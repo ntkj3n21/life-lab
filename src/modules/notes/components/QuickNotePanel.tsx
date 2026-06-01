@@ -1,14 +1,30 @@
 import { useState } from "react";
 
+import { useVideoStore } from "../../../stores/videoStore";
 import { useContextStore } from "../../../stores/contextStore";
 import { useNoteStore } from "../../../stores/noteStore";
+import { useTodoStore } from "../../../stores/todoStore";
 
 export function QuickNotePanel() {
   const [noteContent, setNoteContent] = useState("");
 
   const activeContext = useContextStore((state) => state.activeContext);
+  const setActiveContext = useContextStore((state) => state.setActiveContext);
+  const videos = useVideoStore((state) => state.videos);
   const notes = useNoteStore((state) => state.notes);
   const addNote = useNoteStore((state) => state.addNote);
+  const deleteNote = useNoteStore((state) => state.deleteNote);
+  const clearNotes = useNoteStore((state) => state.clearNotes);
+  const addTodo = useTodoStore((state) => state.addTodo);
+  const sortedNotes = [...notes].sort((a, b) => {
+  const aIsCurrentContext = a.linkedEntityId === activeContext?.entityId;
+  const bIsCurrentContext = b.linkedEntityId === activeContext?.entityId;
+
+  if (aIsCurrentContext && !bIsCurrentContext) return -1;
+  if (!aIsCurrentContext && bIsCurrentContext) return 1;
+
+  return b.createdAt - a.createdAt;
+});
 
   function handleSaveNote() {
     const trimmedContent = noteContent.trim();
@@ -19,12 +35,37 @@ export function QuickNotePanel() {
       content: trimmedContent,
       linkedEntityId: activeContext?.entityId,
       linkedEntityType: activeContext?.entityType,
+      linkedEntityTitle: activeContext?.title,
       timestamp: activeContext?.timestamp,
     });
 
     setNoteContent("");
   }
+  
+  function handleOpenLinkedVideo(videoId: string) {
+    const linkedVideo = videos.find((video) => video.id === videoId);
 
+    if (!linkedVideo) return;
+
+    setActiveContext({
+      entityId: linkedVideo.id,
+      entityType: linkedVideo.type,
+      title: linkedVideo.title,
+      timestamp: 0,
+    });
+  }
+  function handleCreateTodoFromNote(noteId: string) {
+    const note = notes.find((item) => item.id === noteId);
+
+    if (!note) return;
+
+    addTodo({
+      content: note.content,
+      linkedEntityId: note.linkedEntityId ?? note.id,
+      linkedEntityType: note.linkedEntityType ?? note.type,
+      linkedEntityTitle: note.linkedEntityTitle ?? note.title,
+    });
+  }
   return (
     <>
       <div className="rounded-2xl border border-neutral-800 bg-neutral-950 p-4">
@@ -62,34 +103,86 @@ export function QuickNotePanel() {
         )}
       </div>
 
-      <div className="mt-4 rounded-2xl border border-neutral-800 bg-neutral-950 p-4">
-        <h4 className="font-medium">Saved Notes</h4>
+<div className="mt-4 rounded-2xl border border-neutral-800 bg-neutral-950 p-4">
+  <div className="flex items-center justify-between gap-3">
+    <h4 className="font-medium">Saved Notes</h4>
 
-        {notes.length === 0 ? (
-          <p className="mt-2 text-sm text-neutral-500">Chưa có note nào.</p>
-        ) : (
-          <div className="mt-3 space-y-3">
-            {notes.map((note) => (
-              <div
-                key={note.id}
-                className="rounded-xl border border-neutral-800 bg-neutral-900 p-3"
+    {notes.length > 0 && (
+      <button
+        onClick={clearNotes}
+        className="rounded-lg border border-neutral-800 px-2 py-1 text-xs text-neutral-400 hover:bg-neutral-900 hover:text-white"
+      >
+        Clear
+      </button>
+    )}
+  </div>
+
+  {notes.length === 0 ? (
+    <p className="mt-2 text-sm text-neutral-500">Chưa có note nào.</p>
+  ) : (
+    <div className="mt-3 space-y-3">
+      {sortedNotes.map((note) => (
+        <div
+          key={note.id}
+          className="rounded-xl border border-neutral-800 bg-neutral-900 p-3"
+        >
+          <div className="flex items-start justify-between gap-3">
+            <p className="text-sm text-neutral-200">{note.content}</p>
+
+            <div className="flex shrink-0 flex-col gap-2">
+              <button
+                onClick={() => handleCreateTodoFromNote(note.id)}
+                className="rounded-lg border border-neutral-800 px-2 py-1 text-xs text-neutral-500 hover:bg-neutral-800 hover:text-white"
               >
-                <p className="text-sm text-neutral-200">{note.content}</p>
+                Todo
+              </button>
 
-                {note.linkedEntityId ? (
-                  <p className="mt-2 text-xs text-neutral-500">
-                    Linked to {note.linkedEntityType}: {note.linkedEntityId}
-                  </p>
-                ) : (
-                  <p className="mt-2 text-xs text-neutral-600">
-                    No linked context
-                  </p>
+              <button
+                onClick={() => deleteNote(note.id)}
+                className="rounded-lg border border-neutral-800 px-2 py-1 text-xs text-neutral-500 hover:bg-neutral-800 hover:text-white"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+
+          {note.linkedEntityId ? (
+            <>
+              <div className="mt-2 flex items-center justify-between gap-3">
+                <p className="text-xs text-neutral-500">
+                  Linked to {note.linkedEntityType}:{" "}
+                  <span className="text-neutral-300">
+                    {note.linkedEntityTitle ?? note.linkedEntityId}
+                  </span>
+                </p>
+
+                {note.linkedEntityType === "video" && (
+                  <button
+                    onClick={() => handleOpenLinkedVideo(note.linkedEntityId!)}
+                    className="shrink-0 rounded-lg border border-neutral-800 px-2 py-1 text-xs text-neutral-400 hover:bg-neutral-800 hover:text-white"
+                  >
+                    Open
+                  </button>
                 )}
               </div>
-            ))}
-          </div>
-        )}
-      </div>
+
+              {note.linkedEntityId === activeContext?.entityId && (
+                <p className="mt-1 text-xs text-emerald-400">
+                  Current context note
+                </p>
+              )}
+            </>
+          ) : (
+            <p className="mt-2 text-xs text-neutral-600">
+              No linked context
+            </p>
+          )}
+
+        </div>
+      ))}
+    </div>
+  )}
+</div>
     </>
   );
 }

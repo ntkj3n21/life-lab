@@ -21,5 +21,16 @@ export interface NoteItem extends BaseEntity {
 
   linkedEntityId?: string;
   linkedEntityType?: EntityType;
+  linkedEntityTitle?: string;
   timestamp?: number;
+}
+
+export interface TodoItem extends BaseEntity {
+  type: "todo";
+  content: string;
+  done: boolean;
+
+  linkedEntityId?: string;
+  linkedEntityType?: EntityType;
+  linkedEntityTitle?: string;
 }
