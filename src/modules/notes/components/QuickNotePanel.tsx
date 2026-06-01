@@ -4,6 +4,7 @@ import { useVideoStore } from "../../../stores/videoStore";
 import { useContextStore } from "../../../stores/contextStore";
 import { useNoteStore } from "../../../stores/noteStore";
 import { useTodoStore } from "../../../stores/todoStore";
+import { formatTime } from "../../../utils/formatTime";
 
 export function QuickNotePanel() {
   const [noteContent, setNoteContent] = useState("");
@@ -17,14 +18,25 @@ export function QuickNotePanel() {
   const clearNotes = useNoteStore((state) => state.clearNotes);
   const addTodo = useTodoStore((state) => state.addTodo);
   const sortedNotes = [...notes].sort((a, b) => {
-  const aIsCurrentContext = a.linkedEntityId === activeContext?.entityId;
-  const bIsCurrentContext = b.linkedEntityId === activeContext?.entityId;
+    const aIsCurrentContext = a.linkedEntityId === activeContext?.entityId;
+    const bIsCurrentContext = b.linkedEntityId === activeContext?.entityId;
 
-  if (aIsCurrentContext && !bIsCurrentContext) return -1;
-  if (!aIsCurrentContext && bIsCurrentContext) return 1;
+    if (aIsCurrentContext && !bIsCurrentContext) return -1;
+    if (!aIsCurrentContext && bIsCurrentContext) return 1;
 
-  return b.createdAt - a.createdAt;
-});
+    if (aIsCurrentContext && bIsCurrentContext) {
+      const aTimestamp = a.timestamp ?? 0;
+      const bTimestamp = b.timestamp ?? 0;
+
+      if (aTimestamp !== bTimestamp) {
+        return aTimestamp - bTimestamp;
+      }
+
+      return b.createdAt - a.createdAt;
+    }
+
+    return b.createdAt - a.createdAt;
+  });
 
   function handleSaveNote() {
     const trimmedContent = noteContent.trim();
@@ -42,7 +54,7 @@ export function QuickNotePanel() {
     setNoteContent("");
   }
   
-  function handleOpenLinkedVideo(videoId: string) {
+  function handleOpenLinkedVideo(videoId: string, timestamp = 0) {
     const linkedVideo = videos.find((video) => video.id === videoId);
 
     if (!linkedVideo) return;
@@ -51,9 +63,10 @@ export function QuickNotePanel() {
       entityId: linkedVideo.id,
       entityType: linkedVideo.type,
       title: linkedVideo.title,
-      timestamp: 0,
+      timestamp,
     });
   }
+
   function handleCreateTodoFromNote(noteId: string) {
     const note = notes.find((item) => item.id === noteId);
 
@@ -64,8 +77,10 @@ export function QuickNotePanel() {
       linkedEntityId: note.linkedEntityId ?? note.id,
       linkedEntityType: note.linkedEntityType ?? note.type,
       linkedEntityTitle: note.linkedEntityTitle ?? note.title,
+      timestamp: note.timestamp,
     });
   }
+  
   return (
     <>
       <div className="rounded-2xl border border-neutral-800 bg-neutral-950 p-4">
@@ -105,7 +120,9 @@ export function QuickNotePanel() {
 
 <div className="mt-4 rounded-2xl border border-neutral-800 bg-neutral-950 p-4">
   <div className="flex items-center justify-between gap-3">
-    <h4 className="font-medium">Saved Notes</h4>
+    <h4 className="font-medium">
+    {activeContext ? "Context Notes" : "Saved Notes"}
+  </h4>
 
     {notes.length > 0 && (
       <button
@@ -116,6 +133,12 @@ export function QuickNotePanel() {
       </button>
     )}
   </div>
+
+  {activeContext && notes.length > 0 && (
+    <p className="mt-2 text-xs text-neutral-500">
+      Notes linked to current video are shown first and sorted by timestamp.
+    </p>
+  )}
 
   {notes.length === 0 ? (
     <p className="mt-2 text-sm text-neutral-500">Chưa có note nào.</p>
@@ -154,11 +177,19 @@ export function QuickNotePanel() {
                   <span className="text-neutral-300">
                     {note.linkedEntityTitle ?? note.linkedEntityId}
                   </span>
+                  {typeof note.timestamp === "number" && (
+                    <span className="text-neutral-500">
+                      {" "}
+                      at {formatTime(note.timestamp)}
+                    </span>
+                  )}
                 </p>
 
                 {note.linkedEntityType === "video" && (
                   <button
-                    onClick={() => handleOpenLinkedVideo(note.linkedEntityId!)}
+                    onClick={() =>
+                      handleOpenLinkedVideo(note.linkedEntityId!, note.timestamp ?? 0)
+                    }
                     className="shrink-0 rounded-lg border border-neutral-800 px-2 py-1 text-xs text-neutral-400 hover:bg-neutral-800 hover:text-white"
                   >
                     Open

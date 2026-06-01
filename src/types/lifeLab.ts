@@ -33,4 +33,5 @@ export interface TodoItem extends BaseEntity {
   linkedEntityId?: string;
   linkedEntityType?: EntityType;
   linkedEntityTitle?: string;
+  timestamp?: number;
 }

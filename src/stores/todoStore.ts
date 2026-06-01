@@ -9,6 +9,7 @@ interface CreateTodoInput {
   linkedEntityId?: string;
   linkedEntityType?: EntityType;
   linkedEntityTitle?: string;
+  timestamp?: number;
 }
 
 interface TodoStore {
@@ -57,6 +58,7 @@ export const useTodoStore = create<TodoStore>((set) => ({
       linkedEntityId: input.linkedEntityId,
       linkedEntityType: input.linkedEntityType,
       linkedEntityTitle: input.linkedEntityTitle,
+      timestamp: input.timestamp,
       createdAt: now,
       updatedAt: now,
     };
