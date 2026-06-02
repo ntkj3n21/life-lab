@@ -25,13 +25,22 @@ export interface NoteItem extends BaseEntity {
   timestamp?: number;
 }
 
+export interface TodoChecklistItem {
+  id: string;
+  text: string;
+  done: boolean;
+}
+
 export interface TodoItem extends BaseEntity {
   type: "todo";
   content: string;
   done: boolean;
+
+  items: TodoChecklistItem[];
 
   linkedEntityId?: string;
   linkedEntityType?: EntityType;
   linkedEntityTitle?: string;
   timestamp?: number;
 }
+

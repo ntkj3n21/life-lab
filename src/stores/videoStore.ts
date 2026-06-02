@@ -10,9 +10,15 @@ interface CreateVideoInput {
   tags?: string[];
 }
 
+interface UpdateVideoInput {
+  title: string;
+  tags?: string[];
+}
+
 interface VideoStore {
   videos: VideoItem[];
-  addVideo: (input: CreateVideoInput) => void;
+  addVideo: (input: CreateVideoInput) => VideoItem;
+  updateVideo: (videoId: string, input: UpdateVideoInput) => void;
   deleteVideo: (videoId: string) => void;
   clearVideos: () => void;
 }
@@ -82,6 +88,33 @@ export const useVideoStore = create<VideoStore>((set) => ({
 
     set((state) => {
       const nextVideos = [newVideo, ...state.videos];
+      saveVideosToStorage(nextVideos);
+
+      return {
+        videos: nextVideos,
+      };
+    });
+
+    return newVideo;
+  },
+
+  updateVideo: (videoId, input) => {
+    const trimmedTitle = input.title.trim();
+
+    if (!trimmedTitle) return;
+
+    set((state) => {
+      const nextVideos = state.videos.map((video) =>
+        video.id === videoId
+          ? {
+              ...video,
+              title: trimmedTitle,
+              tags: input.tags ?? [],
+              updatedAt: Date.now(),
+            }
+          : video,
+      );
+
       saveVideosToStorage(nextVideos);
 
       return {

@@ -1,8 +1,37 @@
 import { create } from "zustand";
 import { nanoid } from "nanoid";
-import type { EntityType, TodoItem } from "../types/lifeLab";
+import type { EntityType, TodoChecklistItem, TodoItem } from "../types/lifeLab";
 
 const TODOS_STORAGE_KEY = "life-lab-todos";
+
+function parseTodoDraft(rawValue: string) {
+  const lines = rawValue
+    .split("\n")
+    .map((line) => line.replace(/\r/g, "").trim())
+    .filter(Boolean);
+
+  if (lines.length === 0) {
+    return {
+      title: "Untitled Todo",
+      content: "",
+      items: [],
+    };
+  }
+
+  const [titleLine, ...itemLines] = lines;
+
+  const items: TodoChecklistItem[] = itemLines.map((text) => ({
+    id: nanoid(),
+    text,
+    done: false,
+  }));
+
+  return {
+    title: titleLine,
+    content: itemLines.join("\n"),
+    items,
+  };
+}
 
 interface CreateTodoInput {
   content: string;
@@ -15,7 +44,9 @@ interface CreateTodoInput {
 interface TodoStore {
   todos: TodoItem[];
   addTodo: (input: CreateTodoInput) => void;
+  updateTodo: (todoId: string, content: string) => void;
   toggleTodo: (todoId: string) => void;
+  toggleTodoItem: (todoId: string, itemId: string) => void;
   deleteTodo: (todoId: string) => void;
   clearTodos: () => void;
 }
@@ -47,14 +78,20 @@ export const useTodoStore = create<TodoStore>((set) => ({
   todos: loadTodosFromStorage(),
 
   addTodo: (input) => {
+    const trimmedContent = input.content.trim();
+
+    if (!trimmedContent) return;
+
     const now = Date.now();
+    const parsedTodo = parseTodoDraft(trimmedContent);
 
     const newTodo: TodoItem = {
       id: nanoid(),
       type: "todo",
-      title: input.content.slice(0, 40) || "Untitled Todo",
-      content: input.content,
+      title: parsedTodo.title,
+      content: parsedTodo.content,
       done: false,
+      items: parsedTodo.items,
       linkedEntityId: input.linkedEntityId,
       linkedEntityType: input.linkedEntityType,
       linkedEntityTitle: input.linkedEntityTitle,
@@ -73,17 +110,88 @@ export const useTodoStore = create<TodoStore>((set) => ({
     });
   },
 
-  toggleTodo: (todoId) => {
+  updateTodo: (todoId, content) => {
+    const trimmedContent = content.trim();
+
+    if (!trimmedContent) return;
+
+    const parsedTodo = parseTodoDraft(trimmedContent);
+
     set((state) => {
       const nextTodos = state.todos.map((todo) =>
         todo.id === todoId
           ? {
               ...todo,
-              done: !todo.done,
+              title: parsedTodo.title,
+              content: parsedTodo.content,
+              items: parsedTodo.items,
+              done:
+                parsedTodo.items.length > 0
+                  ? parsedTodo.items.every((item) => item.done)
+                  : todo.done,
               updatedAt: Date.now(),
             }
           : todo,
       );
+
+      saveTodosToStorage(nextTodos);
+
+      return {
+        todos: nextTodos,
+      };
+    });
+  },
+
+  toggleTodo: (todoId) => {
+    set((state) => {
+      const nextTodos = state.todos.map((todo) => {
+        if (todo.id !== todoId) return todo;
+
+        const nextDone = !todo.done;
+
+        return {
+          ...todo,
+          done: nextDone,
+          items: (todo.items ?? []).map((item) => ({
+            ...item,
+            done: nextDone,
+          })),
+          updatedAt: Date.now(),
+        };
+      });
+
+      saveTodosToStorage(nextTodos);
+
+      return {
+        todos: nextTodos,
+      };
+    });
+  },
+
+  toggleTodoItem: (todoId, itemId) => {
+    set((state) => {
+      const nextTodos = state.todos.map((todo) => {
+        if (todo.id !== todoId) return todo;
+
+        const nextItems = (todo.items ?? []).map((item) =>
+          item.id === itemId
+            ? {
+                ...item,
+                done: !item.done,
+              }
+            : item,
+        );
+
+        return {
+          ...todo,
+          items: nextItems,
+          done:
+            nextItems.length > 0
+              ? nextItems.every((item) => item.done)
+              : todo.done,
+          updatedAt: Date.now(),
+        };
+      });
 
       saveTodosToStorage(nextTodos);
 

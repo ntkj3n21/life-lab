@@ -15,6 +15,7 @@ interface CreateNoteInput {
 interface NoteStore {
   notes: NoteItem[];
   addNote: (input: CreateNoteInput) => void;
+  updateNote: (noteId: string, content: string) => void;
   deleteNote: (noteId: string) => void;
   clearNotes: () => void;
 }
@@ -42,16 +43,45 @@ function saveNotesToStorage(notes: NoteItem[]) {
   }
 }
 
+function parseNoteDraft(rawValue: string) {
+  const lines = rawValue
+    .split("\n")
+    .map((line) => line.replace(/\r/g, ""));
+
+  const firstNonEmptyIndex = lines.findIndex((line) => line.trim() !== "");
+
+  if (firstNonEmptyIndex === -1) {
+    return {
+      title: "Untitled Note",
+      content: "",
+    };
+  }
+
+  const normalizedLines = lines.slice(firstNonEmptyIndex);
+  const [titleLine, ...contentLines] = normalizedLines;
+
+  return {
+    title: titleLine.trim() || "Untitled Note",
+    content: contentLines.join("\n").trim(),
+  };
+}
+
 export const useNoteStore = create<NoteStore>((set) => ({
   notes: loadNotesFromStorage(),
 
   addNote: (input) => {
+    const trimmedContent = input.content.trim();
+
+    if (!trimmedContent) return;
+
     const now = Date.now();
+    const parsedNote = parseNoteDraft(trimmedContent);
+
     const newNote: NoteItem = {
       id: nanoid(),
       type: "note",
-      title: input.content.slice(0, 40) || "Untitled Note",
-      content: input.content,
+      title: parsedNote.title,
+      content: parsedNote.content,
       linkedEntityId: input.linkedEntityId,
       linkedEntityType: input.linkedEntityType,
       linkedEntityTitle: input.linkedEntityTitle,
@@ -69,6 +99,33 @@ export const useNoteStore = create<NoteStore>((set) => ({
       };
     });
   },
+
+  updateNote: (noteId, content) => {
+  const trimmedContent = content.trim();
+
+  if (!trimmedContent) return;
+
+  set((state) => {
+    const parsedNote = parseNoteDraft(trimmedContent);
+
+    const nextNotes = state.notes.map((note) =>
+      note.id === noteId
+        ? {
+            ...note,
+            title: parsedNote.title,
+            content: parsedNote.content,
+            updatedAt: Date.now(),
+          }
+        : note,
+    );
+
+    saveNotesToStorage(nextNotes);
+
+    return {
+      notes: nextNotes,
+    };
+  });
+},
 
   deleteNote: (noteId) => {
     set((state) => {

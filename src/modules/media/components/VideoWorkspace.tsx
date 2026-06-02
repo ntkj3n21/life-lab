@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { Film, Play, Trash2, X, Clock } from "lucide-react";
+import { Clock, Film, Play, X } from "lucide-react";
+
+import { ContextSummary } from "../../../components/context/ContextSummary";
 import { formatTime, parseTimeToSeconds } from "../../../utils/formatTime";
 import { useContextStore } from "../../../stores/contextStore";
 import { useVideoStore } from "../../../stores/videoStore";
 import type { VideoItem } from "../../../types/lifeLab";
-import { AddVideoForm } from "./AddVideoForm";
 import { EmbedVideoPlayer } from "./EmbedVideoPlayer";
+import { VideoLibrary } from "./VideoLibrary";
 
 export function VideoWorkspace() {
   const [timestampInput, setTimestampInput] = useState("");
@@ -15,8 +17,8 @@ export function VideoWorkspace() {
   const setTimestamp = useContextStore((state) => state.setTimestamp);
   const increaseTimestamp = useContextStore((state) => state.increaseTimestamp);
   const decreaseTimestamp = useContextStore((state) => state.decreaseTimestamp);
-
   const videos = useVideoStore((state) => state.videos);
+  const updateVideo = useVideoStore((state) => state.updateVideo);
   const deleteVideo = useVideoStore((state) => state.deleteVideo);
 
   const activeVideo = videos.find(
@@ -32,7 +34,25 @@ export function VideoWorkspace() {
     });
   }
 
+  function handleUpdateVideo(
+    videoId: string,
+    input: { title: string; tags: string[] },
+  ) {
+    updateVideo(videoId, input);
+
+    if (activeContext?.entityId === videoId) {
+      setActiveContext({
+        ...activeContext,
+        title: input.title,
+      });
+    }
+  }
+
   function handleDeleteVideo(videoId: string) {
+    const confirmed = window.confirm("Delete this video?");
+
+    if (!confirmed) return;
+
     deleteVideo(videoId);
 
     if (activeContext?.entityId === videoId) {
@@ -74,9 +94,9 @@ export function VideoWorkspace() {
       <p className="text-sm font-medium text-neutral-300">
         Current video info
       </p>
-
-      <p className="mt-2 break-all text-sm text-neutral-500">
-        URL: {activeVideo.url}
+      
+      <p className="mt-2 text-sm text-neutral-500">
+        Video source is stored internally.
       </p>
 
       <div className="mt-3 flex flex-wrap gap-2">
@@ -191,36 +211,7 @@ export function VideoWorkspace() {
 )}
 
       <div className="mt-6 grid grid-cols-3 gap-4">
-        <div className="rounded-2xl border border-neutral-800 bg-neutral-900 p-4">
-          <h4 className="font-medium">Current Context</h4>
-
-          {activeContext ? (
-            <div className="mt-2 text-sm text-neutral-400">
-              <p>
-                Type:{" "}
-                <span className="text-neutral-200">
-                  {activeContext.entityType}
-                </span>
-              </p>
-              <p>
-                Title:{" "}
-                <span className="text-neutral-200">
-                  {activeContext.title}
-                </span>
-              </p>
-              <p>
-                Timestamp:{" "}
-                <span className="text-neutral-200">
-                  {formatTime(activeContext.timestamp)}
-                </span>
-              </p>
-            </div>
-          ) : (
-            <p className="mt-2 text-sm text-neutral-400">
-              Chưa có video nào đang mở.
-            </p>
-          )}
-        </div>
+        <ContextSummary />
 
         <div className="rounded-2xl border border-neutral-800 bg-neutral-900 p-4">
           <h4 className="font-medium">Quick Actions</h4>
@@ -237,80 +228,14 @@ export function VideoWorkspace() {
         </div>
       </div>
 
-      <div className="mt-6 grid grid-cols-[360px_1fr] gap-4">
-        <AddVideoForm />
-
-        <div className="rounded-2xl border border-neutral-800 bg-neutral-900 p-4">
-          <div className="mb-4 flex items-center justify-between">
-            <div>
-              <h4 className="font-medium">Video Library</h4>
-              <p className="mt-1 text-sm text-neutral-500">
-                Chọn video để đổi context hiện tại.
-              </p>
-            </div>
-          </div>
-
-          {videos.length === 0 ? (
-            <p className="text-sm text-neutral-500">Chưa có video nào.</p>
-          ) : (
-            <div className="grid grid-cols-2 gap-3">
-              {videos.map((video) => {
-                const isActive = activeContext?.entityId === video.id;
-
-                return (
-                  <div
-                    key={video.id}
-                    className={`rounded-2xl border p-4 transition ${
-                      isActive
-                        ? "border-white bg-neutral-800"
-                        : "border-neutral-800 bg-neutral-950"
-                    }`}
-                  >
-                    <button
-                      onClick={() => handleOpenVideo(video)}
-                      className="w-full text-left"
-                    >
-                      <div className="flex items-start gap-3">
-                        <div className="rounded-xl bg-neutral-800 p-2">
-                          <Film size={18} />
-                        </div>
-
-                        <div className="min-w-0 flex-1">
-                          <p className="font-medium text-neutral-100">
-                            {video.title}
-                          </p>
-
-                          <p className="mt-1 text-xs text-neutral-500">
-                            {video.sourceType} · {video.id}
-                          </p>
-
-                          <div className="mt-3 flex flex-wrap gap-2">
-                            {video.tags?.map((tag) => (
-                              <span
-                                key={tag}
-                                className="rounded-full bg-neutral-800 px-2 py-1 text-xs text-neutral-400"
-                              >
-                                #{tag}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    </button>
-
-                    <button
-                      onClick={() => handleDeleteVideo(video.id)}
-                      className="mt-3 flex items-center gap-2 rounded-lg border border-neutral-800 px-2 py-1 text-xs text-neutral-500 hover:bg-neutral-800 hover:text-white"
-                    >
-                      <Trash2 size={14} />
-                      Delete
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
+      <div className="mt-6 w-full">
+        <VideoLibrary
+          videos={videos}
+          activeVideoId={activeContext?.entityId}
+          onOpenVideo={handleOpenVideo}
+          onDeleteVideo={handleDeleteVideo}
+          onUpdateVideo={handleUpdateVideo}
+        />
       </div>
     </div>
   );
