@@ -101,31 +101,31 @@ export const useNoteStore = create<NoteStore>((set) => ({
   },
 
   updateNote: (noteId, content) => {
-  const trimmedContent = content.trim();
+    const trimmedContent = content.trim();
 
-  if (!trimmedContent) return;
+    if (!trimmedContent) return;
 
-  set((state) => {
-    const parsedNote = parseNoteDraft(trimmedContent);
+    set((state) => {
+      const parsedNote = parseNoteDraft(trimmedContent);
 
-    const nextNotes = state.notes.map((note) =>
-      note.id === noteId
-        ? {
-            ...note,
-            title: parsedNote.title,
-            content: parsedNote.content,
-            updatedAt: Date.now(),
-          }
-        : note,
-    );
+      const nextNotes = state.notes.map((note) =>
+        note.id === noteId
+          ? {
+              ...note,
+              title: parsedNote.title,
+              content: parsedNote.content,
+              updatedAt: Date.now(),
+            }
+          : note,
+      );
 
-    saveNotesToStorage(nextNotes);
+      saveNotesToStorage(nextNotes);
 
-    return {
-      notes: nextNotes,
-    };
-  });
-},
+      return {
+        notes: nextNotes,
+      };
+    });
+  },
 
   deleteNote: (noteId) => {
     set((state) => {

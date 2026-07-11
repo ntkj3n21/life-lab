@@ -25,7 +25,7 @@ export function ContextSummary() {
       <div className="rounded-2xl border border-neutral-800 bg-neutral-900 p-4">
         <div className="flex items-center gap-2">
           <Link2 size={16} className="text-neutral-500" />
-          <h4 className="font-medium">Now working on</h4>
+          <h4 className="font-medium whitespace-nowrap">Now working on</h4>
         </div>
 
         <p className="mt-3 text-sm text-neutral-400">

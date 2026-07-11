@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { StickyNote, Trash2 } from "lucide-react";
+
 import { useVideoStore } from "../../../stores/videoStore";
 import { useContextStore } from "../../../stores/contextStore";
 import { useNoteStore } from "../../../stores/noteStore";
@@ -13,6 +14,8 @@ export function QuickNotePanel() {
   const [captureMode, setCaptureMode] = useState<CaptureMode>("note");
   const [editingNoteId, setEditingNoteId] = useState<string | null>(null);
   const [editingNoteContent, setEditingNoteContent] = useState("");
+  const [expandedNoteIds, setExpandedNoteIds] = useState<string[]>([]);
+
   const activeContext = useContextStore((state) => state.activeContext);
   const setActiveContext = useContextStore((state) => state.setActiveContext);
   const videos = useVideoStore((state) => state.videos);
@@ -21,7 +24,6 @@ export function QuickNotePanel() {
   const updateNote = useNoteStore((state) => state.updateNote);
   const deleteNote = useNoteStore((state) => state.deleteNote);
   const clearNotes = useNoteStore((state) => state.clearNotes);
-  const [expandedNoteIds, setExpandedNoteIds] = useState<string[]>([]);
   const addTodo = useTodoStore((state) => state.addTodo);
   const currentContextNotes = activeContext
     ? notes
@@ -72,7 +74,7 @@ export function QuickNotePanel() {
 
     setCaptureContent("");
   }
-  
+
   function handleOpenLinkedVideo(videoId: string, timestamp = 0) {
     const linkedVideo = videos.find((video) => video.id === videoId);
 
@@ -117,7 +119,23 @@ export function QuickNotePanel() {
 
     clearNotes();
   }
-  
+
+  function toggleExpandedNote(noteId: string) {
+    setExpandedNoteIds((current) =>
+      current.includes(noteId)
+        ? current.filter((id) => id !== noteId)
+        : [...current, noteId],
+    );
+  }
+
+  function isNoteExpanded(noteId: string) {
+    return expandedNoteIds.includes(noteId);
+  }
+
+  function shouldCollapseNote(content: string) {
+    return content.length > 180 || content.split("\n").length > 4;
+  }
+
   function renderNoteCard(note: (typeof notes)[number]) {
     const isCurrentContextNote = note.linkedEntityId === activeContext?.entityId;
     const isExpanded = isNoteExpanded(note.id);
@@ -259,151 +277,135 @@ export function QuickNotePanel() {
     );
   }
 
-  function toggleExpandedNote(noteId: string) {
-    setExpandedNoteIds((current) =>
-      current.includes(noteId)
-        ? current.filter((id) => id !== noteId)
-        : [...current, noteId],
-    );
-  }
-
-  function isNoteExpanded(noteId: string) {
-    return expandedNoteIds.includes(noteId);
-  }
-
-  function shouldCollapseNote(content: string) {
-    return content.length > 180 || content.split("\n").length > 4;
-  }
-
   return (
     <>
-  <div className="rounded-2xl border border-neutral-800 bg-neutral-950 p-4">
-    <div className="flex items-center justify-between gap-3">
-      <div>
-        <h4 className="text-sm font-medium text-neutral-300">
-          Quick Capture
-        </h4>
-        <p className="mt-1 text-xs text-neutral-500">
-          Capture a note or todo for the current context.
-        </p>
-      </div>
-
-      {activeContext && (
-        <span className="rounded-full bg-neutral-900 px-2 py-1 text-xs text-neutral-500">
-          {formatTime(activeContext.timestamp)}
-        </span>
-      )}
-    </div>
-
-    <div className="mt-4 grid grid-cols-2 gap-2 rounded-2xl border border-neutral-800 bg-neutral-900 p-1">
-      <button
-        onClick={() => setCaptureMode("note")}
-        className={`rounded-xl px-3 py-2 text-sm transition ${
-          captureMode === "note"
-            ? "bg-white text-neutral-950"
-            : "text-neutral-400 hover:bg-neutral-800 hover:text-white"
-        }`}
-      >
-        Note
-      </button>
-
-      <button
-        onClick={() => setCaptureMode("todo")}
-        className={`rounded-xl px-3 py-2 text-sm transition ${
-          captureMode === "todo"
-            ? "bg-white text-neutral-950"
-            : "text-neutral-400 hover:bg-neutral-800 hover:text-white"
-        }`}
-      >
-        Todo
-      </button>
-    </div>
-
-    <textarea
-      value={captureContent}
-      onChange={(event) => setCaptureContent(event.target.value)}
-      className="mt-3 h-40 w-full resize-none rounded-xl border border-neutral-800 bg-neutral-900 p-3 text-sm outline-none placeholder:text-neutral-600 focus:border-neutral-600"
-      placeholder={
-        captureMode === "note"
-          ? "Title\nWrite your note here..."
-          : "Todo title\nTask 1\nTask 2\nTask 3"
-      }
-    />
-
-    <button
-      onClick={handleSaveCapture}
-      className="mt-3 w-full rounded-xl bg-white px-4 py-2 text-sm font-medium text-neutral-950 hover:bg-neutral-200"
-    >
-      {captureMode === "note" ? "Save Note" : "Add Todo"}
-    </button>
-  </div>
-
-<div className="mt-4 rounded-2xl border border-neutral-800 bg-neutral-950 p-4">
-  <div className="flex items-center justify-between gap-3">
-    <h4 className="font-medium">Notes</h4>
-
-    {notes.length > 0 && (
-      <button
-        onClick={handleClearNotes}
-        className="rounded-lg border border-neutral-800 px-2 py-1 text-xs text-neutral-400 hover:bg-neutral-900 hover:text-white"
-      >
-        Clear
-      </button>
-    )}
-  </div>
-  
-  {notes.length === 0 ? (
-    <p className="mt-2 text-sm text-neutral-500">No notes yet.</p>
-  ) : (
-    <div className="mt-4 space-y-5">
-      {activeContext && (
-        <section>
-          <div className="mb-2 flex items-center justify-between gap-3">
-            <h5 className="text-xs font-medium uppercase tracking-wide text-neutral-500">
-              Current Video Notes
-            </h5>
-
-            <span className="rounded-full bg-neutral-900 px-2 py-1 text-xs text-neutral-500">
-              {currentContextNotes.length}
-            </span>
+      <div className="rounded-2xl border border-neutral-800 bg-neutral-950 p-4">
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <h4 className="text-sm font-medium text-neutral-300">
+              Quick Capture
+            </h4>
+            <p className="mt-1 text-xs text-neutral-500">
+              Capture a note or todo for the current context.
+            </p>
           </div>
 
-          {currentContextNotes.length === 0 ? (
-            <p className="rounded-xl border border-dashed border-neutral-800 bg-neutral-900 p-3 text-sm text-neutral-500">
-              No notes for this video yet.
-            </p>
-          ) : (
-            <div className="space-y-3">
-              {currentContextNotes.map((note) => renderNoteCard(note))}
-            </div>
+          {activeContext && (
+            <span className="rounded-full bg-neutral-900 px-2 py-1 text-xs text-neutral-500">
+              {formatTime(activeContext.timestamp)}
+            </span>
           )}
-        </section>
-      )}
-
-      <section>
-        <div className="mb-2 flex items-center justify-between gap-3">
-          <h5 className="text-xs font-medium uppercase tracking-wide text-neutral-500">
-            Other Notes
-          </h5>
-
-          <span className="rounded-full bg-neutral-900 px-2 py-1 text-xs text-neutral-500">
-            {otherNotes.length}
-          </span>
         </div>
 
-        {otherNotes.length === 0 ? (
-          <p className="rounded-xl border border-dashed border-neutral-800 bg-neutral-900 p-3 text-sm text-neutral-500">
-            No other notes.
-          </p>
+        <div className="mt-4 grid grid-cols-2 gap-2 rounded-2xl border border-neutral-800 bg-neutral-900 p-1">
+          <button
+            onClick={() => setCaptureMode("note")}
+            className={`rounded-xl px-3 py-2 text-sm transition ${
+              captureMode === "note"
+                ? "bg-white text-neutral-950"
+                : "text-neutral-400 hover:bg-neutral-800 hover:text-white"
+            }`}
+          >
+            Note
+          </button>
+
+          <button
+            onClick={() => setCaptureMode("todo")}
+            className={`rounded-xl px-3 py-2 text-sm transition ${
+              captureMode === "todo"
+                ? "bg-white text-neutral-950"
+                : "text-neutral-400 hover:bg-neutral-800 hover:text-white"
+            }`}
+          >
+            Todo
+          </button>
+        </div>
+
+        <textarea
+          value={captureContent}
+          onChange={(event) => setCaptureContent(event.target.value)}
+          className="mt-3 h-40 w-full resize-none rounded-xl border border-neutral-800 bg-neutral-900 p-3 text-sm outline-none placeholder:text-neutral-600 focus:border-neutral-600"
+          placeholder={
+            captureMode === "note"
+              ? "Title\nWrite your note here..."
+              : "Todo title\nTask 1\nTask 2\nTask 3"
+          }
+        />
+
+        <button
+          onClick={handleSaveCapture}
+          className="mt-3 w-full rounded-xl bg-white px-4 py-2 text-sm font-medium text-neutral-950 hover:bg-neutral-200"
+        >
+          {captureMode === "note" ? "Save Note" : "Add Todo"}
+        </button>
+      </div>
+
+      <div className="mt-4 rounded-2xl border border-neutral-800 bg-neutral-950 p-4">
+        <div className="flex items-center justify-between gap-3">
+          <h4 className="font-medium">Notes</h4>
+
+          {notes.length > 0 && (
+            <button
+              onClick={handleClearNotes}
+              className="rounded-lg border border-neutral-800 px-2 py-1 text-xs text-neutral-400 hover:bg-neutral-900 hover:text-white"
+            >
+              Clear
+            </button>
+          )}
+        </div>
+
+        {notes.length === 0 ? (
+          <p className="mt-2 text-sm text-neutral-500">No notes yet.</p>
         ) : (
-          <div className="space-y-3">
-            {otherNotes.map((note) => renderNoteCard(note))}
+          <div className="mt-4 space-y-5">
+            {activeContext && (
+              <section>
+                <div className="mb-2 flex items-center justify-between gap-3">
+                  <h5 className="text-xs font-medium uppercase tracking-wide text-neutral-500">
+                    Current Video Notes
+                  </h5>
+
+                  <span className="rounded-full bg-neutral-900 px-2 py-1 text-xs text-neutral-500">
+                    {currentContextNotes.length}
+                  </span>
+                </div>
+
+                {currentContextNotes.length === 0 ? (
+                  <p className="rounded-xl border border-dashed border-neutral-800 bg-neutral-900 p-3 text-sm text-neutral-500">
+                    No notes for this video yet.
+                  </p>
+                ) : (
+                  <div className="space-y-3">
+                    {currentContextNotes.map((note) => renderNoteCard(note))}
+                  </div>
+                )}
+              </section>
+            )}
+
+            <section>
+              <div className="mb-2 flex items-center justify-between gap-3">
+                <h5 className="text-xs font-medium uppercase tracking-wide text-neutral-500">
+                  Other Notes
+                </h5>
+
+                <span className="rounded-full bg-neutral-900 px-2 py-1 text-xs text-neutral-500">
+                  {otherNotes.length}
+                </span>
+              </div>
+
+              {otherNotes.length === 0 ? (
+                <p className="rounded-xl border border-dashed border-neutral-800 bg-neutral-900 p-3 text-sm text-neutral-500">
+                  No other notes.
+                </p>
+              ) : (
+                <div className="space-y-3">
+                  {otherNotes.map((note) => renderNoteCard(note))}
+                </div>
+              )}
+            </section>
           </div>
         )}
-      </section>
-    </div>
-  )}
-</div>
+      </div>
     </>
   );
 }

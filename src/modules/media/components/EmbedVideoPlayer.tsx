@@ -1,18 +1,34 @@
+import ReactPlayer from "react-player";
+
 interface EmbedVideoPlayerProps {
   title: string;
   url: string;
+  playerRef: React.RefObject<HTMLVideoElement | null>;
+  onTimeUpdate: (timestamp: number) => void;
 }
 
-export function EmbedVideoPlayer({ title, url }: EmbedVideoPlayerProps) {
+export function EmbedVideoPlayer({
+  title,
+  url,
+  playerRef,
+  onTimeUpdate,
+}: EmbedVideoPlayerProps) {
   return (
-    <div className="aspect-video w-full overflow-hidden rounded-3xl border border-neutral-800 bg-black shadow-2xl">
-      <iframe
+    <div className="aspect-video w-full max-h-[68vh] overflow-hidden rounded-3xl border border-neutral-800 bg-black shadow-2xl">
+      <ReactPlayer
+        ref={playerRef}
         src={url}
         title={title}
-        className="h-full w-full"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        allowFullScreen
-        referrerPolicy="strict-origin-when-cross-origin"
+        controls
+        width="100%"
+        height="100%"
+        onTimeUpdate={(event) => {
+          const currentTime = event.currentTarget.currentTime;
+
+          if (Number.isNaN(currentTime)) return;
+
+          onTimeUpdate(currentTime);
+        }}
       />
     </div>
   );

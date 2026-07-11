@@ -5,8 +5,12 @@ import {
   Home,
   Music,
   NotebookPen,
+  PanelLeftClose,
+  PanelLeftOpen,
   Settings,
 } from "lucide-react";
+
+import { useLayoutStore } from "../../stores/layoutStore";
 
 const navItems = [
   { label: "Home", icon: Home },
@@ -19,11 +23,36 @@ const navItems = [
 ];
 
 export function Sidebar() {
+  const isSidebarCollapsed = useLayoutStore(
+    (state) => state.isSidebarCollapsed,
+  );
+  const toggleSidebar = useLayoutStore((state) => state.toggleSidebar);
+
   return (
-    <aside className="flex w-60 shrink-0 flex-col border-r border-neutral-800 bg-neutral-900/80">
-      <div className="border-b border-neutral-800 p-5">
-        <h1 className="text-xl font-bold tracking-tight">Life Lab</h1>
-        <p className="mt-1 text-sm text-neutral-400">Personal workspace</p>
+    <aside
+      className={`flex shrink-0 flex-col border-r border-neutral-800 bg-neutral-950 transition-all ${
+        isSidebarCollapsed ? "w-16" : "w-64"
+      }`}
+    >
+      <div className="flex items-center justify-between border-b border-neutral-800 p-4">
+        {!isSidebarCollapsed && (
+          <div>
+            <h1 className="font-semibold">Life Lab</h1>
+            <p className="text-xs text-neutral-500">Personal workspace</p>
+          </div>
+        )}
+
+        <button
+          onClick={toggleSidebar}
+          className="rounded-lg border border-neutral-800 p-2 text-neutral-400 hover:bg-neutral-800 hover:text-white"
+          title={isSidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+        >
+          {isSidebarCollapsed ? (
+            <PanelLeftOpen size={16} />
+          ) : (
+            <PanelLeftClose size={16} />
+          )}
+        </button>
       </div>
 
       <nav className="flex-1 space-y-1 p-3">
@@ -33,10 +62,13 @@ export function Sidebar() {
           return (
             <button
               key={item.label}
-              className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm text-neutral-300 transition hover:bg-neutral-800 hover:text-white"
+              className={`flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm text-neutral-300 transition hover:bg-neutral-800 hover:text-white ${
+                isSidebarCollapsed ? "justify-center" : ""
+              }`}
+              title={isSidebarCollapsed ? item.label : undefined}
             >
-              <Icon size={18} />
-              <span>{item.label}</span>
+              <Icon size={18} className="shrink-0" />
+              {!isSidebarCollapsed && <span>{item.label}</span>}
             </button>
           );
         })}

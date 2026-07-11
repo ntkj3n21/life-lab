@@ -2,8 +2,6 @@ import { useState } from "react";
 import { Plus } from "lucide-react";
 
 import { useVideoStore } from "../../../stores/videoStore";
-import { normalizeEmbedUrl } from "../services/embedService";
-
 import type { VideoItem } from "../../../types/lifeLab";
 
 interface AddVideoFormProps {
@@ -32,7 +30,7 @@ export function AddVideoForm({ onVideoAdded }: AddVideoFormProps) {
 
     const newVideo = addVideo({
       title: trimmedTitle,
-      url: normalizeEmbedUrl(trimmedUrl),
+      url: trimmedUrl,
       tags,
     });
 

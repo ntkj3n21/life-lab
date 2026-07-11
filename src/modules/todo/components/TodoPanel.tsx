@@ -104,6 +104,14 @@ export function TodoPanel() {
     deleteTodo(todoId);
   }
 
+  function handleClearTodos() {
+    const confirmed = window.confirm("Clear all todos?");
+
+    if (!confirmed) return;
+
+    clearTodos();
+  }
+
   function renderTodoCard(todo: (typeof todos)[number]) {
     const isCurrentContextTodo = todo.linkedEntityId === activeContext?.entityId;
 
@@ -129,7 +137,9 @@ export function TodoPanel() {
               <div>
                 <textarea
                   value={editingTodoContent}
-                  onChange={(event) => setEditingTodoContent(event.target.value)}
+                  onChange={(event) =>
+                    setEditingTodoContent(event.target.value)
+                  }
                   className="h-24 w-full resize-none rounded-xl border border-neutral-800 bg-neutral-950 p-3 text-sm text-neutral-200 outline-none placeholder:text-neutral-600 focus:border-neutral-600"
                 />
 
@@ -193,9 +203,13 @@ export function TodoPanel() {
                       ))}
                     </div>
                   ) : todo.content ? (
-                    <p className="mt-2 text-sm text-neutral-300">{todo.content}</p>
+                    <p className="mt-2 text-sm text-neutral-300">
+                      {todo.content}
+                    </p>
                   ) : (
-                    <p className="mt-2 text-xs text-neutral-600">No checklist items</p>
+                    <p className="mt-2 text-xs text-neutral-600">
+                      No checklist items
+                    </p>
                   )}
                 </div>
 
@@ -260,14 +274,6 @@ export function TodoPanel() {
         </div>
       </div>
     );
-  }
-
-  function handleClearTodos() {
-    const confirmed = window.confirm("Clear all todos?");
-
-    if (!confirmed) return;
-
-    clearTodos();
   }
 
   return (

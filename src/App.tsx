@@ -1,5 +1,5 @@
-import { MiniPlayer } from "./components/layout/MiniPlayer";
-import { RightDock } from "./components/layout/RightDock";
+import { RightPanel } from "./components/layout/RightPanel";
+import { RightRail } from "./components/layout/RightRail";
 import { Sidebar } from "./components/layout/Sidebar";
 import { Topbar } from "./components/layout/Topbar";
 import { VideoWorkspace } from "./modules/media/components/VideoWorkspace";
@@ -14,10 +14,9 @@ export default function App() {
 
         <section className="flex min-h-0 flex-1 overflow-hidden">
           <VideoWorkspace />
-          <RightDock />
+          <RightPanel />
+          <RightRail />
         </section>
-
-        <MiniPlayer />
       </main>
     </div>
   );

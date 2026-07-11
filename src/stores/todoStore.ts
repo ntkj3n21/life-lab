@@ -20,7 +20,10 @@ function parseTodoDraft(rawValue: string) {
 
   const [titleLine, ...itemLines] = lines;
 
-  const items: TodoChecklistItem[] = itemLines.map((text) => ({
+  const normalizedItemLines =
+    itemLines.length > 0 ? itemLines : [titleLine];
+
+  const items: TodoChecklistItem[] = normalizedItemLines.map((text) => ({
     id: nanoid(),
     text,
     done: false,
@@ -28,7 +31,7 @@ function parseTodoDraft(rawValue: string) {
 
   return {
     title: titleLine,
-    content: itemLines.join("\n"),
+    content: normalizedItemLines.join("\n"),
     items,
   };
 }
