@@ -15,6 +15,13 @@ export interface VideoItem extends BaseEntity {
   tags?: string[];
 }
 
+export interface MusicTrack extends BaseEntity {
+  type: "music";
+  artist?: string;
+  url: string;
+  tags?: string[];
+}
+
 export interface NoteItem extends BaseEntity {
   type: "note";
   content: string;

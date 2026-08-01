@@ -27,6 +27,7 @@ export function Sidebar() {
     (state) => state.isSidebarCollapsed,
   );
   const toggleSidebar = useLayoutStore((state) => state.toggleSidebar);
+  const openRightPanel = useLayoutStore((state) => state.openRightPanel);
 
   return (
     <aside
@@ -62,6 +63,11 @@ export function Sidebar() {
           return (
             <button
               key={item.label}
+              onClick={() => {
+                if (item.label === "Music") {
+                  openRightPanel("player");
+                }
+              }}
               className={`flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm text-neutral-300 transition hover:bg-neutral-800 hover:text-white ${
                 isSidebarCollapsed ? "justify-center" : ""
               }`}

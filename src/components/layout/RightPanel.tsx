@@ -36,7 +36,7 @@ export function RightPanel() {
             <div>
               <h3 className="font-semibold">Mini Player</h3>
               <p className="text-xs text-neutral-500">
-                Music controls will live here.
+                Play tracks while you work.
               </p>
             </div>
           </div>

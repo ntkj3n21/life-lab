@@ -1,3 +1,4 @@
+import { MusicAudioEngine } from "./components/layout/MusicAudioEngine";
 import { RightPanel } from "./components/layout/RightPanel";
 import { RightRail } from "./components/layout/RightRail";
 import { Sidebar } from "./components/layout/Sidebar";
@@ -7,6 +8,7 @@ import { VideoWorkspace } from "./modules/media/components/VideoWorkspace";
 export default function App() {
   return (
     <div className="flex h-screen overflow-hidden bg-neutral-950 text-neutral-100">
+      <MusicAudioEngine />
       <Sidebar />
 
       <main className="flex min-w-0 flex-1 flex-col">
