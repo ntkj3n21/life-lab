@@ -25,10 +25,20 @@ export interface YouTubeVideo {
 export interface LibraryVideo {
   id: number;
   youtubeSource: YouTubeVideo;
+
   customTitle: string | null;
   personalDescription: string | null;
+
   addedAt: string;
   updatedAt: string;
+
+  /*
+   * Derived from VALID WatchSessions only.
+   * These values are not persisted in library_videos.
+   */
+  watched: boolean;
+  viewCount: number;
+  lastWatchedAt: string | null;
 }
 
 export interface PagedResponse<T> {
@@ -85,83 +95,149 @@ export interface LibraryQuery {
   sortDirection?: "asc" | "desc";
 }
 
-function buildLibraryQuery(query: LibraryQuery = {}) {
-  const params = new URLSearchParams();
+function buildLibraryQuery(
+  query: LibraryQuery = {},
+) {
+  const params =
+    new URLSearchParams();
 
   if (query.page !== undefined) {
-    params.set("page", String(query.page));
-  }
-
-  if (query.size !== undefined) {
-    params.set("size", String(query.size));
-  }
-
-  if (query.q?.trim()) {
-    params.set("q", query.q.trim());
-  }
-
-  if (query.minDurationSeconds !== undefined) {
     params.set(
-      "minDurationSeconds",
-      String(query.minDurationSeconds),
+      "page",
+      String(query.page),
     );
   }
 
-  if (query.maxDurationSeconds !== undefined) {
+  if (query.size !== undefined) {
+    params.set(
+      "size",
+      String(query.size),
+    );
+  }
+
+  if (query.q?.trim()) {
+    params.set(
+      "q",
+      query.q.trim(),
+    );
+  }
+
+  if (
+    query.minDurationSeconds !==
+    undefined
+  ) {
+    params.set(
+      "minDurationSeconds",
+      String(
+        query.minDurationSeconds,
+      ),
+    );
+  }
+
+  if (
+    query.maxDurationSeconds !==
+    undefined
+  ) {
     params.set(
       "maxDurationSeconds",
-      String(query.maxDurationSeconds),
+      String(
+        query.maxDurationSeconds,
+      ),
     );
   }
 
   if (query.publishedFrom) {
-    params.set("publishedFrom", query.publishedFrom);
+    params.set(
+      "publishedFrom",
+      query.publishedFrom,
+    );
   }
 
   if (query.publishedTo) {
-    params.set("publishedTo", query.publishedTo);
+    params.set(
+      "publishedTo",
+      query.publishedTo,
+    );
   }
 
   if (query.addedFrom) {
-    params.set("addedFrom", query.addedFrom);
+    params.set(
+      "addedFrom",
+      query.addedFrom,
+    );
   }
 
   if (query.addedTo) {
-    params.set("addedTo", query.addedTo);
+    params.set(
+      "addedTo",
+      query.addedTo,
+    );
   }
 
-  query.tagIds?.forEach((tagId) => {
-    params.append("tagId", String(tagId));
-  });
+  query.tagIds?.forEach(
+    (tagId) => {
+      params.append(
+        "tagId",
+        String(tagId),
+      );
+    },
+  );
 
-  if (query.watched !== undefined) {
-    params.set("watched", String(query.watched));
+  if (
+    query.watched !== undefined
+  ) {
+    params.set(
+      "watched",
+      String(query.watched),
+    );
   }
 
-  if (query.hasNotes !== undefined) {
-    params.set("hasNotes", String(query.hasNotes));
+  if (
+    query.hasNotes !== undefined
+  ) {
+    params.set(
+      "hasNotes",
+      String(query.hasNotes),
+    );
   }
 
   if (query.sortBy) {
-    params.set("sortBy", query.sortBy);
+    params.set(
+      "sortBy",
+      query.sortBy,
+    );
   }
 
   if (query.sortDirection) {
-    params.set("sortDirection", query.sortDirection);
+    params.set(
+      "sortDirection",
+      query.sortDirection,
+    );
   }
 
-  const value = params.toString();
+  const value =
+    params.toString();
 
-  return value ? `?${value}` : "";
+  return value
+    ? `?${value}`
+    : "";
 }
 
-export function getLibrary(query: LibraryQuery = {}) {
-  return apiGet<PagedResponse<LibraryVideo>>(
-    `/api/library/videos${buildLibraryQuery(query)}`,
+export function getLibrary(
+  query: LibraryQuery = {},
+) {
+  return apiGet<
+    PagedResponse<LibraryVideo>
+  >(
+    `/api/library/videos${buildLibraryQuery(
+      query,
+    )}`,
   );
 }
 
-export function getLibraryVideo(libraryVideoId: number) {
+export function getLibraryVideo(
+  libraryVideoId: number,
+) {
   return apiGet<LibraryVideo>(
     `/api/library/videos/${libraryVideoId}`,
   );
@@ -173,7 +249,10 @@ export function addLibraryVideo(
   return apiPost<
     LibraryVideo,
     AddLibraryVideoInput
-  >("/api/library/videos", input);
+  >(
+    "/api/library/videos",
+    input,
+  );
 }
 
 export function updateLibraryVideo(
@@ -183,13 +262,18 @@ export function updateLibraryVideo(
   return apiPatch<
     LibraryVideo,
     UpdateLibraryVideoInput
-  >(`/api/library/videos/${libraryVideoId}`, input);
+  >(
+    `/api/library/videos/${libraryVideoId}`,
+    input,
+  );
 }
 
 export function getLibraryVideoDeleteImpact(
   libraryVideoId: number,
 ) {
-  return apiGet<LibraryVideoDeleteImpact>(
+  return apiGet<
+    LibraryVideoDeleteImpact
+  >(
     `/api/library/videos/${libraryVideoId}/delete-impact`,
   );
 }

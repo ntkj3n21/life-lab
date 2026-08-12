@@ -8,12 +8,24 @@ import {
   type ContextResponse,
 } from "../modules/context/services/contextApi";
 
+export type ReverseContextNoticeTone =
+  | "info"
+  | "warning";
+
+export interface ReverseContextNotice {
+  tone: ReverseContextNoticeTone;
+  title: string;
+  message: string;
+}
+
 interface ReverseContextStore {
   resolution: ContextResponse | null;
 
   isResolving: boolean;
 
   error: ApiError | null;
+
+  notice: ReverseContextNotice | null;
 
   resolveNote: (
     noteId: number,
@@ -23,9 +35,15 @@ interface ReverseContextStore {
     taskId: number,
   ) => Promise<ContextResponse>;
 
+  setNotice: (
+    notice: ReverseContextNotice,
+  ) => void;
+
   clearResolution: () => void;
 
   clearError: () => void;
+
+  clearNotice: () => void;
 
   reset: () => void;
 }
@@ -52,6 +70,9 @@ const initialState = {
   isResolving: false,
 
   error: null as ApiError | null,
+
+  notice:
+    null as ReverseContextNotice | null,
 };
 
 export const useReverseContextStore =
@@ -129,6 +150,12 @@ export const useReverseContextStore =
         }
       },
 
+      setNotice: (notice) => {
+        set({
+          notice,
+        });
+      },
+
       clearResolution: () => {
         set({
           resolution: null,
@@ -138,6 +165,12 @@ export const useReverseContextStore =
       clearError: () => {
         set({
           error: null,
+        });
+      },
+
+      clearNotice: () => {
+        set({
+          notice: null,
         });
       },
 

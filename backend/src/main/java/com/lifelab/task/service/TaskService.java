@@ -1,9 +1,8 @@
 package com.lifelab.task.service;
 
 import java.time.Clock;
-import java.time.OffsetDateTime;
 import java.time.LocalDate;
-import java.util.Locale;
+import java.time.OffsetDateTime;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,8 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.lifelab.auth.domain.Account;
 import com.lifelab.auth.repository.AccountRepository;
-import com.lifelab.common.exception.UnauthenticatedException;
 import com.lifelab.common.dto.PagedResponse;
+import com.lifelab.common.exception.UnauthenticatedException;
+import com.lifelab.common.text.SearchKeywordNormalizer;
 import com.lifelab.note.domain.Note;
 import com.lifelab.note.exception.NoteNotFoundException;
 import com.lifelab.note.repository.NoteRepository;
@@ -25,9 +25,9 @@ import com.lifelab.task.dto.CreateTaskRequest;
 import com.lifelab.task.dto.TaskResponse;
 import com.lifelab.task.dto.UpdateTaskRequest;
 import com.lifelab.task.dto.UpdateTaskStatusRequest;
+import com.lifelab.task.exception.TaskNotFoundException;
 import com.lifelab.task.repository.TaskRepository;
 import com.lifelab.task.repository.TaskSpecifications;
-import com.lifelab.task.exception.TaskNotFoundException;
 
 @Service
 public class TaskService {
@@ -52,12 +52,14 @@ public class TaskService {
     public TaskResponse createIndependentTask(Long accountId, CreateTaskRequest request) {
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(UnauthenticatedException::new);
+
         Task task = Task.createIndependent(
                 account,
                 request.title(),
                 request.description(),
                 request.deadline(),
                 OffsetDateTime.now(clock));
+
         return TaskResponse.from(taskRepository.saveAndFlush(task));
     }
 
@@ -68,12 +70,14 @@ public class TaskService {
             CreateTaskRequest request) {
         Note note = noteRepository.findByIdAndAccount_Id(noteId, accountId)
                 .orElseThrow(NoteNotFoundException::new);
+
         Task task = Task.createFromNote(
                 note,
                 request.title(),
                 request.description(),
                 request.deadline(),
                 OffsetDateTime.now(clock));
+
         return TaskResponse.from(taskRepository.saveAndFlush(task));
     }
 
@@ -86,24 +90,35 @@ public class TaskService {
             TaskStatus status,
             LocalDate deadlineFrom,
             LocalDate deadlineTo) {
-        Specification<Task> specification = TaskSpecifications.ownedBy(accountId);
-        String keyword = normalizeKeyword(query);
+        Specification<Task> specification =
+                TaskSpecifications.ownedBy(accountId);
+
+        String keyword = SearchKeywordNormalizer.normalize(query);
+
         if (keyword != null) {
-            specification = specification.and(TaskSpecifications.keywordContains(keyword));
+            specification =
+                    specification.and(TaskSpecifications.keywordContains(keyword));
         }
+
         if (status != null) {
-            specification = specification.and(TaskSpecifications.hasStatus(status));
+            specification =
+                    specification.and(TaskSpecifications.hasStatus(status));
         }
+
         if (deadlineFrom != null || deadlineTo != null) {
             specification = specification.and(
                     TaskSpecifications.deadlineBetween(deadlineFrom, deadlineTo));
         }
+
         PageRequest pageRequest = PageRequest.of(
                 page,
                 size,
                 Sort.by(Sort.Direction.DESC, "createdAt")
                         .and(Sort.by(Sort.Direction.DESC, "id")));
-        Page<Task> tasks = taskRepository.findAll(specification, pageRequest);
+
+        Page<Task> tasks =
+                taskRepository.findAll(specification, pageRequest);
+
         return PagedResponse.from(tasks.map(TaskResponse::from));
     }
 
@@ -118,11 +133,13 @@ public class TaskService {
             Long taskId,
             UpdateTaskRequest request) {
         Task task = findOwnedTask(accountId, taskId);
+
         task.updateDetails(
                 request.title(),
                 request.description(),
                 request.deadline(),
                 OffsetDateTime.now(clock));
+
         return TaskResponse.from(taskRepository.saveAndFlush(task));
     }
 
@@ -132,7 +149,11 @@ public class TaskService {
             Long taskId,
             UpdateTaskStatusRequest request) {
         Task task = findOwnedTask(accountId, taskId);
-        task.changeStatus(TaskStatus.valueOf(request.status()), OffsetDateTime.now(clock));
+
+        task.changeStatus(
+                TaskStatus.valueOf(request.status()),
+                OffsetDateTime.now(clock));
+
         return TaskResponse.from(taskRepository.saveAndFlush(task));
     }
 
@@ -141,14 +162,6 @@ public class TaskService {
         Task task = findOwnedTask(accountId, taskId);
         taskRepository.delete(task);
         taskRepository.flush();
-    }
-
-    private String normalizeKeyword(String query) {
-        if (query == null) {
-            return null;
-        }
-        String stripped = query.strip();
-        return stripped.isEmpty() ? null : stripped.toLowerCase(Locale.ROOT);
     }
 
     private Task findOwnedTask(Long accountId, Long taskId) {

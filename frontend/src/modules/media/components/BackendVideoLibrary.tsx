@@ -2,28 +2,32 @@ import {
   useEffect,
   useState,
 } from "react";
-import {
-  ChevronLeft,
-  ChevronRight,
-  RefreshCw,
-  RotateCcw,
-  Search,
-  SlidersHorizontal,
-} from "lucide-react";
+import { RefreshCw } from "lucide-react";
 
+import { ConfirmDialog } from "../../../components/ui/ConfirmDialog";
 import { useLibraryStore } from "../../../stores/libraryStore";
 import { useTagStore } from "../../../stores/tagStore";
 import {
   getLibraryVideoDisplayTitle,
   type LibraryQuery,
   type LibraryVideo,
+  type LibraryVideoDeleteImpact,
   type UpdateLibraryVideoInput,
 } from "../services/libraryApi";
 import { LibraryAddVideoForm } from "./LibraryAddVideoForm";
+import {
+  LibraryFilters,
+  type BooleanFilter,
+  type LibrarySortBy,
+  type LibrarySortDirection,
+} from "./LibraryFilters";
+import { LibraryPagination } from "./LibraryPagination";
 import { LibraryVideoCard } from "./LibraryVideoCard";
+import {
+  LibraryViewModes,
+  type LibraryViewMode,
+} from "./LibraryViewModes";
 import { TagManager } from "./TagManager";
-
-type BooleanFilter = "" | "true" | "false";
 
 interface BackendVideoLibraryProps {
   activeVideoId?: number;
@@ -37,22 +41,98 @@ interface BackendVideoLibraryProps {
   ) => void;
 }
 
+interface PendingVideoDelete {
+  video: LibraryVideo;
+  impact: LibraryVideoDeleteImpact;
+}
+
+type AppliedLibraryQuery =
+  Omit<
+    LibraryQuery,
+    "page" | "size"
+  >;
+
+const DEFAULT_APPLIED_QUERY:
+  AppliedLibraryQuery = {
+    sortBy: "addedAt",
+    sortDirection: "desc",
+  };
+
+function applyViewMode(
+  query: AppliedLibraryQuery,
+  mode: LibraryViewMode,
+): AppliedLibraryQuery {
+  switch (mode) {
+    case "recent":
+      return {
+        ...query,
+        watched: true,
+        sortBy: "lastWatchedAt",
+        sortDirection: "desc",
+      };
+
+    case "most":
+      return {
+        ...query,
+        watched: true,
+        sortBy: "viewCount",
+        sortDirection: "desc",
+      };
+
+    case "all":
+      return query;
+  }
+}
+
+function parseOptionalNonNegativeInteger(
+  value: string,
+) {
+  if (!value.trim()) {
+    return {
+      value: undefined,
+      error: null,
+    };
+  }
+
+  const parsed =
+    Number(value);
+
+  if (
+    !Number.isSafeInteger(parsed) ||
+    parsed < 0
+  ) {
+    return {
+      value: undefined,
+      error:
+        "Duration values must be whole numbers greater than or equal to 0.",
+    };
+  }
+
+  return {
+    value: parsed,
+    error: null,
+  };
+}
+
 export function BackendVideoLibrary({
   activeVideoId,
   onOpenVideo,
   onVideoDeleted,
 }: BackendVideoLibraryProps) {
-  const videos = useLibraryStore(
-    (state) => state.videos,
-  );
+  const videos =
+    useLibraryStore(
+      (state) => state.videos,
+    );
 
-  const page = useLibraryStore(
-    (state) => state.page,
-  );
+  const page =
+    useLibraryStore(
+      (state) => state.page,
+    );
 
-  const size = useLibraryStore(
-    (state) => state.size,
-  );
+  const size =
+    useLibraryStore(
+      (state) => state.size,
+    );
 
   const totalElements =
     useLibraryStore(
@@ -62,22 +142,24 @@ export function BackendVideoLibrary({
 
   const totalPages =
     useLibraryStore(
-      (state) => state.totalPages,
+      (state) =>
+        state.totalPages,
     );
 
-  const isLoading = useLibraryStore(
-    (state) => state.isLoading,
-  );
+  const isLoading =
+    useLibraryStore(
+      (state) => state.isLoading,
+    );
 
   const isMutating =
     useLibraryStore(
-      (state) =>
-        state.isMutating,
+      (state) => state.isMutating,
     );
 
-  const error = useLibraryStore(
-    (state) => state.error,
-  );
+  const error =
+    useLibraryStore(
+      (state) => state.error,
+    );
 
   const loadLibrary =
     useLibraryStore(
@@ -109,20 +191,54 @@ export function BackendVideoLibrary({
         state.clearError,
     );
 
-  const tags = useTagStore(
-    (state) => state.tags,
-  );
+  const tags =
+    useTagStore(
+      (state) => state.tags,
+    );
 
-  const loadTags = useTagStore(
-    (state) => state.loadTags,
-  );
-
-  const [searchText, setSearchText] =
-    useState("");
+  const loadTags =
+    useTagStore(
+      (state) => state.loadTags,
+    );
 
   const [
-    selectedTagId,
-    setSelectedTagId,
+    searchText,
+    setSearchText,
+  ] = useState("");
+
+  const [
+    selectedTagIds,
+    setSelectedTagIds,
+  ] = useState<number[]>([]);
+
+  const [
+    minDurationSeconds,
+    setMinDurationSeconds,
+  ] = useState("");
+
+  const [
+    maxDurationSeconds,
+    setMaxDurationSeconds,
+  ] = useState("");
+
+  const [
+    publishedFrom,
+    setPublishedFrom,
+  ] = useState("");
+
+  const [
+    publishedTo,
+    setPublishedTo,
+  ] = useState("");
+
+  const [
+    addedFrom,
+    setAddedFrom,
+  ] = useState("");
+
+  const [
+    addedTo,
+    setAddedTo,
   ] = useState("");
 
   const [
@@ -137,26 +253,61 @@ export function BackendVideoLibrary({
   ] =
     useState<BooleanFilter>("");
 
-  const [sortBy, setSortBy] =
-    useState<
-      NonNullable<
-        LibraryQuery["sortBy"]
-      >
-    >("addedAt");
+  const [
+    sortBy,
+    setSortBy,
+  ] =
+    useState<LibrarySortBy>(
+      "addedAt",
+    );
 
   const [
     sortDirection,
     setSortDirection,
   ] =
-    useState<
-      NonNullable<
-        LibraryQuery["sortDirection"]
-      >
-    >("desc");
+    useState<LibrarySortDirection>(
+      "desc",
+    );
+
+  const [
+    viewMode,
+    setViewMode,
+  ] =
+    useState<LibraryViewMode>(
+      "all",
+    );
+
+  const [
+    appliedQuery,
+    setAppliedQuery,
+  ] =
+    useState<AppliedLibraryQuery>(
+      DEFAULT_APPLIED_QUERY,
+    );
+
+  const [
+    validationMessage,
+    setValidationMessage,
+  ] = useState<
+    string | null
+  >(null);
 
   const [
     showAdvancedFilters,
     setShowAdvancedFilters,
+  ] = useState(false);
+
+  const [
+    pendingDelete,
+    setPendingDelete,
+  ] =
+    useState<PendingVideoDelete | null>(
+      null,
+    );
+
+  const [
+    isPreparingDelete,
+    setIsPreparingDelete,
   ] = useState(false);
 
   useEffect(() => {
@@ -167,54 +318,197 @@ export function BackendVideoLibrary({
     void loadTags().catch(() => {
       // tagStore keeps error.
     });
-  }, [loadLibrary, loadTags]);
+  }, [
+    loadLibrary,
+    loadTags,
+  ]);
 
-  function buildCurrentQuery(
+  function buildAppliedQuery(
     targetPage: number,
+    mode: LibraryViewMode =
+      viewMode,
   ): LibraryQuery {
-    const parsedTagId =
-      Number(selectedTagId);
-
     return {
       page: targetPage,
       size,
+      ...applyViewMode(
+        appliedQuery,
+        mode,
+      ),
+    };
+  }
 
-      q:
-        searchText.trim() ||
-        undefined,
+  function buildDraftQuery():
+    | {
+        query:
+          AppliedLibraryQuery;
+        error: null;
+      }
+    | {
+        query: null;
+        error: string;
+      } {
+    const parsedMin =
+      parseOptionalNonNegativeInteger(
+        minDurationSeconds,
+      );
 
-      tagIds:
-        selectedTagId &&
-        Number.isFinite(
-          parsedTagId,
-        )
-          ? [parsedTagId]
-          : undefined,
+    if (parsedMin.error) {
+      return {
+        query: null,
+        error: parsedMin.error,
+      };
+    }
 
-      watched:
-        watchedFilter === ""
-          ? undefined
-          : watchedFilter ===
-            "true",
+    const parsedMax =
+      parseOptionalNonNegativeInteger(
+        maxDurationSeconds,
+      );
 
-      hasNotes:
-        notesFilter === ""
-          ? undefined
-          : notesFilter ===
-            "true",
+    if (parsedMax.error) {
+      return {
+        query: null,
+        error: parsedMax.error,
+      };
+    }
 
-      sortBy,
-      sortDirection,
+    if (
+      parsedMin.value !==
+        undefined &&
+      parsedMax.value !==
+        undefined &&
+      parsedMin.value >
+        parsedMax.value
+    ) {
+      return {
+        query: null,
+        error:
+          "Minimum duration must be less than or equal to maximum duration.",
+      };
+    }
+
+    if (
+      publishedFrom &&
+      publishedTo &&
+      publishedFrom >
+        publishedTo
+    ) {
+      return {
+        query: null,
+        error:
+          "Published-from date must be on or before published-to date.",
+      };
+    }
+
+    if (
+      addedFrom &&
+      addedTo &&
+      addedFrom > addedTo
+    ) {
+      return {
+        query: null,
+        error:
+          "Added-from date must be on or before added-to date.",
+      };
+    }
+
+    const availableTagIds =
+      new Set(
+        tags.map(
+          (tag) => tag.id,
+        ),
+      );
+
+    const validTagIds =
+      selectedTagIds.filter(
+        (tagId) =>
+          availableTagIds.has(
+            tagId,
+          ),
+      );
+
+    return {
+      error: null,
+      query: {
+        q:
+          searchText.trim() ||
+          undefined,
+
+        minDurationSeconds:
+          parsedMin.value,
+
+        maxDurationSeconds:
+          parsedMax.value,
+
+        publishedFrom:
+          publishedFrom ||
+          undefined,
+
+        publishedTo:
+          publishedTo ||
+          undefined,
+
+        addedFrom:
+          addedFrom ||
+          undefined,
+
+        addedTo:
+          addedTo ||
+          undefined,
+
+        tagIds:
+          validTagIds.length >
+          0
+            ? validTagIds
+            : undefined,
+
+        watched:
+          watchedFilter === ""
+            ? undefined
+            : watchedFilter ===
+              "true",
+
+        hasNotes:
+          notesFilter === ""
+            ? undefined
+            : notesFilter ===
+              "true",
+
+        sortBy,
+        sortDirection,
+      },
     };
   }
 
   async function applyFilters() {
     clearError();
+    setValidationMessage(
+      null,
+    );
+
+    const draft =
+      buildDraftQuery();
+
+    if (draft.query === null) {
+      setValidationMessage(
+        draft.error,
+      );
+      return;
+    }
+
+    setAppliedQuery(
+      draft.query,
+    );
 
     try {
-      await loadLibrary(
-        buildCurrentQuery(0),
-      );
+      await loadLibrary({
+        page: 0,
+        size,
+        ...applyViewMode(
+          draft.query,
+          viewMode,
+        ),
+      });
     } catch {
       // libraryStore keeps error.
     }
@@ -222,11 +516,23 @@ export function BackendVideoLibrary({
 
   async function resetFilters() {
     setSearchText("");
-    setSelectedTagId("");
+    setSelectedTagIds([]);
+    setMinDurationSeconds("");
+    setMaxDurationSeconds("");
+    setPublishedFrom("");
+    setPublishedTo("");
+    setAddedFrom("");
+    setAddedTo("");
     setWatchedFilter("");
     setNotesFilter("");
     setSortBy("addedAt");
     setSortDirection("desc");
+    setAppliedQuery(
+      DEFAULT_APPLIED_QUERY,
+    );
+    setValidationMessage(
+      null,
+    );
 
     clearError();
 
@@ -234,17 +540,67 @@ export function BackendVideoLibrary({
       await loadLibrary({
         page: 0,
         size,
-        sortBy: "addedAt",
-        sortDirection: "desc",
+        ...applyViewMode(
+          DEFAULT_APPLIED_QUERY,
+          viewMode,
+        ),
       });
     } catch {
       // libraryStore keeps error.
     }
   }
 
+  async function handleChangeViewMode(
+    nextMode: LibraryViewMode,
+  ) {
+    if (
+      isLoading ||
+      nextMode === viewMode
+    ) {
+      return;
+    }
+
+    clearError();
+    setValidationMessage(
+      null,
+    );
+
+    try {
+      await loadLibrary(
+        buildAppliedQuery(
+          0,
+          nextMode,
+        ),
+      );
+
+      setViewMode(nextMode);
+    } catch {
+      // libraryStore keeps error.
+    }
+  }
+
+  function toggleTag(
+    tagId: number,
+  ) {
+    setSelectedTagIds(
+      (current) =>
+        current.includes(tagId)
+          ? current.filter(
+              (currentTagId) =>
+                currentTagId !==
+                tagId,
+            )
+          : [
+              ...current,
+              tagId,
+            ],
+    );
+  }
+
   async function handleUpdateVideo(
     libraryVideoId: number,
-    input: UpdateLibraryVideoInput,
+    input:
+      UpdateLibraryVideoInput,
   ) {
     clearError();
 
@@ -257,11 +613,15 @@ export function BackendVideoLibrary({
   async function handleDeleteVideo(
     video: LibraryVideo,
   ) {
-    if (isMutating) {
+    if (
+      isMutating ||
+      isPreparingDelete
+    ) {
       return;
     }
 
     clearError();
+    setIsPreparingDelete(true);
 
     try {
       const impact =
@@ -269,44 +629,46 @@ export function BackendVideoLibrary({
           video.id,
         );
 
-      const displayTitle =
-        getLibraryVideoDisplayTitle(
-          video,
-        );
+      setPendingDelete({
+        video,
+        impact,
+      });
+    } catch {
+      // libraryStore keeps error.
+    } finally {
+      setIsPreparingDelete(false);
+    }
+  }
 
-      const confirmed =
-        window.confirm(
-          [
-            `Delete "${displayTitle}" from your library?`,
-            "",
-            `${impact.watchSessionCountToDelete} watch session(s) will be deleted.`,
-            `${impact.tagLinkCountToDelete} tag link(s) will be removed.`,
-            `${impact.noteCountPreserved} note(s) will be preserved.`,
-            `${impact.taskCountPreserved} task(s) will be preserved.`,
-            impact.youtubeSourcePreserved
-              ? "The YouTube source will be preserved."
-              : "The YouTube source will not be preserved.",
-          ].join("\n"),
-        );
+  async function confirmDeleteVideo() {
+    if (
+      !pendingDelete ||
+      isMutating
+    ) {
+      return;
+    }
 
-      if (!confirmed) {
-        return;
-      }
+    clearError();
 
-      await deleteVideo(video.id);
+    const targetPage =
+      videos.length === 1 &&
+      page > 0
+        ? page - 1
+        : page;
 
-      onVideoDeleted?.(
-        video.id,
+    try {
+      await deleteVideo(
+        pendingDelete.video.id,
       );
 
-      const targetPage =
-        videos.length === 1 &&
-        page > 0
-          ? page - 1
-          : page;
+      onVideoDeleted?.(
+        pendingDelete.video.id,
+      );
+
+      setPendingDelete(null);
 
       await loadLibrary(
-        buildCurrentQuery(
+        buildAppliedQuery(
           targetPage,
         ),
       );
@@ -328,7 +690,7 @@ export function BackendVideoLibrary({
 
     try {
       await loadLibrary(
-        buildCurrentQuery(
+        buildAppliedQuery(
           nextPage,
         ),
       );
@@ -339,18 +701,26 @@ export function BackendVideoLibrary({
 
   async function handleRefresh() {
     try {
-      await loadLibrary(
-        buildCurrentQuery(page),
-      );
-
-      await loadTags(true);
+      await Promise.all([
+        loadLibrary(
+          buildAppliedQuery(page),
+        ),
+        loadTags(true),
+      ]);
     } catch {
       // stores keep errors.
     }
   }
 
   return (
-    <section className="w-full rounded-2xl border border-neutral-800 bg-neutral-900 p-4">
+    <section
+      aria-busy={
+        isLoading ||
+        isMutating ||
+        isPreparingDelete
+      }
+      className="w-full rounded-2xl border border-neutral-800 bg-neutral-900 p-4"
+    >
       <div className="mb-4 flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
         <div>
           <h4 className="font-medium">
@@ -358,8 +728,7 @@ export function BackendVideoLibrary({
           </h4>
 
           <p className="mt-1 text-sm text-neutral-500">
-            Your YouTube sources
-            stored in Life Lab.
+            Your YouTube sources stored in Life Lab.
           </p>
         </div>
 
@@ -377,6 +746,7 @@ export function BackendVideoLibrary({
               void handleRefresh()
             }
             disabled={isLoading}
+            aria-label="Refresh library"
             title="Refresh library"
             className="flex h-8 w-8 items-center justify-center rounded-lg border border-neutral-800 text-neutral-500 transition hover:bg-neutral-800 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
           >
@@ -392,202 +762,116 @@ export function BackendVideoLibrary({
         </div>
       </div>
 
+      <LibraryViewModes
+        mode={viewMode}
+        isLoading={isLoading}
+        onChange={
+          handleChangeViewMode
+        }
+      />
+
       <LibraryAddVideoForm
         onVideoAdded={(video) => {
           onOpenVideo(video);
 
           void loadLibrary(
-            buildCurrentQuery(0),
+            buildAppliedQuery(0),
           ).catch(() => {
             // libraryStore keeps error.
           });
         }}
       />
 
-      <div className="mt-4 rounded-2xl border border-neutral-800 bg-neutral-950 p-3">
-        <div className="flex flex-col gap-2 lg:flex-row">
-          <div className="flex min-w-0 flex-1 items-center gap-2 rounded-xl border border-neutral-800 bg-neutral-900 px-3">
-            <Search
-              size={15}
-              className="shrink-0 text-neutral-500"
-            />
-
-            <input
-              value={searchText}
-              onChange={(event) =>
-                setSearchText(
-                  event.target.value,
-                )
-              }
-              onKeyDown={(event) => {
-                if (
-                  event.key ===
-                  "Enter"
-                ) {
-                  void applyFilters();
-                }
-              }}
-              placeholder="Search videos..."
-              className="min-w-0 flex-1 bg-transparent py-2.5 text-sm outline-none placeholder:text-neutral-600"
-            />
-          </div>
-
-          <button
-            type="button"
-            onClick={() =>
-              void applyFilters()
-            }
-            disabled={isLoading}
-            className="rounded-xl bg-white px-4 py-2 text-sm font-medium text-neutral-950 hover:bg-neutral-200 disabled:opacity-50"
-          >
-            Search
-          </button>
-
-          <button
-            type="button"
-            onClick={() =>
-              setShowAdvancedFilters(
-                (value) => !value,
-              )
-            }
-            className="flex items-center justify-center gap-2 rounded-xl border border-neutral-800 px-3 py-2 text-sm text-neutral-400 hover:bg-neutral-800 hover:text-white"
-          >
-            <SlidersHorizontal
-              size={15}
-            />
-            Filters
-          </button>
-
-          <button
-            type="button"
-            onClick={() =>
-              void resetFilters()
-            }
-            disabled={isLoading}
-            title="Reset filters"
-            className="flex items-center justify-center rounded-xl border border-neutral-800 px-3 py-2 text-neutral-500 hover:bg-neutral-800 hover:text-white disabled:opacity-50"
-          >
-            <RotateCcw
-              size={15}
-            />
-          </button>
-        </div>
-
-        {showAdvancedFilters && (
-          <div className="mt-3 grid gap-2 md:grid-cols-2 xl:grid-cols-5">
-            <select
-              value={selectedTagId}
-              onChange={(event) =>
-                setSelectedTagId(
-                  event.target.value,
-                )
-              }
-              className="rounded-xl border border-neutral-800 bg-neutral-900 px-3 py-2 text-xs text-neutral-300 outline-none"
-            >
-              <option value="">
-                All tags
-              </option>
-
-              {tags.map((tag) => (
-                <option
-                  key={tag.id}
-                  value={tag.id}
-                >
-                  {tag.name}
-                </option>
-              ))}
-            </select>
-
-            <select
-              value={watchedFilter}
-              onChange={(event) =>
-                setWatchedFilter(
-                  event.target
-                    .value as BooleanFilter,
-                )
-              }
-              className="rounded-xl border border-neutral-800 bg-neutral-900 px-3 py-2 text-xs text-neutral-300 outline-none"
-            >
-              <option value="">
-                Any watch status
-              </option>
-              <option value="true">
-                Watched
-              </option>
-              <option value="false">
-                Not watched
-              </option>
-            </select>
-
-            <select
-              value={notesFilter}
-              onChange={(event) =>
-                setNotesFilter(
-                  event.target
-                    .value as BooleanFilter,
-                )
-              }
-              className="rounded-xl border border-neutral-800 bg-neutral-900 px-3 py-2 text-xs text-neutral-300 outline-none"
-            >
-              <option value="">
-                Any note status
-              </option>
-              <option value="true">
-                Has notes
-              </option>
-              <option value="false">
-                No notes
-              </option>
-            </select>
-
-            <select
-              value={sortBy}
-              onChange={(event) =>
-                setSortBy(
-                  event.target
-                    .value as NonNullable<
-                    LibraryQuery["sortBy"]
-                  >,
-                )
-              }
-              className="rounded-xl border border-neutral-800 bg-neutral-900 px-3 py-2 text-xs text-neutral-300 outline-none"
-            >
-              <option value="addedAt">
-                Added date
-              </option>
-              <option value="duration">
-                Duration
-              </option>
-              <option value="viewCount">
-                View count
-              </option>
-              <option value="lastWatchedAt">
-                Last watched
-              </option>
-            </select>
-
-            <select
-              value={sortDirection}
-              onChange={(event) =>
-                setSortDirection(
-                  event.target
-                    .value as NonNullable<
-                    LibraryQuery["sortDirection"]
-                  >,
-                )
-              }
-              className="rounded-xl border border-neutral-800 bg-neutral-900 px-3 py-2 text-xs text-neutral-300 outline-none"
-            >
-              <option value="desc">
-                Descending
-              </option>
-              <option value="asc">
-                Ascending
-              </option>
-            </select>
-          </div>
-        )}
-      </div>
+      <LibraryFilters
+        tags={tags}
+        searchText={searchText}
+        selectedTagIds={
+          selectedTagIds
+        }
+        minDurationSeconds={
+          minDurationSeconds
+        }
+        maxDurationSeconds={
+          maxDurationSeconds
+        }
+        publishedFrom={
+          publishedFrom
+        }
+        publishedTo={publishedTo}
+        addedFrom={addedFrom}
+        addedTo={addedTo}
+        watchedFilter={
+          viewMode === "all"
+            ? watchedFilter
+            : "true"
+        }
+        notesFilter={
+          notesFilter
+        }
+        sortBy={
+          viewMode === "recent"
+            ? "lastWatchedAt"
+            : viewMode === "most"
+              ? "viewCount"
+              : sortBy
+        }
+        sortDirection={
+          viewMode === "all"
+            ? sortDirection
+            : "desc"
+        }
+        showAdvancedFilters={
+          showAdvancedFilters
+        }
+        isLoading={isLoading}
+        watchAndSortLocked={
+          viewMode !== "all"
+        }
+        validationMessage={
+          validationMessage
+        }
+        onSearchTextChange={
+          setSearchText
+        }
+        onToggleTag={toggleTag}
+        onMinDurationSecondsChange={
+          setMinDurationSeconds
+        }
+        onMaxDurationSecondsChange={
+          setMaxDurationSeconds
+        }
+        onPublishedFromChange={
+          setPublishedFrom
+        }
+        onPublishedToChange={
+          setPublishedTo
+        }
+        onAddedFromChange={
+          setAddedFrom
+        }
+        onAddedToChange={
+          setAddedTo
+        }
+        onWatchedFilterChange={
+          setWatchedFilter
+        }
+        onNotesFilterChange={
+          setNotesFilter
+        }
+        onSortByChange={
+          setSortBy
+        }
+        onSortDirectionChange={
+          setSortDirection
+        }
+        onToggleAdvancedFilters={() =>
+          setShowAdvancedFilters(
+            (value) => !value,
+          )
+        }
+        onApply={applyFilters}
+        onReset={resetFilters}
+      />
 
       <details className="mt-4">
         <summary className="cursor-pointer select-none text-sm text-neutral-400 hover:text-white">
@@ -600,7 +884,10 @@ export function BackendVideoLibrary({
       </details>
 
       {error && (
-        <div className="mt-4 rounded-xl border border-red-900/60 bg-red-950/40 px-4 py-3">
+        <div
+          role="alert"
+          className="mt-4 rounded-xl border border-red-900/60 bg-red-950/40 px-4 py-3"
+        >
           <p className="text-sm text-red-300">
             {error.message}
           </p>
@@ -632,100 +919,110 @@ export function BackendVideoLibrary({
 
       {isLoading &&
       videos.length === 0 ? (
-        <div className="flex min-h-48 items-center justify-center">
+        <div
+          role="status"
+          className="flex min-h-48 items-center justify-center"
+        >
           <p className="text-sm text-neutral-500">
             Loading library...
           </p>
         </div>
       ) : videos.length === 0 ? (
-        <div className="mt-4 rounded-2xl border border-dashed border-neutral-800 bg-neutral-950 p-8 text-center">
+        <div
+          role="status"
+          className="mt-4 rounded-2xl border border-dashed border-neutral-800 bg-neutral-950 p-8 text-center"
+        >
           <p className="text-sm font-medium text-neutral-300">
             No videos found
           </p>
 
           <p className="mt-1 text-sm text-neutral-500">
-            Try changing your search
-            or filters.
+            No Library Video matches the current search and filter conditions. Change or reset the conditions to search again.
           </p>
         </div>
       ) : (
         <div className="mt-4 grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-4">
-          {videos.map((video) => (
-            <LibraryVideoCard
-              key={video.id}
-              video={video}
-              isActive={
-                activeVideoId ===
-                video.id
-              }
-              isMutating={
-                isMutating
-              }
-              onOpen={onOpenVideo}
-              onUpdate={
-                handleUpdateVideo
-              }
-              onDelete={(
-                targetVideo,
-              ) =>
-                void handleDeleteVideo(
+          {videos.map(
+            (video) => (
+              <LibraryVideoCard
+                key={video.id}
+                video={video}
+                isActive={
+                  activeVideoId ===
+                  video.id
+                }
+                isMutating={
+                  isMutating ||
+                  isPreparingDelete
+                }
+                onOpen={
+                  onOpenVideo
+                }
+                onUpdate={
+                  handleUpdateVideo
+                }
+                onDelete={(
                   targetVideo,
-                )
-              }
-            />
-          ))}
+                ) =>
+                  void handleDeleteVideo(
+                    targetVideo,
+                  )
+                }
+              />
+            ),
+          )}
         </div>
       )}
 
-      {totalPages > 1 && (
-        <div className="mt-5 flex items-center justify-between border-t border-neutral-800 pt-4">
-          <p className="text-xs text-neutral-500">
-            Page {page + 1} of{" "}
-            {totalPages}
-          </p>
+      <LibraryPagination
+        page={page}
+        totalPages={totalPages}
+        isLoading={isLoading}
+        onChangePage={
+          handleChangePage
+        }
+      />
 
-          <div className="flex gap-2">
-            <button
-              type="button"
-              onClick={() =>
-                void handleChangePage(
-                  page - 1,
-                )
-              }
-              disabled={
-                page === 0 ||
-                isLoading
-              }
-              className="flex items-center gap-1 rounded-lg border border-neutral-800 px-3 py-1.5 text-xs text-neutral-400 hover:bg-neutral-800 hover:text-white disabled:opacity-40"
-            >
-              <ChevronLeft
-                size={14}
-              />
-              Previous
-            </button>
-
-            <button
-              type="button"
-              onClick={() =>
-                void handleChangePage(
-                  page + 1,
-                )
-              }
-              disabled={
-                page + 1 >=
-                  totalPages ||
-                isLoading
-              }
-              className="flex items-center gap-1 rounded-lg border border-neutral-800 px-3 py-1.5 text-xs text-neutral-400 hover:bg-neutral-800 hover:text-white disabled:opacity-40"
-            >
-              Next
-              <ChevronRight
-                size={14}
-              />
-            </button>
-          </div>
-        </div>
-      )}
+      <ConfirmDialog
+        open={
+          pendingDelete !== null
+        }
+        title={
+          pendingDelete
+            ? `Delete "${getLibraryVideoDisplayTitle(
+                pendingDelete.video,
+              )}" from your Library?`
+            : "Delete video from Library?"
+        }
+        description="This removes only the personal Library entry and its Library-specific data. Historical Note and Task context is preserved according to the impact below."
+        details={
+          pendingDelete
+            ? [
+                `${pendingDelete.impact.watchSessionCountToDelete} watch session(s) will be deleted.`,
+                `${pendingDelete.impact.tagLinkCountToDelete} tag link(s) will be removed.`,
+                `${pendingDelete.impact.noteCountPreserved} note(s) will be preserved.`,
+                `${pendingDelete.impact.taskCountPreserved} task(s) will be preserved.`,
+                pendingDelete.impact.youtubeSourcePreserved
+                  ? "The exact YouTube source will be preserved."
+                  : "The exact YouTube source will not be preserved.",
+              ]
+            : []
+        }
+        confirmLabel="Remove from Library"
+        isBusy={isMutating}
+        errorMessage={
+          pendingDelete
+            ? error?.message ??
+              null
+            : null
+        }
+        onConfirm={
+          confirmDeleteVideo
+        }
+        onCancel={() =>
+          setPendingDelete(null)
+        }
+      />
     </section>
   );
 }

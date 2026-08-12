@@ -1,11 +1,37 @@
 import {
-  Film,
-  Music,
+  CalendarDays,
+  Library,
+  ListTodo,
   PanelLeftClose,
   PanelLeftOpen,
+  StickyNote,
 } from "lucide-react";
+import { NavLink } from "react-router-dom";
 
 import { useLayoutStore } from "../../stores/layoutStore";
+
+const navItems = [
+  {
+    to: "/library",
+    label: "Library",
+    icon: Library,
+  },
+  {
+    to: "/notes",
+    label: "Notes",
+    icon: StickyNote,
+  },
+  {
+    to: "/tasks",
+    label: "Tasks",
+    icon: ListTodo,
+  },
+  {
+    to: "/plan",
+    label: "Daily Plan",
+    icon: CalendarDays,
+  },
+] as const;
 
 export function Sidebar() {
   const isSidebarCollapsed =
@@ -20,15 +46,10 @@ export function Sidebar() {
         state.toggleSidebar,
     );
 
-  const openRightPanel =
-    useLayoutStore(
-      (state) =>
-        state.openRightPanel,
-    );
-
   return (
     <aside
-      className={`flex shrink-0 flex-col border-r border-neutral-800 bg-neutral-950 transition-all ${
+      aria-label="Primary navigation"
+      className={`hidden shrink-0 flex-col border-r border-neutral-800 bg-neutral-950 transition-all xl:flex ${
         isSidebarCollapsed
           ? "w-16"
           : "w-64"
@@ -50,7 +71,12 @@ export function Sidebar() {
         <button
           type="button"
           onClick={toggleSidebar}
-          className="rounded-lg border border-neutral-800 p-2 text-neutral-400 hover:bg-neutral-800 hover:text-white"
+          aria-label={
+            isSidebarCollapsed
+              ? "Expand sidebar"
+              : "Collapse sidebar"
+          }
+          className="rounded-lg border border-neutral-800 p-2 text-neutral-400 hover:bg-neutral-800 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-500"
           title={
             isSidebarCollapsed
               ? "Expand sidebar"
@@ -70,59 +96,48 @@ export function Sidebar() {
       </div>
 
       <nav className="flex-1 space-y-1 p-3">
-        <div
-          className={`flex w-full items-center gap-3 rounded-xl bg-neutral-800 px-3 py-2 text-sm text-white ${
-            isSidebarCollapsed
-              ? "justify-center"
-              : ""
-          }`}
-          title={
-            isSidebarCollapsed
-              ? "Media"
-              : undefined
-          }
-        >
-          <Film
-            size={18}
-            className="shrink-0"
-          />
+        {navItems.map(
+          ({
+            to,
+            label,
+            icon: Icon,
+          }) => (
+            <NavLink
+              key={to}
+              to={to}
+              className={({
+                isActive,
+              }) =>
+                `flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-500 ${
+                  isActive
+                    ? "bg-neutral-800 text-white"
+                    : "text-neutral-400 hover:bg-neutral-900 hover:text-neutral-100"
+                } ${
+                  isSidebarCollapsed
+                    ? "justify-center"
+                    : ""
+                }`
+              }
+              title={
+                isSidebarCollapsed
+                  ? label
+                  : undefined
+              }
+            >
+              <Icon
+                size={18}
+                className="shrink-0"
+                aria-hidden="true"
+              />
 
-          {!isSidebarCollapsed && (
-            <span>
-              Media
-            </span>
-          )}
-        </div>
-
-        <button
-          type="button"
-          onClick={() =>
-            openRightPanel(
-              "player",
-            )
-          }
-          className={`flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm text-neutral-300 transition hover:bg-neutral-800 hover:text-white ${
-            isSidebarCollapsed
-              ? "justify-center"
-              : ""
-          }`}
-          title={
-            isSidebarCollapsed
-              ? "Music"
-              : undefined
-          }
-        >
-          <Music
-            size={18}
-            className="shrink-0"
-          />
-
-          {!isSidebarCollapsed && (
-            <span>
-              Music
-            </span>
-          )}
-        </button>
+              {!isSidebarCollapsed && (
+                <span>
+                  {label}
+                </span>
+              )}
+            </NavLink>
+          ),
+        )}
       </nav>
     </aside>
   );

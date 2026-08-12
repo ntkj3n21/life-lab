@@ -109,8 +109,8 @@ Source Preview playback intentionally does not create a WatchSession.
 - TypeScript
 - Vite
 - Tailwind CSS
-- Zustand
-- React Player
+- Zustand (shared client state where cross-screen coordination is required)
+- React Player as the frontend adapter for YouTube embedded playback
 - Lucide React
 
 ### Backend
@@ -196,10 +196,15 @@ DB_PASSWORD=your-local-password
 LIFELAB_YOUTUBE_API_KEY=your-youtube-data-api-key
 
 LIFELAB_JWT_SECRET=your-base64-secret
+LIFELAB_JWT_ISSUER=life-lab
+LIFELAB_JWT_ACCESS_TOKEN_TTL=30m
+LIFELAB_DEFAULT_TIME_ZONE=Asia/Ho_Chi_Minh
 LIFELAB_COOKIE_SECURE=false
 ```
 
 `LIFELAB_JWT_SECRET` must be valid Base64 and decode to at least 32 bytes.
+
+`LIFELAB_DEFAULT_TIME_ZONE` is the backend fallback used only when a Daily Plan request does not include `X-Time-Zone`. The frontend normally sends the browser's resolved IANA timezone automatically.
 
 Do not commit `.env`.
 
@@ -258,6 +263,8 @@ http://localhost:5173
 
 During local development, Vite proxies `/api` requests to the Spring Boot backend.
 
+For Daily Plan, the frontend resolves the browser timezone with `Intl.DateTimeFormat()` and sends it in the `X-Time-Zone` request header. The backend validates that IANA timezone and falls back to `LIFELAB_DEFAULT_TIME_ZONE` only when the header is absent.
+
 ## Validation
 
 ### Backend
@@ -284,6 +291,53 @@ Optional Git whitespace validation:
 ```powershell
 git diff --check
 ```
+
+
+## Production Deployment
+
+Production uses a separate Compose file:
+
+```text
+Browser
+    ↓ HTTPS
+Frontend / Nginx
+    ↓ /api/*
+Spring Boot Backend
+    ↓
+PostgreSQL
+```
+
+Only Nginx publishes host ports. The backend and PostgreSQL remain on internal Docker networks.
+
+Create the production environment file:
+
+```powershell
+Copy-Item .env.production.example .env.production
+```
+
+Validate and build:
+
+```powershell
+docker compose --env-file .env.production -f docker-compose.prod.yml config
+docker compose --env-file .env.production -f docker-compose.prod.yml build
+```
+
+Nginx serves the Vite production build, provides SPA fallback routing, and reverse proxies `/api/*` to the internal backend service.
+
+Production HTTPS expects:
+
+```text
+deploy/certs/fullchain.pem
+deploy/certs/privkey.pem
+```
+
+See `DEPLOYMENT.md` for the complete deployment procedure.
+
+## Frontend State and YouTube Player Notes
+
+Zustand is used for shared state that must coordinate across screens or components, including authentication, active video context, reverse-context navigation, library/tag/watch coordination, notes/tasks, and layout state. Page-local forms and filters remain local React state where practical.
+
+YouTube video playback remains browser-side. `ReactPlayer` is used as the frontend player adapter around YouTube embedded playback; the backend never proxies video streams and only uses the YouTube Data API for metadata/source resolution.
 
 ## Main Workflow
 

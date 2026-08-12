@@ -1,0 +1,71 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "${LIFELAB_HTTP_PORT:-80}:80"
+      - "${LIFELAB_HTTPS_PORT:-443}:443"
+    volumes:
+      - ./deploy/certs:/etc/nginx/certs:ro
+    networks:
+      - frontend_backend
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_HOST: postgres
+      DB_PORT: "5432"
+      DB_NAME: ${DB_NAME:-lifelab}
+      DB_USERNAME: ${DB_USERNAME:-lifelab}
+      DB_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD is required}
+
+      LIFELAB_YOUTUBE_API_KEY: ${LIFELAB_YOUTUBE_API_KEY:?LIFELAB_YOUTUBE_API_KEY is required}
+
+      LIFELAB_JWT_SECRET: ${LIFELAB_JWT_SECRET:?LIFELAB_JWT_SECRET is required}
+      LIFELAB_JWT_ISSUER: ${LIFELAB_JWT_ISSUER:-life-lab}
+      LIFELAB_JWT_ACCESS_TOKEN_TTL: ${LIFELAB_JWT_ACCESS_TOKEN_TTL:-30m}
+
+      LIFELAB_DEFAULT_TIME_ZONE: ${LIFELAB_DEFAULT_TIME_ZONE:-UTC}
+      LIFELAB_COOKIE_SECURE: "true"
+    networks:
+      - frontend_backend
+      - backend_database
+
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME:-lifelab}
+      POSTGRES_USER: ${DB_USERNAME:-lifelab}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD is required}
+    volumes:
+      - lifelab_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    networks:
+      - backend_database
+
+volumes:
+  lifelab_postgres_data:
+
+networks:
+  frontend_backend:
+  backend_database:

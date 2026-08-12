@@ -1,124 +1,87 @@
 import {
-  Pencil,
-  StickyNote,
-  Trash2,
-} from "lucide-react";
-
-import {
   useEffect,
   useState,
 } from "react";
 
+import { ConfirmDialog } from "../../../components/ui/ConfirmDialog";
 import { useContextStore } from "../../../stores/contextStore";
 import { useLibraryStore } from "../../../stores/libraryStore";
 import { useNoteStore } from "../../../stores/noteStore";
-
-import {
-  useReverseContextNavigation,
-} from "../../context/hooks/useReverseContextNavigation";
-
+import { useReverseContextNavigation } from "../../context/hooks/useReverseContextNavigation";
 import type {
   Note,
+  NoteDeleteImpact,
 } from "../services/noteApi";
+import { NoteCard } from "./NoteCard";
+import { QuickNoteComposer } from "./QuickNoteComposer";
 
-import {
-  formatTime,
-} from "../../../utils/formatTime";
+interface PendingNoteDelete {
+  note: Note;
+  impact: NoteDeleteImpact;
+}
 
 export function QuickNotePanel() {
-  const activeContext =
-    useContextStore(
-      (state) =>
-        state.activeContext,
-    );
+  const activeContext = useContextStore(
+    (state) => state.activeContext,
+  );
 
-  const videos =
-    useLibraryStore(
-      (state) =>
-        state.videos,
-    );
+  const videos = useLibraryStore(
+    (state) => state.videos,
+  );
 
-  const notes =
-    useNoteStore(
-      (state) =>
-        state.notes,
-    );
+  const notes = useNoteStore(
+    (state) => state.notes,
+  );
 
-  const videoNotesByVideo =
-    useNoteStore(
-      (state) =>
-        state.videoNotes,
-    );
+  const videoNotesByVideo = useNoteStore(
+    (state) => state.videoNotes,
+  );
 
-  const totalElements =
-    useNoteStore(
-      (state) =>
-        state.totalElements,
-    );
+  const totalElements = useNoteStore(
+    (state) => state.totalElements,
+  );
 
-  const isLoading =
-    useNoteStore(
-      (state) =>
-        state.isLoading,
-    );
+  const isLoading = useNoteStore(
+    (state) => state.isLoading,
+  );
 
-  const isMutating =
-    useNoteStore(
-      (state) =>
-        state.isMutating,
-    );
+  const isMutating = useNoteStore(
+    (state) => state.isMutating,
+  );
 
-  const error =
-    useNoteStore(
-      (state) =>
-        state.error,
-    );
+  const error = useNoteStore(
+    (state) => state.error,
+  );
 
-  const loadNotes =
-    useNoteStore(
-      (state) =>
-        state.loadNotes,
-    );
+  const loadNotes = useNoteStore(
+    (state) => state.loadNotes,
+  );
 
-  const loadVideoNotes =
-    useNoteStore(
-      (state) =>
-        state.loadVideoNotes,
-    );
+  const loadVideoNotes = useNoteStore(
+    (state) => state.loadVideoNotes,
+  );
 
-  const createNote =
-    useNoteStore(
-      (state) =>
-        state.createNote,
-    );
+  const createNote = useNoteStore(
+    (state) => state.createNote,
+  );
 
-  const updateNote =
-    useNoteStore(
-      (state) =>
-        state.updateNote,
-    );
+  const updateNote = useNoteStore(
+    (state) => state.updateNote,
+  );
 
-  const getDeleteImpact =
-    useNoteStore(
-      (state) =>
-        state.getDeleteImpact,
-    );
+  const getDeleteImpact = useNoteStore(
+    (state) => state.getDeleteImpact,
+  );
 
-  const deleteNote =
-    useNoteStore(
-      (state) =>
-        state.deleteNote,
-    );
+  const deleteNote = useNoteStore(
+    (state) => state.deleteNote,
+  );
 
-  const clearError =
-    useNoteStore(
-      (state) =>
-        state.clearError,
-    );
+  const clearError = useNoteStore(
+    (state) => state.clearError,
+  );
 
-  const {
-    openNoteContext,
-  } =
+  const { openNoteContext } =
     useReverseContextNavigation();
 
   const [
@@ -134,22 +97,33 @@ export function QuickNotePanel() {
   const [
     editingNoteId,
     setEditingNoteId,
-  ] = useState<
-    number | null
-  >(null);
+  ] = useState<number | null>(
+    null,
+  );
 
   const [
     editingContent,
     setEditingContent,
   ] = useState("");
 
+  const [
+    pendingDelete,
+    setPendingDelete,
+  ] =
+    useState<PendingNoteDelete | null>(
+      null,
+    );
+
+  const [
+    isPreparingDelete,
+    setIsPreparingDelete,
+  ] = useState(false);
+
   const activeLibraryVideoId =
     activeContext?.entityType ===
       "video" &&
     Number.isFinite(
-      Number(
-        activeContext.entityId,
-      ),
+      Number(activeContext.entityId),
     )
       ? Number(
           activeContext.entityId,
@@ -231,9 +205,7 @@ export function QuickNotePanel() {
         activeLibraryVideoId,
         {
           content,
-
           timestampSeconds,
-
           withoutTimestampConfirmed:
             timestampSeconds ===
             null,
@@ -298,11 +270,15 @@ export function QuickNotePanel() {
   async function handleDelete(
     note: Note,
   ) {
-    if (isMutating) {
+    if (
+      isMutating ||
+      isPreparingDelete
+    ) {
       return;
     }
 
     clearError();
+    setIsPreparingDelete(true);
 
     try {
       const impact =
@@ -310,28 +286,40 @@ export function QuickNotePanel() {
           note.id,
         );
 
-      const confirmed =
-        window.confirm(
-          [
-            "Delete this note?",
-            "",
-            `${impact.taskCountToMarkSourceMissing} linked task(s) will lose their Note source.`,
-            impact.tasksPreserved
-              ? "Tasks will be preserved."
-              : "Tasks may be affected.",
-            impact.youtubeSourcePreserved
-              ? "The YouTube source will be preserved."
-              : "The YouTube source may be affected.",
-          ].join("\n"),
-        );
+      setPendingDelete({
+        note,
+        impact,
+      });
+    } catch {
+      // noteStore keeps error.
+    } finally {
+      setIsPreparingDelete(false);
+    }
+  }
 
-      if (!confirmed) {
-        return;
+  async function confirmDelete() {
+    if (
+      !pendingDelete ||
+      isMutating
+    ) {
+      return;
+    }
+
+    clearError();
+
+    try {
+      await deleteNote(
+        pendingDelete.note.id,
+      );
+
+      if (
+        editingNoteId ===
+        pendingDelete.note.id
+      ) {
+        handleCancelEdit();
       }
 
-      await deleteNote(
-        note.id,
-      );
+      setPendingDelete(null);
     } catch {
       // noteStore keeps error.
     }
@@ -346,8 +334,7 @@ export function QuickNotePanel() {
       );
     } catch {
       /*
-       * reverseContextStore
-       * keeps the API error.
+       * reverseContextStore keeps the API error.
        */
     }
   }
@@ -357,263 +344,68 @@ export function QuickNotePanel() {
     current: boolean,
   ) {
     return (
-      <article
+      <NoteCard
         key={note.id}
-        className={`rounded-xl border p-3 ${
-          current
-            ? "border-neutral-700 bg-neutral-900"
-            : "border-neutral-800 bg-neutral-900"
-        }`}
-      >
-        {editingNoteId ===
-        note.id ? (
-          <>
-            <textarea
-              value={
-                editingContent
-              }
-              disabled={
-                isMutating
-              }
-              onChange={(
-                event,
-              ) =>
-                setEditingContent(
-                  event.target
-                    .value,
-                )
-              }
-              className="h-28 w-full resize-none rounded-xl border border-neutral-800 bg-neutral-950 p-3 text-sm outline-none focus:border-neutral-600"
-            />
-
-            <div className="mt-2 flex justify-end gap-2">
-              <button
-                type="button"
-                onClick={
-                  handleCancelEdit
-                }
-                disabled={
-                  isMutating
-                }
-                className="rounded-lg border border-neutral-800 px-2 py-1 text-xs text-neutral-400 hover:bg-neutral-800 hover:text-white disabled:opacity-40"
-              >
-                Cancel
-              </button>
-
-              <button
-                type="button"
-                onClick={() =>
-                  void handleSaveEdit(
-                    note.id,
-                  )
-                }
-                disabled={
-                  isMutating ||
-                  !editingContent.trim()
-                }
-                className="rounded-lg bg-white px-3 py-1 text-xs font-medium text-neutral-950 hover:bg-neutral-200 disabled:opacity-50"
-              >
-                Save
-              </button>
-            </div>
-          </>
-        ) : (
-          <>
-            <div className="flex items-start gap-2">
-              <StickyNote
-                size={15}
-                className="mt-0.5 shrink-0 text-neutral-500"
-              />
-
-              <p className="whitespace-pre-wrap break-words text-sm leading-6 text-neutral-300">
-                {note.content}
-              </p>
-            </div>
-
-            <div className="mt-3 text-xs text-neutral-500">
-              <p className="line-clamp-1">
-                {note.youtubeSource
-                  .title ??
-                  note.youtubeSource
-                    .youtubeVideoId}
-              </p>
-
-              <p className="mt-1">
-                {note.timestampSeconds !==
-                null
-                  ? formatTime(
-                      note.timestampSeconds,
-                    )
-                  : "No timestamp"}
-              </p>
-            </div>
-
-            <div className="mt-3 flex items-center justify-between gap-2">
-              <div>
-                {current && (
-                  <span className="rounded-full bg-neutral-800 px-2 py-1 text-[10px] text-neutral-400">
-                    CURRENT
-                  </span>
-                )}
-              </div>
-
-              <div className="flex gap-2">
-                <button
-                  type="button"
-                  onClick={() =>
-                    void handleViewSource(
-                      note.id,
-                    )
-                  }
-                  className="rounded-lg border border-neutral-800 px-2 py-1 text-xs text-neutral-400 hover:bg-neutral-800 hover:text-white"
-                >
-                  View Source
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    handleStartEdit(
-                      note,
-                    )
-                  }
-                  disabled={
-                    isMutating
-                  }
-                  className="rounded-lg border border-neutral-800 p-1.5 text-neutral-500 hover:bg-neutral-800 hover:text-white disabled:opacity-40"
-                  title="Edit note"
-                >
-                  <Pencil
-                    size={13}
-                  />
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    void handleDelete(
-                      note,
-                    )
-                  }
-                  disabled={
-                    isMutating
-                  }
-                  className="rounded-lg border border-neutral-800 p-1.5 text-neutral-500 hover:bg-neutral-800 hover:text-red-300 disabled:opacity-40"
-                  title="Delete note"
-                >
-                  <Trash2
-                    size={13}
-                  />
-                </button>
-              </div>
-            </div>
-          </>
-        )}
-      </article>
+        note={note}
+        current={current}
+        isMutating={
+          isMutating ||
+          isPreparingDelete
+        }
+        isEditing={
+          editingNoteId ===
+          note.id
+        }
+        editingContent={
+          editingContent
+        }
+        onEditingContentChange={
+          setEditingContent
+        }
+        onStartEdit={
+          handleStartEdit
+        }
+        onCancelEdit={
+          handleCancelEdit
+        }
+        onSaveEdit={
+          handleSaveEdit
+        }
+        onDelete={
+          handleDelete
+        }
+        onViewSource={
+          handleViewSource
+        }
+      />
     );
   }
 
   return (
     <>
-      <div className="rounded-2xl border border-neutral-800 bg-neutral-950 p-4">
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <h4 className="text-sm font-medium text-neutral-300">
-              Quick Note
-            </h4>
-
-            <p className="mt-1 text-xs text-neutral-500">
-              Save a note to the
-              exact current video
-              source.
-            </p>
-          </div>
-
-          {activeContext &&
-            typeof activeContext
-              .timestamp ===
-              "number" && (
-              <span className="rounded-full bg-neutral-900 px-2 py-1 text-xs text-neutral-500">
-                {formatTime(
-                  activeContext.timestamp,
-                )}
-              </span>
-            )}
-        </div>
-
-        {!activeVideo && (
-          <p className="mt-3 rounded-xl border border-dashed border-neutral-800 p-3 text-xs text-neutral-500">
-            Open a Library video
-            before creating a
-            note.
-          </p>
-        )}
-
-        <textarea
-          value={
-            captureContent
-          }
-          disabled={
-            !activeVideo ||
-            isMutating
-          }
-          onChange={(
-            event,
-          ) =>
-            setCaptureContent(
-              event.target.value,
-            )
-          }
-          placeholder="Write your note..."
-          className="mt-3 h-32 w-full resize-none rounded-xl border border-neutral-800 bg-neutral-900 p-3 text-sm outline-none placeholder:text-neutral-600 focus:border-neutral-600 disabled:opacity-50"
-        />
-
-        <label className="mt-2 flex items-center gap-2 text-xs text-neutral-500">
-          <input
-            type="checkbox"
-            checked={
-              includeTimestamp
-            }
-            disabled={
-              !activeVideo
-            }
-            onChange={(
-              event,
-            ) =>
-              setIncludeTimestamp(
-                event.target
-                  .checked,
-              )
-            }
-          />
-
-          Include current
-          timestamp
-        </label>
-
-        <button
-          type="button"
-          onClick={() =>
-            void handleCreate()
-          }
-          disabled={
-            !activeVideo ||
-            isMutating ||
-            !captureContent.trim()
-          }
-          className="mt-3 w-full rounded-xl bg-white px-4 py-2 text-sm font-medium text-neutral-950 hover:bg-neutral-200 disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          {isMutating
-            ? "Saving..."
-            : "Save Note"}
-        </button>
-
-        {error && (
-          <p className="mt-2 text-xs text-red-400">
-            {error.message}
-          </p>
-        )}
-      </div>
+      <QuickNoteComposer
+        hasActiveVideo={Boolean(activeVideo)}
+        timestamp={
+          activeContext?.timestamp
+        }
+        content={captureContent}
+        includeTimestamp={
+          includeTimestamp
+        }
+        isMutating={isMutating}
+        errorMessage={
+          error?.message ?? null
+        }
+        onContentChange={
+          setCaptureContent
+        }
+        onIncludeTimestampChange={
+          setIncludeTimestamp
+        }
+        onCreate={
+          handleCreate
+        }
+      />
 
       <div className="mt-4 rounded-2xl border border-neutral-800 bg-neutral-950 p-4">
         <div className="flex items-center justify-between gap-3">
@@ -622,9 +414,7 @@ export function QuickNotePanel() {
           </h4>
 
           <span className="rounded-full bg-neutral-900 px-2 py-1 text-xs text-neutral-500">
-            {
-              currentVideoNotes.length
-            }
+            {currentVideoNotes.length}
           </span>
         </div>
 
@@ -633,11 +423,10 @@ export function QuickNotePanel() {
           <p className="mt-3 text-sm text-neutral-500">
             No active video.
           </p>
-        ) : currentVideoNotes
-            .length === 0 ? (
+        ) : currentVideoNotes.length ===
+          0 ? (
           <p className="mt-3 text-sm text-neutral-500">
-            No notes for this
-            video yet.
+            No notes for this video yet.
           </p>
         ) : (
           <div className="mt-3 space-y-3">
@@ -653,19 +442,25 @@ export function QuickNotePanel() {
       </div>
 
       <details className="mt-4 rounded-2xl border border-neutral-800 bg-neutral-950 p-4">
-        <summary className="cursor-pointer text-sm font-medium text-neutral-300">
+        <summary className="cursor-pointer text-sm font-medium text-neutral-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-700">
           Recent Notes (
           {totalElements})
         </summary>
 
         {isLoading &&
         notes.length === 0 ? (
-          <p className="mt-3 text-sm text-neutral-500">
+          <p
+            role="status"
+            className="mt-3 text-sm text-neutral-500"
+          >
             Loading notes...
           </p>
         ) : notes.length ===
           0 ? (
-          <p className="mt-3 text-sm text-neutral-500">
+          <p
+            role="status"
+            className="mt-3 text-sm text-neutral-500"
+          >
             No notes yet.
           </p>
         ) : (
@@ -680,6 +475,40 @@ export function QuickNotePanel() {
           </div>
         )}
       </details>
+
+      <ConfirmDialog
+        open={pendingDelete !== null}
+        title="Delete Note?"
+        description={
+          pendingDelete
+            ? `This will delete the selected Note. Its exact YouTube source history is handled according to the impact below.`
+            : undefined
+        }
+        details={
+          pendingDelete
+            ? [
+                `${pendingDelete.impact.taskCountToMarkSourceMissing} linked task(s) will lose their Note source.`,
+                pendingDelete.impact.tasksPreserved
+                  ? "Linked tasks will be preserved."
+                  : "Linked tasks may be affected.",
+                pendingDelete.impact.youtubeSourcePreserved
+                  ? "The exact YouTube source will be preserved."
+                  : "The exact YouTube source may be affected.",
+              ]
+            : []
+        }
+        confirmLabel="Delete Note"
+        isBusy={isMutating}
+        errorMessage={
+          pendingDelete
+            ? error?.message ?? null
+            : null
+        }
+        onConfirm={confirmDelete}
+        onCancel={() =>
+          setPendingDelete(null)
+        }
+      />
     </>
   );
 }

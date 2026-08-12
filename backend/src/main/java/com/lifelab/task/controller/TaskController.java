@@ -6,26 +6,26 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lifelab.common.security.CurrentAccount;
 import com.lifelab.common.dto.PagedResponse;
-import com.lifelab.common.exception.InvalidPaginationException;
+import com.lifelab.common.security.CurrentAccount;
+import com.lifelab.common.validation.PaginationValidator;
 import com.lifelab.task.domain.TaskStatus;
 import com.lifelab.task.dto.CreateTaskRequest;
 import com.lifelab.task.dto.TaskResponse;
 import com.lifelab.task.dto.UpdateTaskRequest;
 import com.lifelab.task.dto.UpdateTaskStatusRequest;
-import com.lifelab.task.service.TaskService;
 import com.lifelab.task.exception.InvalidTaskFilterException;
+import com.lifelab.task.service.TaskService;
 
 import jakarta.validation.Valid;
 
@@ -57,9 +57,10 @@ public class TaskController {
             @RequestParam(required = false) String status,
             @RequestParam(required = false) LocalDate deadlineFrom,
             @RequestParam(required = false) LocalDate deadlineTo) {
-        validatePagination(page, size);
+        PaginationValidator.validate(page, size);
         TaskStatus parsedStatus = parseStatus(status);
         validateDeadlineRange(deadlineFrom, deadlineTo);
+
         return taskService.getTasks(
                 currentAccount.requireAccountId(),
                 page,
@@ -95,23 +96,11 @@ public class TaskController {
         return ResponseEntity.noContent().build();
     }
 
-    private void validatePagination(int page, int size) {
-        Map<String, String> fieldErrors = new LinkedHashMap<>();
-        if (page < 0) {
-            fieldErrors.put("page", "must be greater than or equal to 0");
-        }
-        if (size < 1 || size > 100) {
-            fieldErrors.put("size", "must be between 1 and 100");
-        }
-        if (!fieldErrors.isEmpty()) {
-            throw new InvalidPaginationException(fieldErrors);
-        }
-    }
-
     private TaskStatus parseStatus(String status) {
         if (status == null) {
             return null;
         }
+
         try {
             return TaskStatus.valueOf(status);
         } catch (IllegalArgumentException exception) {

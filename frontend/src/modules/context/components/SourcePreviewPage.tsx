@@ -1,31 +1,25 @@
 import {
   ArrowLeft,
   ExternalLink,
+  LoaderCircle,
   TriangleAlert,
 } from "lucide-react";
-
 import {
   useEffect,
   useRef,
 } from "react";
-
-import { EmbedVideoPlayer } from "../../media/components/EmbedVideoPlayer";
-
-import {
-  navigateToPath,
-} from "../../../lib/navigation";
+import { useNavigate } from "react-router-dom";
 
 import {
   useReverseContextStore,
 } from "../../../stores/reverseContextStore";
-
-import {
-  useReverseContextNavigation,
-} from "../hooks/useReverseContextNavigation";
-
 import {
   formatTime,
 } from "../../../utils/formatTime";
+import { EmbedVideoPlayer } from "../../media/components/EmbedVideoPlayer";
+import {
+  useReverseContextNavigation,
+} from "../hooks/useReverseContextNavigation";
 
 interface SourcePreviewPageProps {
   noteId: number;
@@ -34,6 +28,8 @@ interface SourcePreviewPageProps {
 export function SourcePreviewPage({
   noteId,
 }: SourcePreviewPageProps) {
+  const navigate = useNavigate();
+
   const playerRef =
     useRef<HTMLVideoElement | null>(
       null,
@@ -68,13 +64,18 @@ export function SourcePreviewPage({
       ? resolution.note
       : null;
 
+  const navigationMode =
+    note
+      ? resolution?.navigationMode
+      : null;
+
   useEffect(() => {
     if (
       note &&
       (
-        resolution?.navigationMode ===
+        navigationMode ===
           "SOURCE_PREVIEW" ||
-        resolution?.navigationMode ===
+        navigationMode ===
           "VIDEO_UNAVAILABLE"
       )
     ) {
@@ -89,82 +90,91 @@ export function SourcePreviewPage({
   }, [
     noteId,
     note,
-    resolution?.navigationMode,
+    navigationMode,
     openNoteContext,
   ]);
 
   /*
-   * Source Preview must seek to
-   * the exact historical timestamp
-   * when one exists.
+   * Source Preview seeks only when the historical
+   * Note actually recorded a timestamp.
    *
-   * A missing timestamp remains
-   * missing — never guess 0.
+   * Missing timestamp remains missing; never guess 0.
    */
-    useEffect(() => {
+  useEffect(() => {
     const player =
-        playerRef.current;
+      playerRef.current;
 
     if (
-        !player ||
-        resolution?.navigationMode !==
+      !player ||
+      navigationMode !==
         "SOURCE_PREVIEW"
     ) {
-        return;
+      return;
     }
 
     const timestamp =
-        note?.timestampSeconds;
+      note?.timestampSeconds;
 
     if (
-        typeof timestamp !==
-        "number"
+      typeof timestamp !==
+      "number"
     ) {
-        return;
+      return;
     }
 
     try {
-        player.currentTime =
+      player.currentTime =
         timestamp;
     } catch (error) {
-        console.error(
+      console.error(
         "Failed to seek source preview timestamp:",
         error,
-        );
+      );
     }
-    }, [
+  }, [
     note?.id,
     note?.timestampSeconds,
-    resolution?.navigationMode,
-    ]);
-    
+    navigationMode,
+  ]);
+
+  const sourceTitle =
+    note?.youtubeSource.title ??
+    note?.youtubeSource.youtubeVideoId ??
+    "Source Preview";
+
+  const showHistoricalContext =
+    Boolean(note) &&
+    (
+      navigationMode ===
+        "SOURCE_PREVIEW" ||
+      navigationMode ===
+        "VIDEO_UNAVAILABLE"
+    );
+
   return (
-    <div className="min-h-screen bg-neutral-950 p-6 text-neutral-100">
+    <main className="min-h-screen bg-neutral-950 p-4 text-neutral-100 sm:p-6">
       <div className="mx-auto max-w-5xl">
         <button
           type="button"
           onClick={() =>
-            navigateToPath(
-              "/",
-            )
+            navigate("/library")
           }
-          className="flex items-center gap-2 rounded-xl border border-neutral-800 px-3 py-2 text-sm text-neutral-400 hover:bg-neutral-900 hover:text-white"
+          className="flex items-center gap-2 rounded-xl border border-neutral-800 px-3 py-2 text-sm text-neutral-400 transition hover:bg-neutral-900 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-600"
         >
           <ArrowLeft
             size={15}
+            aria-hidden="true"
           />
-          Back to workspace
+          Back to Library
         </button>
 
-        <div className="mt-6">
+        <header className="mt-6">
           <p className="text-xs font-medium uppercase tracking-wider text-neutral-600">
             Exact Source Preview
           </p>
 
-          <h1 className="mt-2 text-2xl font-semibold">
-            {note?.youtubeSource
-              .title ??
-              "Source Preview"}
+          <h1 className="mt-2 wrap-break-word text-xl font-semibold sm:text-2xl">
+            {sourceTitle}
           </h1>
 
           {note?.youtubeSource
@@ -176,109 +186,164 @@ export function SourcePreviewPage({
               }
             </p>
           )}
-        </div>
+        </header>
 
         {isResolving &&
         !note ? (
-          <div className="mt-8 rounded-2xl border border-neutral-800 bg-neutral-900 p-8 text-center text-sm text-neutral-500">
-            Resolving exact
-            source...
+          <div
+            role="status"
+            aria-live="polite"
+            className="mt-8 flex min-h-56 items-center justify-center rounded-2xl border border-neutral-800 bg-neutral-900 p-8"
+          >
+            <div className="text-center">
+              <LoaderCircle
+                size={24}
+                className="mx-auto animate-spin text-neutral-500"
+                aria-hidden="true"
+              />
+
+              <p className="mt-3 text-sm text-neutral-500">
+                Resolving exact source...
+              </p>
+            </div>
           </div>
         ) : error ? (
-          <div className="mt-8 rounded-2xl border border-red-900/60 bg-red-950/30 p-5">
-            <p className="text-sm text-red-300">
+          <div
+            role="alert"
+            className="mt-8 rounded-2xl border border-red-900/60 bg-red-950/30 p-5"
+          >
+            <p className="text-sm font-medium text-red-300">
+              Could not restore source context
+            </p>
+
+            <p className="mt-2 text-sm text-red-300/80">
               {error.message}
             </p>
+
+            <button
+              type="button"
+              onClick={() =>
+                void openNoteContext(
+                  noteId,
+                ).catch(() => {
+                  // reverseContextStore keeps error.
+                })
+              }
+              disabled={isResolving}
+              className="mt-4 rounded-xl border border-red-900/70 px-3 py-2 text-xs text-red-200 transition hover:bg-red-950/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-800 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              Try again
+            </button>
           </div>
-        ) : resolution?.navigationMode ===
+        ) : navigationMode ===
             "VIDEO_UNAVAILABLE" ? (
-          <div className="mt-8 flex aspect-video items-center justify-center rounded-3xl border border-red-950/70 bg-neutral-900 p-8">
+          <div
+            role="status"
+            className="mt-8 flex aspect-video items-center justify-center rounded-3xl border border-red-950/70 bg-neutral-900 p-6 sm:p-8"
+          >
             <div className="max-w-md text-center">
               <TriangleAlert
                 size={44}
                 className="mx-auto text-red-400"
+                aria-hidden="true"
               />
 
               <h2 className="mt-4 text-lg font-semibold">
-                Exact source
-                unavailable
+                Exact source unavailable
               </h2>
 
               <p className="mt-2 text-sm leading-6 text-neutral-500">
-                Life Lab preserved
-                this Note and its
-                exact YouTube source,
-                but the source is no
-                longer currently
-                available.
+                Life Lab preserved this Note and its exact
+                YouTube source reference, but that source is
+                not currently playable.
+              </p>
+
+              <p className="mt-3 text-xs leading-5 text-neutral-600">
+                No similar or replacement video is used.
               </p>
             </div>
           </div>
         ) : note &&
-          resolution?.navigationMode ===
+          navigationMode ===
             "SOURCE_PREVIEW" ? (
-          <>
-            <div className="mt-8">
-              <EmbedVideoPlayer
-                title={
-                  note.youtubeSource
-                    .title ??
-                  note.youtubeSource
-                    .youtubeVideoId
-                }
-                url={
-                  note.youtubeSource
-                    .sourceUrl
-                }
-                playerRef={
-                  playerRef
-                }
-                onTimeUpdate={() => {
-                  /*
-                   * Intentionally empty.
-                   *
-                   * Source Preview does
-                   * NOT create or update
-                   * WatchSession.
-                   */
-                }}
-              />
-            </div>
+          <div className="mt-8">
+            <EmbedVideoPlayer
+              title={sourceTitle}
+              url={
+                note.youtubeSource
+                  .sourceUrl
+              }
+              playerRef={
+                playerRef
+              }
+              onTimeUpdate={() => {
+                /*
+                 * Intentionally empty.
+                 *
+                 * Source Preview does NOT create or update
+                 * WatchSession.
+                 */
+              }}
+            />
+          </div>
+        ) : null}
 
-            <div className="mt-5 rounded-2xl border border-neutral-800 bg-neutral-900 p-4">
+        {showHistoricalContext &&
+          note && (
+            <section className="mt-5 rounded-2xl border border-neutral-800 bg-neutral-900 p-4">
               <div className="flex items-center gap-2 text-sm text-neutral-400">
                 <ExternalLink
                   size={14}
+                  aria-hidden="true"
                 />
 
-                Exact historical
-                context
+                Exact historical context
               </div>
 
-              <p className="mt-3 whitespace-pre-wrap text-sm leading-6 text-neutral-300">
+              <p className="mt-3 whitespace-pre-wrap wrap-break-word text-sm leading-6 text-neutral-300">
                 {note.content}
               </p>
 
-              <p className="mt-3 text-xs text-neutral-500">
-                Timestamp:{" "}
-                {note.timestampSeconds !==
-                null
-                  ? formatTime(
-                      note.timestampSeconds,
-                    )
-                  : "Not recorded"}
-              </p>
+              <div className="mt-4 grid gap-2 sm:grid-cols-2">
+                <div className="rounded-xl border border-neutral-800 bg-neutral-950 p-3">
+                  <p className="text-[10px] uppercase tracking-wide text-neutral-600">
+                    Timestamp
+                  </p>
 
-              <p className="mt-1 text-xs text-neutral-700">
-                Source Preview playback
-                is intentionally excluded
-                from WatchSession
-                tracking.
-              </p>
-            </div>
-          </>
-        ) : null}
+                  <p className="mt-1 text-sm text-neutral-300">
+                    {note.timestampSeconds !==
+                    null
+                      ? formatTime(
+                          note.timestampSeconds,
+                        )
+                      : "Not recorded"}
+                  </p>
+                </div>
+
+                <div className="rounded-xl border border-neutral-800 bg-neutral-950 p-3">
+                  <p className="text-[10px] uppercase tracking-wide text-neutral-600">
+                    Source mode
+                  </p>
+
+                  <p className="mt-1 text-sm text-neutral-300">
+                    {navigationMode ===
+                    "SOURCE_PREVIEW"
+                      ? "Read-only preview"
+                      : "Unavailable source"}
+                  </p>
+                </div>
+              </div>
+
+              {navigationMode ===
+                "SOURCE_PREVIEW" && (
+                <p className="mt-3 text-xs leading-5 text-neutral-600">
+                  Preview playback is intentionally excluded
+                  from WatchSession tracking.
+                </p>
+              )}
+            </section>
+          )}
       </div>
-    </div>
+    </main>
   );
 }

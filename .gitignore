@@ -23,17 +23,18 @@ target/
 *.njsproj
 *.sln
 *.sw?
+
 # Environment variables
 .env
 .env.*
 !.env.example
+!.env.production.example
 
 # Test coverage
 coverage/
 
-# Repomix output
-repomix-output.*
-*.repomix.*
+# Repomix generated snapshots
+repomix-*.xml
 
 # Temporary files
 *.tmp

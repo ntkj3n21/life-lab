@@ -1,6 +1,5 @@
 import { useContextStore } from "./contextStore";
 import { useLibraryStore } from "./libraryStore";
-import { useMusicStore } from "./musicStore";
 import { useNoteStore } from "./noteStore";
 import { useReverseContextStore } from "./reverseContextStore";
 import { useTagStore } from "./tagStore";
@@ -95,12 +94,4 @@ export function resetAccountScopedState() {
     .getState()
     .reset();
 
-  /*
-   * Music is currently local-device
-   * data, not backend account data.
-   * Keep tracks but stop playback.
-   */
-  useMusicStore
-    .getState()
-    .pause();
 }

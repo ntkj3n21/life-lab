@@ -1,104 +1,109 @@
 import {
-  useEffect,
-  useState,
-} from "react";
+  Navigate,
+  Route,
+  Routes,
+  useParams,
+} from "react-router-dom";
 
-import { MusicAudioEngine } from "./components/layout/MusicAudioEngine";
-import { RightPanel } from "./components/layout/RightPanel";
-import { RightRail } from "./components/layout/RightRail";
-import { Sidebar } from "./components/layout/Sidebar";
-import { Topbar } from "./components/layout/Topbar";
-
+import { AppShell } from "./components/layout/AppShell";
 import { AuthGate } from "./modules/auth/components/AuthGate";
-
+import { ReverseContextNotice } from "./modules/context/components/ReverseContextNotice";
 import { SourcePreviewPage } from "./modules/context/components/SourcePreviewPage";
-
 import { VideoWorkspace } from "./modules/media/components/VideoWorkspace";
+import { DailyPlanPage } from "./modules/todo/pages/DailyPlanPage";
+import { TaskDetailPage } from "./modules/todo/pages/TaskDetailPage";
+import { TasksPage } from "./modules/todo/pages/TasksPage";
+import { NoteDetailPage } from "./modules/notes/pages/NoteDetailPage";
+import { NotesPage } from "./modules/notes/pages/NotesPage";
 
-function getSourcePreviewNoteId(
-  pathname: string,
-) {
-  const match =
-    pathname.match(
-      /^\/notes\/(\d+)\/source\/?$/,
-    );
+function SourcePreviewRoute() {
+  const { noteId } = useParams();
+  const parsedNoteId = Number(noteId);
 
-  if (!match) {
-    return null;
+  if (
+    !Number.isSafeInteger(parsedNoteId) ||
+    parsedNoteId <= 0
+  ) {
+    return <Navigate to="/library" replace />;
   }
 
-  const noteId =
-    Number(match[1]);
-
-  return Number.isSafeInteger(
-    noteId,
-  ) && noteId > 0
-    ? noteId
-    : null;
+  return (
+    <SourcePreviewPage
+      noteId={parsedNoteId}
+    />
+  );
 }
 
 export default function App() {
-  const [
-    pathname,
-    setPathname,
-  ] = useState(
-    () =>
-      window.location.pathname,
-  );
-
-  useEffect(() => {
-    function handlePopState() {
-      setPathname(
-        window.location.pathname,
-      );
-    }
-
-    window.addEventListener(
-      "popstate",
-      handlePopState,
-    );
-
-    return () => {
-      window.removeEventListener(
-        "popstate",
-        handlePopState,
-      );
-    };
-  }, []);
-
-  const sourcePreviewNoteId =
-    getSourcePreviewNoteId(
-      pathname,
-    );
-
   return (
     <AuthGate>
-      {sourcePreviewNoteId !==
-      null ? (
-        <SourcePreviewPage
-          noteId={
-            sourcePreviewNoteId
-          }
-        />
-      ) : (
-        <div className="flex h-screen overflow-hidden bg-neutral-950 text-neutral-100">
-          <MusicAudioEngine />
+      <>
+        <Routes>
+          <Route
+            path="/notes/:noteId/source"
+            element={<SourcePreviewRoute />}
+          />
 
-          <Sidebar />
+          <Route element={<AppShell />}>
+            <Route
+              index
+              element={
+                <Navigate
+                  to="/library"
+                  replace
+                />
+              }
+            />
 
-          <main className="flex min-w-0 flex-1 flex-col">
-            <Topbar />
+            <Route
+              path="/library"
+              element={<VideoWorkspace />}
+            />
 
-            <section className="flex min-h-0 flex-1 overflow-hidden">
-              <VideoWorkspace />
+            <Route
+              path="/library/:libraryVideoId"
+              element={<VideoWorkspace />}
+            />
 
-              <RightPanel />
+            <Route
+              path="/notes"
+              element={<NotesPage />}
+            />
 
-              <RightRail />
-            </section>
-          </main>
-        </div>
-      )}
+            <Route
+              path="/notes/:noteId"
+              element={<NoteDetailPage />}
+            />
+
+            <Route
+              path="/tasks"
+              element={<TasksPage />}
+            />
+
+            <Route
+              path="/tasks/:taskId"
+              element={<TaskDetailPage />}
+            />
+
+            <Route
+              path="/plan"
+              element={<DailyPlanPage />}
+            />
+          </Route>
+
+          <Route
+            path="*"
+            element={
+              <Navigate
+                to="/library"
+                replace
+              />
+            }
+          />
+        </Routes>
+
+        <ReverseContextNotice />
+      </>
     </AuthGate>
   );
 }

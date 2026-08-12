@@ -7,15 +7,16 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
+    "check": "npm run lint && npm run build",
     "preview": "vite preview"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.0",
     "lucide-react": "^1.17.0",
-    "nanoid": "^5.1.11",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "react-player": "^3.4.0",
+    "react-router-dom": "^7.18.2",
     "tailwindcss": "^4.3.0",
     "zustand": "^5.0.14"
   },

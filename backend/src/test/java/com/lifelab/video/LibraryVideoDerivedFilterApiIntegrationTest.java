@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -138,6 +139,51 @@ class LibraryVideoDerivedFilterApiIntegrationTest {
                 .andExpect(jsonPath("$.items[1].id").value(undetermined.getId()))
                 .andExpect(jsonPath("$.items[2].id").value(invalid.getId()))
                 .andExpect(jsonPath("$.items[3].id").value(pending.getId()));
+    }
+
+    @Test
+    void libraryResponsesExposeOnlyValidDerivedWatchStatistics() throws Exception {
+        Account owner = createAccount("watch-stats@example.com");
+        LibraryVideo watched = createVideo(owner, "stats-watched", "Video", 100, BASE_TIME);
+        LibraryVideo nonValidOnly = createVideo(
+                owner, "stats-non-valid", "Video", 100, BASE_TIME.plusSeconds(1));
+        LibraryVideo neverWatched = createVideo(
+                owner, "stats-never", "Video", 100, BASE_TIME.plusSeconds(2));
+
+        OffsetDateTime firstValid = BASE_TIME.plusDays(1);
+        OffsetDateTime latestValid = BASE_TIME.plusDays(2);
+        OffsetDateTime laterButInvalid = BASE_TIME.plusDays(10);
+
+        insertWatchSession(watched.getId(), "VALID", firstValid);
+        insertWatchSession(watched.getId(), "VALID", latestValid);
+        insertWatchSession(watched.getId(), "PENDING", laterButInvalid);
+        insertWatchSession(watched.getId(), "INVALID", laterButInvalid.plusDays(1));
+        insertWatchSession(watched.getId(), "UNDETERMINED", laterButInvalid.plusDays(2));
+
+        insertWatchSession(nonValidOnly.getId(), "PENDING", firstValid);
+        insertWatchSession(nonValidOnly.getId(), "INVALID", latestValid);
+        insertWatchSession(nonValidOnly.getId(), "UNDETERMINED", laterButInvalid);
+
+        Cookie token = login(owner.getEmail());
+
+        mockMvc.perform(get("/api/library/videos/{id}", watched.getId()).cookie(token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.watched").value(true))
+                .andExpect(jsonPath("$.viewCount").value(2))
+                .andExpect(jsonPath("$.lastWatchedAt").value(
+                        latestValid.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)));
+
+        mockMvc.perform(get("/api/library/videos/{id}", nonValidOnly.getId()).cookie(token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.watched").value(false))
+                .andExpect(jsonPath("$.viewCount").value(0))
+                .andExpect(jsonPath("$.lastWatchedAt").doesNotExist());
+
+        mockMvc.perform(get("/api/library/videos/{id}", neverWatched.getId()).cookie(token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.watched").value(false))
+                .andExpect(jsonPath("$.viewCount").value(0))
+                .andExpect(jsonPath("$.lastWatchedAt").doesNotExist());
     }
 
     @Test
@@ -321,6 +367,23 @@ class LibraryVideoDerivedFilterApiIntegrationTest {
                     watch_time_seconds, validity_status
                 ) VALUES (?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 30, ?)
                 """, libraryVideoId, status);
+    }
+
+    private void insertWatchSession(
+            Long libraryVideoId,
+            String status,
+            OffsetDateTime startedAt) {
+        jdbcTemplate.update("""
+                INSERT INTO watch_sessions (
+                    library_video_id, started_at, ended_at, last_heartbeat_at,
+                    watch_time_seconds, validity_status
+                ) VALUES (?, ?, ?, ?, 30, ?)
+                """,
+                libraryVideoId,
+                startedAt,
+                startedAt.plusSeconds(30),
+                startedAt.plusSeconds(30),
+                status);
     }
 
     private Long insertNote(Long accountId, Long youtubeSourceId) {

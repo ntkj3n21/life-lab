@@ -1,32 +1,27 @@
 import {
   useCallback,
 } from "react";
-
-import {
-  navigateToPath,
-} from "../../../lib/navigation";
+import { useNavigate } from "react-router-dom";
 
 import {
   useContextStore,
 } from "../../../stores/contextStore";
-
 import {
   useLibraryStore,
 } from "../../../stores/libraryStore";
-
 import {
   useReverseContextStore,
 } from "../../../stores/reverseContextStore";
-
 import {
   getLibraryVideoDisplayTitle,
 } from "../../media/services/libraryApi";
-
 import type {
   ContextResponse,
 } from "../services/contextApi";
 
 export function useReverseContextNavigation() {
+  const navigate = useNavigate();
+
   const setActiveContext =
     useContextStore(
       (state) =>
@@ -51,12 +46,30 @@ export function useReverseContextNavigation() {
         state.resolveTask,
     );
 
+  const setNotice =
+    useReverseContextStore(
+      (state) =>
+        state.setNotice,
+    );
+
+  const clearNotice =
+    useReverseContextStore(
+      (state) =>
+        state.clearNotice,
+    );
+
   const applyResolution =
     useCallback(
       async (
         resolution:
           ContextResponse,
       ) => {
+        /*
+         * A new reverse-context result replaces any
+         * notice from the previous navigation attempt.
+         */
+        clearNotice();
+
         switch (
           resolution.navigationMode
         ) {
@@ -101,8 +114,8 @@ export function useReverseContextNavigation() {
                 undefined,
             });
 
-            navigateToPath(
-              "/",
+            navigate(
+              `/library/${video.id}`,
             );
 
             return;
@@ -116,7 +129,7 @@ export function useReverseContextNavigation() {
               return;
             }
 
-            navigateToPath(
+            navigate(
               `/notes/${resolution.note.id}/source`,
             );
 
@@ -124,25 +137,36 @@ export function useReverseContextNavigation() {
           }
 
           case "SOURCE_MISSING": {
-            window.alert(
-              "The original Note no longer exists. The Task is preserved, but its source cannot be restored.",
-            );
+            setNotice({
+              tone: "warning",
+              title:
+                "Original Note is missing",
+              message:
+                "The Task is preserved, but its original Note no longer exists, so Life Lab stops at the last determinable context instead of guessing a replacement source.",
+            });
 
             return;
           }
 
           case "NO_SOURCE": {
-            window.alert(
-              "This is an independent Task and has no source Note or Video.",
-            );
+            setNotice({
+              tone: "info",
+              title:
+                "This Task has no source",
+              message:
+                "This is an independent Task, so there is no source Note, Video, or timestamp to restore.",
+            });
 
             return;
           }
         }
       },
       [
+        clearNotice,
         ensureVideo,
+        navigate,
         setActiveContext,
+        setNotice,
       ],
     );
 

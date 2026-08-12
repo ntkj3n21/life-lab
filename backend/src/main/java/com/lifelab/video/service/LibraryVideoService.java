@@ -5,9 +5,9 @@ import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Locale;
+import java.util.Map;
+import java.util.stream.Collectors;
 
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,8 +17,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.lifelab.auth.domain.Account;
 import com.lifelab.auth.repository.AccountRepository;
-import com.lifelab.common.exception.UnauthenticatedException;
 import com.lifelab.common.dto.PagedResponse;
+import com.lifelab.common.exception.UnauthenticatedException;
+import com.lifelab.common.persistence.DatabaseConstraintMatcher;
+import com.lifelab.common.text.SearchKeywordNormalizer;
 import com.lifelab.note.repository.NoteRepository;
 import com.lifelab.task.repository.TaskRepository;
 import com.lifelab.video.domain.LibraryVideo;
@@ -34,10 +36,11 @@ import com.lifelab.video.integration.youtube.ResolvedYouTubeVideo;
 import com.lifelab.video.integration.youtube.YouTubeMetadataClient;
 import com.lifelab.video.integration.youtube.YouTubeUrlParser;
 import com.lifelab.video.repository.LibraryVideoRepository;
-import com.lifelab.video.repository.LibraryVideoTagRepository;
 import com.lifelab.video.repository.LibraryVideoSpecifications;
+import com.lifelab.video.repository.LibraryVideoTagRepository;
 import com.lifelab.video.repository.TagRepository;
 import com.lifelab.video.repository.YouTubeVideoRepository;
+import com.lifelab.watch.repository.LibraryVideoWatchStatsProjection;
 import com.lifelab.watch.repository.WatchSessionRepository;
 
 @Service
@@ -87,26 +90,43 @@ public class LibraryVideoService {
     public LibraryVideoResponse addVideo(Long accountId, AddLibraryVideoRequest request) {
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(UnauthenticatedException::new);
-        String parsedVideoId = youTubeUrlParser.parse(request.youtubeUrl());
-        ResolvedYouTubeVideo resolved = youTubeMetadataClient.resolve(parsedVideoId);
-        OffsetDateTime now = OffsetDateTime.now(clock);
+
+        String parsedVideoId =
+                youTubeUrlParser.parse(request.youtubeUrl());
+
+        ResolvedYouTubeVideo resolved =
+                youTubeMetadataClient.resolve(parsedVideoId);
+
+        OffsetDateTime now =
+                OffsetDateTime.now(clock);
 
         YouTubeVideo youtubeSource = youTubeVideoRepository
                 .findByYoutubeVideoId(resolved.youtubeVideoId())
                 .orElseGet(() -> createSource(resolved, now));
 
         if (libraryVideoRepository.existsByAccount_IdAndYoutubeSource_Id(
-                accountId, youtubeSource.getId())) {
+                accountId,
+                youtubeSource.getId())) {
             throw new LibraryVideoAlreadyExistsException();
         }
 
-        LibraryVideo libraryVideo = LibraryVideo.create(account, youtubeSource, now);
+        LibraryVideo libraryVideo =
+                LibraryVideo.create(account, youtubeSource, now);
+
         try {
-            return LibraryVideoResponse.from(libraryVideoRepository.saveAndFlush(libraryVideo));
+            /*
+             * A newly created Library entry cannot have a
+             * WatchSession yet, so the zero-stat response is exact.
+             */
+            return LibraryVideoResponse.from(
+                    libraryVideoRepository.saveAndFlush(libraryVideo));
         } catch (DataIntegrityViolationException exception) {
-            if (isLibraryVideoUniqueConstraintViolation(exception)) {
+            if (DatabaseConstraintMatcher.matches(
+                    exception,
+                    LIBRARY_VIDEO_UNIQUE_CONSTRAINT)) {
                 throw new LibraryVideoAlreadyExistsException();
             }
+
             throw exception;
         }
     }
@@ -128,45 +148,86 @@ public class LibraryVideoService {
             Boolean hasNotes,
             String sortBy,
             String sortDirection) {
-        PageRequest pageRequest = PageRequest.of(page, size);
-        String keyword = normalizeKeyword(query);
-        List<Long> validatedTagIds = validateTagIds(accountId, tagIds);
-        Specification<LibraryVideo> specification = LibraryVideoSpecifications.ownedBy(accountId);
+        PageRequest pageRequest =
+                PageRequest.of(page, size);
+
+        String keyword =
+                SearchKeywordNormalizer.normalize(query);
+
+        List<Long> validatedTagIds =
+                validateTagIds(accountId, tagIds);
+
+        Specification<LibraryVideo> specification =
+                LibraryVideoSpecifications.ownedBy(accountId);
+
         if (keyword != null) {
-            specification = specification.and(LibraryVideoSpecifications.keywordContains(keyword));
+            specification = specification.and(
+                    LibraryVideoSpecifications.keywordContains(keyword));
         }
+
         if (minDurationSeconds != null || maxDurationSeconds != null) {
-            specification = specification.and(LibraryVideoSpecifications.durationBetween(
-                    minDurationSeconds, maxDurationSeconds));
+            specification = specification.and(
+                    LibraryVideoSpecifications.durationBetween(
+                            minDurationSeconds,
+                            maxDurationSeconds));
         }
+
         if (publishedFrom != null || publishedTo != null) {
-            specification = specification.and(LibraryVideoSpecifications.publishedBetween(
-                    publishedFrom, publishedTo));
+            specification = specification.and(
+                    LibraryVideoSpecifications.publishedBetween(
+                            publishedFrom,
+                            publishedTo));
         }
+
         if (addedFrom != null || addedTo != null) {
-            specification = specification.and(LibraryVideoSpecifications.addedBetween(addedFrom, addedTo));
+            specification = specification.and(
+                    LibraryVideoSpecifications.addedBetween(
+                            addedFrom,
+                            addedTo));
         }
+
         if (!validatedTagIds.isEmpty()) {
-            specification = specification.and(LibraryVideoSpecifications.hasAnyTagId(validatedTagIds));
+            specification = specification.and(
+                    LibraryVideoSpecifications.hasAnyTagId(validatedTagIds));
         }
+
         if (watched != null) {
-            specification = specification.and(LibraryVideoSpecifications.watched(watched));
+            specification = specification.and(
+                    LibraryVideoSpecifications.watched(watched));
         }
+
         if (hasNotes != null) {
-            specification = specification.and(LibraryVideoSpecifications.hasNotes(accountId, hasNotes));
+            specification = specification.and(
+                    LibraryVideoSpecifications.hasNotes(
+                            accountId,
+                            hasNotes));
         }
-        specification = specification.and(LibraryVideoSpecifications.orderedBy(
-                sortBy,
-                "asc".equals(sortDirection)));
-        Page<LibraryVideo> videos = libraryVideoRepository.findAll(specification, pageRequest);
-        Page<LibraryVideoResponse> result = videos
-                .map(LibraryVideoResponse::from);
+
+        specification = specification.and(
+                LibraryVideoSpecifications.orderedBy(
+                        sortBy,
+                        "asc".equals(sortDirection)));
+
+        Page<LibraryVideo> videos =
+                libraryVideoRepository.findAll(specification, pageRequest);
+
+        Map<Long, LibraryVideoWatchStatsProjection> watchStats =
+                loadWatchStats(accountId, videos.getContent());
+
+        Page<LibraryVideoResponse> result =
+                videos.map(video -> toResponse(video, watchStats.get(video.getId())));
+
         return PagedResponse.from(result);
     }
 
     @Transactional(readOnly = true)
     public LibraryVideoResponse getVideo(Long accountId, Long libraryVideoId) {
-        return LibraryVideoResponse.from(findOwnedVideo(accountId, libraryVideoId));
+        LibraryVideo video =
+                findOwnedVideo(accountId, libraryVideoId);
+
+        return toResponse(
+                video,
+                loadWatchStats(accountId, List.of(video)).get(video.getId()));
     }
 
     @Transactional
@@ -174,60 +235,120 @@ public class LibraryVideoService {
             Long accountId,
             Long libraryVideoId,
             UpdateLibraryVideoRequest request) {
-        LibraryVideo libraryVideo = findOwnedVideo(accountId, libraryVideoId);
+        LibraryVideo libraryVideo =
+                findOwnedVideo(accountId, libraryVideoId);
+
         libraryVideo.updatePersonalInfo(
                 request.customTitle(),
                 request.personalDescription(),
                 OffsetDateTime.now(clock));
-        return LibraryVideoResponse.from(libraryVideo);
+
+        return toResponse(
+                libraryVideo,
+                loadWatchStats(accountId, List.of(libraryVideo)).get(libraryVideo.getId()));
     }
 
     @Transactional(readOnly = true)
-    public LibraryVideoDeleteImpactResponse getDeleteImpact(Long accountId, Long libraryVideoId) {
-        LibraryVideo libraryVideo = findOwnedVideo(accountId, libraryVideoId);
-        Long youtubeSourceId = libraryVideo.getYoutubeSource().getId();
+    public LibraryVideoDeleteImpactResponse getDeleteImpact(
+            Long accountId,
+            Long libraryVideoId) {
+        LibraryVideo libraryVideo =
+                findOwnedVideo(accountId, libraryVideoId);
+
+        Long youtubeSourceId =
+                libraryVideo.getYoutubeSource().getId();
+
         return new LibraryVideoDeleteImpactResponse(
                 libraryVideoId,
                 watchSessionRepository.countByLibraryVideo_Id(libraryVideoId),
                 libraryVideoTagRepository.countByLibraryVideo_Id(libraryVideoId),
-                noteRepository.countByAccount_IdAndYoutubeSource_Id(accountId, youtubeSourceId),
-                taskRepository.countByAccount_IdAndSourceNote_YoutubeSource_Id(accountId, youtubeSourceId),
+                noteRepository.countByAccount_IdAndYoutubeSource_Id(
+                        accountId,
+                        youtubeSourceId),
+                taskRepository.countByAccount_IdAndSourceNote_YoutubeSource_Id(
+                        accountId,
+                        youtubeSourceId),
                 true);
     }
 
     @Transactional
     public void deleteVideo(Long accountId, Long libraryVideoId) {
-        LibraryVideo libraryVideo = findOwnedVideo(accountId, libraryVideoId);
+        LibraryVideo libraryVideo =
+                findOwnedVideo(accountId, libraryVideoId);
+
         libraryVideoRepository.delete(libraryVideo);
         libraryVideoRepository.flush();
     }
 
-    private LibraryVideo findOwnedVideo(Long accountId, Long libraryVideoId) {
-        return libraryVideoRepository.findByIdAndAccount_Id(libraryVideoId, accountId)
-                .orElseThrow(LibraryVideoNotFoundException::new);
+    private Map<Long, LibraryVideoWatchStatsProjection> loadWatchStats(
+            Long accountId,
+            List<LibraryVideo> videos) {
+        if (videos.isEmpty()) {
+            return Map.of();
+        }
+
+        List<Long> libraryVideoIds = videos.stream()
+                .map(LibraryVideo::getId)
+                .toList();
+
+        /*
+         * One grouped query enriches the whole current page.
+         * This avoids one WatchSession query per Library card.
+         */
+        return watchSessionRepository
+                .findValidStatsByAccountIdAndLibraryVideoIds(
+                        accountId,
+                        libraryVideoIds)
+                .stream()
+                .collect(Collectors.toMap(
+                        LibraryVideoWatchStatsProjection::getLibraryVideoId,
+                        stats -> stats));
     }
 
-    private String normalizeKeyword(String query) {
-        if (query == null) {
-            return null;
+    private LibraryVideoResponse toResponse(
+            LibraryVideo video,
+            LibraryVideoWatchStatsProjection stats) {
+        if (stats == null) {
+            return LibraryVideoResponse.from(video);
         }
-        String stripped = query.strip();
-        return stripped.isEmpty() ? null : stripped.toLowerCase(Locale.ROOT);
+
+        long viewCount =
+                stats.getViewCount() == null
+                        ? 0L
+                        : stats.getViewCount();
+
+        return LibraryVideoResponse.from(
+                video,
+                viewCount,
+                stats.getLastWatchedAt());
+    }
+
+    private LibraryVideo findOwnedVideo(Long accountId, Long libraryVideoId) {
+        return libraryVideoRepository.findByIdAndAccount_Id(
+                        libraryVideoId,
+                        accountId)
+                .orElseThrow(LibraryVideoNotFoundException::new);
     }
 
     private List<Long> validateTagIds(Long accountId, List<Long> tagIds) {
         if (tagIds == null || tagIds.isEmpty()) {
             return List.of();
         }
-        List<Long> distinctTagIds = new LinkedHashSet<>(tagIds).stream().toList();
+
+        List<Long> distinctTagIds =
+                new LinkedHashSet<>(tagIds).stream().toList();
+
         for (Long tagId : distinctTagIds) {
             tagRepository.findByIdAndAccount_Id(tagId, accountId)
                     .orElseThrow(TagNotFoundException::new);
         }
+
         return distinctTagIds;
     }
 
-    private YouTubeVideo createSource(ResolvedYouTubeVideo resolved, OffsetDateTime now) {
+    private YouTubeVideo createSource(
+            ResolvedYouTubeVideo resolved,
+            OffsetDateTime now) {
         YouTubeVideo source = YouTubeVideo.create(
                 resolved.youtubeVideoId(),
                 resolved.sourceUrl(),
@@ -238,19 +359,7 @@ public class LibraryVideoService {
                 resolved.publishedAt(),
                 resolved.availabilityStatus(),
                 now);
-        return youTubeVideoRepository.saveAndFlush(source);
-    }
 
-    private boolean isLibraryVideoUniqueConstraintViolation(DataIntegrityViolationException exception) {
-        Throwable cause = exception;
-        while (cause != null) {
-            if (cause instanceof ConstraintViolationException constraintViolation
-                    && LIBRARY_VIDEO_UNIQUE_CONSTRAINT.equalsIgnoreCase(
-                            constraintViolation.getConstraintName())) {
-                return true;
-            }
-            cause = cause.getCause();
-        }
-        return false;
+        return youTubeVideoRepository.saveAndFlush(source);
     }
 }

@@ -20,12 +20,13 @@ spring:
           time_zone: UTC
 
 app:
+  default-time-zone: ${LIFELAB_DEFAULT_TIME_ZONE:UTC}
   youtube:
     api-key: ${LIFELAB_YOUTUBE_API_KEY:}
   security:
     jwt:
-      issuer: life-lab
-      access-token-ttl: 30m
+      issuer: ${LIFELAB_JWT_ISSUER:life-lab}
+      access-token-ttl: ${LIFELAB_JWT_ACCESS_TOKEN_TTL:30m}
       secret: ${LIFELAB_JWT_SECRET:}
     cookie:
       secure: ${LIFELAB_COOKIE_SECURE:false}

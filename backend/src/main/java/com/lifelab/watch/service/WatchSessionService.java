@@ -11,8 +11,8 @@ import com.lifelab.video.exception.LibraryVideoNotFoundException;
 import com.lifelab.video.repository.LibraryVideoRepository;
 import com.lifelab.watch.domain.WatchSession;
 import com.lifelab.watch.domain.WatchSessionValidityStatus;
-import com.lifelab.watch.dto.WatchSessionHeartbeatRequest;
 import com.lifelab.watch.dto.CloseWatchSessionRequest;
+import com.lifelab.watch.dto.WatchSessionHeartbeatRequest;
 import com.lifelab.watch.dto.WatchSessionResponse;
 import com.lifelab.watch.exception.WatchSessionClosedException;
 import com.lifelab.watch.exception.WatchSessionNotFoundException;
@@ -45,9 +45,12 @@ public class WatchSessionService {
         LibraryVideo libraryVideo = libraryVideoRepository
                 .findByIdAndAccount_Id(libraryVideoId, accountId)
                 .orElseThrow(LibraryVideoNotFoundException::new);
-        OffsetDateTime now = OffsetDateTime.now(clock);
-        WatchSession session = WatchSession.start(libraryVideo, now);
-        return WatchSessionResponse.from(watchSessionRepository.saveAndFlush(session));
+
+        WatchSession session = WatchSession.start(
+                libraryVideo,
+                OffsetDateTime.now(clock));
+
+        return save(session);
     }
 
     @Transactional
@@ -55,25 +58,24 @@ public class WatchSessionService {
             Long accountId,
             Long watchSessionId,
             WatchSessionHeartbeatRequest request) {
-        WatchSession session = watchSessionRepository
-                .findByIdAndLibraryVideo_Account_Id(watchSessionId, accountId)
-                .orElseThrow(WatchSessionNotFoundException::new);
-        if (session.getEndedAt() != null) {
-            throw new WatchSessionClosedException();
-        }
-
+        WatchSession session = findOpenSession(accountId, watchSessionId);
         OffsetDateTime now = OffsetDateTime.now(clock);
-        int trustedDelta = heartbeatPolicy.calculateTrustedDelta(
-                session.getStartedAt(),
-                session.getLastHeartbeatAt(),
+        int trustedDelta = calculateTrustedDelta(
+                session,
                 now,
-                session.getWatchTimeSeconds(),
                 request.playedSecondsDelta());
-        int newWatchTime = Math.addExact(session.getWatchTimeSeconds(), trustedDelta);
-        Integer durationSeconds = session.getLibraryVideo().getYoutubeSource().getDurationSeconds();
-        WatchSessionValidityStatus status = validityEvaluator.evaluateActive(durationSeconds, newWatchTime);
-        session.applyHeartbeat(trustedDelta, now, status);
-        return WatchSessionResponse.from(watchSessionRepository.saveAndFlush(session));
+
+        int newWatchTime = watchTimeAfter(session, trustedDelta);
+        WatchSessionValidityStatus status = validityEvaluator.evaluateActive(
+                durationSeconds(session),
+                newWatchTime);
+
+        session.applyHeartbeat(
+                trustedDelta,
+                now,
+                status);
+
+        return save(session);
     }
 
     @Transactional
@@ -81,30 +83,69 @@ public class WatchSessionService {
             Long accountId,
             Long watchSessionId,
             CloseWatchSessionRequest request) {
+        WatchSession session = findOpenSession(accountId, watchSessionId);
+        OffsetDateTime now = OffsetDateTime.now(clock);
+        int trustedDelta = calculateTrustedDelta(
+                session,
+                now,
+                request.playedSecondsDelta());
+
+        int finalWatchTime = watchTimeAfter(session, trustedDelta);
+        WatchSessionValidityStatus evaluatedStatus = validityEvaluator.evaluateClosed(
+                durationSeconds(session),
+                finalWatchTime);
+
+        WatchSessionValidityStatus finalStatus =
+                session.getValidityStatus() == WatchSessionValidityStatus.VALID
+                        ? WatchSessionValidityStatus.VALID
+                        : evaluatedStatus;
+
+        session.close(
+                trustedDelta,
+                now,
+                finalStatus);
+
+        return save(session);
+    }
+
+    private WatchSession findOpenSession(Long accountId, Long watchSessionId) {
         WatchSession session = watchSessionRepository
                 .findByIdAndLibraryVideo_Account_Id(watchSessionId, accountId)
                 .orElseThrow(WatchSessionNotFoundException::new);
+
         if (session.getEndedAt() != null) {
             throw new WatchSessionClosedException();
         }
 
-        OffsetDateTime now = OffsetDateTime.now(clock);
-        int trustedDelta = heartbeatPolicy.calculateTrustedDelta(
+        return session;
+    }
+
+    private int calculateTrustedDelta(
+            WatchSession session,
+            OffsetDateTime now,
+            int playedSecondsDelta) {
+        return heartbeatPolicy.calculateTrustedDelta(
                 session.getStartedAt(),
                 session.getLastHeartbeatAt(),
                 now,
                 session.getWatchTimeSeconds(),
-                request.playedSecondsDelta());
-        int finalWatchTime = Math.addExact(session.getWatchTimeSeconds(), trustedDelta);
-        Integer durationSeconds = session.getLibraryVideo().getYoutubeSource().getDurationSeconds();
-        WatchSessionValidityStatus evaluatedStatus = validityEvaluator.evaluateClosed(
-                durationSeconds,
-                finalWatchTime);
-        WatchSessionValidityStatus finalStatus = session.getValidityStatus()
-                == WatchSessionValidityStatus.VALID
-                        ? WatchSessionValidityStatus.VALID
-                        : evaluatedStatus;
-        session.close(trustedDelta, now, finalStatus);
-        return WatchSessionResponse.from(watchSessionRepository.saveAndFlush(session));
+                playedSecondsDelta);
+    }
+
+    private int watchTimeAfter(WatchSession session, int trustedDelta) {
+        return Math.addExact(
+                session.getWatchTimeSeconds(),
+                trustedDelta);
+    }
+
+    private Integer durationSeconds(WatchSession session) {
+        return session.getLibraryVideo()
+                .getYoutubeSource()
+                .getDurationSeconds();
+    }
+
+    private WatchSessionResponse save(WatchSession session) {
+        return WatchSessionResponse.from(
+                watchSessionRepository.saveAndFlush(session));
     }
 }
