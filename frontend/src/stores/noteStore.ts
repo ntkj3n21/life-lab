@@ -1,145 +1,478 @@
 import { create } from "zustand";
-import { nanoid } from "nanoid";
-import type { EntityType, NoteItem } from "../types/lifeLab";
 
-const NOTES_STORAGE_KEY = "life-lab-notes";
+import { ApiError } from "../lib/api";
 
-interface CreateNoteInput {
-  content: string;
-  linkedEntityId?: string;
-  linkedEntityType?: EntityType;
-  linkedEntityTitle?: string;
-  timestamp?: number;
-}
+import {
+  createNote as createNoteRequest,
+  deleteNote as deleteNoteRequest,
+  getNoteDeleteImpact,
+  getNotes,
+  getVideoNotes,
+  updateNote as updateNoteRequest,
+  type CreateNoteInput,
+  type Note,
+  type NoteDeleteImpact,
+  type NoteQuery,
+} from "../modules/notes/services/noteApi";
 
 interface NoteStore {
-  notes: NoteItem[];
-  addNote: (input: CreateNoteInput) => void;
-  updateNote: (noteId: string, content: string) => void;
-  deleteNote: (noteId: string) => void;
-  clearNotes: () => void;
+  notes: Note[];
+
+  videoNotes: Record<
+    number,
+    Note[]
+  >;
+
+  page: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
+
+  isLoading: boolean;
+  isMutating: boolean;
+
+  error: ApiError | null;
+
+  loadNotes: (
+    query?: NoteQuery,
+  ) => Promise<void>;
+
+  loadVideoNotes: (
+    libraryVideoId: number,
+  ) => Promise<Note[]>;
+
+  createNote: (
+    libraryVideoId: number,
+    input: CreateNoteInput,
+  ) => Promise<Note>;
+
+  updateNote: (
+    noteId: number,
+    content: string,
+  ) => Promise<Note>;
+
+  getDeleteImpact: (
+    noteId: number,
+  ) => Promise<NoteDeleteImpact>;
+
+  deleteNote: (
+    noteId: number,
+  ) => Promise<void>;
+
+  clearError: () => void;
+  reset: () => void;
 }
 
-function loadNotesFromStorage(): NoteItem[] {
-  try {
-    const rawNotes = localStorage.getItem(NOTES_STORAGE_KEY);
-
-    if (!rawNotes) {
-      return [];
-    }
-
-    return JSON.parse(rawNotes) as NoteItem[];
-  } catch (error) {
-    console.error("Failed to load notes from localStorage:", error);
-    return [];
+function toApiError(
+  error: unknown,
+) {
+  if (error instanceof ApiError) {
+    return error;
   }
+
+  return new ApiError(0, {
+    code: "UNKNOWN_ERROR",
+    message:
+      "Something went wrong.",
+    fieldErrors: {},
+  });
 }
 
-function saveNotesToStorage(notes: NoteItem[]) {
-  try {
-    localStorage.setItem(NOTES_STORAGE_KEY, JSON.stringify(notes));
-  } catch (error) {
-    console.error("Failed to save notes to localStorage:", error);
-  }
+const initialState = {
+  notes: [] as Note[],
+
+  videoNotes: {} as Record<
+    number,
+    Note[]
+  >,
+
+  page: 0,
+  size: 20,
+  totalElements: 0,
+  totalPages: 0,
+
+  isLoading: false,
+  isMutating: false,
+
+  error: null as ApiError | null,
+};
+
+function replaceNote(
+  notes: Note[],
+  updatedNote: Note,
+) {
+  return notes.map((note) =>
+    note.id === updatedNote.id
+      ? updatedNote
+      : note,
+  );
 }
 
-function parseNoteDraft(rawValue: string) {
-  const lines = rawValue
-    .split("\n")
-    .map((line) => line.replace(/\r/g, ""));
+export const useNoteStore =
+  create<NoteStore>(
+    (set) => ({
+      ...initialState,
 
-  const firstNonEmptyIndex = lines.findIndex((line) => line.trim() !== "");
+      loadNotes: async (
+        query = {},
+      ) => {
+        set({
+          isLoading: true,
+          error: null,
+        });
 
-  if (firstNonEmptyIndex === -1) {
-    return {
-      title: "Untitled Note",
-      content: "",
-    };
-  }
+        try {
+          const response =
+            await getNotes({
+              page: 0,
+              size: 20,
+              ...query,
+            });
 
-  const normalizedLines = lines.slice(firstNonEmptyIndex);
-  const [titleLine, ...contentLines] = normalizedLines;
+          set({
+            notes:
+              response.items,
+            page:
+              response.page,
+            size:
+              response.size,
+            totalElements:
+              response.totalElements,
+            totalPages:
+              response.totalPages,
+          });
+        } catch (error) {
+          const apiError =
+            toApiError(error);
 
-  return {
-    title: titleLine.trim() || "Untitled Note",
-    content: contentLines.join("\n").trim(),
-  };
-}
+          set({
+            error: apiError,
+          });
 
-export const useNoteStore = create<NoteStore>((set) => ({
-  notes: loadNotesFromStorage(),
+          throw apiError;
+        } finally {
+          set({
+            isLoading: false,
+          });
+        }
+      },
 
-  addNote: (input) => {
-    const trimmedContent = input.content.trim();
+      loadVideoNotes:
+        async (
+          libraryVideoId,
+        ) => {
+          try {
+            const notes =
+              await getVideoNotes(
+                libraryVideoId,
+              );
 
-    if (!trimmedContent) return;
+            set((state) => ({
+              videoNotes: {
+                ...state.videoNotes,
+                [libraryVideoId]:
+                  notes,
+              },
+              error: null,
+            }));
 
-    const now = Date.now();
-    const parsedNote = parseNoteDraft(trimmedContent);
+            return notes;
+          } catch (error) {
+            const apiError =
+              toApiError(error);
 
-    const newNote: NoteItem = {
-      id: nanoid(),
-      type: "note",
-      title: parsedNote.title,
-      content: parsedNote.content,
-      linkedEntityId: input.linkedEntityId,
-      linkedEntityType: input.linkedEntityType,
-      linkedEntityTitle: input.linkedEntityTitle,
-      timestamp: input.timestamp,
-      createdAt: now,
-      updatedAt: now,
-    };
+            set({
+              error: apiError,
+            });
 
-    set((state) => {
-      const nextNotes = [newNote, ...state.notes];
-      saveNotesToStorage(nextNotes);
+            throw apiError;
+          }
+        },
 
-      return {
-        notes: nextNotes,
-      };
-    });
-  },
+      createNote: async (
+        libraryVideoId,
+        input,
+      ) => {
+        set({
+          isMutating: true,
+          error: null,
+        });
 
-  updateNote: (noteId, content) => {
-    const trimmedContent = content.trim();
+        try {
+          const note =
+            await createNoteRequest(
+              libraryVideoId,
+              input,
+            );
 
-    if (!trimmedContent) return;
+          set((state) => ({
+            notes: [
+              note,
+              ...state.notes.filter(
+                (existing) =>
+                  existing.id !==
+                  note.id,
+              ),
+            ],
 
-    set((state) => {
-      const parsedNote = parseNoteDraft(trimmedContent);
+            videoNotes: {
+              ...state.videoNotes,
 
-      const nextNotes = state.notes.map((note) =>
-        note.id === noteId
-          ? {
-              ...note,
-              title: parsedNote.title,
-              content: parsedNote.content,
-              updatedAt: Date.now(),
-            }
-          : note,
-      );
+              [libraryVideoId]: [
+                ...(
+                  state.videoNotes[
+                    libraryVideoId
+                  ] ?? []
+                ).filter(
+                  (existing) =>
+                    existing.id !==
+                    note.id,
+                ),
+                note,
+              ].sort(
+                (a, b) => {
+                  if (
+                    a.timestampSeconds ===
+                      null &&
+                    b.timestampSeconds !==
+                      null
+                  ) {
+                    return 1;
+                  }
 
-      saveNotesToStorage(nextNotes);
+                  if (
+                    a.timestampSeconds !==
+                      null &&
+                    b.timestampSeconds ===
+                      null
+                  ) {
+                    return -1;
+                  }
 
-      return {
-        notes: nextNotes,
-      };
-    });
-  },
+                  if (
+                    a.timestampSeconds !==
+                      null &&
+                    b.timestampSeconds !==
+                      null &&
+                    a.timestampSeconds !==
+                      b.timestampSeconds
+                  ) {
+                    return (
+                      a.timestampSeconds -
+                      b.timestampSeconds
+                    );
+                  }
 
-  deleteNote: (noteId) => {
-    set((state) => {
-      const nextNotes = state.notes.filter((note) => note.id !== noteId);
-      saveNotesToStorage(nextNotes);
+                  return (
+                    new Date(
+                      b.createdAt,
+                    ).getTime() -
+                    new Date(
+                      a.createdAt,
+                    ).getTime()
+                  );
+                },
+              ),
+            },
 
-      return {
-        notes: nextNotes,
-      };
-    });
-  },
+            totalElements:
+              state.totalElements +
+              1,
+          }));
 
-  clearNotes: () => {
-    saveNotesToStorage([]);
-    set({ notes: [] });
-  },
-}));
+          return note;
+        } catch (error) {
+          const apiError =
+            toApiError(error);
+
+          set({
+            error: apiError,
+          });
+
+          throw apiError;
+        } finally {
+          set({
+            isMutating: false,
+          });
+        }
+      },
+
+      updateNote: async (
+        noteId,
+        content,
+      ) => {
+        set({
+          isMutating: true,
+          error: null,
+        });
+
+        try {
+          const note =
+            await updateNoteRequest(
+              noteId,
+              {
+                content:
+                  content.trim(),
+              },
+            );
+
+          set((state) => {
+            const nextVideoNotes =
+              Object.fromEntries(
+                Object.entries(
+                  state.videoNotes,
+                ).map(
+                  ([
+                    videoId,
+                    notes,
+                  ]) => [
+                    videoId,
+                    replaceNote(
+                      notes,
+                      note,
+                    ),
+                  ],
+                ),
+              ) as Record<
+                number,
+                Note[]
+              >;
+
+            return {
+              notes:
+                replaceNote(
+                  state.notes,
+                  note,
+                ),
+
+              videoNotes:
+                nextVideoNotes,
+            };
+          });
+
+          return note;
+        } catch (error) {
+          const apiError =
+            toApiError(error);
+
+          set({
+            error: apiError,
+          });
+
+          throw apiError;
+        } finally {
+          set({
+            isMutating: false,
+          });
+        }
+      },
+
+      getDeleteImpact:
+        async (noteId) => {
+          try {
+            const impact =
+              await getNoteDeleteImpact(
+                noteId,
+              );
+
+            set({
+              error: null,
+            });
+
+            return impact;
+          } catch (error) {
+            const apiError =
+              toApiError(error);
+
+            set({
+              error: apiError,
+            });
+
+            throw apiError;
+          }
+        },
+
+      deleteNote: async (
+        noteId,
+      ) => {
+        set({
+          isMutating: true,
+          error: null,
+        });
+
+        try {
+          await deleteNoteRequest(
+            noteId,
+          );
+
+          set((state) => {
+            const nextVideoNotes =
+              Object.fromEntries(
+                Object.entries(
+                  state.videoNotes,
+                ).map(
+                  ([
+                    videoId,
+                    notes,
+                  ]) => [
+                    videoId,
+                    notes.filter(
+                      (note) =>
+                        note.id !==
+                        noteId,
+                    ),
+                  ],
+                ),
+              ) as Record<
+                number,
+                Note[]
+              >;
+
+            return {
+              notes:
+                state.notes.filter(
+                  (note) =>
+                    note.id !==
+                    noteId,
+                ),
+
+              videoNotes:
+                nextVideoNotes,
+
+              totalElements:
+                Math.max(
+                  0,
+                  state.totalElements -
+                    1,
+                ),
+            };
+          });
+        } catch (error) {
+          const apiError =
+            toApiError(error);
+
+          set({
+            error: apiError,
+          });
+
+          throw apiError;
+        } finally {
+          set({
+            isMutating: false,
+          });
+        }
+      },
+
+      clearError: () => {
+        set({
+          error: null,
+        });
+      },
+
+      reset: () => {
+        set({
+          ...initialState,
+        });
+      },
+    }),
+  );

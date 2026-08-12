@@ -33,7 +33,7 @@ export function RightDock() {
           }`}
         >
           <CheckSquare size={16} />
-          Todos
+          Tasks
         </button>
       </div>
 

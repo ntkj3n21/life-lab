@@ -1,222 +1,434 @@
 import { create } from "zustand";
-import { nanoid } from "nanoid";
-import type { EntityType, TodoChecklistItem, TodoItem } from "../types/lifeLab";
 
-const TODOS_STORAGE_KEY = "life-lab-todos";
+import { ApiError } from "../lib/api";
 
-function parseTodoDraft(rawValue: string) {
-  const lines = rawValue
-    .split("\n")
-    .map((line) => line.replace(/\r/g, "").trim())
-    .filter(Boolean);
-
-  if (lines.length === 0) {
-    return {
-      title: "Untitled Todo",
-      content: "",
-      items: [],
-    };
-  }
-
-  const [titleLine, ...itemLines] = lines;
-
-  const normalizedItemLines =
-    itemLines.length > 0 ? itemLines : [titleLine];
-
-  const items: TodoChecklistItem[] = normalizedItemLines.map((text) => ({
-    id: nanoid(),
-    text,
-    done: false,
-  }));
-
-  return {
-    title: titleLine,
-    content: normalizedItemLines.join("\n"),
-    items,
-  };
-}
-
-interface CreateTodoInput {
-  content: string;
-  linkedEntityId?: string;
-  linkedEntityType?: EntityType;
-  linkedEntityTitle?: string;
-  timestamp?: number;
-}
+import {
+  createIndependentTask as createIndependentTaskRequest,
+  createTaskFromNote as createTaskFromNoteRequest,
+  deleteTask as deleteTaskRequest,
+  getDailyPlan as getDailyPlanRequest,
+  getTasks,
+  updateTask as updateTaskRequest,
+  updateTaskStatus as updateTaskStatusRequest,
+  type CreateTaskInput,
+  type DailyPlan,
+  type Task,
+  type TaskQuery,
+  type TaskStatus,
+  type UpdateTaskInput,
+} from "../modules/todo/services/taskApi";
 
 interface TodoStore {
-  todos: TodoItem[];
-  addTodo: (input: CreateTodoInput) => void;
-  updateTodo: (todoId: string, content: string) => void;
-  toggleTodo: (todoId: string) => void;
-  toggleTodoItem: (todoId: string, itemId: string) => void;
-  deleteTodo: (todoId: string) => void;
-  clearTodos: () => void;
+  tasks: Task[];
+
+  page: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
+
+  dailyPlan: DailyPlan | null;
+
+  isLoading: boolean;
+  isLoadingPlan: boolean;
+  isMutating: boolean;
+
+  error: ApiError | null;
+
+  loadTasks: (
+    query?: TaskQuery,
+  ) => Promise<void>;
+
+  loadDailyPlan:
+    () => Promise<DailyPlan>;
+
+  createIndependentTask: (
+    input: CreateTaskInput,
+  ) => Promise<Task>;
+
+  createTaskFromNote: (
+    noteId: number,
+    input: CreateTaskInput,
+  ) => Promise<Task>;
+
+  updateTask: (
+    taskId: number,
+    input: UpdateTaskInput,
+  ) => Promise<Task>;
+
+  changeStatus: (
+    taskId: number,
+    status: TaskStatus,
+  ) => Promise<Task>;
+
+  deleteTask: (
+    taskId: number,
+  ) => Promise<void>;
+
+  clearError: () => void;
+  reset: () => void;
 }
 
-function loadTodosFromStorage(): TodoItem[] {
-  try {
-    const rawTodos = localStorage.getItem(TODOS_STORAGE_KEY);
-
-    if (!rawTodos) {
-      return [];
-    }
-
-    return JSON.parse(rawTodos) as TodoItem[];
-  } catch (error) {
-    console.error("Failed to load todos from localStorage:", error);
-    return [];
+function toApiError(
+  error: unknown,
+) {
+  if (error instanceof ApiError) {
+    return error;
   }
+
+  return new ApiError(0, {
+    code: "UNKNOWN_ERROR",
+    message:
+      "Something went wrong.",
+    fieldErrors: {},
+  });
 }
 
-function saveTodosToStorage(todos: TodoItem[]) {
-  try {
-    localStorage.setItem(TODOS_STORAGE_KEY, JSON.stringify(todos));
-  } catch (error) {
-    console.error("Failed to save todos to localStorage:", error);
-  }
+const initialState = {
+  tasks: [] as Task[],
+
+  page: 0,
+  size: 20,
+  totalElements: 0,
+  totalPages: 0,
+
+  dailyPlan:
+    null as DailyPlan | null,
+
+  isLoading: false,
+  isLoadingPlan: false,
+  isMutating: false,
+
+  error: null as ApiError | null,
+};
+
+function replaceTask(
+  tasks: Task[],
+  updatedTask: Task,
+) {
+  return tasks.map((task) =>
+    task.id === updatedTask.id
+      ? updatedTask
+      : task,
+  );
 }
 
-export const useTodoStore = create<TodoStore>((set) => ({
-  todos: loadTodosFromStorage(),
+export const useTodoStore =
+  create<TodoStore>(
+    (set) => ({
+      ...initialState,
 
-  addTodo: (input) => {
-    const trimmedContent = input.content.trim();
+      loadTasks: async (
+        query = {},
+      ) => {
+        set({
+          isLoading: true,
+          error: null,
+        });
 
-    if (!trimmedContent) return;
+        try {
+          const response =
+            await getTasks({
+              page: 0,
+              size: 100,
+              ...query,
+            });
 
-    const now = Date.now();
-    const parsedTodo = parseTodoDraft(trimmedContent);
+          set({
+            tasks:
+              response.items,
 
-    const newTodo: TodoItem = {
-      id: nanoid(),
-      type: "todo",
-      title: parsedTodo.title,
-      content: parsedTodo.content,
-      done: false,
-      items: parsedTodo.items,
-      linkedEntityId: input.linkedEntityId,
-      linkedEntityType: input.linkedEntityType,
-      linkedEntityTitle: input.linkedEntityTitle,
-      timestamp: input.timestamp,
-      createdAt: now,
-      updatedAt: now,
-    };
+            page:
+              response.page,
 
-    set((state) => {
-      const nextTodos = [newTodo, ...state.todos];
-      saveTodosToStorage(nextTodos);
+            size:
+              response.size,
 
-      return {
-        todos: nextTodos,
-      };
-    });
-  },
+            totalElements:
+              response.totalElements,
 
-  updateTodo: (todoId, content) => {
-    const trimmedContent = content.trim();
+            totalPages:
+              response.totalPages,
+          });
+        } catch (error) {
+          const apiError =
+            toApiError(error);
 
-    if (!trimmedContent) return;
+          set({
+            error: apiError,
+          });
 
-    const parsedTodo = parseTodoDraft(trimmedContent);
+          throw apiError;
+        } finally {
+          set({
+            isLoading: false,
+          });
+        }
+      },
 
-    set((state) => {
-      const nextTodos = state.todos.map((todo) =>
-        todo.id === todoId
-          ? {
-              ...todo,
-              title: parsedTodo.title,
-              content: parsedTodo.content,
-              items: parsedTodo.items,
-              done:
-                parsedTodo.items.length > 0
-                  ? parsedTodo.items.every((item) => item.done)
-                  : todo.done,
-              updatedAt: Date.now(),
-            }
-          : todo,
-      );
+      loadDailyPlan:
+        async () => {
+          set({
+            isLoadingPlan:
+              true,
+            error: null,
+          });
 
-      saveTodosToStorage(nextTodos);
+          try {
+            const dailyPlan =
+              await getDailyPlanRequest();
 
-      return {
-        todos: nextTodos,
-      };
-    });
-  },
+            set({
+              dailyPlan,
+            });
 
-  toggleTodo: (todoId) => {
-    set((state) => {
-      const nextTodos = state.todos.map((todo) => {
-        if (todo.id !== todoId) return todo;
+            return dailyPlan;
+          } catch (error) {
+            const apiError =
+              toApiError(error);
 
-        const nextDone = !todo.done;
+            set({
+              error: apiError,
+            });
 
-        return {
-          ...todo,
-          done: nextDone,
-          items: (todo.items ?? []).map((item) => ({
-            ...item,
-            done: nextDone,
-          })),
-          updatedAt: Date.now(),
-        };
-      });
+            throw apiError;
+          } finally {
+            set({
+              isLoadingPlan:
+                false,
+            });
+          }
+        },
 
-      saveTodosToStorage(nextTodos);
+      createIndependentTask:
+        async (input) => {
+          set({
+            isMutating: true,
+            error: null,
+          });
 
-      return {
-        todos: nextTodos,
-      };
-    });
-  },
+          try {
+            const task =
+              await createIndependentTaskRequest(
+                input,
+              );
 
-  toggleTodoItem: (todoId, itemId) => {
-    set((state) => {
-      const nextTodos = state.todos.map((todo) => {
-        if (todo.id !== todoId) return todo;
+            set((state) => ({
+              tasks: [
+                task,
+                ...state.tasks.filter(
+                  (existing) =>
+                    existing.id !==
+                    task.id,
+                ),
+              ],
 
-        const nextItems = (todo.items ?? []).map((item) =>
-          item.id === itemId
-            ? {
-                ...item,
-                done: !item.done,
-              }
-            : item,
-        );
+              totalElements:
+                state.totalElements +
+                1,
+            }));
 
-        return {
-          ...todo,
-          items: nextItems,
-          done:
-            nextItems.length > 0
-              ? nextItems.every((item) => item.done)
-              : todo.done,
-          updatedAt: Date.now(),
-        };
-      });
+            return task;
+          } catch (error) {
+            const apiError =
+              toApiError(error);
 
-      saveTodosToStorage(nextTodos);
+            set({
+              error: apiError,
+            });
 
-      return {
-        todos: nextTodos,
-      };
-    });
-  },
+            throw apiError;
+          } finally {
+            set({
+              isMutating: false,
+            });
+          }
+        },
 
-  deleteTodo: (todoId) => {
-    set((state) => {
-      const nextTodos = state.todos.filter((todo) => todo.id !== todoId);
-      saveTodosToStorage(nextTodos);
+      createTaskFromNote:
+        async (
+          noteId,
+          input,
+        ) => {
+          set({
+            isMutating: true,
+            error: null,
+          });
 
-      return {
-        todos: nextTodos,
-      };
-    });
-  },
+          try {
+            const task =
+              await createTaskFromNoteRequest(
+                noteId,
+                input,
+              );
 
-  clearTodos: () => {
-    saveTodosToStorage([]);
-    set({ todos: [] });
-  },
-}));
+            set((state) => ({
+              tasks: [
+                task,
+                ...state.tasks.filter(
+                  (existing) =>
+                    existing.id !==
+                    task.id,
+                ),
+              ],
+
+              totalElements:
+                state.totalElements +
+                1,
+            }));
+
+            return task;
+          } catch (error) {
+            const apiError =
+              toApiError(error);
+
+            set({
+              error: apiError,
+            });
+
+            throw apiError;
+          } finally {
+            set({
+              isMutating: false,
+            });
+          }
+        },
+
+      updateTask: async (
+        taskId,
+        input,
+      ) => {
+        set({
+          isMutating: true,
+          error: null,
+        });
+
+        try {
+          const task =
+            await updateTaskRequest(
+              taskId,
+              input,
+            );
+
+          set((state) => ({
+            tasks:
+              replaceTask(
+                state.tasks,
+                task,
+              ),
+          }));
+
+          return task;
+        } catch (error) {
+          const apiError =
+            toApiError(error);
+
+          set({
+            error: apiError,
+          });
+
+          throw apiError;
+        } finally {
+          set({
+            isMutating: false,
+          });
+        }
+      },
+
+      changeStatus: async (
+        taskId,
+        status,
+      ) => {
+        set({
+          isMutating: true,
+          error: null,
+        });
+
+        try {
+          const task =
+            await updateTaskStatusRequest(
+              taskId,
+              status,
+            );
+
+          set((state) => ({
+            tasks:
+              replaceTask(
+                state.tasks,
+                task,
+              ),
+          }));
+
+          return task;
+        } catch (error) {
+          const apiError =
+            toApiError(error);
+
+          set({
+            error: apiError,
+          });
+
+          throw apiError;
+        } finally {
+          set({
+            isMutating: false,
+          });
+        }
+      },
+
+      deleteTask: async (
+        taskId,
+      ) => {
+        set({
+          isMutating: true,
+          error: null,
+        });
+
+        try {
+          await deleteTaskRequest(
+            taskId,
+          );
+
+          set((state) => ({
+            tasks:
+              state.tasks.filter(
+                (task) =>
+                  task.id !==
+                  taskId,
+              ),
+
+            totalElements:
+              Math.max(
+                0,
+                state.totalElements -
+                  1,
+              ),
+          }));
+        } catch (error) {
+          const apiError =
+            toApiError(error);
+
+          set({
+            error: apiError,
+          });
+
+          throw apiError;
+        } finally {
+          set({
+            isMutating: false,
+          });
+        }
+      },
+
+      clearError: () => {
+        set({
+          error: null,
+        });
+      },
+
+      reset: () => {
+        set({
+          ...initialState,
+        });
+      },
+    }),
+  );

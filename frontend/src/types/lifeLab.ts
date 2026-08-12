@@ -1,4 +1,10 @@
-export type EntityType = "video" | "music" | "note" | "todo" | "journal" | "calendar";
+export type EntityType =
+  | "video"
+  | "music"
+  | "note"
+  | "todo"
+  | "journal"
+  | "calendar";
 
 export interface BaseEntity {
   id: string;
@@ -8,46 +14,11 @@ export interface BaseEntity {
   updatedAt: number;
 }
 
-export interface VideoItem extends BaseEntity {
-  type: "video";
-  sourceType: "local" | "embed";
-  url: string;
-  tags?: string[];
-}
-
-export interface MusicTrack extends BaseEntity {
+export interface MusicTrack
+  extends BaseEntity {
   type: "music";
+
   artist?: string;
   url: string;
   tags?: string[];
 }
-
-export interface NoteItem extends BaseEntity {
-  type: "note";
-  content: string;
-
-  linkedEntityId?: string;
-  linkedEntityType?: EntityType;
-  linkedEntityTitle?: string;
-  timestamp?: number;
-}
-
-export interface TodoChecklistItem {
-  id: string;
-  text: string;
-  done: boolean;
-}
-
-export interface TodoItem extends BaseEntity {
-  type: "todo";
-  content: string;
-  done: boolean;
-
-  items: TodoChecklistItem[];
-
-  linkedEntityId?: string;
-  linkedEntityType?: EntityType;
-  linkedEntityTitle?: string;
-  timestamp?: number;
-}
-

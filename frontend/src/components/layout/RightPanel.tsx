@@ -20,7 +20,7 @@ export function RightPanel() {
             <div>
               <h3 className="font-semibold">Workspace Tools</h3>
               <p className="text-xs text-neutral-500">
-                Notes and todos for your current context.
+                Notes and tasks for your current context.
               </p>
             </div>
           </div>

@@ -1,0 +1,31 @@
+spring:
+  config:
+    import: "optional:file:../.env[.properties]"
+  application:
+    name: life-lab-backend
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5433}/${DB_NAME:lifelab}
+    username: ${DB_USERNAME:lifelab}
+    password: ${DB_PASSWORD:lifelab}
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+
+app:
+  youtube:
+    api-key: ${LIFELAB_YOUTUBE_API_KEY:}
+  security:
+    jwt:
+      issuer: life-lab
+      access-token-ttl: 30m
+      secret: ${LIFELAB_JWT_SECRET:}
+    cookie:
+      secure: ${LIFELAB_COOKIE_SECURE:false}
