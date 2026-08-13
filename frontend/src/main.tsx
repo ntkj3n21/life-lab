@@ -5,6 +5,15 @@ import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App";
 import { useAuthStore } from "./stores/authStore";
+import {
+  applyAppearance,
+  getInitialAppearance,
+} from "./theme/appearance";
+
+applyAppearance(
+  getInitialAppearance(),
+  false,
+);
 
 void useAuthStore.getState().initialize();
 

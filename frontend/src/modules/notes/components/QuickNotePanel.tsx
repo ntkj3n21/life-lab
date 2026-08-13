@@ -407,25 +407,25 @@ export function QuickNotePanel() {
         }
       />
 
-      <div className="mt-4 rounded-2xl border border-neutral-800 bg-neutral-950 p-4">
+      <div className="mt-4 rounded-2xl border border-(--border) bg-(--app-bg) p-4">
         <div className="flex items-center justify-between gap-3">
           <h4 className="font-medium">
             Current Video Notes
           </h4>
 
-          <span className="rounded-full bg-neutral-900 px-2 py-1 text-xs text-neutral-500">
+          <span className="rounded-full bg-(--surface) px-2 py-1 text-xs text-(--text-muted)">
             {currentVideoNotes.length}
           </span>
         </div>
 
         {activeLibraryVideoId ===
         null ? (
-          <p className="mt-3 text-sm text-neutral-500">
+          <p className="mt-3 text-sm text-(--text-muted)">
             No active video.
           </p>
         ) : currentVideoNotes.length ===
           0 ? (
-          <p className="mt-3 text-sm text-neutral-500">
+          <p className="mt-3 text-sm text-(--text-muted)">
             No notes for this video yet.
           </p>
         ) : (
@@ -441,8 +441,8 @@ export function QuickNotePanel() {
         )}
       </div>
 
-      <details className="mt-4 rounded-2xl border border-neutral-800 bg-neutral-950 p-4">
-        <summary className="cursor-pointer text-sm font-medium text-neutral-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-700">
+      <details className="mt-4 rounded-2xl border border-(--border) bg-(--app-bg) p-4">
+        <summary className="cursor-pointer text-sm font-medium text-(--text-secondary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)">
           Recent Notes (
           {totalElements})
         </summary>
@@ -451,7 +451,7 @@ export function QuickNotePanel() {
         notes.length === 0 ? (
           <p
             role="status"
-            className="mt-3 text-sm text-neutral-500"
+            className="mt-3 text-sm text-(--text-muted)"
           >
             Loading notes...
           </p>
@@ -459,7 +459,7 @@ export function QuickNotePanel() {
           0 ? (
           <p
             role="status"
-            className="mt-3 text-sm text-neutral-500"
+            className="mt-3 text-sm text-(--text-muted)"
           >
             No notes yet.
           </p>

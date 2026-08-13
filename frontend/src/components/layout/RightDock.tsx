@@ -6,6 +6,8 @@ import { useState } from "react";
 
 import { QuickNotePanel } from "../../modules/notes/components/QuickNotePanel";
 import { TodoPanel } from "../../modules/todo/components/TodoPanel";
+import { useNoteStore } from "../../stores/noteStore";
+import { useTodoStore } from "../../stores/todoStore";
 
 type DockTab = "notes" | "todos";
 
@@ -13,12 +15,20 @@ export function RightDock() {
   const [activeTab, setActiveTab] =
     useState<DockTab>("notes");
 
+  const noteCount = useNoteStore(
+    (state) => state.totalElements,
+  );
+
+  const taskCount = useTodoStore(
+    (state) => state.totalElements,
+  );
+
   return (
     <div>
       <div
         role="tablist"
         aria-label="Workspace tools"
-        className="grid grid-cols-2 gap-2 rounded-2xl border border-neutral-800 bg-neutral-900 p-1"
+        className="grid grid-cols-2 gap-1 rounded-[11px] bg-(--surface) p-1"
       >
         <button
           type="button"
@@ -29,14 +39,20 @@ export function RightDock() {
           onClick={() =>
             setActiveTab("notes")
           }
-          className={`flex items-center justify-center gap-2 rounded-xl px-3 py-2 text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-500 ${
+          className={`flex h-9 items-center justify-center gap-2 rounded-[9px] px-3 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) ${
             activeTab === "notes"
-              ? "bg-white text-neutral-950"
-              : "text-neutral-400 hover:bg-neutral-800 hover:text-white"
+              ? "bg-(--surface-active) text-(--text-primary)"
+              : "text-(--text-muted) hover:bg-(--surface-hover) hover:text-(--text-primary)"
           }`}
         >
-          <StickyNote size={16} />
+          <StickyNote
+            size={15}
+            aria-hidden="true"
+          />
           Notes
+          <span className="text-[11px] text-(--text-faint)">
+            {noteCount}
+          </span>
         </button>
 
         <button
@@ -48,18 +64,24 @@ export function RightDock() {
           onClick={() =>
             setActiveTab("todos")
           }
-          className={`flex items-center justify-center gap-2 rounded-xl px-3 py-2 text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-500 ${
+          className={`flex h-9 items-center justify-center gap-2 rounded-[9px] px-3 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) ${
             activeTab === "todos"
-              ? "bg-white text-neutral-950"
-              : "text-neutral-400 hover:bg-neutral-800 hover:text-white"
+              ? "bg-(--surface-active) text-(--text-primary)"
+              : "text-(--text-muted) hover:bg-(--surface-hover) hover:text-(--text-primary)"
           }`}
         >
-          <CheckSquare size={16} />
+          <CheckSquare
+            size={15}
+            aria-hidden="true"
+          />
           Tasks
+          <span className="text-[11px] text-(--text-faint)">
+            {taskCount}
+          </span>
         </button>
       </div>
 
-      <div className="mt-4">
+      <div className="mt-3">
         {activeTab === "notes" ? (
           <QuickNotePanel />
         ) : (

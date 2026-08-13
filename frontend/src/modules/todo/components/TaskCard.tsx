@@ -204,7 +204,7 @@ export function TaskCard({
 
   return (
     <>
-      <article className="rounded-xl border border-neutral-800 bg-neutral-900 p-3">
+      <article className="rounded-xl border border-(--border) bg-(--surface) p-3">
         {isEditing ? (
           <div className="space-y-2">
             <label
@@ -225,7 +225,7 @@ export function TaskCard({
                 )
               }
               placeholder="Task title"
-              className="w-full rounded-lg border border-neutral-800 bg-neutral-950 px-3 py-2 text-sm outline-none focus:border-neutral-600 focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-50"
+              className="w-full rounded-lg border border-(--border) bg-(--app-bg) px-3 py-2 text-sm outline-none focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
             />
 
             <label
@@ -245,7 +245,7 @@ export function TaskCard({
                 )
               }
               placeholder="Description"
-              className="h-20 w-full resize-none rounded-lg border border-neutral-800 bg-neutral-950 px-3 py-2 text-xs outline-none focus:border-neutral-600 focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-50"
+              className="h-20 w-full resize-none rounded-lg border border-(--border) bg-(--app-bg) px-3 py-2 text-xs outline-none focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
             />
 
             <label
@@ -265,7 +265,7 @@ export function TaskCard({
                   event.target.value,
                 )
               }
-              className="w-full rounded-lg border border-neutral-800 bg-neutral-950 px-3 py-2 text-xs outline-none focus:border-neutral-600 focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-50"
+              className="w-full rounded-lg border border-(--border) bg-(--app-bg) px-3 py-2 text-xs outline-none focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
             />
 
             <div className="flex justify-end gap-2">
@@ -275,7 +275,7 @@ export function TaskCard({
                 onClick={
                   handleCancelEditing
                 }
-                className="rounded-lg border border-neutral-800 px-2 py-1 text-xs text-neutral-400 transition hover:bg-neutral-800 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-40"
+                className="rounded-lg border border-(--border) px-2 py-1 text-xs text-(--text-secondary) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
               >
                 Cancel
               </button>
@@ -289,7 +289,7 @@ export function TaskCard({
                 onClick={() =>
                   void handleSave()
                 }
-                className="rounded-lg bg-white px-3 py-1 text-xs font-medium text-neutral-950 transition hover:bg-neutral-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-500 disabled:cursor-not-allowed disabled:opacity-50"
+                className="rounded-lg bg-(--primary-bg) px-3 py-1 text-xs font-medium text-(--primary-text) transition hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {isMutating
                   ? "Saving..."
@@ -301,12 +301,12 @@ export function TaskCard({
           <>
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0 flex-1">
-                <p className="wrap-break-word text-sm font-medium text-neutral-200">
+                <p className="wrap-break-word text-sm font-medium text-(--text-primary)">
                   {task.title}
                 </p>
 
                 {task.description && (
-                  <p className="mt-1 whitespace-pre-wrap wrap-break-word text-xs leading-5 text-neutral-500">
+                  <p className="mt-1 whitespace-pre-wrap wrap-break-word text-xs leading-5 text-(--text-muted)">
                     {task.description}
                   </p>
                 )}
@@ -319,7 +319,7 @@ export function TaskCard({
                   handleStartEditing
                 }
                 aria-label={`Edit task ${task.title}`}
-                className="shrink-0 rounded-lg border border-neutral-800 p-1.5 text-neutral-500 transition hover:bg-neutral-800 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-40"
+                className="shrink-0 rounded-lg border border-(--border) p-1.5 text-(--text-muted) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
                 title="Edit task"
               >
                 <Pencil
@@ -334,24 +334,24 @@ export function TaskCard({
                 className={`rounded-full px-2 py-1 ${
                   task.sourceStatus ===
                   "SOURCE_MISSING"
-                    ? "bg-red-950/60 text-red-400"
+                    ? "bg-(--danger-surface) text-(--danger-text)"
                     : task.sourceStatus ===
                         "HAS_SOURCE"
-                      ? "bg-neutral-800 text-neutral-300"
-                      : "bg-neutral-800 text-neutral-500"
+                      ? "bg-(--surface-hover) text-(--text-secondary)"
+                      : "bg-(--surface-hover) text-(--text-muted)"
                 }`}
               >
                 {formatSource(task)}
               </span>
 
-              <span className="rounded-full bg-neutral-800 px-2 py-1 text-neutral-400">
+              <span className="rounded-full bg-(--surface-hover) px-2 py-1 text-(--text-secondary)">
                 {task.deadline
                   ? `Due ${task.deadline}`
                   : "No deadline"}
               </span>
             </div>
 
-            <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-neutral-800 pt-3">
+            <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-(--border) pt-3">
               {onOpenDetail && (
                 <button
                   type="button"
@@ -361,7 +361,7 @@ export function TaskCard({
                       task.id,
                     )
                   }
-                  className="flex shrink-0 items-center gap-1 rounded-lg border border-neutral-800 px-2 py-1.5 text-xs text-neutral-500 hover:bg-neutral-800 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-40"
+                  className="flex shrink-0 items-center gap-1 rounded-lg border border-(--border) px-2 py-1.5 text-xs text-(--text-muted) hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   <Eye
                     size={12}
@@ -377,7 +377,7 @@ export function TaskCard({
                 onClick={() =>
                   void handleViewSource()
                 }
-                className="flex shrink-0 items-center gap-1 rounded-lg border border-neutral-800 px-2 py-1.5 text-xs text-neutral-500 hover:bg-neutral-800 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-40"
+                className="flex shrink-0 items-center gap-1 rounded-lg border border-(--border) px-2 py-1.5 text-xs text-(--text-muted) hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
                 title="View original source"
               >
                 <ExternalLink
@@ -406,7 +406,7 @@ export function TaskCard({
                       .value as TaskStatus,
                   )
                 }
-                className="min-w-36 flex-1 rounded-lg border border-neutral-800 bg-neutral-950 px-2 py-1.5 text-xs text-neutral-300 outline-none focus:border-neutral-600 focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-40"
+                className="min-w-36 flex-1 rounded-lg border border-(--border) bg-(--app-bg) px-2 py-1.5 text-xs text-(--text-secondary) outline-none focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
               >
                 <option value="NOT_STARTED">
                   Not started
@@ -433,7 +433,7 @@ export function TaskCard({
                   );
                 }}
                 aria-label={`Delete task ${task.title}`}
-                className="rounded-lg border border-neutral-800 p-1.5 text-neutral-500 transition hover:bg-neutral-800 hover:text-red-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-40"
+                className="rounded-lg border border-(--border) p-1.5 text-(--text-muted) transition hover:bg-(--surface-hover) hover:text-(--danger-text) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
                 title="Delete task"
               >
                 <Trash2

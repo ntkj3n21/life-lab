@@ -25,7 +25,7 @@ export function EmbedVideoPlayer({
   onEnded,
 }: EmbedVideoPlayerProps) {
   return (
-    <div className="aspect-video w-full max-h-[68vh] overflow-hidden rounded-3xl border border-neutral-800 bg-black shadow-2xl">
+    <div className="aspect-video w-full max-h-[68vh] overflow-hidden rounded-3xl border border-(--border) bg-black shadow-2xl">
       <ReactPlayer
         ref={playerRef}
         src={url}

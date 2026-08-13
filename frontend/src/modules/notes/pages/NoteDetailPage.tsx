@@ -313,7 +313,7 @@ export function NoteDetailPage() {
           onClick={() =>
             navigate("/notes")
           }
-          className="flex items-center gap-2 rounded-xl border border-neutral-800 px-3 py-2 text-sm text-neutral-400 transition hover:bg-neutral-900 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-700"
+          className="flex items-center gap-2 rounded-xl border border-(--border) px-3 py-2 text-sm text-(--text-secondary) transition hover:bg-(--surface) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)"
         >
           <ArrowLeft
             size={15}
@@ -326,16 +326,16 @@ export function NoteDetailPage() {
           <div
             role="status"
             aria-live="polite"
-            className="mt-6 flex min-h-64 items-center justify-center rounded-2xl border border-neutral-800 bg-neutral-900"
+            className="mt-6 flex min-h-64 items-center justify-center rounded-2xl border border-(--border) bg-(--surface)"
           >
             <div className="text-center">
               <LoaderCircle
                 size={24}
-                className="mx-auto animate-spin text-neutral-500"
+                className="mx-auto animate-spin text-(--text-muted)"
                 aria-hidden="true"
               />
 
-              <p className="mt-3 text-sm text-neutral-500">
+              <p className="mt-3 text-sm text-(--text-muted)">
                 Loading Note...
               </p>
             </div>
@@ -344,20 +344,20 @@ export function NoteDetailPage() {
           !note ? (
           <div
             role="alert"
-            className="mt-6 rounded-2xl border border-red-900/60 bg-red-950/30 p-5"
+            className="mt-6 rounded-2xl border border-(--danger-border) bg-(--danger-surface) p-5"
           >
-            <h1 className="text-lg font-semibold text-red-200">
+            <h1 className="text-lg font-semibold text-(--danger-text)">
               Could not load Note
             </h1>
 
-            <p className="mt-2 text-sm text-red-300/80">
+            <p className="mt-2 text-sm text-(--danger-text)">
               {errorMessage}
             </p>
           </div>
         ) : note ? (
           <>
             <header className="mt-6">
-              <p className="text-xs font-medium uppercase tracking-wider text-neutral-600">
+              <p className="text-xs font-medium text-(--text-secondary)">
                 Note detail
               </p>
 
@@ -369,7 +369,7 @@ export function NoteDetailPage() {
 
                   {note.youtubeSource
                     .channelName && (
-                    <p className="mt-1 text-sm text-neutral-500">
+                    <p className="mt-1 text-sm text-(--text-muted)">
                       {
                         note.youtubeSource
                           .channelName
@@ -385,7 +385,7 @@ export function NoteDetailPage() {
                       void handleViewSource()
                     }
                     disabled={isMutating}
-                    className="flex items-center gap-2 rounded-xl border border-neutral-800 px-3 py-2 text-sm text-neutral-300 transition hover:bg-neutral-900 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-50"
+                    className="flex items-center gap-2 rounded-xl border border-(--border) px-3 py-2 text-sm text-(--text-secondary) transition hover:bg-(--surface) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     <ExternalLink
                       size={14}
@@ -406,7 +406,7 @@ export function NoteDetailPage() {
                       isMutating ||
                       isEditing
                     }
-                    className="flex items-center gap-2 rounded-xl border border-neutral-800 px-3 py-2 text-sm text-neutral-300 transition hover:bg-neutral-900 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-50"
+                    className="flex items-center gap-2 rounded-xl border border-(--border) px-3 py-2 text-sm text-(--text-secondary) transition hover:bg-(--surface) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     <Pencil
                       size={14}
@@ -421,7 +421,7 @@ export function NoteDetailPage() {
                       void handleOpenDelete()
                     }
                     disabled={isMutating}
-                    className="flex items-center gap-2 rounded-xl border border-red-950/70 px-3 py-2 text-sm text-red-300 transition hover:bg-red-950/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-900 disabled:cursor-not-allowed disabled:opacity-50"
+                    className="flex items-center gap-2 rounded-xl border border-(--danger-border) px-3 py-2 text-sm text-(--danger-text) transition hover:bg-(--danger-surface) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--danger-ring) disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     <Trash2
                       size={14}
@@ -436,20 +436,20 @@ export function NoteDetailPage() {
             {errorMessage && (
               <div
                 role="alert"
-                className="mt-4 rounded-xl border border-red-900/60 bg-red-950/30 px-4 py-3 text-sm text-red-300"
+                className="mt-4 rounded-xl border border-(--danger-border) bg-(--danger-surface) px-4 py-3 text-sm text-(--danger-text)"
               >
                 {errorMessage}
               </div>
             )}
 
-            <section className="mt-6 rounded-2xl border border-neutral-800 bg-neutral-900 p-5">
+            <section className="mt-6 rounded-2xl border border-(--border) bg-(--surface) p-5">
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-                <div className="rounded-xl border border-neutral-800 bg-neutral-950 p-3">
-                  <p className="text-[10px] uppercase tracking-wide text-neutral-600">
+                <div className="rounded-xl border border-(--border) bg-(--app-bg) p-3">
+                  <p className="text-[11px] font-medium text-(--text-faint)">
                     Timestamp
                   </p>
 
-                  <p className="mt-1 text-sm text-neutral-300">
+                  <p className="mt-1 text-sm text-(--text-secondary)">
                     {note.timestampSeconds !==
                     null
                       ? formatTime(
@@ -459,13 +459,13 @@ export function NoteDetailPage() {
                   </p>
                 </div>
 
-                <div className="rounded-xl border border-neutral-800 bg-neutral-950 p-3">
-                  <p className="text-[10px] uppercase tracking-wide text-neutral-600">
+                <div className="rounded-xl border border-(--border) bg-(--app-bg) p-3">
+                  <p className="text-[11px] font-medium text-(--text-faint)">
                     YouTube source
                   </p>
 
                   <p
-                    className="mt-1 truncate text-sm text-neutral-300"
+                    className="mt-1 truncate text-sm text-(--text-secondary)"
                     title={
                       note.youtubeSource
                         .youtubeVideoId
@@ -478,24 +478,24 @@ export function NoteDetailPage() {
                   </p>
                 </div>
 
-                <div className="rounded-xl border border-neutral-800 bg-neutral-950 p-3">
-                  <p className="text-[10px] uppercase tracking-wide text-neutral-600">
+                <div className="rounded-xl border border-(--border) bg-(--app-bg) p-3">
+                  <p className="text-[11px] font-medium text-(--text-faint)">
                     Created
                   </p>
 
-                  <p className="mt-1 text-sm text-neutral-300">
+                  <p className="mt-1 text-sm text-(--text-secondary)">
                     {formatDateTime(
                       note.createdAt,
                     )}
                   </p>
                 </div>
 
-                <div className="rounded-xl border border-neutral-800 bg-neutral-950 p-3">
-                  <p className="text-[10px] uppercase tracking-wide text-neutral-600">
+                <div className="rounded-xl border border-(--border) bg-(--app-bg) p-3">
+                  <p className="text-[11px] font-medium text-(--text-faint)">
                     Updated
                   </p>
 
-                  <p className="mt-1 text-sm text-neutral-300">
+                  <p className="mt-1 text-sm text-(--text-secondary)">
                     {formatDateTime(
                       note.updatedAt,
                     )}
@@ -504,7 +504,7 @@ export function NoteDetailPage() {
               </div>
 
               <div className="mt-5">
-                <p className="text-xs font-medium uppercase tracking-wider text-neutral-600">
+                <p className="text-xs font-medium text-(--text-secondary)">
                   Content
                 </p>
 
@@ -530,7 +530,7 @@ export function NoteDetailPage() {
                           event.target.value,
                         )
                       }
-                      className="mt-3 min-h-48 w-full resize-y rounded-xl border border-neutral-800 bg-neutral-950 p-4 text-sm leading-6 text-neutral-200 outline-none focus:border-neutral-600 focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-50"
+                      className="mt-3 min-h-48 w-full resize-y rounded-xl border border-(--border) bg-(--app-bg) p-4 text-sm leading-6 text-(--text-primary) outline-none focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
                     />
 
                     <div className="mt-3 flex flex-wrap justify-end gap-2">
@@ -547,7 +547,7 @@ export function NoteDetailPage() {
                         disabled={
                           isMutating
                         }
-                        className="rounded-xl border border-neutral-800 px-4 py-2 text-sm text-neutral-400 transition hover:bg-neutral-950 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+                        className="rounded-xl border border-(--border) px-4 py-2 text-sm text-(--text-secondary) transition hover:bg-(--app-bg) hover:text-(--text-primary) disabled:cursor-not-allowed disabled:opacity-50"
                       >
                         Cancel
                       </button>
@@ -561,7 +561,7 @@ export function NoteDetailPage() {
                           isMutating ||
                           !editingContent.trim()
                         }
-                        className="rounded-xl bg-white px-4 py-2 text-sm font-medium text-neutral-950 transition hover:bg-neutral-200 disabled:cursor-not-allowed disabled:opacity-50"
+                        className="rounded-xl bg-(--primary-bg) px-4 py-2 text-sm font-medium text-(--primary-text) transition hover:bg-(--primary-hover) disabled:cursor-not-allowed disabled:opacity-50"
                       >
                         {isMutating
                           ? "Saving..."
@@ -570,7 +570,7 @@ export function NoteDetailPage() {
                     </div>
                   </>
                 ) : (
-                  <p className="mt-3 whitespace-pre-wrap wrap-break-word text-sm leading-7 text-neutral-300">
+                  <p className="mt-3 whitespace-pre-wrap wrap-break-word text-sm leading-7 text-(--text-secondary)">
                     {note.content}
                   </p>
                 )}

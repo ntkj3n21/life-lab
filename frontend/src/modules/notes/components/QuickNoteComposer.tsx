@@ -36,22 +36,18 @@ export function QuickNoteComposer({
   return (
     <div
       aria-busy={isMutating}
-      className="rounded-2xl border border-neutral-800 bg-neutral-950 p-4"
+      className="rounded-xl border border-(--border) bg-(--app-bg) p-3"
     >
       <div className="flex items-start justify-between gap-3">
         <div>
-          <h4 className="text-sm font-medium text-neutral-300">
+          <h4 className="text-sm font-medium text-(--text-secondary)">
             Quick Note
           </h4>
 
-          <p className="mt-1 text-xs text-neutral-500">
-            Save a note to the exact current video
-            source.
-          </p>
         </div>
 
         {typeof timestamp === "number" && (
-          <span className="rounded-full bg-neutral-900 px-2 py-1 text-xs text-neutral-500">
+          <span className="rounded-full bg-(--surface) px-2 py-1 text-xs text-(--text-muted)">
             {formatTime(timestamp)}
           </span>
         )}
@@ -61,7 +57,7 @@ export function QuickNoteComposer({
         <p
           id="quick-note-video-required"
           role="status"
-          className="mt-3 rounded-xl border border-dashed border-neutral-800 p-3 text-xs text-neutral-500"
+          className="mt-3 rounded-xl border border-dashed border-(--border) p-3 text-xs text-(--text-muted)"
         >
           Open a Library video before creating a note.
         </p>
@@ -86,10 +82,10 @@ export function QuickNoteComposer({
           )
         }
         placeholder="Write your note..."
-        className="mt-3 h-32 w-full resize-none rounded-xl border border-neutral-800 bg-neutral-900 p-3 text-sm outline-none placeholder:text-neutral-600 focus:border-neutral-600 focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-50"
+        className="mt-3 h-24 w-full resize-none rounded-lg border border-(--border) bg-(--surface) p-3 text-sm outline-none placeholder:text-(--text-faint) focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
       />
 
-      <label className="mt-2 flex items-center gap-2 text-xs text-neutral-500">
+      <label className="mt-2 flex items-center gap-2 text-xs text-(--text-muted)">
         <input
           type="checkbox"
           checked={includeTimestamp}
@@ -114,7 +110,7 @@ export function QuickNoteComposer({
           isMutating ||
           !content.trim()
         }
-        className="mt-3 w-full rounded-xl bg-white px-4 py-2 text-sm font-medium text-neutral-950 hover:bg-neutral-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-500 disabled:cursor-not-allowed disabled:opacity-50"
+        className="mt-3 w-full rounded-lg bg-(--primary-bg) px-4 py-2 text-sm font-medium text-(--primary-text) hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
       >
         {isMutating
           ? "Saving..."
@@ -125,7 +121,7 @@ export function QuickNoteComposer({
         <p
           id="quick-note-error"
           role="alert"
-          className="mt-2 text-xs text-red-400"
+          className="mt-2 text-xs text-(--danger-text)"
         >
           {errorMessage}
         </p>

@@ -123,11 +123,11 @@ export function ContextSummary() {
 
   if (!activeContext) {
     return (
-      <div className="rounded-2xl border border-neutral-800 bg-neutral-900 p-4">
+      <div className="rounded-2xl border border-(--border) bg-(--surface) p-4">
         <div className="flex items-center gap-2">
           <Link2
             size={16}
-            className="text-neutral-500"
+            className="text-(--text-muted)"
           />
 
           <h4 className="whitespace-nowrap font-medium">
@@ -135,11 +135,11 @@ export function ContextSummary() {
           </h4>
         </div>
 
-        <p className="mt-3 text-sm text-neutral-400">
+        <p className="mt-3 text-sm text-(--text-secondary)">
           No active context yet.
         </p>
 
-        <p className="mt-1 text-xs text-neutral-600">
+        <p className="mt-1 text-xs text-(--text-faint)">
           Open a video to start
           linking notes and tasks.
         </p>
@@ -148,12 +148,12 @@ export function ContextSummary() {
   }
 
   return (
-    <div className="rounded-2xl border border-neutral-800 bg-neutral-900 p-4">
+    <div className="rounded-2xl border border-(--border) bg-(--surface) p-4">
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <Link2
             size={16}
-            className="text-neutral-400"
+            className="text-(--text-secondary)"
           />
 
           <h4 className="font-medium">
@@ -161,27 +161,27 @@ export function ContextSummary() {
           </h4>
         </div>
 
-        <span className="rounded-full bg-neutral-800 px-2 py-1 text-[10px] font-medium uppercase tracking-wide text-neutral-400">
+        <span className="rounded-full bg-(--surface-hover) px-2 py-1 text-[10px] font-medium text-(--text-secondary)">
           {
             activeContext.entityType
           }
         </span>
       </div>
 
-      <p className="mt-3 line-clamp-2 text-base font-semibold text-neutral-100">
+      <p className="mt-3 line-clamp-2 text-base font-semibold text-(--text-primary)">
         {activeContext.title}
       </p>
 
-      <div className="mt-3 flex items-center gap-2 text-sm text-neutral-400">
+      <div className="mt-3 flex items-center gap-2 text-sm text-(--text-secondary)">
         <Clock
           size={14}
-          className="text-neutral-500"
+          className="text-(--text-muted)"
         />
 
         <span>
           Timestamp{" "}
 
-          <span className="text-neutral-200">
+          <span className="text-(--text-primary)">
             {typeof activeContext.timestamp ===
             "number"
               ? formatTime(
@@ -193,8 +193,8 @@ export function ContextSummary() {
       </div>
 
       <div className="mt-4 grid grid-cols-2 gap-2">
-        <div className="rounded-xl border border-neutral-800 bg-neutral-950 p-3">
-          <div className="flex items-center gap-2 text-neutral-400">
+        <div className="rounded-xl border border-(--border) bg-(--app-bg) p-3">
+          <div className="flex items-center gap-2 text-(--text-secondary)">
             <StickyNote
               size={15}
             />
@@ -204,15 +204,15 @@ export function ContextSummary() {
             </span>
           </div>
 
-          <p className="mt-2 text-xl font-semibold text-neutral-100">
+          <p className="mt-2 text-xl font-semibold text-(--text-primary)">
             {
               relatedNotes.length
             }
           </p>
         </div>
 
-        <div className="rounded-xl border border-neutral-800 bg-neutral-950 p-3">
-          <div className="flex items-center gap-2 text-neutral-400">
+        <div className="rounded-xl border border-(--border) bg-(--app-bg) p-3">
+          <div className="flex items-center gap-2 text-(--text-secondary)">
             <CheckSquare
               size={15}
             />
@@ -222,7 +222,7 @@ export function ContextSummary() {
             </span>
           </div>
 
-          <p className="mt-2 text-xl font-semibold text-neutral-100">
+          <p className="mt-2 text-xl font-semibold text-(--text-primary)">
             {
               relatedTasksCount
             }

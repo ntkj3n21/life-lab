@@ -24,7 +24,7 @@ const navItems = [
   },
   {
     to: "/plan",
-    label: "Daily Plan",
+    label: "Plan",
     icon: CalendarDays,
   },
 ] as const;
@@ -33,7 +33,7 @@ export function MobileNavigation() {
   return (
     <nav
       aria-label="Primary navigation"
-      className="flex shrink-0 gap-1 overflow-x-auto border-b border-neutral-800 bg-neutral-950 px-3 py-2 xl:hidden"
+      className="flex shrink-0 gap-1 overflow-x-auto border-b border-(--border) bg-(--panel-bg) px-2 py-1.5 xl:hidden"
     >
       {navItems.map(
         ({
@@ -47,10 +47,10 @@ export function MobileNavigation() {
             className={({
               isActive,
             }) =>
-              `flex shrink-0 items-center gap-2 rounded-xl px-3 py-2 text-xs transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-500 ${
+              `flex h-9 shrink-0 items-center gap-2 rounded-[9px] px-3 text-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) ${
                 isActive
-                  ? "bg-neutral-800 text-white"
-                  : "text-neutral-500 hover:bg-neutral-900 hover:text-neutral-200"
+                  ? "bg-(--surface-hover) font-medium text-(--text-primary)"
+                  : "text-(--text-muted) hover:bg-(--surface) hover:text-(--text-primary)"
               }`
             }
           >

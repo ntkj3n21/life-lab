@@ -1,8 +1,7 @@
 import { useState } from "react";
 import {
-  Eye,
+  Ellipsis,
   Film,
-  History,
   LoaderCircle,
   Pencil,
   Trash2,
@@ -36,30 +35,19 @@ interface LibraryVideoCardProps {
   ) => void;
 }
 
-function formatLastWatched(
-  value: string | null,
+function formatDuration(
+  durationSeconds: number | null,
 ) {
-  if (!value) {
-    return "Never watched";
+  if (durationSeconds === null) {
+    return null;
   }
 
-  const parsed = new Date(value);
+  const minutes = Math.floor(durationSeconds / 60);
+  const seconds = durationSeconds % 60;
 
-  if (
-    Number.isNaN(
-      parsed.getTime(),
-    )
-  ) {
-    return "Last watched recorded";
-  }
-
-  return new Intl.DateTimeFormat(
-    undefined,
-    {
-      dateStyle: "medium",
-      timeStyle: "short",
-    },
-  ).format(parsed);
+  return `${minutes}:${seconds
+    .toString()
+    .padStart(2, "0")}`;
 }
 
 export function LibraryVideoCard({
@@ -159,16 +147,20 @@ export function LibraryVideoCard({
     video.youtubeSource
       .availabilityStatus;
 
+  const durationLabel = formatDuration(
+    video.youtubeSource.durationSeconds,
+  );
+
   return (
     <article
       aria-busy={
         isSaving ||
         isMutating
       }
-      className={`min-w-0 overflow-hidden rounded-2xl border transition ${
+      className={`min-w-0 overflow-visible rounded-xl border transition ${
         isActive
-          ? "border-neutral-500 bg-neutral-800"
-          : "border-neutral-800 bg-neutral-950 hover:border-neutral-700"
+          ? "border-(--border-strong) bg-(--surface-hover)"
+          : "border-(--border) bg-(--surface) hover:bg-(--surface-hover)"
       }`}
     >
       <button
@@ -178,9 +170,9 @@ export function LibraryVideoCard({
         }
         disabled={isEditing}
         aria-label={`Open video ${displayTitle}`}
-        className="block w-full text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-neutral-500 disabled:cursor-default"
+        className="block w-full text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--focus) disabled:cursor-default"
       >
-        <div className="relative aspect-video overflow-hidden bg-neutral-900">
+        <div className="relative aspect-video overflow-hidden bg-(--surface)">
           {video.youtubeSource
             .thumbnailUrl ? (
             <img
@@ -196,49 +188,27 @@ export function LibraryVideoCard({
             <div className="flex h-full items-center justify-center">
               <Film
                 size={36}
-                className="text-neutral-700"
+                className="text-(--text-faint)"
                 aria-hidden="true"
               />
             </div>
           )}
 
-          <div className="absolute left-2 top-2 flex flex-wrap gap-2">
-            {isActive && (
-              <span className="rounded-full bg-white px-2 py-1 text-[10px] font-semibold text-neutral-950">
-                OPEN
-              </span>
-            )}
-
-            <span
-              className={`rounded-full px-2 py-1 text-[10px] font-medium ${
-                availability ===
-                "AVAILABLE"
-                  ? "bg-emerald-950/90 text-emerald-300"
-                  : availability ===
-                      "UNAVAILABLE"
-                    ? "bg-red-950/90 text-red-300"
-                    : "bg-neutral-950/90 text-neutral-400"
-              }`}
-            >
-              {availability}
+          {availability === "UNAVAILABLE" && (
+            <span className="absolute left-2 top-2 rounded-full bg-(--danger-surface) px-2 py-1 text-[11px] font-medium text-(--danger-text)">
+              Unavailable
             </span>
-
-            {video.watched && (
-              <span className="rounded-full bg-neutral-950/90 px-2 py-1 text-[10px] font-medium text-neutral-300">
-                WATCHED
-              </span>
-            )}
-          </div>
+          )}
         </div>
       </button>
 
-      <div className="min-w-0 p-4">
+      <div className="min-w-0 p-3.5">
         {isEditing ? (
           <div className="space-y-3">
             <div>
               <label
                 htmlFor={`custom-title-${video.id}`}
-                className="mb-1.5 block text-xs font-medium text-neutral-400"
+                className="mb-1.5 block text-xs font-medium text-(--text-secondary)"
               >
                 Custom title
               </label>
@@ -261,14 +231,14 @@ export function LibraryVideoCard({
                     .title ??
                   "Optional custom title"
                 }
-                className="w-full rounded-xl border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none placeholder:text-neutral-600 focus:border-neutral-600 focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-60"
+                className="w-full rounded-xl border border-(--border) bg-(--surface) px-3 py-2 text-sm outline-none placeholder:text-(--text-faint) focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-60"
               />
             </div>
 
             <div>
               <label
                 htmlFor={`description-${video.id}`}
-                className="mb-1.5 block text-xs font-medium text-neutral-400"
+                className="mb-1.5 block text-xs font-medium text-(--text-secondary)"
               >
                 Personal description
               </label>
@@ -289,7 +259,7 @@ export function LibraryVideoCard({
                 }
                 rows={3}
                 placeholder="Optional personal description"
-                className="w-full resize-none rounded-xl border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none placeholder:text-neutral-600 focus:border-neutral-600 focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-60"
+                className="w-full resize-none rounded-xl border border-(--border) bg-(--surface) px-3 py-2 text-sm outline-none placeholder:text-(--text-faint) focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-60"
               />
             </div>
 
@@ -303,7 +273,7 @@ export function LibraryVideoCard({
                   isSaving ||
                   isMutating
                 }
-                className="rounded-lg border border-neutral-800 px-3 py-1.5 text-xs text-neutral-400 hover:bg-neutral-800 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-50"
+                className="rounded-lg border border-(--border) px-3 py-1.5 text-xs text-(--text-secondary) hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Cancel
               </button>
@@ -317,7 +287,7 @@ export function LibraryVideoCard({
                   isSaving ||
                   isMutating
                 }
-                className="flex items-center gap-2 rounded-lg bg-white px-3 py-1.5 text-xs font-medium text-neutral-950 hover:bg-neutral-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-500 disabled:cursor-not-allowed disabled:opacity-50"
+                className="flex items-center gap-2 rounded-lg bg-(--primary-bg) px-3 py-1.5 text-xs font-medium text-(--primary-text) hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {isSaving && (
                   <LoaderCircle
@@ -340,10 +310,10 @@ export function LibraryVideoCard({
               onClick={() =>
                 onOpen(video)
               }
-              className="block min-w-0 w-full rounded-lg text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-700"
+              className="block min-w-0 w-full rounded-lg text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)"
             >
               <h5
-                className="line-clamp-2 wrap-break-word text-sm font-medium leading-5 text-neutral-100"
+                className="line-clamp-2 wrap-break-word text-sm font-medium leading-5 text-(--text-primary)"
                 title={displayTitle}
               >
                 {displayTitle}
@@ -353,7 +323,7 @@ export function LibraryVideoCard({
                 video.youtubeSource
                   .title && (
                   <p
-                    className="mt-1 truncate text-xs text-neutral-500"
+                    className="mt-1 truncate text-xs text-(--text-muted)"
                     title={
                       video
                         .youtubeSource
@@ -368,106 +338,55 @@ export function LibraryVideoCard({
                   </p>
                 )}
 
-              {video.youtubeSource
-                .channelName && (
-                <p
-                  className="mt-2 truncate text-xs text-neutral-500"
-                  title={
-                    video.youtubeSource
-                      .channelName
-                  }
-                >
-                  {
-                    video.youtubeSource
-                      .channelName
-                  }
-                </p>
-              )}
-
-              {video.personalDescription && (
-                <p className="mt-3 line-clamp-2 wrap-break-word text-xs leading-5 text-neutral-400">
-                  {
-                    video.personalDescription
-                  }
-                </p>
-              )}
             </button>
 
-            <div className="mt-3 grid gap-2 sm:grid-cols-2">
-              <div className="flex items-center gap-2 rounded-lg border border-neutral-800 bg-neutral-900 px-2.5 py-2">
-                <Eye
-                  size={13}
-                  className="shrink-0 text-neutral-600"
-                  aria-hidden="true"
-                />
+            <div className="mt-2 flex min-w-0 items-center gap-2 text-xs text-(--text-muted)">
+              {video.youtubeSource.channelName && (
+                <span className="min-w-0 truncate" title={video.youtubeSource.channelName}>
+                  {video.youtubeSource.channelName}
+                </span>
+              )}
 
-                <div className="min-w-0">
-                  <p className="text-[10px] uppercase tracking-wide text-neutral-600">
-                    Personal views
-                  </p>
+              {video.youtubeSource.channelName && durationLabel && (
+                <span aria-hidden="true">·</span>
+              )}
 
-                  <p className="text-xs text-neutral-300">
-                    {video.viewCount}
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2 rounded-lg border border-neutral-800 bg-neutral-900 px-2.5 py-2">
-                <History
-                  size={13}
-                  className="shrink-0 text-neutral-600"
-                  aria-hidden="true"
-                />
-
-                <div className="min-w-0">
-                  <p className="text-[10px] uppercase tracking-wide text-neutral-600">
-                    Last watched
-                  </p>
-
-                  <p
-                    className="truncate text-xs text-neutral-300"
-                    title={
-                      formatLastWatched(
-                        video.lastWatchedAt,
-                      )
-                    }
-                  >
-                    {formatLastWatched(
-                      video.lastWatchedAt,
-                    )}
-                  </p>
-                </div>
-              </div>
+              {durationLabel && (
+                <span className="shrink-0">
+                  {durationLabel}
+                </span>
+              )}
             </div>
 
-            <LibraryVideoTags
-              libraryVideoId={
-                video.id
-              }
-            />
+            {video.personalDescription && (
+              <p className="mt-2 line-clamp-2 wrap-break-word text-xs leading-5 text-(--text-secondary)">
+                {video.personalDescription}
+              </p>
+            )}
 
-            <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-neutral-800 pt-3">
-              <span
-                className="min-w-0 flex-1 truncate text-[11px] text-neutral-600"
-                title={
-                  video.youtubeSource
-                    .youtubeVideoId
-                }
-              >
-                {
-                  video.youtubeSource
-                    .youtubeVideoId
-                }
+            <div className="mt-3 flex items-center justify-between border-t border-(--border) pt-2.5">
+              <span className="text-[11px] text-(--text-faint)">
+                {video.viewCount > 0 ? `${video.viewCount} view${video.viewCount === 1 ? "" : "s"}` : "Not watched"}
               </span>
 
-              <div className="flex flex-wrap justify-end gap-2">
+              <details className="group relative">
+                <summary
+                  className="flex h-7 w-7 cursor-pointer list-none items-center justify-center rounded-lg text-(--text-muted) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) [&::-webkit-details-marker]:hidden"
+                  aria-label={`More actions for ${displayTitle}`}
+                  title="More actions"
+                >
+                  <Ellipsis size={16} aria-hidden="true" />
+                </summary>
+
+                <div className="absolute bottom-9 right-0 z-10 w-64 rounded-xl border border-(--border-strong) bg-(--surface) p-2 shadow-lg">
+                  <div className="flex gap-1">
                 <button
                   type="button"
                   onClick={
                     handleStartEdit
                   }
                   disabled={isMutating}
-                  className="flex items-center gap-1.5 rounded-lg border border-neutral-800 px-2 py-1 text-xs text-neutral-500 hover:bg-neutral-800 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="flex flex-1 items-center justify-center gap-1.5 rounded-lg px-2 py-1.5 text-xs text-(--text-secondary) hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   <Pencil
                     size={13}
@@ -482,7 +401,7 @@ export function LibraryVideoCard({
                     onDelete(video)
                   }
                   disabled={isMutating}
-                  className="flex items-center gap-1.5 rounded-lg border border-neutral-800 px-2 py-1 text-xs text-neutral-500 hover:bg-neutral-800 hover:text-red-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="flex flex-1 items-center justify-center gap-1.5 rounded-lg px-2 py-1.5 text-xs text-(--text-secondary) hover:bg-(--danger-surface) hover:text-(--danger-text) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   <Trash2
                     size={13}
@@ -490,7 +409,11 @@ export function LibraryVideoCard({
                   />
                   Delete
                 </button>
-              </div>
+                  </div>
+
+                  <LibraryVideoTags libraryVideoId={video.id} />
+                </div>
+              </details>
             </div>
           </>
         )}

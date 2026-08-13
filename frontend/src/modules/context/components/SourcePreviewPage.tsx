@@ -152,14 +152,14 @@ export function SourcePreviewPage({
     );
 
   return (
-    <main className="min-h-screen bg-neutral-950 p-4 text-neutral-100 sm:p-6">
+    <main className="min-h-screen bg-(--app-bg) p-4 text-(--text-primary) sm:p-6">
       <div className="mx-auto max-w-5xl">
         <button
           type="button"
           onClick={() =>
             navigate("/library")
           }
-          className="flex items-center gap-2 rounded-xl border border-neutral-800 px-3 py-2 text-sm text-neutral-400 transition hover:bg-neutral-900 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-600"
+          className="flex items-center gap-2 rounded-xl border border-(--border) px-3 py-2 text-sm text-(--text-secondary) transition hover:bg-(--surface) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)"
         >
           <ArrowLeft
             size={15}
@@ -169,7 +169,7 @@ export function SourcePreviewPage({
         </button>
 
         <header className="mt-6">
-          <p className="text-xs font-medium uppercase tracking-wider text-neutral-600">
+          <p className="text-xs font-medium uppercase tracking-wider text-(--text-faint)">
             Exact Source Preview
           </p>
 
@@ -179,7 +179,7 @@ export function SourcePreviewPage({
 
           {note?.youtubeSource
             .channelName && (
-            <p className="mt-1 text-sm text-neutral-500">
+            <p className="mt-1 text-sm text-(--text-muted)">
               {
                 note.youtubeSource
                   .channelName
@@ -193,16 +193,16 @@ export function SourcePreviewPage({
           <div
             role="status"
             aria-live="polite"
-            className="mt-8 flex min-h-56 items-center justify-center rounded-2xl border border-neutral-800 bg-neutral-900 p-8"
+            className="mt-8 flex min-h-56 items-center justify-center rounded-2xl border border-(--border) bg-(--surface) p-8"
           >
             <div className="text-center">
               <LoaderCircle
                 size={24}
-                className="mx-auto animate-spin text-neutral-500"
+                className="mx-auto animate-spin text-(--text-muted)"
                 aria-hidden="true"
               />
 
-              <p className="mt-3 text-sm text-neutral-500">
+              <p className="mt-3 text-sm text-(--text-muted)">
                 Resolving exact source...
               </p>
             </div>
@@ -210,13 +210,13 @@ export function SourcePreviewPage({
         ) : error ? (
           <div
             role="alert"
-            className="mt-8 rounded-2xl border border-red-900/60 bg-red-950/30 p-5"
+            className="mt-8 rounded-2xl border border-(--danger-border) bg-(--danger-surface) p-5"
           >
-            <p className="text-sm font-medium text-red-300">
+            <p className="text-sm font-medium text-(--danger-text)">
               Could not restore source context
             </p>
 
-            <p className="mt-2 text-sm text-red-300/80">
+            <p className="mt-2 text-sm text-(--danger-text)">
               {error.message}
             </p>
 
@@ -230,7 +230,7 @@ export function SourcePreviewPage({
                 })
               }
               disabled={isResolving}
-              className="mt-4 rounded-xl border border-red-900/70 px-3 py-2 text-xs text-red-200 transition hover:bg-red-950/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-800 disabled:cursor-not-allowed disabled:opacity-50"
+              className="mt-4 rounded-xl border border-(--danger-border) px-3 py-2 text-xs text-(--danger-text) transition hover:bg-(--danger-surface) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--danger-ring) disabled:cursor-not-allowed disabled:opacity-50"
             >
               Try again
             </button>
@@ -239,12 +239,12 @@ export function SourcePreviewPage({
             "VIDEO_UNAVAILABLE" ? (
           <div
             role="status"
-            className="mt-8 flex aspect-video items-center justify-center rounded-3xl border border-red-950/70 bg-neutral-900 p-6 sm:p-8"
+            className="mt-8 flex aspect-video items-center justify-center rounded-3xl border border-(--danger-border) bg-(--surface) p-6 sm:p-8"
           >
             <div className="max-w-md text-center">
               <TriangleAlert
                 size={44}
-                className="mx-auto text-red-400"
+                className="mx-auto text-(--danger-text)"
                 aria-hidden="true"
               />
 
@@ -252,13 +252,13 @@ export function SourcePreviewPage({
                 Exact source unavailable
               </h2>
 
-              <p className="mt-2 text-sm leading-6 text-neutral-500">
+              <p className="mt-2 text-sm leading-6 text-(--text-muted)">
                 Life Lab preserved this Note and its exact
                 YouTube source reference, but that source is
                 not currently playable.
               </p>
 
-              <p className="mt-3 text-xs leading-5 text-neutral-600">
+              <p className="mt-3 text-xs leading-5 text-(--text-faint)">
                 No similar or replacement video is used.
               </p>
             </div>
@@ -290,8 +290,8 @@ export function SourcePreviewPage({
 
         {showHistoricalContext &&
           note && (
-            <section className="mt-5 rounded-2xl border border-neutral-800 bg-neutral-900 p-4">
-              <div className="flex items-center gap-2 text-sm text-neutral-400">
+            <section className="mt-5 rounded-2xl border border-(--border) bg-(--surface) p-4">
+              <div className="flex items-center gap-2 text-sm text-(--text-secondary)">
                 <ExternalLink
                   size={14}
                   aria-hidden="true"
@@ -300,17 +300,17 @@ export function SourcePreviewPage({
                 Exact historical context
               </div>
 
-              <p className="mt-3 whitespace-pre-wrap wrap-break-word text-sm leading-6 text-neutral-300">
+              <p className="mt-3 whitespace-pre-wrap wrap-break-word text-sm leading-6 text-(--text-secondary)">
                 {note.content}
               </p>
 
               <div className="mt-4 grid gap-2 sm:grid-cols-2">
-                <div className="rounded-xl border border-neutral-800 bg-neutral-950 p-3">
-                  <p className="text-[10px] uppercase tracking-wide text-neutral-600">
+                <div className="rounded-xl border border-(--border) bg-(--app-bg) p-3">
+                  <p className="text-[11px] font-medium text-(--text-faint)">
                     Timestamp
                   </p>
 
-                  <p className="mt-1 text-sm text-neutral-300">
+                  <p className="mt-1 text-sm text-(--text-secondary)">
                     {note.timestampSeconds !==
                     null
                       ? formatTime(
@@ -320,12 +320,12 @@ export function SourcePreviewPage({
                   </p>
                 </div>
 
-                <div className="rounded-xl border border-neutral-800 bg-neutral-950 p-3">
-                  <p className="text-[10px] uppercase tracking-wide text-neutral-600">
+                <div className="rounded-xl border border-(--border) bg-(--app-bg) p-3">
+                  <p className="text-[11px] font-medium text-(--text-faint)">
                     Source mode
                   </p>
 
-                  <p className="mt-1 text-sm text-neutral-300">
+                  <p className="mt-1 text-sm text-(--text-secondary)">
                     {navigationMode ===
                     "SOURCE_PREVIEW"
                       ? "Read-only preview"
@@ -336,7 +336,7 @@ export function SourcePreviewPage({
 
               {navigationMode ===
                 "SOURCE_PREVIEW" && (
-                <p className="mt-3 text-xs leading-5 text-neutral-600">
+                <p className="mt-3 text-xs leading-5 text-(--text-faint)">
                   Preview playback is intentionally excluded
                   from WatchSession tracking.
                 </p>

@@ -111,7 +111,7 @@ interface LibraryFiltersProps {
 }
 
 const inputClassName =
-  "w-full rounded-xl border border-neutral-800 bg-neutral-900 px-3 py-2 text-xs text-neutral-300 outline-none focus:border-neutral-600 focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-50";
+  "w-full rounded-xl border border-(--border) bg-(--surface) px-3 py-2 text-xs text-(--text-secondary) outline-none focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50";
 
 export function LibraryFilters({
   tags,
@@ -150,13 +150,13 @@ export function LibraryFilters({
   return (
     <div
       aria-busy={isLoading}
-      className="mt-4 rounded-2xl border border-neutral-800 bg-neutral-950 p-3"
+      className="mt-4"
     >
       <div className="flex flex-col gap-2 lg:flex-row">
-        <div className="flex min-w-0 flex-1 items-center gap-2 rounded-xl border border-neutral-800 bg-neutral-900 px-3 focus-within:border-neutral-600 focus-within:ring-2 focus-within:ring-neutral-700">
+        <div className="flex min-w-0 flex-1 items-center gap-2 rounded-lg border border-(--border) bg-(--app-bg) px-3 shadow-sm transition focus-within:border-(--border-strong) focus-within:ring-2 focus-within:ring-(--focus)">
           <Search
             size={15}
-            className="shrink-0 text-neutral-500"
+            className="shrink-0 text-(--text-muted)"
             aria-hidden="true"
           />
 
@@ -183,8 +183,8 @@ export function LibraryFilters({
                 void onApply();
               }
             }}
-            placeholder="Search title, channel, personal info or tags..."
-            className="min-w-0 flex-1 bg-transparent py-2.5 text-sm outline-none placeholder:text-neutral-600 disabled:cursor-not-allowed disabled:opacity-50"
+            placeholder="Search library..."
+            className="min-w-0 flex-1 bg-transparent py-3 text-sm outline-none placeholder:text-(--text-faint) disabled:cursor-not-allowed disabled:opacity-50"
           />
         </div>
 
@@ -194,7 +194,9 @@ export function LibraryFilters({
             void onApply()
           }
           disabled={isLoading}
-          className="flex items-center justify-center gap-2 rounded-xl bg-white px-4 py-2 text-sm font-medium text-neutral-950 hover:bg-neutral-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-500 disabled:cursor-not-allowed disabled:opacity-50"
+          aria-label="Search library"
+          title="Search library"
+          className="flex h-10 w-10 items-center justify-center rounded-lg bg-(--primary-bg) text-(--primary-text) hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isLoading && (
             <LoaderCircle
@@ -204,9 +206,12 @@ export function LibraryFilters({
             />
           )}
 
-          {isLoading
-            ? "Applying..."
-            : "Apply"}
+          {!isLoading && (
+            <Search
+              size={16}
+              aria-hidden="true"
+            />
+          )}
         </button>
 
         <button
@@ -217,7 +222,7 @@ export function LibraryFilters({
           aria-expanded={
             showAdvancedFilters
           }
-          className="flex items-center justify-center gap-2 rounded-xl border border-neutral-800 px-3 py-2 text-sm text-neutral-400 hover:bg-neutral-800 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-700"
+          className="flex h-10 items-center justify-center gap-2 rounded-lg px-3 text-sm text-(--text-secondary) hover:bg-(--surface-subtle) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)"
         >
           <SlidersHorizontal
             size={15}
@@ -234,7 +239,7 @@ export function LibraryFilters({
           disabled={isLoading}
           aria-label="Reset library filters"
           title="Reset filters"
-          className="flex items-center justify-center rounded-xl border border-neutral-800 px-3 py-2 text-neutral-500 hover:bg-neutral-800 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-50"
+          className="flex h-10 w-10 items-center justify-center rounded-lg text-(--text-muted) hover:bg-(--surface-subtle) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
         >
           <RotateCcw
             size={15}
@@ -246,7 +251,7 @@ export function LibraryFilters({
       {validationMessage && (
         <p
           role="alert"
-          className="mt-3 rounded-xl border border-amber-900/60 bg-amber-950/20 px-3 py-2 text-xs text-amber-300"
+          className="mt-3 rounded-xl border border-(--warning-border) bg-(--warning-surface) px-3 py-2 text-xs text-(--warning-text)"
         >
           {validationMessage}
         </p>
@@ -257,20 +262,20 @@ export function LibraryFilters({
           {watchAndSortLocked && (
             <p
               role="status"
-              className="rounded-xl border border-neutral-800 bg-neutral-900 px-3 py-2 text-xs leading-5 text-neutral-500"
+              className="rounded-xl border border-(--border) bg-(--surface) px-3 py-2 text-xs leading-5 text-(--text-muted)"
             >
               The current Library view controls watch status and sort order. Keyword, date, duration, tag, and Note filters still combine with this view.
             </p>
           )}
 
           <div className="grid gap-3 xl:grid-cols-2">
-            <fieldset className="rounded-xl border border-neutral-800 bg-neutral-900/50 p-3">
-              <legend className="px-1 text-xs font-medium text-neutral-400">
+            <fieldset className="rounded-xl border border-(--border) bg-(--surface-subtle) p-3">
+              <legend className="px-1 text-xs font-medium text-(--text-secondary)">
                 Personal tags
               </legend>
 
               {tags.length === 0 ? (
-                <p className="text-xs text-neutral-600">
+                <p className="text-xs text-(--text-faint)">
                   No tags available.
                 </p>
               ) : (
@@ -288,8 +293,8 @@ export function LibraryFilters({
                             key={tag.id}
                             className={`flex cursor-pointer items-center gap-2 rounded-lg border px-2.5 py-1.5 text-xs transition ${
                               checked
-                                ? "border-neutral-600 bg-neutral-800 text-neutral-200"
-                                : "border-neutral-800 bg-neutral-950 text-neutral-500 hover:text-neutral-300"
+                                ? "border-(--border-strong) bg-(--surface-hover) text-(--text-primary)"
+                                : "border-(--border) bg-(--app-bg) text-(--text-muted) hover:text-(--text-secondary)"
                             }`}
                           >
                             <input
@@ -305,7 +310,7 @@ export function LibraryFilters({
                                   tag.id,
                                 )
                               }
-                              className="accent-neutral-200"
+                              className="accent-(--primary-bg)"
                             />
 
                             <span className="wrap-break-word">
@@ -317,15 +322,15 @@ export function LibraryFilters({
                     )}
                   </div>
 
-                  <p className="mt-2 text-[10px] leading-4 text-neutral-600">
+                  <p className="mt-2 text-[10px] leading-4 text-(--text-faint)">
                     Multiple selected tags are matched with OR. Tag filtering is combined with other filter groups using AND.
                   </p>
                 </>
               )}
             </fieldset>
 
-            <fieldset className="rounded-xl border border-neutral-800 bg-neutral-900/50 p-3">
-              <legend className="px-1 text-xs font-medium text-neutral-400">
+            <fieldset className="rounded-xl border border-(--border) bg-(--surface-subtle) p-3">
+              <legend className="px-1 text-xs font-medium text-(--text-secondary)">
                 Activity and Notes
               </legend>
 
@@ -333,7 +338,7 @@ export function LibraryFilters({
                 <div>
                   <label
                     htmlFor="library-watched-filter"
-                    className="mb-1 block text-[10px] uppercase tracking-wide text-neutral-600"
+                    className="mb-1 block text-[11px] font-medium text-(--text-faint)"
                   >
                     Watch status
                   </label>
@@ -374,7 +379,7 @@ export function LibraryFilters({
                 <div>
                   <label
                     htmlFor="library-notes-filter"
-                    className="mb-1 block text-[10px] uppercase tracking-wide text-neutral-600"
+                    className="mb-1 block text-[11px] font-medium text-(--text-faint)"
                   >
                     Note status
                   </label>
@@ -411,8 +416,8 @@ export function LibraryFilters({
           </div>
 
           <div className="grid gap-3 lg:grid-cols-3">
-            <fieldset className="rounded-xl border border-neutral-800 bg-neutral-900/50 p-3">
-              <legend className="px-1 text-xs font-medium text-neutral-400">
+            <fieldset className="rounded-xl border border-(--border) bg-(--surface-subtle) p-3">
+              <legend className="px-1 text-xs font-medium text-(--text-secondary)">
                 Duration
               </legend>
 
@@ -420,7 +425,7 @@ export function LibraryFilters({
                 <div>
                   <label
                     htmlFor="library-duration-min"
-                    className="mb-1 block text-[10px] uppercase tracking-wide text-neutral-600"
+                    className="mb-1 block text-[11px] font-medium text-(--text-faint)"
                   >
                     Min seconds
                   </label>
@@ -453,7 +458,7 @@ export function LibraryFilters({
                 <div>
                   <label
                     htmlFor="library-duration-max"
-                    className="mb-1 block text-[10px] uppercase tracking-wide text-neutral-600"
+                    className="mb-1 block text-[11px] font-medium text-(--text-faint)"
                   >
                     Max seconds
                   </label>
@@ -485,8 +490,8 @@ export function LibraryFilters({
               </div>
             </fieldset>
 
-            <fieldset className="rounded-xl border border-neutral-800 bg-neutral-900/50 p-3">
-              <legend className="px-1 text-xs font-medium text-neutral-400">
+            <fieldset className="rounded-xl border border-(--border) bg-(--surface-subtle) p-3">
+              <legend className="px-1 text-xs font-medium text-(--text-secondary)">
                 YouTube published date
               </legend>
 
@@ -494,7 +499,7 @@ export function LibraryFilters({
                 <div>
                   <label
                     htmlFor="library-published-from"
-                    className="mb-1 block text-[10px] uppercase tracking-wide text-neutral-600"
+                    className="mb-1 block text-[11px] font-medium text-(--text-faint)"
                   >
                     From
                   </label>
@@ -523,7 +528,7 @@ export function LibraryFilters({
                 <div>
                   <label
                     htmlFor="library-published-to"
-                    className="mb-1 block text-[10px] uppercase tracking-wide text-neutral-600"
+                    className="mb-1 block text-[11px] font-medium text-(--text-faint)"
                   >
                     To
                   </label>
@@ -549,8 +554,8 @@ export function LibraryFilters({
               </div>
             </fieldset>
 
-            <fieldset className="rounded-xl border border-neutral-800 bg-neutral-900/50 p-3">
-              <legend className="px-1 text-xs font-medium text-neutral-400">
+            <fieldset className="rounded-xl border border-(--border) bg-(--surface-subtle) p-3">
+              <legend className="px-1 text-xs font-medium text-(--text-secondary)">
                 Added to Life Lab
               </legend>
 
@@ -558,7 +563,7 @@ export function LibraryFilters({
                 <div>
                   <label
                     htmlFor="library-added-from"
-                    className="mb-1 block text-[10px] uppercase tracking-wide text-neutral-600"
+                    className="mb-1 block text-[11px] font-medium text-(--text-faint)"
                   >
                     From
                   </label>
@@ -585,7 +590,7 @@ export function LibraryFilters({
                 <div>
                   <label
                     htmlFor="library-added-to"
-                    className="mb-1 block text-[10px] uppercase tracking-wide text-neutral-600"
+                    className="mb-1 block text-[11px] font-medium text-(--text-faint)"
                   >
                     To
                   </label>
@@ -612,8 +617,8 @@ export function LibraryFilters({
             </fieldset>
           </div>
 
-          <fieldset className="rounded-xl border border-neutral-800 bg-neutral-900/50 p-3">
-            <legend className="px-1 text-xs font-medium text-neutral-400">
+          <fieldset className="rounded-xl border border-(--border) bg-(--surface-subtle) p-3">
+            <legend className="px-1 text-xs font-medium text-(--text-secondary)">
               Sort Library
             </legend>
 
@@ -621,7 +626,7 @@ export function LibraryFilters({
               <div>
                 <label
                   htmlFor="library-sort-by"
-                  className="mb-1 block text-[10px] uppercase tracking-wide text-neutral-600"
+                  className="mb-1 block text-[11px] font-medium text-(--text-faint)"
                 >
                   Sort by
                 </label>
@@ -663,7 +668,7 @@ export function LibraryFilters({
               <div>
                 <label
                   htmlFor="library-sort-direction"
-                  className="mb-1 block text-[10px] uppercase tracking-wide text-neutral-600"
+                  className="mb-1 block text-[11px] font-medium text-(--text-faint)"
                 >
                   Direction
                 </label>

@@ -491,22 +491,18 @@ export function NotesPage() {
     <main className="min-w-0 flex-1 overflow-y-auto p-4 sm:p-6">
       <div className="mx-auto max-w-5xl">
         <header>
-          <p className="text-xs font-medium uppercase tracking-wider text-neutral-600">
-            Global workspace
-          </p>
-
-          <div className="mt-2 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <h1 className="text-2xl font-semibold">
                 Notes
               </h1>
 
-              <p className="mt-2 max-w-2xl text-sm leading-6 text-neutral-400">
-                Search and manage Notes across your account. Each Note keeps its exact YouTube source, and View Source uses the centralized Reverse Context flow.
+              <p className="mt-1 max-w-2xl text-sm leading-6 text-(--text-secondary)">
+                Your notes, kept with their original YouTube context.
               </p>
             </div>
 
-            <p className="text-sm text-neutral-500">
+            <p className="text-sm text-(--text-muted)">
               {totalElements} note
               {totalElements === 1
                 ? ""
@@ -519,12 +515,12 @@ export function NotesPage() {
           onSubmit={
             handleSearchSubmit
           }
-          className="mt-6 flex flex-col gap-2 sm:flex-row"
+          className="mt-5 flex flex-col gap-2 sm:flex-row"
         >
-          <div className="flex min-w-0 flex-1 items-center gap-2 rounded-xl border border-neutral-800 bg-neutral-900 px-3 focus-within:border-neutral-600 focus-within:ring-2 focus-within:ring-neutral-700">
+          <div className="flex min-w-0 flex-1 items-center gap-2 rounded-xl border border-(--border) bg-(--surface) px-3 focus-within:border-(--border-strong) focus-within:ring-2 focus-within:ring-(--focus)">
             <Search
               size={16}
-              className="shrink-0 text-neutral-500"
+              className="shrink-0 text-(--text-muted)"
               aria-hidden="true"
             />
 
@@ -545,14 +541,14 @@ export function NotesPage() {
                 )
               }
               placeholder="Search note content..."
-              className="min-w-0 flex-1 bg-transparent py-2.5 text-sm outline-none placeholder:text-neutral-600 disabled:cursor-not-allowed disabled:opacity-50"
+              className="min-w-0 flex-1 bg-transparent py-2.5 text-sm outline-none placeholder:text-(--text-faint) disabled:cursor-not-allowed disabled:opacity-50"
             />
           </div>
 
           <button
             type="submit"
             disabled={isLoading}
-            className="flex items-center justify-center gap-2 rounded-xl bg-white px-4 py-2 text-sm font-medium text-neutral-950 transition hover:bg-neutral-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-500 disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex items-center justify-center gap-2 rounded-lg bg-(--primary-bg) px-4 py-2 text-sm font-medium text-(--primary-text) transition hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isLoading && (
               <LoaderCircle
@@ -573,7 +569,7 @@ export function NotesPage() {
               onClick={
                 handleClearSearch
               }
-              className="rounded-xl border border-neutral-800 px-4 py-2 text-sm text-neutral-400 transition hover:bg-neutral-900 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-50"
+              className="rounded-lg px-4 py-2 text-sm text-(--text-muted) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
             >
               Clear
             </button>
@@ -583,7 +579,7 @@ export function NotesPage() {
         {errorMessage && (
           <div
             role="alert"
-            className="mt-4 rounded-xl border border-red-900/60 bg-red-950/30 px-4 py-3 text-sm text-red-300"
+            className="mt-4 rounded-xl border border-(--danger-border) bg-(--danger-surface) px-4 py-3 text-sm text-(--danger-text)"
           >
             {errorMessage}
           </div>
@@ -593,36 +589,36 @@ export function NotesPage() {
           <div
             role="status"
             aria-live="polite"
-            className="mt-6 flex min-h-56 items-center justify-center rounded-2xl border border-neutral-800 bg-neutral-900"
+            className="mt-6 flex min-h-56 items-center justify-center rounded-2xl border border-(--border) bg-(--surface)"
           >
             <div className="text-center">
               <LoaderCircle
                 size={24}
-                className="mx-auto animate-spin text-neutral-500"
+                className="mx-auto animate-spin text-(--text-muted)"
                 aria-hidden="true"
               />
 
-              <p className="mt-3 text-sm text-neutral-500">
+              <p className="mt-3 text-sm text-(--text-muted)">
                 Loading Notes...
               </p>
             </div>
           </div>
         ) : notes.length === 0 ? (
-          <div className="mt-6 flex min-h-56 items-center justify-center rounded-2xl border border-dashed border-neutral-800 bg-neutral-950 p-6 text-center">
+          <div className="mt-6 flex min-h-56 items-center justify-center rounded-2xl border border-dashed border-(--border) bg-(--app-bg) p-6 text-center">
             <div>
               <StickyNote
                 size={28}
-                className="mx-auto text-neutral-700"
+                className="mx-auto text-(--text-faint)"
                 aria-hidden="true"
               />
 
-              <h2 className="mt-3 text-sm font-medium text-neutral-300">
+              <h2 className="mt-3 text-sm font-medium text-(--text-secondary)">
                 {hasSearch
                   ? "No matching Notes"
                   : "No Notes yet"}
               </h2>
 
-              <p className="mt-2 max-w-md text-xs leading-5 text-neutral-500">
+              <p className="mt-2 max-w-md text-xs leading-5 text-(--text-muted)">
                 {hasSearch
                   ? "No Note content matches the current keyword. Change or clear the search condition."
                   : "Notes created from a Video Workspace will appear here."}
@@ -683,9 +679,9 @@ export function NotesPage() {
           totalPages > 1 && (
             <nav
               aria-label="Notes pagination"
-              className="mt-6 flex items-center justify-between border-t border-neutral-800 pt-4"
+              className="mt-6 flex items-center justify-between border-t border-(--border) pt-4"
             >
-              <p className="text-xs text-neutral-500">
+              <p className="text-xs text-(--text-muted)">
                 Page {page + 1} of{" "}
                 {totalPages}
               </p>
@@ -703,7 +699,7 @@ export function NotesPage() {
                     )
                   }
                   aria-label="Previous Notes page"
-                  className="flex h-9 w-9 items-center justify-center rounded-xl border border-neutral-800 text-neutral-400 transition hover:bg-neutral-900 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-40"
+                  className="flex h-9 w-9 items-center justify-center rounded-xl border border-(--border) text-(--text-secondary) transition hover:bg-(--surface) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   <ChevronLeft
                     size={16}
@@ -724,7 +720,7 @@ export function NotesPage() {
                     )
                   }
                   aria-label="Next Notes page"
-                  className="flex h-9 w-9 items-center justify-center rounded-xl border border-neutral-800 text-neutral-400 transition hover:bg-neutral-900 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-40"
+                  className="flex h-9 w-9 items-center justify-center rounded-xl border border-(--border) text-(--text-secondary) transition hover:bg-(--surface) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   <ChevronRight
                     size={16}

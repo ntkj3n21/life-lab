@@ -29,14 +29,14 @@ export function ReverseContextNotice() {
     <div
       role="status"
       aria-live="polite"
-      className="fixed bottom-4 right-4 z-40 w-[calc(100%-2rem)] max-w-sm rounded-2xl border border-neutral-700 bg-neutral-950 p-4 shadow-2xl"
+      className="fixed bottom-4 right-4 z-40 w-[calc(100%-2rem)] max-w-sm rounded-2xl border border-(--border-strong) bg-(--app-bg) p-4 shadow-2xl"
     >
       <div className="flex items-start gap-3">
         <div
           className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl ${
             isWarning
-              ? "bg-amber-950/60 text-amber-300"
-              : "bg-neutral-800 text-neutral-300"
+              ? "bg-(--warning-surface) text-(--warning-text)"
+              : "bg-(--surface-hover) text-(--text-secondary)"
           }`}
         >
           {isWarning ? (
@@ -53,11 +53,11 @@ export function ReverseContextNotice() {
         </div>
 
         <div className="min-w-0 flex-1">
-          <p className="text-sm font-medium text-neutral-100">
+          <p className="text-sm font-medium text-(--text-primary)">
             {notice.title}
           </p>
 
-          <p className="mt-1 text-xs leading-5 text-neutral-400">
+          <p className="mt-1 text-xs leading-5 text-(--text-secondary)">
             {notice.message}
           </p>
         </div>
@@ -66,7 +66,7 @@ export function ReverseContextNotice() {
           type="button"
           onClick={clearNotice}
           aria-label="Dismiss context notice"
-          className="shrink-0 rounded-lg p-1.5 text-neutral-500 transition hover:bg-neutral-800 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-600"
+          className="shrink-0 rounded-lg p-1.5 text-(--text-muted) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)"
         >
           <X
             size={15}

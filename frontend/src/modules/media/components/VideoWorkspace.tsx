@@ -30,6 +30,11 @@ export function VideoWorkspace() {
       null,
     );
 
+  const workspaceScrollRef =
+    useRef<HTMLDivElement | null>(
+      null,
+    );
+
   const lastTrackedSecondRef =
     useRef<number | null>(
       null,
@@ -182,6 +187,17 @@ export function VideoWorkspace() {
     setActiveContext,
   ]);
 
+  useEffect(() => {
+    if (libraryVideoId === undefined) {
+      return;
+    }
+
+    workspaceScrollRef.current?.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, [libraryVideoId]);
+
   const activeLibraryVideoId =
     activeContext
       ?.entityType ===
@@ -215,7 +231,6 @@ export function VideoWorkspace() {
     routeActiveVideo;
 
   const {
-    watchSession,
     watchError,
     clearWatchError,
     finishWatchSession,
@@ -244,6 +259,25 @@ export function VideoWorkspace() {
   const canPlayVideo =
     Boolean(activeVideo) &&
     !isVideoUnavailable;
+
+  const activeVideoIndex =
+    activeVideo
+      ? videos.findIndex(
+          (video) =>
+            video.id === activeVideo.id,
+        )
+      : -1;
+
+  const previousVideo =
+    activeVideoIndex > 0
+      ? videos[activeVideoIndex - 1]
+      : undefined;
+
+  const nextVideo =
+    activeVideoIndex >= 0 &&
+    activeVideoIndex < videos.length - 1
+      ? videos[activeVideoIndex + 1]
+      : undefined;
 
   /*
    * Keep context title synchronized when the user
@@ -446,7 +480,10 @@ export function VideoWorkspace() {
   }
 
   return (
-    <div className="no-scrollbar min-w-0 flex-1 overflow-y-auto p-4 sm:p-6">
+    <div
+      ref={workspaceScrollRef}
+      className="no-scrollbar min-w-0 flex-1 overflow-y-auto p-4 sm:p-6"
+    >
       <div className="mx-auto max-w-7xl">
         <VideoStage
           activeVideo={
@@ -474,6 +511,15 @@ export function VideoWorkspace() {
           onPause={pauseTracking}
           onWaiting={waitTracking}
           onEnded={endTracking}
+          timestamp={activeContext?.timestamp}
+          previousVideo={previousVideo}
+          nextVideo={nextVideo}
+          onDecreaseTimestamp={() =>
+            decreaseTimestamp(10)
+          }
+          onIncreaseTimestamp={() =>
+            increaseTimestamp(10)
+          }
         />
 
         <div className="mt-6 grid grid-cols-1 gap-4 xl:grid-cols-[1fr_1.4fr]">
@@ -490,9 +536,6 @@ export function VideoWorkspace() {
             hasActiveVideo={Boolean(
               activeVideo,
             )}
-            watchSession={
-              watchSession
-            }
             watchErrorMessage={
               watchError
                 ?.message ??

@@ -81,11 +81,11 @@ export function ConfirmDialog({
             : undefined
         }
         aria-busy={isBusy}
-        className="max-h-[calc(100vh-2rem)] w-full max-w-md overflow-y-auto overscroll-contain rounded-2xl border border-neutral-800 bg-neutral-950 p-5 shadow-2xl"
+        className="max-h-[calc(100vh-2rem)] w-full max-w-md overflow-y-auto overscroll-contain rounded-2xl border border-(--border) bg-(--app-bg) p-5 shadow-2xl"
       >
         <h2
           id="confirm-dialog-title"
-          className="wrap-break-word text-lg font-semibold text-neutral-100"
+          className="wrap-break-word text-lg font-semibold text-(--text-primary)"
         >
           {title}
         </h2>
@@ -93,14 +93,14 @@ export function ConfirmDialog({
         {description && (
           <p
             id="confirm-dialog-description"
-            className="mt-2 wrap-break-word text-sm leading-6 text-neutral-400"
+            className="mt-2 wrap-break-word text-sm leading-6 text-(--text-secondary)"
           >
             {description}
           </p>
         )}
 
         {details.length > 0 && (
-          <ul className="mt-4 space-y-2 rounded-xl border border-neutral-800 bg-neutral-900 p-3 text-xs leading-5 text-neutral-400">
+          <ul className="mt-4 space-y-2 rounded-xl border border-(--border) bg-(--surface) p-3 text-xs leading-5 text-(--text-secondary)">
             {details.map((detail) => (
               <li
                 key={detail}
@@ -108,7 +108,7 @@ export function ConfirmDialog({
               >
                 <span
                   aria-hidden="true"
-                  className="mt-0.5 shrink-0 text-neutral-600"
+                  className="mt-0.5 shrink-0 text-(--text-faint)"
                 >
                   •
                 </span>
@@ -124,7 +124,7 @@ export function ConfirmDialog({
         {errorMessage && (
           <p
             role="alert"
-            className="mt-3 wrap-break-word rounded-xl border border-red-900/60 bg-red-950/30 px-3 py-2 text-xs text-red-300"
+            className="mt-3 wrap-break-word rounded-xl border border-(--danger-border) bg-(--danger-surface) px-3 py-2 text-xs text-(--danger-text)"
           >
             {errorMessage}
           </p>
@@ -136,7 +136,7 @@ export function ConfirmDialog({
             autoFocus
             disabled={isBusy}
             onClick={onCancel}
-            className="rounded-xl border border-neutral-800 px-4 py-2 text-sm text-neutral-400 transition hover:bg-neutral-900 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-600 disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded-xl border border-(--border) px-4 py-2 text-sm text-(--text-secondary) transition hover:bg-(--surface) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
           >
             {cancelLabel}
           </button>
@@ -147,7 +147,7 @@ export function ConfirmDialog({
             onClick={() =>
               void onConfirm()
             }
-            className="rounded-xl bg-red-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-red-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300 disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded-xl bg-(--danger-solid-bg) px-4 py-2 text-sm font-medium text-(--danger-solid-text) transition hover:bg-(--danger-solid-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--danger-ring) disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isBusy
               ? "Working..."

@@ -60,17 +60,17 @@ export function TaskListPanel({
   return (
     <details
       aria-busy={isLoading}
-      className="rounded-2xl border border-neutral-800 bg-neutral-950 p-4"
+      className="rounded-2xl border border-(--border) bg-(--app-bg) p-4"
     >
-      <summary className="cursor-pointer text-sm font-medium text-neutral-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-700">
+      <summary className="cursor-pointer text-sm font-medium text-(--text-secondary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)">
         All Tasks ({totalElements})
       </summary>
 
       <div className="mt-3 flex gap-2">
-        <div className="flex min-w-0 flex-1 items-center gap-2 rounded-xl border border-neutral-800 bg-neutral-900 px-3 focus-within:border-neutral-600 focus-within:ring-2 focus-within:ring-neutral-700">
+        <div className="flex min-w-0 flex-1 items-center gap-2 rounded-xl border border-(--border) bg-(--surface) px-3 focus-within:border-(--border-strong) focus-within:ring-2 focus-within:ring-(--focus)">
           <Search
             size={14}
-            className="text-neutral-600"
+            className="text-(--text-faint)"
             aria-hidden="true"
           />
 
@@ -117,7 +117,7 @@ export function TaskListPanel({
             event.target.value as StatusFilter,
           )
         }
-        className="mt-2 w-full rounded-xl border border-neutral-800 bg-neutral-900 px-3 py-2 text-xs text-neutral-300 outline-none focus:border-neutral-600 focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-50"
+        className="mt-2 w-full rounded-xl border border-(--border) bg-(--surface) px-3 py-2 text-xs text-(--text-secondary) outline-none focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
       >
         <option value="">
           All statuses
@@ -142,7 +142,7 @@ export function TaskListPanel({
         onClick={() =>
           void onApplySearch()
         }
-        className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl border border-neutral-800 px-3 py-2 text-xs text-neutral-400 hover:bg-neutral-900 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-50"
+        className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl border border-(--border) px-3 py-2 text-xs text-(--text-secondary) hover:bg-(--surface) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
       >
         {isLoading && (
           <LoaderCircle
@@ -160,14 +160,14 @@ export function TaskListPanel({
       {isLoading ? (
         <p
           role="status"
-          className="mt-3 text-xs text-neutral-500"
+          className="mt-3 text-xs text-(--text-muted)"
         >
           Loading tasks...
         </p>
       ) : tasks.length === 0 ? (
         <p
           role="status"
-          className="mt-3 rounded-xl border border-dashed border-neutral-800 p-3 text-xs text-neutral-600"
+          className="mt-3 rounded-xl border border-dashed border-(--border) p-3 text-xs text-(--text-faint)"
         >
           No tasks match the current filters.
         </p>

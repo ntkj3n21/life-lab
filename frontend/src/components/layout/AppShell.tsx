@@ -1,14 +1,15 @@
-import { Outlet, useLocation } from "react-router-dom";
+import {
+  Outlet,
+  useLocation,
+} from "react-router-dom";
 
 import { MobileNavigation } from "./MobileNavigation";
 import { RightPanel } from "./RightPanel";
-import { RightRail } from "./RightRail";
 import { Sidebar } from "./Sidebar";
 import { Topbar } from "./Topbar";
 
 export function AppShell() {
-  const { pathname } =
-    useLocation();
+  const { pathname } = useLocation();
 
   const isLibraryWorkspace =
     pathname === "/library" ||
@@ -17,7 +18,7 @@ export function AppShell() {
     );
 
   return (
-    <div className="flex h-screen overflow-hidden bg-neutral-950 text-neutral-100">
+    <div className="flex h-full w-full overflow-hidden bg-(--app-bg) text-(--text-primary)">
       <Sidebar />
 
       <div className="flex min-w-0 flex-1 flex-col">
@@ -28,10 +29,7 @@ export function AppShell() {
           <Outlet />
 
           {isLibraryWorkspace && (
-            <>
-              <RightPanel />
-              <RightRail />
-            </>
+            <RightPanel />
           )}
         </section>
       </div>

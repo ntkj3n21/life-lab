@@ -379,7 +379,7 @@ export function TaskDetailPage() {
           onClick={() =>
             navigate("/tasks")
           }
-          className="flex items-center gap-2 rounded-xl border border-neutral-800 px-3 py-2 text-sm text-neutral-400 transition hover:bg-neutral-900 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-700"
+          className="flex items-center gap-2 rounded-xl border border-(--border) px-3 py-2 text-sm text-(--text-secondary) transition hover:bg-(--surface) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)"
         >
           <ArrowLeft
             size={15}
@@ -392,16 +392,16 @@ export function TaskDetailPage() {
           <div
             role="status"
             aria-live="polite"
-            className="mt-6 flex min-h-64 items-center justify-center rounded-2xl border border-neutral-800 bg-neutral-900"
+            className="mt-6 flex min-h-64 items-center justify-center rounded-2xl border border-(--border) bg-(--surface)"
           >
             <div className="text-center">
               <LoaderCircle
                 size={24}
-                className="mx-auto animate-spin text-neutral-500"
+                className="mx-auto animate-spin text-(--text-muted)"
                 aria-hidden="true"
               />
 
-              <p className="mt-3 text-sm text-neutral-500">
+              <p className="mt-3 text-sm text-(--text-muted)">
                 Loading Task...
               </p>
             </div>
@@ -410,20 +410,20 @@ export function TaskDetailPage() {
           !task ? (
           <div
             role="alert"
-            className="mt-6 rounded-2xl border border-red-900/60 bg-red-950/30 p-5"
+            className="mt-6 rounded-2xl border border-(--danger-border) bg-(--danger-surface) p-5"
           >
-            <h1 className="text-lg font-semibold text-red-200">
+            <h1 className="text-lg font-semibold text-(--danger-text)">
               Could not load Task
             </h1>
 
-            <p className="mt-2 text-sm text-red-300/80">
+            <p className="mt-2 text-sm text-(--danger-text)">
               {errorMessage}
             </p>
           </div>
         ) : task ? (
           <>
             <header className="mt-6">
-              <p className="text-xs font-medium uppercase tracking-wider text-neutral-600">
+              <p className="text-xs font-medium text-(--text-secondary)">
                 Task detail
               </p>
 
@@ -433,7 +433,7 @@ export function TaskDetailPage() {
                     {task.title}
                   </h1>
 
-                  <p className="mt-2 text-sm text-neutral-500">
+                  <p className="mt-2 text-sm text-(--text-muted)">
                     Task #{task.id}
                   </p>
                 </div>
@@ -445,7 +445,7 @@ export function TaskDetailPage() {
                       void handleViewSource()
                     }
                     disabled={isMutating}
-                    className="flex items-center gap-2 rounded-xl border border-neutral-800 px-3 py-2 text-sm text-neutral-300 transition hover:bg-neutral-900 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-50"
+                    className="flex items-center gap-2 rounded-xl border border-(--border) px-3 py-2 text-sm text-(--text-secondary) transition hover:bg-(--surface) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     <ExternalLink
                       size={14}
@@ -463,7 +463,7 @@ export function TaskDetailPage() {
                       isMutating ||
                       isEditing
                     }
-                    className="flex items-center gap-2 rounded-xl border border-neutral-800 px-3 py-2 text-sm text-neutral-300 transition hover:bg-neutral-900 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-50"
+                    className="flex items-center gap-2 rounded-xl border border-(--border) px-3 py-2 text-sm text-(--text-secondary) transition hover:bg-(--surface) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     <Pencil
                       size={14}
@@ -483,7 +483,7 @@ export function TaskDetailPage() {
                       );
                     }}
                     disabled={isMutating}
-                    className="flex items-center gap-2 rounded-xl border border-red-950/70 px-3 py-2 text-sm text-red-300 transition hover:bg-red-950/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-900 disabled:cursor-not-allowed disabled:opacity-50"
+                    className="flex items-center gap-2 rounded-xl border border-(--danger-border) px-3 py-2 text-sm text-(--danger-text) transition hover:bg-(--danger-surface) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--danger-ring) disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     <Trash2
                       size={14}
@@ -498,16 +498,16 @@ export function TaskDetailPage() {
             {errorMessage && (
               <div
                 role="alert"
-                className="mt-4 rounded-xl border border-red-900/60 bg-red-950/30 px-4 py-3 text-sm text-red-300"
+                className="mt-4 rounded-xl border border-(--danger-border) bg-(--danger-surface) px-4 py-3 text-sm text-(--danger-text)"
               >
                 {errorMessage}
               </div>
             )}
 
-            <section className="mt-6 rounded-2xl border border-neutral-800 bg-neutral-900 p-5">
+            <section className="mt-6 rounded-2xl border border-(--border) bg-(--surface) p-5">
               <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
-                <div className="rounded-xl border border-neutral-800 bg-neutral-950 p-3">
-                  <p className="text-[10px] uppercase tracking-wide text-neutral-600">
+                <div className="rounded-xl border border-(--border) bg-(--app-bg) p-3">
+                  <p className="text-[11px] font-medium text-(--text-faint)">
                     Status
                   </p>
 
@@ -528,7 +528,7 @@ export function TaskDetailPage() {
                           .value as TaskStatus,
                       )
                     }
-                    className="mt-1 w-full rounded-lg border border-neutral-800 bg-neutral-950 py-1.5 text-sm text-neutral-300 outline-none focus:border-neutral-600 focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-50"
+                    className="mt-1 w-full rounded-lg border border-(--border) bg-(--app-bg) py-1.5 text-sm text-(--text-secondary) outline-none focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     <option value="NOT_STARTED">
                       Not started
@@ -544,19 +544,19 @@ export function TaskDetailPage() {
                   </select>
                 </div>
 
-                <div className="rounded-xl border border-neutral-800 bg-neutral-950 p-3">
-                  <p className="text-[10px] uppercase tracking-wide text-neutral-600">
+                <div className="rounded-xl border border-(--border) bg-(--app-bg) p-3">
+                  <p className="text-[11px] font-medium text-(--text-faint)">
                     Deadline
                   </p>
 
-                  <p className="mt-2 text-sm text-neutral-300">
+                  <p className="mt-2 text-sm text-(--text-secondary)">
                     {task.deadline ??
                       "No deadline"}
                   </p>
                 </div>
 
-                <div className="rounded-xl border border-neutral-800 bg-neutral-950 p-3">
-                  <p className="text-[10px] uppercase tracking-wide text-neutral-600">
+                <div className="rounded-xl border border-(--border) bg-(--app-bg) p-3">
+                  <p className="text-[11px] font-medium text-(--text-faint)">
                     Source
                   </p>
 
@@ -564,8 +564,8 @@ export function TaskDetailPage() {
                     className={`mt-2 text-sm ${
                       task.sourceStatus ===
                       "SOURCE_MISSING"
-                        ? "text-red-300"
-                        : "text-neutral-300"
+                        ? "text-(--danger-text)"
+                        : "text-(--text-secondary)"
                     }`}
                   >
                     {formatSourceLabel(
@@ -574,24 +574,24 @@ export function TaskDetailPage() {
                   </p>
                 </div>
 
-                <div className="rounded-xl border border-neutral-800 bg-neutral-950 p-3">
-                  <p className="text-[10px] uppercase tracking-wide text-neutral-600">
+                <div className="rounded-xl border border-(--border) bg-(--app-bg) p-3">
+                  <p className="text-[11px] font-medium text-(--text-faint)">
                     Created
                   </p>
 
-                  <p className="mt-2 text-sm text-neutral-300">
+                  <p className="mt-2 text-sm text-(--text-secondary)">
                     {formatDateTime(
                       task.createdAt,
                     )}
                   </p>
                 </div>
 
-                <div className="rounded-xl border border-neutral-800 bg-neutral-950 p-3">
-                  <p className="text-[10px] uppercase tracking-wide text-neutral-600">
+                <div className="rounded-xl border border-(--border) bg-(--app-bg) p-3">
+                  <p className="text-[11px] font-medium text-(--text-faint)">
                     Updated
                   </p>
 
-                  <p className="mt-2 text-sm text-neutral-300">
+                  <p className="mt-2 text-sm text-(--text-secondary)">
                     {formatDateTime(
                       task.updatedAt,
                     )}
@@ -605,7 +605,7 @@ export function TaskDetailPage() {
                     <div>
                       <label
                         htmlFor="task-detail-title"
-                        className="text-xs font-medium uppercase tracking-wider text-neutral-600"
+                        className="text-xs font-medium text-(--text-secondary)"
                       >
                         Title
                       </label>
@@ -620,14 +620,14 @@ export function TaskDetailPage() {
                             event.target.value,
                           )
                         }
-                        className="mt-2 w-full rounded-xl border border-neutral-800 bg-neutral-950 px-3 py-2.5 text-sm text-neutral-200 outline-none focus:border-neutral-600 focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-50"
+                        className="mt-2 w-full rounded-xl border border-(--border) bg-(--app-bg) px-3 py-2.5 text-sm text-(--text-primary) outline-none focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
                       />
                     </div>
 
                     <div>
                       <label
                         htmlFor="task-detail-description"
-                        className="text-xs font-medium uppercase tracking-wider text-neutral-600"
+                        className="text-xs font-medium text-(--text-secondary)"
                       >
                         Description
                       </label>
@@ -641,14 +641,14 @@ export function TaskDetailPage() {
                             event.target.value,
                           )
                         }
-                        className="mt-2 min-h-36 w-full resize-y rounded-xl border border-neutral-800 bg-neutral-950 p-3 text-sm leading-6 text-neutral-200 outline-none focus:border-neutral-600 focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-50"
+                        className="mt-2 min-h-36 w-full resize-y rounded-xl border border-(--border) bg-(--app-bg) p-3 text-sm leading-6 text-(--text-primary) outline-none focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
                       />
                     </div>
 
                     <div>
                       <label
                         htmlFor="task-detail-deadline"
-                        className="text-xs font-medium uppercase tracking-wider text-neutral-600"
+                        className="text-xs font-medium text-(--text-secondary)"
                       >
                         Deadline
                       </label>
@@ -663,7 +663,7 @@ export function TaskDetailPage() {
                             event.target.value,
                           )
                         }
-                        className="mt-2 rounded-xl border border-neutral-800 bg-neutral-950 px-3 py-2.5 text-sm text-neutral-300 outline-none focus:border-neutral-600 focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-50"
+                        className="mt-2 rounded-xl border border-(--border) bg-(--app-bg) px-3 py-2.5 text-sm text-(--text-secondary) outline-none focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
                       />
                     </div>
 
@@ -674,7 +674,7 @@ export function TaskDetailPage() {
                           handleCancelEdit
                         }
                         disabled={isMutating}
-                        className="rounded-xl border border-neutral-800 px-4 py-2 text-sm text-neutral-400 transition hover:bg-neutral-950 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+                        className="rounded-xl border border-(--border) px-4 py-2 text-sm text-(--text-secondary) transition hover:bg-(--app-bg) hover:text-(--text-primary) disabled:cursor-not-allowed disabled:opacity-50"
                       >
                         Cancel
                       </button>
@@ -688,7 +688,7 @@ export function TaskDetailPage() {
                           isMutating ||
                           !title.trim()
                         }
-                        className="rounded-xl bg-white px-4 py-2 text-sm font-medium text-neutral-950 transition hover:bg-neutral-200 disabled:cursor-not-allowed disabled:opacity-50"
+                        className="rounded-xl bg-(--primary-bg) px-4 py-2 text-sm font-medium text-(--primary-text) transition hover:bg-(--primary-hover) disabled:cursor-not-allowed disabled:opacity-50"
                       >
                         {isMutating
                           ? "Saving..."
@@ -699,35 +699,35 @@ export function TaskDetailPage() {
                 ) : (
                   <>
                     <div>
-                      <p className="text-xs font-medium uppercase tracking-wider text-neutral-600">
+                      <p className="text-xs font-medium text-(--text-secondary)">
                         Description
                       </p>
 
-                      <p className="mt-3 whitespace-pre-wrap wrap-break-word text-sm leading-7 text-neutral-300">
+                      <p className="mt-3 whitespace-pre-wrap wrap-break-word text-sm leading-7 text-(--text-secondary)">
                         {task.description ??
                           "No description"}
                       </p>
                     </div>
 
                     <div className="mt-5 grid gap-3 sm:grid-cols-2">
-                      <div className="rounded-xl border border-neutral-800 bg-neutral-950 p-3">
-                        <p className="text-[10px] uppercase tracking-wide text-neutral-600">
+                      <div className="rounded-xl border border-(--border) bg-(--app-bg) p-3">
+                        <p className="text-[11px] font-medium text-(--text-faint)">
                           Current status
                         </p>
 
-                        <p className="mt-1 text-sm text-neutral-300">
+                        <p className="mt-1 text-sm text-(--text-secondary)">
                           {formatStatusLabel(
                             task.status,
                           )}
                         </p>
                       </div>
 
-                      <div className="rounded-xl border border-neutral-800 bg-neutral-950 p-3">
-                        <p className="text-[10px] uppercase tracking-wide text-neutral-600">
+                      <div className="rounded-xl border border-(--border) bg-(--app-bg) p-3">
+                        <p className="text-[11px] font-medium text-(--text-faint)">
                           Source state
                         </p>
 
-                        <p className="mt-1 text-sm text-neutral-300">
+                        <p className="mt-1 text-sm text-(--text-secondary)">
                           {task.sourceStatus}
                         </p>
                       </div>

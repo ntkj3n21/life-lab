@@ -24,8 +24,8 @@ export function LibraryPagination({
   }
 
   return (
-    <div className="mt-5 flex items-center justify-between border-t border-neutral-800 pt-4">
-      <p className="text-xs text-neutral-500">
+    <div className="mt-5 flex items-center justify-between border-t border-(--border) pt-4">
+      <p className="text-xs text-(--text-muted)">
         Page {page + 1} of {totalPages}
       </p>
 
@@ -41,7 +41,7 @@ export function LibraryPagination({
             page === 0 ||
             isLoading
           }
-          className="flex items-center gap-1 rounded-lg border border-neutral-800 px-3 py-1.5 text-xs text-neutral-400 hover:bg-neutral-800 hover:text-white disabled:cursor-not-allowed disabled:opacity-40"
+          className="flex items-center gap-1 rounded-lg border border-(--border) px-3 py-1.5 text-xs text-(--text-secondary) hover:bg-(--surface-hover) hover:text-(--text-primary) disabled:cursor-not-allowed disabled:opacity-40"
         >
           <ChevronLeft size={14} />
           Previous
@@ -58,7 +58,7 @@ export function LibraryPagination({
             page + 1 >= totalPages ||
             isLoading
           }
-          className="flex items-center gap-1 rounded-lg border border-neutral-800 px-3 py-1.5 text-xs text-neutral-400 hover:bg-neutral-800 hover:text-white disabled:cursor-not-allowed disabled:opacity-40"
+          className="flex items-center gap-1 rounded-lg border border-(--border) px-3 py-1.5 text-xs text-(--text-secondary) hover:bg-(--surface-hover) hover:text-(--text-primary) disabled:cursor-not-allowed disabled:opacity-40"
         >
           Next
           <ChevronRight size={14} />

@@ -203,28 +203,28 @@ export function TagManager() {
           isLoading ||
           controlsBusy
         }
-        className="rounded-xl border border-neutral-800 bg-neutral-950 p-3"
+        className="rounded-xl border border-(--border) bg-(--app-bg) p-3"
       >
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <TagIcon
               size={15}
-              className="text-neutral-500"
+              className="text-(--text-muted)"
               aria-hidden="true"
             />
 
             <div>
-              <p className="text-sm font-medium text-neutral-200">
+              <p className="text-sm font-medium text-(--text-primary)">
                 Tag Manager
               </p>
 
-              <p className="text-xs text-neutral-600">
+              <p className="text-xs text-(--text-faint)">
                 Rename or delete your tags.
               </p>
             </div>
           </div>
 
-          <span className="rounded-full bg-neutral-900 px-2 py-1 text-xs text-neutral-500">
+          <span className="rounded-full bg-(--surface) px-2 py-1 text-xs text-(--text-muted)">
             {tags.length}
           </span>
         </div>
@@ -237,7 +237,7 @@ export function TagManager() {
           >
             <LoaderCircle
               size={18}
-              className="animate-spin text-neutral-500"
+              className="animate-spin text-(--text-muted)"
               aria-hidden="true"
             />
             <span className="sr-only">
@@ -248,7 +248,7 @@ export function TagManager() {
           0 ? (
           <p
             role="status"
-            className="mt-3 rounded-lg border border-dashed border-neutral-800 p-3 text-xs text-neutral-600"
+            className="mt-3 rounded-lg border border-dashed border-(--border) p-3 text-xs text-(--text-faint)"
           >
             No tags yet.
           </p>
@@ -262,7 +262,7 @@ export function TagManager() {
               return (
                 <div
                   key={tag.id}
-                  className="flex items-center gap-2 rounded-lg border border-neutral-800 bg-neutral-900 p-2"
+                  className="flex items-center gap-2 rounded-lg border border-(--border) bg-(--surface) p-2"
                 >
                   {isEditing ? (
                     <>
@@ -308,7 +308,7 @@ export function TagManager() {
                             cancelEditing();
                           }
                         }}
-                        className="min-w-0 flex-1 rounded-lg border border-neutral-700 bg-neutral-950 px-2 py-1.5 text-xs outline-none focus:border-neutral-600 focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-50"
+                        className="min-w-0 flex-1 rounded-lg border border-(--border-strong) bg-(--app-bg) px-2 py-1.5 text-xs outline-none focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
                       />
 
                       <button
@@ -323,7 +323,7 @@ export function TagManager() {
                           )
                         }
                         aria-label="Save tag name"
-                        className="rounded-lg border border-neutral-700 p-1.5 text-neutral-400 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-40"
+                        className="rounded-lg border border-(--border-strong) p-1.5 text-(--text-secondary) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
                         title="Save"
                       >
                         <Check
@@ -341,7 +341,7 @@ export function TagManager() {
                           cancelEditing
                         }
                         aria-label="Cancel tag rename"
-                        className="rounded-lg border border-neutral-700 p-1.5 text-neutral-500 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-40"
+                        className="rounded-lg border border-(--border-strong) p-1.5 text-(--text-muted) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
                         title="Cancel"
                       >
                         <X
@@ -352,7 +352,7 @@ export function TagManager() {
                     </>
                   ) : (
                     <>
-                      <span className="min-w-0 flex-1 truncate text-xs text-neutral-300">
+                      <span className="min-w-0 flex-1 truncate text-xs text-(--text-secondary)">
                         {tag.name}
                       </span>
 
@@ -367,7 +367,7 @@ export function TagManager() {
                           )
                         }
                         aria-label={`Rename tag ${tag.name}`}
-                        className="rounded-lg border border-neutral-800 p-1.5 text-neutral-500 hover:bg-neutral-800 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-40"
+                        className="rounded-lg border border-(--border) p-1.5 text-(--text-muted) hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
                         title="Rename tag"
                       >
                         <Pencil
@@ -387,7 +387,7 @@ export function TagManager() {
                           )
                         }
                         aria-label={`Delete tag ${tag.name}`}
-                        className="rounded-lg border border-neutral-800 p-1.5 text-neutral-500 hover:bg-neutral-800 hover:text-red-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-40"
+                        className="rounded-lg border border-(--border) p-1.5 text-(--text-muted) hover:bg-(--surface-hover) hover:text-(--danger-text) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
                         title="Delete tag"
                       >
                         <Trash2
@@ -407,7 +407,7 @@ export function TagManager() {
           !pendingDelete && (
             <p
               role="alert"
-              className="mt-2 text-xs text-red-400"
+              className="mt-2 text-xs text-(--danger-text)"
             >
               {error.message}
             </p>

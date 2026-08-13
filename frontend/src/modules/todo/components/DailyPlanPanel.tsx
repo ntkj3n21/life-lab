@@ -48,28 +48,28 @@ function PlanSection({
   return (
     <details
       open={tasks.length > 0}
-      className="rounded-xl border border-neutral-800 bg-neutral-950 p-3"
+      className="rounded-xl border border-(--border) bg-(--app-bg) p-3"
     >
-      <summary className="flex cursor-pointer list-none items-center justify-between gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-700">
-        <span className="text-xs font-medium uppercase tracking-wide text-neutral-400">
+      <summary className="flex cursor-pointer list-none items-center justify-between gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)">
+        <span className="text-sm font-medium text-(--text-primary)">
           {title}
         </span>
 
         <div className="flex items-center gap-2">
-          <span className="rounded-full bg-neutral-900 px-2 py-1 text-[10px] text-neutral-500">
+          <span className="rounded-full bg-(--surface) px-2 py-1 text-[10px] text-(--text-muted)">
             {tasks.length}
           </span>
 
           <ChevronDown
             size={13}
-            className="text-neutral-600"
+            className="text-(--text-faint)"
             aria-hidden="true"
           />
         </div>
       </summary>
 
       {tasks.length === 0 ? (
-        <p className="mt-3 text-xs text-neutral-600">
+        <p className="mt-3 text-xs text-(--text-faint)">
           {emptyText}
         </p>
       ) : (
@@ -116,29 +116,29 @@ export function DailyPlanPanel({
   return (
     <section
       aria-busy={isLoadingPlan}
-      className="rounded-2xl border border-neutral-800 bg-neutral-950 p-4"
+      className="rounded-2xl border border-(--border) bg-(--app-bg) p-4"
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-2">
           <CalendarDays
             size={16}
-            className="text-neutral-500"
+            className="text-(--text-muted)"
             aria-hidden="true"
           />
 
           <div>
-            <h4 className="text-sm font-medium text-neutral-300">
+            <h4 className="text-sm font-medium text-(--text-secondary)">
               Daily Plan
             </h4>
 
-            <p className="mt-1 text-xs text-neutral-500">
+            <p className="mt-1 text-xs text-(--text-muted)">
               Derived from your current Tasks.
             </p>
           </div>
         </div>
 
         {dailyPlan && (
-          <span className="rounded-full bg-neutral-900 px-2 py-1 text-[10px] text-neutral-500">
+          <span className="rounded-full bg-(--surface) px-2 py-1 text-[10px] text-(--text-muted)">
             {dailyPlan.currentDate}
           </span>
         )}
@@ -147,14 +147,14 @@ export function DailyPlanPanel({
       {isLoadingPlan && !dailyPlan ? (
         <p
           role="status"
-          className="mt-4 text-xs text-neutral-500"
+          className="mt-4 text-xs text-(--text-muted)"
         >
           Loading plan...
         </p>
       ) : !dailyPlan ? (
         <p
           role="status"
-          className="mt-4 rounded-xl border border-dashed border-neutral-800 p-3 text-xs text-neutral-600"
+          className="mt-4 rounded-xl border border-dashed border-(--border) p-3 text-xs text-(--text-faint)"
         >
           Daily Plan is currently unavailable.
         </p>
@@ -195,7 +195,7 @@ export function DailyPlanPanel({
             {...mutationProps}
           />
 
-          <p className="pt-1 text-[10px] text-neutral-700">
+          <p className="pt-1 text-[10px] text-(--text-faint)">
             Time zone: {dailyPlan.timeZone}
           </p>
         </div>

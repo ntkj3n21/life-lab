@@ -37,21 +37,21 @@ export function TaskComposer({
   return (
     <section
       aria-busy={isMutating}
-      className="rounded-2xl border border-neutral-800 bg-neutral-950 p-4"
+      className="rounded-2xl border border-(--border) bg-(--app-bg) p-4"
     >
       <div className="flex items-center gap-2">
         <Plus
           size={16}
-          className="text-neutral-500"
+          className="text-(--text-muted)"
           aria-hidden="true"
         />
 
         <div>
-          <h4 className="text-sm font-medium text-neutral-300">
+          <h4 className="text-sm font-medium text-(--text-secondary)">
             Create Task
           </h4>
 
-          <p className="mt-1 text-xs text-neutral-500">
+          <p className="mt-1 text-xs text-(--text-muted)">
             Create an independent task or link it to an
             existing Note.
           </p>
@@ -80,7 +80,7 @@ export function TaskComposer({
           onTitleChange(event.target.value)
         }
         placeholder="Task title"
-        className="mt-3 w-full rounded-xl border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none placeholder:text-neutral-600 focus:border-neutral-600 focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-50"
+        className="mt-3 w-full rounded-xl border border-(--border) bg-(--surface) px-3 py-2 text-sm outline-none placeholder:text-(--text-faint) focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
       />
 
       <label
@@ -100,7 +100,7 @@ export function TaskComposer({
           )
         }
         placeholder="Description (optional)"
-        className="mt-2 h-20 w-full resize-none rounded-xl border border-neutral-800 bg-neutral-900 px-3 py-2 text-xs outline-none placeholder:text-neutral-600 focus:border-neutral-600 focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-50"
+        className="mt-2 h-20 w-full resize-none rounded-xl border border-(--border) bg-(--surface) px-3 py-2 text-xs outline-none placeholder:text-(--text-faint) focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
       />
 
       <label
@@ -120,7 +120,7 @@ export function TaskComposer({
             event.target.value,
           )
         }
-        className="mt-2 w-full rounded-xl border border-neutral-800 bg-neutral-900 px-3 py-2 text-xs text-neutral-300 outline-none focus:border-neutral-600 focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-50"
+        className="mt-2 w-full rounded-xl border border-(--border) bg-(--surface) px-3 py-2 text-xs text-(--text-secondary) outline-none focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
       />
 
       <label
@@ -139,7 +139,7 @@ export function TaskComposer({
             event.target.value,
           )
         }
-        className="mt-2 w-full rounded-xl border border-neutral-800 bg-neutral-900 px-3 py-2 text-xs text-neutral-300 outline-none focus:border-neutral-600 focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-50"
+        className="mt-2 w-full rounded-xl border border-(--border) bg-(--surface) px-3 py-2 text-xs text-(--text-secondary) outline-none focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
       >
         <option value="">
           Independent task
@@ -176,7 +176,7 @@ export function TaskComposer({
         onClick={() =>
           void onCreate()
         }
-        className="mt-3 w-full rounded-xl bg-white px-4 py-2 text-sm font-medium text-neutral-950 hover:bg-neutral-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-500 disabled:cursor-not-allowed disabled:opacity-50"
+        className="mt-3 w-full rounded-xl bg-(--primary-bg) px-4 py-2 text-sm font-medium text-(--primary-text) hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
       >
         {isMutating
           ? "Saving..."
@@ -189,7 +189,7 @@ export function TaskComposer({
         <p
           id="task-create-error"
           role="alert"
-          className="mt-2 text-xs text-red-400"
+          className="mt-2 text-xs text-(--danger-text)"
         >
           {errorMessage}
         </p>

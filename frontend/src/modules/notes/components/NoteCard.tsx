@@ -48,8 +48,8 @@ export function NoteCard({
       aria-busy={isMutating}
       className={`rounded-xl border p-3 ${
         current
-          ? "border-neutral-700 bg-neutral-900"
-          : "border-neutral-800 bg-neutral-900"
+          ? "border-(--border-strong) bg-(--surface)"
+          : "border-(--border) bg-(--surface)"
       }`}
     >
       {isEditing ? (
@@ -70,7 +70,7 @@ export function NoteCard({
                 event.target.value,
               )
             }
-            className="h-28 w-full resize-none rounded-xl border border-neutral-800 bg-neutral-950 p-3 text-sm outline-none focus:border-neutral-600 focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-50"
+            className="h-28 w-full resize-none rounded-xl border border-(--border) bg-(--app-bg) p-3 text-sm outline-none focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
           />
 
           <div className="mt-2 flex flex-wrap justify-end gap-2">
@@ -78,7 +78,7 @@ export function NoteCard({
               type="button"
               onClick={onCancelEdit}
               disabled={isMutating}
-              className="rounded-lg border border-neutral-800 px-2 py-1 text-xs text-neutral-400 hover:bg-neutral-800 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-40"
+              className="rounded-lg border border-(--border) px-2 py-1 text-xs text-(--text-secondary) hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
             >
               Cancel
             </button>
@@ -94,7 +94,7 @@ export function NoteCard({
                 isMutating ||
                 !editingContent.trim()
               }
-              className="rounded-lg bg-white px-3 py-1 text-xs font-medium text-neutral-950 hover:bg-neutral-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-500 disabled:cursor-not-allowed disabled:opacity-50"
+              className="rounded-lg bg-(--primary-bg) px-3 py-1 text-xs font-medium text-(--primary-text) hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isMutating
                 ? "Saving..."
@@ -107,16 +107,16 @@ export function NoteCard({
           <div className="flex items-start gap-2">
             <StickyNote
               size={15}
-              className="mt-0.5 shrink-0 text-neutral-500"
+              className="mt-0.5 shrink-0 text-(--text-muted)"
               aria-hidden="true"
             />
 
-            <p className="min-w-0 whitespace-pre-wrap wrap-break-word text-sm leading-6 text-neutral-300">
+            <p className="min-w-0 whitespace-pre-wrap wrap-break-word text-sm leading-6 text-(--text-secondary)">
               {note.content}
             </p>
           </div>
 
-          <div className="mt-3 min-w-0 text-xs text-neutral-500">
+          <div className="mt-3 min-w-0 text-xs text-(--text-muted)">
             <p
               className="truncate"
               title={
@@ -145,8 +145,8 @@ export function NoteCard({
           <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
             <div>
               {current && (
-                <span className="rounded-full bg-neutral-800 px-2 py-1 text-[10px] text-neutral-400">
-                  CURRENT
+                <span className="rounded-full bg-(--surface-hover) px-2 py-1 text-[10px] text-(--text-secondary)">
+                  Current
                 </span>
               )}
             </div>
@@ -161,7 +161,7 @@ export function NoteCard({
                     )
                   }
                   disabled={isMutating}
-                  className="flex items-center gap-1.5 rounded-lg border border-neutral-800 px-2 py-1 text-xs text-neutral-400 hover:bg-neutral-800 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-40"
+                  className="flex items-center gap-1.5 rounded-lg border border-(--border) px-2 py-1 text-xs text-(--text-secondary) hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   <Eye
                     size={12}
@@ -179,7 +179,7 @@ export function NoteCard({
                   )
                 }
                 disabled={isMutating}
-                className="rounded-lg border border-neutral-800 px-2 py-1 text-xs text-neutral-400 hover:bg-neutral-800 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-40"
+                className="rounded-lg border border-(--border) px-2 py-1 text-xs text-(--text-secondary) hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
               >
                 View Source
               </button>
@@ -191,7 +191,7 @@ export function NoteCard({
                 }
                 disabled={isMutating}
                 aria-label={`Edit Note ${note.id}`}
-                className="rounded-lg border border-neutral-800 p-1.5 text-neutral-500 hover:bg-neutral-800 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-40"
+                className="rounded-lg border border-(--border) p-1.5 text-(--text-muted) hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
                 title="Edit note"
               >
                 <Pencil
@@ -207,7 +207,7 @@ export function NoteCard({
                 }
                 disabled={isMutating}
                 aria-label={`Delete Note ${note.id}`}
-                className="rounded-lg border border-neutral-800 p-1.5 text-neutral-500 hover:bg-neutral-800 hover:text-red-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-40"
+                className="rounded-lg border border-(--border) p-1.5 text-(--text-muted) hover:bg-(--surface-hover) hover:text-(--danger-text) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
                 title="Delete note"
               >
                 <Trash2

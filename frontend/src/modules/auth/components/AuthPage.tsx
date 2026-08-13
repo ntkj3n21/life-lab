@@ -68,10 +68,10 @@ export function AuthPage() {
   const displayNameError = error?.fieldErrors.displayName;
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-neutral-950 px-4 py-10 text-neutral-100">
+    <main className="flex min-h-screen items-center justify-center bg-(--app-bg) py-10 text-(--text-primary)">
       <div className="w-full max-w-md">
         <div className="mb-8 flex flex-col items-center text-center">
-          <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-neutral-800 bg-neutral-900">
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-(--border) bg-(--surface)">
             <FlaskConical size={26} />
           </div>
 
@@ -79,20 +79,20 @@ export function AuthPage() {
             Life Lab
           </h1>
 
-          <p className="mt-2 text-sm text-neutral-500">
+          <p className="mt-2 text-sm text-(--text-muted)">
             Your personal digital workspace.
           </p>
         </div>
 
-        <div className="rounded-2xl border border-neutral-800 bg-neutral-900 p-6 shadow-2xl shadow-black/20">
-          <div className="grid grid-cols-2 rounded-xl bg-neutral-950 p-1">
+        <div className="rounded-2xl border border-(--border) bg-(--surface) p-6 shadow-2xl shadow-black/20">
+          <div className="grid grid-cols-2 rounded-xl bg-(--app-bg) p-1">
             <button
               type="button"
               onClick={() => switchMode("login")}
               className={`rounded-lg px-3 py-2 text-sm font-medium transition ${
                 mode === "login"
-                  ? "bg-neutral-800 text-neutral-100"
-                  : "text-neutral-500 hover:text-neutral-300"
+                  ? "bg-(--surface-hover) text-(--text-primary)"
+                  : "text-(--text-muted) hover:text-(--text-secondary)"
               }`}
             >
               Sign in
@@ -103,8 +103,8 @@ export function AuthPage() {
               onClick={() => switchMode("register")}
               className={`rounded-lg px-3 py-2 text-sm font-medium transition ${
                 mode === "register"
-                  ? "bg-neutral-800 text-neutral-100"
-                  : "text-neutral-500 hover:text-neutral-300"
+                  ? "bg-(--surface-hover) text-(--text-primary)"
+                  : "text-(--text-muted) hover:text-(--text-secondary)"
               }`}
             >
               Create account
@@ -118,7 +118,7 @@ export function AuthPage() {
                 : "Create your account"}
             </h2>
 
-            <p className="mt-1 text-sm text-neutral-500">
+            <p className="mt-1 text-sm text-(--text-muted)">
               {mode === "login"
                 ? "Sign in to continue to your workspace."
                 : "Create an account to start using Life Lab."}
@@ -126,13 +126,13 @@ export function AuthPage() {
           </div>
 
           {notice && (
-            <div className="mt-5 rounded-xl border border-emerald-900/60 bg-emerald-950/40 px-4 py-3 text-sm text-emerald-300">
+            <div className="mt-5 rounded-xl border border-(--success-border) bg-(--success-surface) px-4 py-3 text-sm text-(--success-text)">
               {notice}
             </div>
           )}
 
           {error && (
-            <div className="mt-5 rounded-xl border border-red-900/60 bg-red-950/40 px-4 py-3 text-sm text-red-300">
+            <div className="mt-5 rounded-xl border border-(--danger-border) bg-(--danger-surface) px-4 py-3 text-sm text-(--danger-text)">
               {error.message}
             </div>
           )}
@@ -145,7 +145,7 @@ export function AuthPage() {
               <div>
                 <label
                   htmlFor="displayName"
-                  className="mb-2 block text-sm font-medium text-neutral-300"
+                  className="mb-2 block text-sm font-medium text-(--text-secondary)"
                 >
                   Display name
                 </label>
@@ -158,12 +158,12 @@ export function AuthPage() {
                     setDisplayName(event.target.value)
                   }
                   autoComplete="name"
-                  className="w-full rounded-xl border border-neutral-800 bg-neutral-950 px-4 py-3 text-sm outline-none transition placeholder:text-neutral-700 focus:border-neutral-600"
+                  className="w-full rounded-xl border border-(--border) bg-(--app-bg) px-4 py-3 text-sm outline-none transition placeholder:text-(--text-faint) focus:border-(--border-strong)"
                   placeholder="Your name"
                 />
 
                 {displayNameError && (
-                  <p className="mt-1.5 text-xs text-red-400">
+                  <p className="mt-1.5 text-xs text-(--danger-text)">
                     {displayNameError}
                   </p>
                 )}
@@ -173,7 +173,7 @@ export function AuthPage() {
             <div>
               <label
                 htmlFor="email"
-                className="mb-2 block text-sm font-medium text-neutral-300"
+                className="mb-2 block text-sm font-medium text-(--text-secondary)"
               >
                 Email
               </label>
@@ -186,12 +186,12 @@ export function AuthPage() {
                   setEmail(event.target.value)
                 }
                 autoComplete="email"
-                className="w-full rounded-xl border border-neutral-800 bg-neutral-950 px-4 py-3 text-sm outline-none transition placeholder:text-neutral-700 focus:border-neutral-600"
+                className="w-full rounded-xl border border-(--border) bg-(--app-bg) px-4 py-3 text-sm outline-none transition placeholder:text-(--text-faint) focus:border-(--border-strong)"
                 placeholder="you@example.com"
               />
 
               {emailError && (
-                <p className="mt-1.5 text-xs text-red-400">
+                <p className="mt-1.5 text-xs text-(--danger-text)">
                   {emailError}
                 </p>
               )}
@@ -200,7 +200,7 @@ export function AuthPage() {
             <div>
               <label
                 htmlFor="password"
-                className="mb-2 block text-sm font-medium text-neutral-300"
+                className="mb-2 block text-sm font-medium text-(--text-secondary)"
               >
                 Password
               </label>
@@ -217,7 +217,7 @@ export function AuthPage() {
                     ? "current-password"
                     : "new-password"
                 }
-                className="w-full rounded-xl border border-neutral-800 bg-neutral-950 px-4 py-3 text-sm outline-none transition placeholder:text-neutral-700 focus:border-neutral-600"
+                className="w-full rounded-xl border border-(--border) bg-(--app-bg) px-4 py-3 text-sm outline-none transition placeholder:text-(--text-faint) focus:border-(--border-strong)"
                 placeholder={
                   mode === "register"
                     ? "At least 8 characters"
@@ -226,7 +226,7 @@ export function AuthPage() {
               />
 
               {passwordError && (
-                <p className="mt-1.5 text-xs text-red-400">
+                <p className="mt-1.5 text-xs text-(--danger-text)">
                   {passwordError}
                 </p>
               )}
@@ -235,7 +235,7 @@ export function AuthPage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-neutral-100 px-4 py-3 text-sm font-semibold text-neutral-950 transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-(--primary-bg) px-4 py-3 text-sm font-semibold text-(--primary-text) transition hover:bg-(--primary-bg) disabled:cursor-not-allowed disabled:opacity-50"
             >
               {mode === "login" ? (
                 <LogIn size={17} />

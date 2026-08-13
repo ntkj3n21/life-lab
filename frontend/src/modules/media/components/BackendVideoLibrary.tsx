@@ -2,7 +2,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import { RefreshCw } from "lucide-react";
+import { Plus, RefreshCw, X } from "lucide-react";
 
 import { ConfirmDialog } from "../../../components/ui/ConfirmDialog";
 import { useLibraryStore } from "../../../stores/libraryStore";
@@ -309,6 +309,8 @@ export function BackendVideoLibrary({
     isPreparingDelete,
     setIsPreparingDelete,
   ] = useState(false);
+
+  const [isAddFormOpen, setIsAddFormOpen] = useState(false);
 
   useEffect(() => {
     void loadLibrary().catch(() => {
@@ -714,50 +716,46 @@ export function BackendVideoLibrary({
 
   return (
     <section
-      aria-busy={
-        isLoading ||
-        isMutating ||
-        isPreparingDelete
-      }
-      className="w-full rounded-2xl border border-neutral-800 bg-neutral-900 p-4"
+      aria-busy={isLoading || isMutating || isPreparingDelete}
+      className="w-full rounded-xl border border-(--border) bg-(--surface) p-4 sm:p-5"
     >
       <div className="mb-4 flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
         <div>
-          <h4 className="font-medium">
-            Video Library
+          <h4 className="text-base font-semibold text-(--text-primary)">
+            Library
           </h4>
-
-          <p className="mt-1 text-sm text-neutral-500">
-            Your YouTube sources stored in Life Lab.
+          <p className="mt-1 text-sm text-(--text-muted)">
+            Your saved YouTube study sources.
           </p>
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="rounded-full bg-neutral-800 px-2.5 py-1 text-xs text-neutral-400">
-            {totalElements} video
-            {totalElements === 1
-              ? ""
-              : "s"}
+          <span className="rounded-full bg-(--surface-hover) px-2.5 py-1 text-xs text-(--text-secondary)">
+            {totalElements} video{totalElements === 1 ? "" : "s"}
           </span>
+
+          {/* Nút bấm để mở/đóng Form Add Video */}
+          <button
+            type="button"
+            onClick={() => setIsAddFormOpen((open) => !open)}
+            aria-expanded={isAddFormOpen}
+            aria-controls="library-add-video-panel"
+            aria-label={isAddFormOpen ? "Close add video" : "Add video"}
+            title={isAddFormOpen ? "Close" : "Add video"}
+            className="flex h-8 w-8 items-center justify-center rounded-lg border border-(--border) text-(--text-muted) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)"
+          >
+            {isAddFormOpen ? <X size={14} aria-hidden="true" /> : <Plus size={14} aria-hidden="true" />}
+          </button>
 
           <button
             type="button"
-            onClick={() =>
-              void handleRefresh()
-            }
+            onClick={() => void handleRefresh()}
             disabled={isLoading}
             aria-label="Refresh library"
             title="Refresh library"
-            className="flex h-8 w-8 items-center justify-center rounded-lg border border-neutral-800 text-neutral-500 transition hover:bg-neutral-800 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex h-8 w-8 items-center justify-center rounded-lg border border-(--border) text-(--text-muted) transition hover:bg-(--surface-hover) hover:text-(--text-primary) disabled:cursor-not-allowed disabled:opacity-50"
           >
-            <RefreshCw
-              size={14}
-              className={
-                isLoading
-                  ? "animate-spin"
-                  : undefined
-              }
-            />
+            <RefreshCw size={14} className={isLoading ? "animate-spin" : undefined} />
           </button>
         </div>
       </div>
@@ -765,23 +763,21 @@ export function BackendVideoLibrary({
       <LibraryViewModes
         mode={viewMode}
         isLoading={isLoading}
-        onChange={
-          handleChangeViewMode
-        }
+        onChange={handleChangeViewMode}
       />
 
-      <LibraryAddVideoForm
-        onVideoAdded={(video) => {
-          onOpenVideo(video);
-
-          void loadLibrary(
-            buildAppliedQuery(0),
-          ).catch(() => {
-            // libraryStore keeps error.
-          });
-        }}
-      />
-
+      {/* Form Add Video giờ đây chỉ hiện ra khi bấm nút Plus */}
+      {isAddFormOpen && (
+        <div id="library-add-video-panel" className="mt-3">
+          <LibraryAddVideoForm
+            onVideoAdded={(video) => {
+              setIsAddFormOpen(false); // Tự động đóng form sau khi add thành công
+              onOpenVideo(video);
+              void loadLibrary(buildAppliedQuery(0)).catch(() => {});
+            }}
+          />
+        </div>
+      )}
       <LibraryFilters
         tags={tags}
         searchText={searchText}
@@ -874,7 +870,7 @@ export function BackendVideoLibrary({
       />
 
       <details className="mt-4">
-        <summary className="cursor-pointer select-none text-sm text-neutral-400 hover:text-white">
+        <summary className="cursor-pointer select-none text-sm text-(--text-secondary) hover:text-(--text-primary)">
           Manage tags
         </summary>
 
@@ -886,9 +882,9 @@ export function BackendVideoLibrary({
       {error && (
         <div
           role="alert"
-          className="mt-4 rounded-xl border border-red-900/60 bg-red-950/40 px-4 py-3"
+          className="mt-4 rounded-xl border border-(--danger-border) bg-(--danger-surface) px-4 py-3"
         >
-          <p className="text-sm text-red-300">
+          <p className="text-sm text-(--danger-text)">
             {error.message}
           </p>
 
@@ -905,7 +901,7 @@ export function BackendVideoLibrary({
                 ]) => (
                   <p
                     key={field}
-                    className="text-xs text-red-400"
+                    className="text-xs text-(--danger-text)"
                   >
                     {field}:{" "}
                     {message}
@@ -923,25 +919,25 @@ export function BackendVideoLibrary({
           role="status"
           className="flex min-h-48 items-center justify-center"
         >
-          <p className="text-sm text-neutral-500">
+          <p className="text-sm text-(--text-muted)">
             Loading library...
           </p>
         </div>
       ) : videos.length === 0 ? (
         <div
           role="status"
-          className="mt-4 rounded-2xl border border-dashed border-neutral-800 bg-neutral-950 p-8 text-center"
+          className="mt-4 rounded-2xl border border-dashed border-(--border) bg-(--app-bg) p-8 text-center"
         >
-          <p className="text-sm font-medium text-neutral-300">
+          <p className="text-sm font-medium text-(--text-secondary)">
             No videos found
           </p>
 
-          <p className="mt-1 text-sm text-neutral-500">
+          <p className="mt-1 text-sm text-(--text-muted)">
             No Library Video matches the current search and filter conditions. Change or reset the conditions to search again.
           </p>
         </div>
       ) : (
-        <div className="mt-4 grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-4">
+        <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
           {videos.map(
             (video) => (
               <LibraryVideoCard

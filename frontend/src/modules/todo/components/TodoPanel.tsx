@@ -1,8 +1,4 @@
 import {
-  ListTodo,
-} from "lucide-react";
-
-import {
   useEffect,
   useState,
 } from "react";
@@ -16,7 +12,6 @@ import type {
   UpdateTaskInput,
 } from "../services/taskApi";
 
-import { DailyPlanPanel } from "./DailyPlanPanel";
 import { TaskComposer } from "./TaskComposer";
 import {
   TaskListPanel,
@@ -28,20 +23,12 @@ export function TodoPanel() {
     (state) => state.tasks,
   );
 
-  const dailyPlan = useTodoStore(
-    (state) => state.dailyPlan,
-  );
-
   const totalElements = useTodoStore(
     (state) => state.totalElements,
   );
 
   const isLoading = useTodoStore(
     (state) => state.isLoading,
-  );
-
-  const isLoadingPlan = useTodoStore(
-    (state) => state.isLoadingPlan,
   );
 
   const isMutating = useTodoStore(
@@ -54,10 +41,6 @@ export function TodoPanel() {
 
   const loadTasks = useTodoStore(
     (state) => state.loadTasks,
-  );
-
-  const loadDailyPlan = useTodoStore(
-    (state) => state.loadDailyPlan,
   );
 
   const createIndependentTask = useTodoStore(
@@ -127,8 +110,6 @@ export function TodoPanel() {
         size: 100,
       }),
 
-      loadDailyPlan(),
-
       loadNotes({
         page: 0,
         size: 100,
@@ -138,7 +119,6 @@ export function TodoPanel() {
     });
   }, [
     loadTasks,
-    loadDailyPlan,
     loadNotes,
   ]);
 
@@ -167,7 +147,6 @@ export function TodoPanel() {
           undefined,
       }),
 
-      loadDailyPlan(),
     ]);
   }
 
@@ -295,19 +274,6 @@ export function TodoPanel() {
         onCreate={handleCreate}
       />
 
-      <DailyPlanPanel
-        dailyPlan={dailyPlan}
-        isLoadingPlan={
-          isLoadingPlan
-        }
-        isMutating={isMutating}
-        onUpdate={handleUpdate}
-        onStatusChange={
-          handleStatusChange
-        }
-        onDelete={handleDelete}
-      />
-
       <TaskListPanel
         tasks={tasks}
         totalElements={
@@ -332,13 +298,6 @@ export function TodoPanel() {
         }
         onDelete={handleDelete}
       />
-
-      <div className="flex items-center gap-2 px-1 text-[10px] text-neutral-700">
-        <ListTodo size={11} />
-
-        Tasks are stored in PostgreSQL. Daily Plan is
-        derived and creates no separate task copies.
-      </div>
     </div>
   );
 }

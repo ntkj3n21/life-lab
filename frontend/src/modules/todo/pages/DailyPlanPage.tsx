@@ -72,27 +72,29 @@ function PlanSection({
   return (
     <details
       open={tasks.length > 0}
-      className="rounded-2xl border border-neutral-800 bg-neutral-950 p-4"
+      className="rounded-xl border border-(--border) bg-(--app-bg) p-4"
     >
-      <summary className="flex cursor-pointer list-none items-start justify-between gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-700">
+      <summary className="flex cursor-pointer list-none items-start justify-between gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)">
         <div className="min-w-0">
-          <h2 className="text-sm font-medium text-neutral-300">
+          <h2 className="text-sm font-medium text-(--text-secondary)">
             {title}
           </h2>
 
-          <p className="mt-1 text-xs leading-5 text-neutral-600">
-            {description}
-          </p>
+            {tasks.length > 0 && (
+              <p className="mt-1 text-xs leading-5 text-(--text-faint)">
+                {description}
+              </p>
+            )}
         </div>
 
         <div className="flex shrink-0 items-center gap-2">
-          <span className="rounded-full bg-neutral-900 px-2 py-1 text-[10px] text-neutral-500">
+          <span className="rounded-full bg-(--surface) px-2 py-1 text-[10px] text-(--text-muted)">
             {tasks.length}
           </span>
 
           <ChevronDown
             size={14}
-            className="text-neutral-600"
+            className="text-(--text-faint)"
             aria-hidden="true"
           />
         </div>
@@ -101,7 +103,7 @@ function PlanSection({
       {tasks.length === 0 ? (
         <p
           role="status"
-          className="mt-4 rounded-xl border border-dashed border-neutral-800 p-4 text-xs text-neutral-600"
+          className="mt-4 rounded-xl border border-dashed border-(--border) p-4 text-xs text-(--text-faint)"
         >
           {emptyText}
         </p>
@@ -332,16 +334,12 @@ export function DailyPlanPage() {
       <div className="mx-auto max-w-6xl">
         <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-xs font-medium uppercase tracking-wider text-neutral-600">
-              Derived Task view
-            </p>
-
-            <h1 className="mt-2 text-2xl font-semibold">
+            <h1 className="text-2xl font-semibold">
               Daily Plan
             </h1>
 
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-neutral-400">
-              Daily Plan does not create separate Tasks. It groups your existing Tasks by their current status and deadline.
+            <p className="mt-1 max-w-2xl text-sm leading-6 text-(--text-secondary)">
+              A calm view of what needs attention today.
             </p>
           </div>
 
@@ -354,7 +352,7 @@ export function DailyPlanPage() {
               isLoading ||
               isMutating
             }
-            className="flex shrink-0 items-center justify-center gap-2 rounded-xl border border-neutral-800 px-3 py-2 text-sm text-neutral-400 transition hover:bg-neutral-900 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex shrink-0 items-center justify-center gap-2 rounded-xl border border-(--border) px-3 py-2 text-sm text-(--text-secondary) transition hover:bg-(--surface) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
           >
             <RefreshCw
               size={14}
@@ -370,50 +368,20 @@ export function DailyPlanPage() {
         </header>
 
         {dailyPlan && (
-          <section className="mt-6 grid gap-3 sm:grid-cols-3">
-            <div className="rounded-2xl border border-neutral-800 bg-neutral-900 p-4">
-              <div className="flex items-center gap-2 text-neutral-500">
-                <CalendarDays
-                  size={15}
-                  aria-hidden="true"
-                />
-
-                <p className="text-[10px] font-medium uppercase tracking-wide">
-                  Current date
-                </p>
-              </div>
-
-              <p className="mt-2 text-sm text-neutral-200">
-                {dailyPlan.currentDate}
-              </p>
-            </div>
-
-            <div className="rounded-2xl border border-neutral-800 bg-neutral-900 p-4">
-              <p className="text-[10px] font-medium uppercase tracking-wide text-neutral-500">
-                Time zone
-              </p>
-
-              <p className="mt-2 wrap-break-word text-sm text-neutral-200">
-                {dailyPlan.timeZone}
-              </p>
-            </div>
-
-            <div className="rounded-2xl border border-neutral-800 bg-neutral-900 p-4">
-              <p className="text-[10px] font-medium uppercase tracking-wide text-neutral-500">
-                Tasks in plan
-              </p>
-
-              <p className="mt-2 text-sm text-neutral-200">
-                {totalTasks}
-              </p>
-            </div>
+          <section className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-(--text-muted)">
+            <span className="flex items-center gap-2">
+              <CalendarDays size={15} aria-hidden="true" />
+              {dailyPlan.currentDate}
+            </span>
+            <span>{totalTasks} task{totalTasks === 1 ? "" : "s"}</span>
+            <span className="text-(--text-faint)">{dailyPlan.timeZone}</span>
           </section>
         )}
 
         {errorMessage && (
           <div
             role="alert"
-            className="mt-4 rounded-xl border border-red-900/60 bg-red-950/30 px-4 py-3 text-sm text-red-300"
+            className="mt-4 rounded-xl border border-(--danger-border) bg-(--danger-surface) px-4 py-3 text-sm text-(--danger-text)"
           >
             {errorMessage}
           </div>
@@ -422,7 +390,7 @@ export function DailyPlanPage() {
         {notice && (
           <div
             role="status"
-            className="mt-4 rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-sm text-neutral-300"
+            className="mt-4 rounded-xl border border-(--border) bg-(--surface) px-4 py-3 text-sm text-(--text-secondary)"
           >
             {notice}
           </div>
@@ -433,40 +401,40 @@ export function DailyPlanPage() {
           <div
             role="status"
             aria-live="polite"
-            className="mt-6 flex min-h-64 items-center justify-center rounded-2xl border border-neutral-800 bg-neutral-900"
+            className="mt-6 flex min-h-64 items-center justify-center rounded-2xl border border-(--border) bg-(--surface)"
           >
             <div className="text-center">
               <LoaderCircle
                 size={24}
-                className="mx-auto animate-spin text-neutral-500"
+                className="mx-auto animate-spin text-(--text-muted)"
                 aria-hidden="true"
               />
 
-              <p className="mt-3 text-sm text-neutral-500">
+              <p className="mt-3 text-sm text-(--text-muted)">
                 Loading Daily Plan...
               </p>
             </div>
           </div>
         ) : !dailyPlan ? (
-          <div className="mt-6 rounded-2xl border border-dashed border-neutral-800 bg-neutral-950 p-6 text-center">
-            <p className="text-sm text-neutral-500">
+          <div className="mt-6 rounded-2xl border border-dashed border-(--border) bg-(--app-bg) p-6 text-center">
+            <p className="text-sm text-(--text-muted)">
               Daily Plan is currently unavailable.
             </p>
           </div>
         ) : totalTasks === 0 ? (
-          <div className="mt-6 flex min-h-56 items-center justify-center rounded-2xl border border-dashed border-neutral-800 bg-neutral-950 p-6 text-center">
+          <div className="mt-6 flex min-h-56 items-center justify-center rounded-2xl border border-dashed border-(--border) bg-(--app-bg) p-6 text-center">
             <div>
               <CalendarDays
                 size={28}
-                className="mx-auto text-neutral-700"
+                className="mx-auto text-(--text-faint)"
                 aria-hidden="true"
               />
 
-              <h2 className="mt-3 text-sm font-medium text-neutral-300">
+              <h2 className="mt-3 text-sm font-medium text-(--text-secondary)">
                 No Tasks yet
               </h2>
 
-              <p className="mt-2 max-w-md text-xs leading-5 text-neutral-500">
+              <p className="mt-2 max-w-md text-xs leading-5 text-(--text-muted)">
                 Daily Plan is derived from existing Tasks. Create a Task first and it will appear in the appropriate group automatically.
               </p>
             </div>

@@ -156,16 +156,16 @@ export function LibraryVideoTags({
     <section
       aria-label="Video tags"
       aria-busy={isMutating}
-      className="mt-3 min-w-0 border-t border-neutral-800 pt-3"
+      className="mt-3 min-w-0 border-t border-(--border) pt-3"
     >
       <div className="mb-2 flex items-center gap-2">
         <TagIcon
           size={13}
-          className="text-neutral-500"
+          className="text-(--text-muted)"
           aria-hidden="true"
         />
 
-        <span className="text-xs font-medium text-neutral-400">
+        <span className="text-xs font-medium text-(--text-secondary)">
           Tags
         </span>
       </div>
@@ -176,7 +176,7 @@ export function LibraryVideoTags({
             (tag) => (
               <span
                 key={tag.id}
-                className="flex max-w-full min-w-0 items-center gap-1 rounded-full bg-neutral-800 px-2 py-1 text-[11px] text-neutral-300"
+                className="flex max-w-full min-w-0 items-center gap-1 rounded-full bg-(--surface-hover) px-2 py-1 text-[11px] text-(--text-secondary)"
               >
                 <span
                   className="truncate"
@@ -197,7 +197,7 @@ export function LibraryVideoTags({
                     )
                   }
                   aria-label={`Remove tag ${tag.name}`}
-                  className="shrink-0 rounded-full text-neutral-500 hover:text-red-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-600 disabled:cursor-not-allowed disabled:opacity-40"
+                  className="shrink-0 rounded-full text-(--text-muted) hover:text-(--danger-text) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
                   title={`Remove ${tag.name}`}
                 >
                   <X
@@ -210,7 +210,7 @@ export function LibraryVideoTags({
           )}
         </div>
       ) : (
-        <p className="text-xs text-neutral-600">
+        <p className="text-xs text-(--text-faint)">
           No tags.
         </p>
       )}
@@ -251,7 +251,7 @@ export function LibraryVideoTags({
                   "";
               }
             }}
-            className="mt-3 w-full rounded-lg border border-neutral-800 bg-neutral-900 px-2 py-2 text-xs text-neutral-300 outline-none focus:border-neutral-600 focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-50"
+            className="mt-3 w-full rounded-lg border border-(--border) bg-(--surface) px-2 py-2 text-xs text-(--text-secondary) outline-none focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
           >
             <option value="">
               Attach existing tag...
@@ -298,7 +298,7 @@ export function LibraryVideoTags({
             }
           }}
           placeholder="Create tag..."
-          className="min-w-0 flex-1 rounded-lg border border-neutral-800 bg-neutral-900 px-2 py-1.5 text-xs outline-none placeholder:text-neutral-600 focus:border-neutral-600 focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-50"
+          className="min-w-0 flex-1 rounded-lg border border-(--border) bg-(--surface) px-2 py-1.5 text-xs outline-none placeholder:text-(--text-faint) focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
         />
 
         <button
@@ -311,7 +311,7 @@ export function LibraryVideoTags({
             void handleCreate()
           }
           aria-label="Create and attach tag"
-          className="flex shrink-0 items-center justify-center rounded-lg border border-neutral-800 px-2 text-neutral-500 hover:bg-neutral-800 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-40"
+          className="flex shrink-0 items-center justify-center rounded-lg border border-(--border) px-2 text-(--text-muted) hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
           title="Create and attach tag"
         >
           <Plus
@@ -324,7 +324,7 @@ export function LibraryVideoTags({
       {error && (
         <p
           role="alert"
-          className="mt-2 wrap-break-word text-xs text-red-400"
+          className="mt-2 wrap-break-word text-xs text-(--danger-text)"
         >
           {error.message}
         </p>

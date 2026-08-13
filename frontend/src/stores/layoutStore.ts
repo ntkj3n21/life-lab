@@ -15,10 +15,6 @@ interface LayoutStore {
   ) => void;
 
   closeRightPanel: () => void;
-
-  toggleRightPanel: (
-    panel: RightPanelType,
-  ) => void;
 }
 
 export const useLayoutStore =
@@ -34,32 +30,16 @@ export const useLayoutStore =
         }));
       },
 
-      openRightPanel: (
-        panel,
-      ) => {
+      openRightPanel: (panel) => {
         set({
-          activeRightPanel:
-            panel,
+          activeRightPanel: panel,
         });
       },
 
       closeRightPanel: () => {
         set({
-          activeRightPanel:
-            null,
+          activeRightPanel: null,
         });
-      },
-
-      toggleRightPanel: (
-        panel,
-      ) => {
-        set((state) => ({
-          activeRightPanel:
-            state.activeRightPanel ===
-            panel
-              ? null
-              : panel,
-        }));
       },
     }),
   );

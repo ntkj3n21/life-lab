@@ -3,6 +3,7 @@ import {
   type FormEvent,
 } from "react";
 import {
+  ExternalLink,
   LoaderCircle,
   Plus,
 } from "lucide-react";
@@ -14,6 +15,15 @@ interface LibraryAddVideoFormProps {
   onVideoAdded?: (video: LibraryVideo) => void;
 }
 
+/**
+ * Compact "Add Video" panel (UI-03).
+ *
+ * Life Lab intentionally does NOT embed YouTube search here.
+ * "Find on YouTube" opens YouTube in a new tab; the user copies
+ * a link and pastes it back. This keeps Library Search (finding
+ * saved content) and YouTube discovery (finding new content)
+ * fully separate — they serve different intents.
+ */
 export function LibraryAddVideoForm({
   onVideoAdded,
 }: LibraryAddVideoFormProps) {
@@ -73,20 +83,9 @@ export function LibraryAddVideoForm({
     <form
       onSubmit={handleSubmit}
       aria-busy={isMutating}
-      className="rounded-2xl border border-neutral-800 bg-neutral-950 p-4"
+      className="rounded-[10px] border border-(--border) bg-(--panel-bg) p-3"
     >
-      <div className="mb-4">
-        <h4 className="font-medium">
-          Add YouTube Video
-        </h4>
-
-        <p className="mt-1 text-sm text-neutral-500">
-          Paste a YouTube URL. Life Lab will retrieve the
-          source metadata automatically.
-        </p>
-      </div>
-
-      <div className="flex min-w-0 flex-col gap-3 sm:flex-row">
+      <div className="flex min-w-0 flex-col gap-2 sm:flex-row">
         <div className="min-w-0 flex-1">
           <label
             htmlFor="youtube-video-url"
@@ -109,6 +108,7 @@ export function LibraryAddVideoForm({
               }
             }}
             disabled={isMutating}
+            autoFocus
             autoComplete="off"
             aria-invalid={Boolean(youtubeUrlError)}
             aria-describedby={
@@ -116,15 +116,15 @@ export function LibraryAddVideoForm({
                 ? "youtube-video-url-error"
                 : undefined
             }
-            placeholder="https://www.youtube.com/watch?v=..."
-            className="w-full rounded-xl border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none transition placeholder:text-neutral-600 focus:border-neutral-600 focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:cursor-not-allowed disabled:opacity-60"
+            placeholder="Paste YouTube URL..."
+            className="h-9 w-full rounded-[8px] border border-(--border) bg-(--surface) px-3 text-sm outline-none transition placeholder:text-(--text-faint) focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-60"
           />
 
           {youtubeUrlError && (
             <p
               id="youtube-video-url-error"
               role="alert"
-              className="mt-1.5 text-xs text-red-400"
+              className="mt-1.5 text-xs text-(--danger-text)"
             >
               {youtubeUrlError}
             </p>
@@ -137,28 +137,36 @@ export function LibraryAddVideoForm({
             isMutating ||
             !youtubeUrl.trim()
           }
-          className="flex shrink-0 items-center justify-center gap-2 rounded-xl bg-white px-4 py-2 text-sm font-medium text-neutral-950 transition hover:bg-neutral-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-500 disabled:cursor-not-allowed disabled:opacity-50"
+          className="flex h-9 shrink-0 items-center justify-center gap-1.5 rounded-[8px] bg-(--primary-bg) px-3.5 text-sm font-medium text-(--primary-text) transition hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isMutating ? (
             <LoaderCircle
-              size={16}
+              size={14}
               className="animate-spin"
               aria-hidden="true"
             />
           ) : (
             <Plus
-              size={16}
+              size={14}
               aria-hidden="true"
             />
           )}
-
-          <span className="whitespace-nowrap">
-            {isMutating
-              ? "Adding..."
-              : "Add Video"}
-          </span>
+          Add
         </button>
       </div>
+
+      <a
+        href="https://www.youtube.com/"
+        target="_blank"
+        rel="noreferrer"
+        className="mt-2 inline-flex items-center gap-1.5 text-xs text-(--text-muted) transition-colors hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)"
+      >
+        Find on YouTube
+        <ExternalLink
+          size={12}
+          aria-hidden="true"
+        />
+      </a>
     </form>
   );
 }
