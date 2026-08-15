@@ -1,38 +1,104 @@
 # Life Lab
 
-Life Lab is a personal digital workspace focused on preserving context across multimedia learning and task management.
+**Life Lab** is a full-stack productivity workspace that preserves context from multimedia learning all the way to daily planning.
 
-The core workflow is:
+Instead of separating videos, notes, and tasks into disconnected tools, Life Lab keeps the original learning context attached to the user's work.
+
+### Core workflow
+
+`YouTube Video → Timestamp → Note → Task → Daily Plan`
+
+### Reverse context
+
+`Daily Plan → Task → Note → Exact YouTube Source → Original Timestamp`
+
+This allows users to move from consuming video content to taking notes and planning work, while still being able to return to the exact source that created that context.
+
+**Tech:** React · TypeScript · Spring Boot · PostgreSQL · Docker
+
+---
+
+## Screenshots
+
+> Screenshots will be added after the final UI and deployment pass.
+
+<!--
+Recommended screenshots:
+1. Library
+2. Video Workspace + Notes
+3. Tasks / source context
+4. Daily Plan
+-->
+
+---
+
+## Key Features
+
+### Video Library
+
+- Add YouTube videos by URL
+- Retrieve video metadata through the YouTube Data API
+- Search, filter, sort, and paginate Library videos
+- Organize videos with tags
+- Filter by watched state and note existence
+- Rename or remove videos from the personal Library
+
+### Context-Aware Notes
+
+- Create Notes directly from a Library video
+- Preserve the exact YouTube source
+- Capture an optional playback timestamp
+- Edit and delete Notes
+- Preserve historical source context even if the video is removed from the Library
+
+### Tasks
+
+- Create independent Tasks
+- Create Tasks from Notes
+- Manage title, description, deadline, and status
+- Preserve Tasks even if their source Note is later deleted
+- Clearly distinguish independent, linked, and missing-source Tasks
+
+### Daily Plan
+
+Tasks are automatically organized into a derived Daily Plan:
+
+- Overdue
+- Today
+- Upcoming
+- No deadline
+- Completed
+
+Daily Plan is derived from authoritative Task data rather than stored as a separate planning model.
+
+### Reverse Context Navigation
+
+Life Lab can resolve a Task or Note back to its original multimedia context.
+
+For example:
 
 ```text
-YouTube Video
-    ↓
-Note
-    ↓
 Task
-    ↓
-Daily Plan
-```
-
-Life Lab also supports reverse navigation:
-
-```text
-Daily Plan
-    ↓
-Task
-    ↓
+  ↓
 Note
-    ↓
-Exact source video
-    ↓
+  ↓
+Exact YouTube source
+  ↓
 Original timestamp
 ```
 
-The main goal is to let users move from consuming multimedia content to taking notes and planning work without losing the original source context.
+If the original video is no longer in the user's Library but still exists on YouTube, Life Lab provides a read-only Source Preview.
 
-## Core Features
+If the original source is unavailable or missing, Life Lab reports that state instead of substituting unrelated content.
 
-### Authentication
+### Watch Tracking
+
+- Track real video viewing sessions
+- Synchronize playback progress through heartbeat updates
+- Close sessions when switching videos or leaving the workspace
+- Keep Source Preview playback separate from normal Library watch tracking
+
+### Authentication & Data Isolation
 
 - Account registration and login
 - JWT-based authentication
@@ -41,65 +107,70 @@ The main goal is to let users move from consuming multimedia content to taking n
 - Account-scoped application data
 - Logout state cleanup
 
-### Video Library
+---
 
-- Add YouTube videos by URL
-- Retrieve metadata from the YouTube Data API
-- Rename library videos
-- Delete videos from the personal library
-- Search, filter, sort and paginate videos
-- Organize videos with tags
-- Filter by watched status and note existence
+## Engineering Highlights
 
-### Watch Tracking
+Life Lab includes several domain and architecture decisions beyond basic CRUD behavior:
 
-- Create watch sessions when video playback begins
-- Track actual elapsed playback time
-- Heartbeat synchronization
-- Close sessions when switching videos or leaving the workspace
-- Preserve watch state consistently across context navigation
+- **Exact context preservation**  
+  Notes can preserve the exact YouTube source and playback timestamp that created them.
 
-### Notes
+- **Source vs Library separation**  
+  A YouTube source is distinct from a user's personal Library entry.
 
-- Create notes directly from a Library video
-- Record the exact video source
-- Optional timestamp capture
-- Edit and delete notes
-- Preserve the distinction between a missing timestamp and timestamp `0`
-- Keep source history even when a video is removed from the personal Library
+- **Historical context preservation**  
+  Removing a video from the Library does not invalidate Notes that reference its original source.
 
-### Tasks and Daily Plan
+- **Task preservation**  
+  Deleting a source Note does not delete Tasks created from it. The Task remains valid while its source is explicitly represented as missing.
 
-- Create independent tasks
-- Create tasks from Notes
-- Update task title, description and deadline
-- Task statuses:
-  - `NOT_STARTED`
-  - `IN_PROGRESS`
-  - `COMPLETED`
-- Source states:
-  - `INDEPENDENT`
-  - `HAS_SOURCE`
-  - `SOURCE_MISSING`
-- Derived Daily Plan with overdue, today, upcoming, no-deadline and completed groups
+- **Derived planning model**  
+  Daily Plan is computed from Task data instead of persisting duplicate planning state.
 
-### Reverse Context Navigation
+- **Strict Reverse Context**  
+  Navigation follows only the real Task → Note → source relationship and never fabricates substitute context.
 
-Life Lab can resolve a Task or Note back to its exact historical source.
+- **Account-scoped data boundaries**  
+  User-owned resources are isolated by authenticated account.
 
-Navigation modes include:
+- **Browser-side video playback**  
+  YouTube video streams remain browser-side. The backend only handles metadata, validation, and source resolution.
 
-- `WORKSPACE`
-- `SOURCE_PREVIEW`
-- `VIDEO_UNAVAILABLE`
-- `SOURCE_MISSING`
-- `NO_SOURCE`
+---
 
-The application never substitutes a similar video when the original source is missing or unavailable.
+## Architecture
 
-If the exact YouTube source still exists but is no longer in the user's Library, Life Lab opens a read-only Source Preview.
+```text
+Browser
+   │
+   ▼
+React + TypeScript
+   │
+   │ REST / JSON
+   ▼
+Spring Boot
+   │
+   ▼
+PostgreSQL
+```
 
-Source Preview playback intentionally does not create a WatchSession.
+YouTube integration follows a separate path:
+
+```text
+Browser
+   │
+   ├── YouTube embedded playback
+   │
+   └── Life Lab API
+            │
+            └── YouTube Data API
+                metadata / validation
+```
+
+The backend does **not** proxy YouTube video streams.
+
+---
 
 ## Technology Stack
 
@@ -109,8 +180,8 @@ Source Preview playback intentionally does not create a WatchSession.
 - TypeScript
 - Vite
 - Tailwind CSS
-- Zustand (shared client state where cross-screen coordination is required)
-- React Player as the frontend adapter for YouTube embedded playback
+- Zustand
+- React Player
 - Lucide React
 
 ### Backend
@@ -119,15 +190,23 @@ Source Preview playback intentionally does not create a WatchSession.
 - Spring Boot
 - Spring Security
 - Spring Data JPA
+- Maven
+
+### Data & Infrastructure
+
 - PostgreSQL
 - Flyway
-- Maven
+- Docker
+- Docker Compose
+- Nginx
 - Testcontainers
 
-### External Service
+### External Services
 
 - YouTube Data API v3
 - YouTube embedded player
+
+---
 
 ## Repository Structure
 
@@ -137,12 +216,15 @@ life-lab/
 │   └── src/
 ├── frontend/
 │   └── src/
+├── deploy/
 ├── docker-compose.yml
+├── docker-compose.prod.yml
 ├── .env.example
+├── DEPLOYMENT.md
 └── README.md
 ```
 
-The backend follows a modular-monolith structure organized by feature:
+The backend is organized as a modular monolith by feature:
 
 ```text
 auth
@@ -154,7 +236,7 @@ context
 common
 ```
 
-The main backend flow follows:
+Typical backend flow:
 
 ```text
 Controller
@@ -166,25 +248,31 @@ Repository
 PostgreSQL
 ```
 
-## Requirements
+---
 
-Before running Life Lab locally, install:
+## Running Locally
+
+### Requirements
+
+Install:
 
 - Java 17
 - Node.js and npm
 - Docker Desktop / Docker Compose
 
-A YouTube Data API v3 key is required for live YouTube metadata resolution.
+A **YouTube Data API v3 key** is required for live metadata resolution.
 
-## Environment Configuration
+---
 
-Create a local environment file from the example:
+### 1. Configure Environment
+
+Create a local environment file:
 
 ```powershell
 Copy-Item .env.example .env
 ```
 
-Configure:
+Configure the required values:
 
 ```env
 DB_HOST=localhost
@@ -204,160 +292,136 @@ LIFELAB_COOKIE_SECURE=false
 
 `LIFELAB_JWT_SECRET` must be valid Base64 and decode to at least 32 bytes.
 
-`LIFELAB_DEFAULT_TIME_ZONE` is the backend fallback used only when a Daily Plan request does not include `X-Time-Zone`. The frontend normally sends the browser's resolved IANA timezone automatically.
-
 Do not commit `.env`.
 
-## Run PostgreSQL
+---
+
+### 2. Start PostgreSQL
 
 From the project root:
 
-```powershell
+```bash
 docker compose up -d postgres
 ```
 
-Check the container:
+Check the service:
 
-```powershell
+```bash
 docker compose ps
 ```
 
-The local PostgreSQL service is exposed on:
+PostgreSQL is exposed locally on:
 
 ```text
 localhost:5433
 ```
 
-## Run the Backend
+---
 
-From the project root:
+### 3. Start the Backend
+
+Windows:
 
 ```powershell
 cd backend
 .\mvnw.cmd spring-boot:run
 ```
 
-The backend runs at:
+Unix-like systems:
+
+```bash
+cd backend
+./mvnw spring-boot:run
+```
+
+Backend:
 
 ```text
 http://localhost:8080
 ```
 
-Flyway automatically applies the database migration and Hibernate validates the JPA mappings during startup.
+Flyway applies database migrations during startup.
 
-## Run the Frontend
+---
+
+### 4. Start the Frontend
 
 Open another terminal:
 
-```powershell
+```bash
 cd frontend
 npm ci
 npm run dev
 ```
 
-Open the URL printed by Vite, normally:
+Vite normally starts at:
 
 ```text
 http://localhost:5173
 ```
 
-During local development, Vite proxies `/api` requests to the Spring Boot backend.
+During local development, `/api` requests are proxied to the Spring Boot backend.
 
-For Daily Plan, the frontend resolves the browser timezone with `Intl.DateTimeFormat()` and sends it in the `X-Time-Zone` request header. The backend validates that IANA timezone and falls back to `LIFELAB_DEFAULT_TIME_ZONE` only when the header is absent.
+---
 
 ## Validation
 
+### Frontend
+
+```bash
+cd frontend
+npm run check
+```
+
 ### Backend
 
-Run:
+Windows:
 
 ```powershell
 cd backend
 .\mvnw.cmd clean verify
 ```
 
-### Frontend
+Unix-like systems:
 
-Run:
-
-```powershell
-cd frontend
-npm run lint
-npm run build
+```bash
+cd backend
+./mvnw clean verify
 ```
 
 Optional Git whitespace validation:
 
-```powershell
+```bash
 git diff --check
 ```
 
+---
 
 ## Production Deployment
 
-Production uses a separate Compose file:
+Production uses:
 
 ```text
 Browser
-    ↓ HTTPS
-Frontend / Nginx
-    ↓ /api/*
-Spring Boot Backend
-    ↓
+   ↓ HTTPS
+Nginx / Frontend
+   ↓ /api/*
+Spring Boot
+   ↓
 PostgreSQL
 ```
 
-Only Nginx publishes host ports. The backend and PostgreSQL remain on internal Docker networks.
+Only Nginx exposes host-facing ports. Backend and PostgreSQL remain on internal Docker networks.
 
-Create the production environment file:
+Production configuration uses:
 
-```powershell
-Copy-Item .env.production.example .env.production
+```bash
+docker-compose.prod.yml
 ```
 
-Validate and build:
+See [`DEPLOYMENT.md`](./DEPLOYMENT.md) for the complete deployment procedure.
 
-```powershell
-docker compose --env-file .env.production -f docker-compose.prod.yml config
-docker compose --env-file .env.production -f docker-compose.prod.yml build
-```
-
-Nginx serves the Vite production build, provides SPA fallback routing, and reverse proxies `/api/*` to the internal backend service.
-
-Production HTTPS expects:
-
-```text
-deploy/certs/fullchain.pem
-deploy/certs/privkey.pem
-```
-
-See `DEPLOYMENT.md` for the complete deployment procedure.
-
-## Frontend State and YouTube Player Notes
-
-Zustand is used for shared state that must coordinate across screens or components, including authentication, active video context, reverse-context navigation, library/tag/watch coordination, notes/tasks, and layout state. Page-local forms and filters remain local React state where practical.
-
-YouTube video playback remains browser-side. `ReactPlayer` is used as the frontend player adapter around YouTube embedded playback; the backend never proxies video streams and only uses the YouTube Data API for metadata/source resolution.
-
-## Main Workflow
-
-A representative Life Lab workflow is:
-
-```text
-1. Register or sign in
-2. Add a YouTube video to the Library
-3. Play the video
-4. Capture a Note at an exact timestamp
-5. Create a Task from the Note
-6. Assign a deadline
-7. View the Task in the Daily Plan
-8. Open the Task's source
-9. Resolve Task → Note → exact Video → timestamp
-```
-
-If the Library entry is later deleted, the Note still preserves its original YouTube source.
-
-If the Note is deleted, a Task created from that Note is preserved and becomes `SOURCE_MISSING`.
+---
 
 ## Data Model
 
@@ -374,16 +438,28 @@ Note
 Task
 ```
 
-Daily Plan and reverse Context are derived application concepts and are not stored as independent database tables.
+Daily Plan and Reverse Context are **derived application concepts** rather than independent persisted models.
 
-## Security Notes
+---
 
-- Passwords are hashed before storage.
-- Authentication uses signed JWT access tokens.
-- Authentication tokens are stored in HttpOnly cookies.
-- Unsafe requests use CSRF protection.
-- User-owned resources are scoped to the authenticated account.
-- Secrets and API keys belong in `.env`, not in Git.
+## Security
+
+- Passwords are hashed before storage
+- Authentication uses signed JWT access tokens
+- Authentication tokens are stored in HttpOnly cookies
+- Unsafe requests use CSRF protection
+- User-owned data is scoped to the authenticated account
+- Secrets and API keys are stored outside the repository
+
+---
+
+## Project Status
+
+Life Lab is being developed as a full-stack software engineering portfolio project.
+
+Current work focuses on final validation, deployment, documentation, and portfolio presentation.
+
+---
 
 ## Author
 
