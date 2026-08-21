@@ -1,4 +1,4 @@
-import { Plus } from "lucide-react";
+import { ChevronDown, Plus } from "lucide-react";
 
 import type { Note } from "../../notes/services/noteApi";
 
@@ -12,6 +12,7 @@ interface TaskComposerProps {
 
   isMutating: boolean;
   errorMessage?: string | null;
+  allowSourceSelection?: boolean;
 
   onTitleChange: (value: string) => void;
   onDescriptionChange: (value: string) => void;
@@ -28,6 +29,7 @@ export function TaskComposer({
   sourceNoteId,
   isMutating,
   errorMessage,
+  allowSourceSelection = true,
   onTitleChange,
   onDescriptionChange,
   onDeadlineChange,
@@ -37,153 +39,215 @@ export function TaskComposer({
   return (
     <section
       aria-busy={isMutating}
-      className="rounded-2xl border border-(--border) bg-(--app-bg) p-4"
+      className="rounded-xl border border-(--border) bg-(--app-bg) p-3"
     >
       <div className="flex items-center gap-2">
         <Plus
-          size={16}
-          className="text-(--text-muted)"
+          size={14}
+          className="shrink-0 text-(--text-muted)"
           aria-hidden="true"
         />
 
-        <div>
-          <h4 className="text-sm font-medium text-(--text-secondary)">
-            Create Task
-          </h4>
-
-          <p className="mt-1 text-xs text-(--text-muted)">
-            Create an independent task or link it to an
-            existing Note.
-          </p>
-        </div>
+        <h4 className="text-xs font-medium text-(--text-secondary)">
+          Create task
+        </h4>
       </div>
 
-      <label
-        htmlFor="task-title"
-        className="sr-only"
-      >
-        Task title
-      </label>
+      <div className="mt-2 flex items-center gap-2">
+        <label
+          htmlFor="task-title"
+          className="sr-only"
+        >
+          Task title
+        </label>
 
-      <input
-        id="task-title"
-        value={title}
-        maxLength={255}
-        disabled={isMutating}
-        aria-invalid={Boolean(errorMessage)}
-        aria-describedby={
-          errorMessage
-            ? "task-create-error"
-            : undefined
-        }
-        onChange={(event) =>
-          onTitleChange(event.target.value)
-        }
-        placeholder="Task title"
-        className="mt-3 w-full rounded-xl border border-(--border) bg-(--surface) px-3 py-2 text-sm outline-none placeholder:text-(--text-faint) focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
-      />
+        <input
+          id="task-title"
+          value={title}
+          maxLength={255}
+          disabled={isMutating}
+          aria-required="true"
+          aria-invalid={Boolean(errorMessage)}
+          aria-describedby={
+            errorMessage
+              ? "task-create-error"
+              : undefined
+          }
+          onChange={(event) =>
+            onTitleChange(
+              event.target.value,
+            )
+          }
+          onKeyDown={(event) => {
+            if (
+              event.key === "Enter" &&
+              !event.shiftKey
+            ) {
+              event.preventDefault();
 
-      <label
-        htmlFor="task-description"
-        className="sr-only"
-      >
-        Task description
-      </label>
+              if (
+                title.trim() &&
+                !isMutating
+              ) {
+                void onCreate();
+              }
+            }
+          }}
+          placeholder="Task title..."
+          className="min-w-0 flex-1 rounded-lg border border-(--border) bg-(--surface) px-3 py-2 text-sm outline-none placeholder:text-(--text-faint) transition focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
+        />
 
-      <textarea
-        id="task-description"
-        value={description}
-        disabled={isMutating}
-        onChange={(event) =>
-          onDescriptionChange(
-            event.target.value,
-          )
-        }
-        placeholder="Description (optional)"
-        className="mt-2 h-20 w-full resize-none rounded-xl border border-(--border) bg-(--surface) px-3 py-2 text-xs outline-none placeholder:text-(--text-faint) focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
-      />
+        <button
+          type="button"
+          disabled={
+            isMutating ||
+            !title.trim()
+          }
+          onClick={() =>
+            void onCreate()
+          }
+          className="h-10 shrink-0 rounded-lg bg-(--primary-bg) px-3 text-xs font-medium text-(--primary-text) transition hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50 xl:h-8"
+        >
+          {isMutating
+            ? "Saving..."
+            : sourceNoteId
+              ? "Create"
+              : "Add"}
+        </button>
+      </div>
 
-      <label
-        htmlFor="task-deadline"
-        className="sr-only"
-      >
-        Task deadline
-      </label>
+      <details className="mt-2 group">
+        <summary className="flex min-h-10 cursor-pointer list-none items-center gap-1.5 px-1 py-1 text-xs text-(--text-muted) outline-none focus-visible:ring-2 focus-visible:ring-(--focus) xl:min-h-8">
+          <ChevronDown
+            size={13}
+            className="transition-transform group-open:rotate-180"
+            aria-hidden="true"
+          />
 
-      <input
-        id="task-deadline"
-        type="date"
-        value={deadline}
-        disabled={isMutating}
-        onChange={(event) =>
-          onDeadlineChange(
-            event.target.value,
-          )
-        }
-        className="mt-2 w-full rounded-xl border border-(--border) bg-(--surface) px-3 py-2 text-xs text-(--text-secondary) outline-none focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
-      />
+          <span>More options</span>
 
-      <label
-        htmlFor="task-source-note"
-        className="sr-only"
-      >
-        Task source Note
-      </label>
+          {allowSourceSelection && sourceNoteId && (
+            <span className="text-(--text-muted)">
+              · linked
+            </span>
+          )}
 
-      <select
-        id="task-source-note"
-        value={sourceNoteId}
-        disabled={isMutating}
-        onChange={(event) =>
-          onSourceNoteIdChange(
-            event.target.value,
-          )
-        }
-        className="mt-2 w-full rounded-xl border border-(--border) bg-(--surface) px-3 py-2 text-xs text-(--text-secondary) outline-none focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
-      >
-        <option value="">
-          Independent task
-        </option>
+          {deadline && (
+            <span className="text-(--text-muted)">
+              · deadline
+            </span>
+          )}
+        </summary>
 
-        {notes.map((note) => {
-          const sourceTitle =
-            note.youtubeSource.title ??
-            note.youtubeSource.youtubeVideoId;
+        <div className="mt-2 space-y-2">
+          <label
+            htmlFor="task-description"
+            className="sr-only"
+          >
+            Task description
+          </label>
 
-          const preview = note.content
-            .replace(/\s+/g, " ")
-            .slice(0, 40);
+          <textarea
+            id="task-description"
+            value={description}
+            disabled={isMutating}
+            onChange={(event) =>
+              onDescriptionChange(
+                event.target.value,
+              )
+            }
+            placeholder="Description (optional)"
+            className="h-16 w-full resize-none rounded-lg border border-(--border) bg-(--surface) px-3 py-2 text-xs outline-none placeholder:text-(--text-faint) transition focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
+          />
 
-          return (
-            <option
-              key={note.id}
-              value={note.id}
-            >
-              {sourceTitle}
-              {" — "}
-              {preview}
-            </option>
-          );
-        })}
-      </select>
+          <div
+            className={`grid grid-cols-1 gap-2 ${
+              allowSourceSelection
+                ? "sm:grid-cols-2"
+                : ""
+            }`}
+          >
+            <div>
+              <label
+                htmlFor="task-deadline"
+                className="sr-only"
+              >
+                Task deadline
+              </label>
 
-      <button
-        type="button"
-        disabled={
-          isMutating ||
-          !title.trim()
-        }
-        onClick={() =>
-          void onCreate()
-        }
-        className="mt-3 w-full rounded-xl bg-(--primary-bg) px-4 py-2 text-sm font-medium text-(--primary-text) hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
-      >
-        {isMutating
-          ? "Saving..."
-          : sourceNoteId
-            ? "Create from Note"
-            : "Create Task"}
-      </button>
+              <input
+                id="task-deadline"
+                type="date"
+                value={deadline}
+                disabled={isMutating}
+                onChange={(event) =>
+                  onDeadlineChange(
+                    event.target.value,
+                  )
+                }
+                className="w-full rounded-lg border border-(--border) bg-(--surface) px-3 py-2 text-xs text-(--text-secondary) outline-none transition focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
+              />
+            </div>
+
+            {allowSourceSelection && (
+              <div>
+                <label
+                  htmlFor="task-source-note"
+                  className="sr-only"
+                >
+                  Task source Note
+                </label>
+
+                <select
+                  id="task-source-note"
+                  value={sourceNoteId}
+                  disabled={isMutating}
+                  onChange={(event) =>
+                    onSourceNoteIdChange(
+                      event.target.value,
+                    )
+                  }
+                  className="w-full rounded-lg border border-(--border) bg-(--surface) px-3 py-2 text-xs text-(--text-secondary) outline-none transition focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  <option value="">
+                    Independent task
+                  </option>
+
+                  {notes.map((note) => {
+                    const sourceTitle =
+                      note.youtubeSource
+                        .title ??
+                      note.youtubeSource
+                        .youtubeVideoId;
+
+                    const preview =
+                      note.content
+                        .replace(
+                          /\s+/g,
+                          " ",
+                        )
+                        .slice(
+                          0,
+                          40,
+                        );
+
+                    return (
+                      <option
+                        key={note.id}
+                        value={note.id}
+                      >
+                        {sourceTitle}
+                        {" — "}
+                        {preview}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
+            )}
+          </div>
+        </div>
+      </details>
 
       {errorMessage && (
         <p

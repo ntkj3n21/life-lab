@@ -93,8 +93,15 @@ export function NotesPage() {
   ] = useState(false);
 
   const [
-    errorMessage,
-    setErrorMessage,
+    loadErrorMessage,
+    setLoadErrorMessage,
+  ] = useState<string | null>(
+    null,
+  );
+
+  const [
+    actionErrorMessage,
+    setActionErrorMessage,
   ] = useState<string | null>(
     null,
   );
@@ -148,14 +155,14 @@ export function NotesPage() {
         setTotalPages(
           response.totalPages,
         );
-        setErrorMessage(null);
+        setLoadErrorMessage(null);
       })
       .catch((error: unknown) => {
         if (cancelled) {
           return;
         }
 
-        setErrorMessage(
+        setLoadErrorMessage(
           getErrorMessage(error),
         );
       })
@@ -226,7 +233,7 @@ export function NotesPage() {
     query: string,
   ) {
     setIsLoading(true);
-    setErrorMessage(null);
+    setLoadErrorMessage(null);
 
     try {
       const response =
@@ -246,7 +253,7 @@ export function NotesPage() {
         response.totalPages,
       );
     } catch (error) {
-      setErrorMessage(
+      setLoadErrorMessage(
         getErrorMessage(error),
       );
     } finally {
@@ -262,7 +269,8 @@ export function NotesPage() {
     const nextQuery =
       searchText.trim();
 
-    setErrorMessage(null);
+    setLoadErrorMessage(null);
+    setActionErrorMessage(null);
 
     /*
      * React does not rerun the data-loading effect
@@ -291,7 +299,8 @@ export function NotesPage() {
 
   function handleClearSearch() {
     setSearchText("");
-    setErrorMessage(null);
+    setLoadErrorMessage(null);
+    setActionErrorMessage(null);
 
     if (
       page === 0 &&
@@ -322,7 +331,8 @@ export function NotesPage() {
     }
 
     setIsLoading(true);
-    setErrorMessage(null);
+    setLoadErrorMessage(null);
+    setActionErrorMessage(null);
     setPage(nextPage);
   }
 
@@ -333,7 +343,7 @@ export function NotesPage() {
     setEditingContent(
       note.content,
     );
-    setErrorMessage(null);
+    setActionErrorMessage(null);
   }
 
   function handleCancelEdit() {
@@ -355,7 +365,7 @@ export function NotesPage() {
     }
 
     setIsMutating(true);
-    setErrorMessage(null);
+    setActionErrorMessage(null);
 
     try {
       await updateNoteRequest(
@@ -367,12 +377,21 @@ export function NotesPage() {
 
       setEditingNoteId(null);
       setEditingContent("");
+    } catch (error) {
+      setActionErrorMessage(
+        getErrorMessage(error),
+      );
+      setIsMutating(false);
+      return;
+    }
 
+    try {
       await reloadNotesAfterMutation(
         page,
       );
+      setLoadErrorMessage(null);
     } catch (error) {
-      setErrorMessage(
+      setLoadErrorMessage(
         getErrorMessage(error),
       );
     } finally {
@@ -387,6 +406,7 @@ export function NotesPage() {
       return;
     }
 
+    setActionErrorMessage(null);
     setDeleteErrorMessage(null);
 
     try {
@@ -400,7 +420,7 @@ export function NotesPage() {
         impact,
       });
     } catch (error) {
-      setErrorMessage(
+      setActionErrorMessage(
         getErrorMessage(error),
       );
     }
@@ -416,7 +436,7 @@ export function NotesPage() {
 
     setIsMutating(true);
     setDeleteErrorMessage(null);
-    setErrorMessage(null);
+    setActionErrorMessage(null);
 
     try {
       await deleteNoteRequest(
@@ -442,7 +462,7 @@ export function NotesPage() {
          * Report a list-refresh problem globally
          * instead of reopening a destructive action.
          */
-        setErrorMessage(
+        setLoadErrorMessage(
           getErrorMessage(error),
         );
       }
@@ -458,14 +478,14 @@ export function NotesPage() {
   async function handleViewSource(
     noteId: number,
   ) {
-    setErrorMessage(null);
+    setActionErrorMessage(null);
 
     try {
       await openNoteContext(
         noteId,
       );
     } catch (error) {
-      setErrorMessage(
+      setActionErrorMessage(
         getErrorMessage(error),
       );
     }
@@ -477,7 +497,7 @@ export function NotesPage() {
   const deleteDetails =
     pendingDelete
       ? [
-          `${pendingDelete.impact.taskCountToMarkSourceMissing} linked Task(s) will remain, but their source status will become SOURCE_MISSING.`,
+          `${pendingDelete.impact.taskCountToMarkSourceMissing} linked task(s) will remain, but will no longer be linked to this Note.`,
           pendingDelete.impact.youtubeSourcePreserved
             ? "The exact YouTube source record will be preserved."
             : "The YouTube source will not be preserved.",
@@ -576,12 +596,21 @@ export function NotesPage() {
           )}
         </form>
 
-        {errorMessage && (
+        {loadErrorMessage && (
           <div
             role="alert"
             className="mt-4 rounded-xl border border-(--danger-border) bg-(--danger-surface) px-4 py-3 text-sm text-(--danger-text)"
           >
-            {errorMessage}
+            {loadErrorMessage}
+          </div>
+        )}
+
+        {actionErrorMessage && (
+          <div
+            role="alert"
+            className="mt-4 rounded-xl border border-(--danger-border) bg-(--danger-surface) px-4 py-3 text-sm text-(--danger-text)"
+          >
+            {actionErrorMessage}
           </div>
         )}
 
@@ -603,7 +632,7 @@ export function NotesPage() {
               </p>
             </div>
           </div>
-        ) : notes.length === 0 ? (
+        ) : loadErrorMessage ? null : notes.length === 0 ? (
           <div className="mt-6 flex min-h-56 items-center justify-center rounded-2xl border border-dashed border-(--border) bg-(--app-bg) p-6 text-center">
             <div>
               <StickyNote

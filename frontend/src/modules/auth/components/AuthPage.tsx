@@ -16,12 +16,10 @@ export function AuthPage() {
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [notice, setNotice] = useState<string | null>(null);
 
   function switchMode(nextMode: AuthMode) {
     setMode(nextMode);
     setPassword("");
-    setNotice(null);
     clearError();
   }
 
@@ -33,7 +31,6 @@ export function AuthPage() {
     }
 
     clearError();
-    setNotice(null);
     setIsSubmitting(true);
 
     try {
@@ -52,10 +49,7 @@ export function AuthPage() {
         displayName,
       });
 
-      setMode("login");
-      setPassword("");
-      setDisplayName("");
-      setNotice("Account created. Sign in to continue.");
+      return;
     } catch {
       // authStore keeps the API error so the form can display it.
     } finally {
@@ -68,11 +62,14 @@ export function AuthPage() {
   const displayNameError = error?.fieldErrors.displayName;
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-(--app-bg) py-10 text-(--text-primary)">
-      <div className="w-full max-w-md">
+    <main className="h-full overflow-y-auto overscroll-contain bg-(--app-bg) px-4 text-(--text-primary)">
+      <div className="mx-auto flex min-h-full w-full max-w-md flex-col justify-center py-10">
         <div className="mb-8 flex flex-col items-center text-center">
           <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-(--border) bg-(--surface)">
-            <FlaskConical size={26} />
+            <FlaskConical
+              size={26}
+              aria-hidden="true"
+            />
           </div>
 
           <h1 className="mt-4 text-2xl font-semibold">
@@ -84,12 +81,13 @@ export function AuthPage() {
           </p>
         </div>
 
-        <div className="rounded-2xl border border-(--border) bg-(--surface) p-6 shadow-2xl shadow-black/20">
+        <div className="rounded-2xl border border-(--border) bg-(--surface) p-6 shadow-(--elevated-shadow)">
           <div className="grid grid-cols-2 rounded-xl bg-(--app-bg) p-1">
             <button
               type="button"
               onClick={() => switchMode("login")}
-              className={`rounded-lg px-3 py-2 text-sm font-medium transition ${
+              aria-pressed={mode === "login"}
+              className={`rounded-lg px-3 py-2 text-sm font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) ${
                 mode === "login"
                   ? "bg-(--surface-hover) text-(--text-primary)"
                   : "text-(--text-muted) hover:text-(--text-secondary)"
@@ -101,7 +99,8 @@ export function AuthPage() {
             <button
               type="button"
               onClick={() => switchMode("register")}
-              className={`rounded-lg px-3 py-2 text-sm font-medium transition ${
+              aria-pressed={mode === "register"}
+              className={`rounded-lg px-3 py-2 text-sm font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) ${
                 mode === "register"
                   ? "bg-(--surface-hover) text-(--text-primary)"
                   : "text-(--text-muted) hover:text-(--text-secondary)"
@@ -125,14 +124,11 @@ export function AuthPage() {
             </p>
           </div>
 
-          {notice && (
-            <div className="mt-5 rounded-xl border border-(--success-border) bg-(--success-surface) px-4 py-3 text-sm text-(--success-text)">
-              {notice}
-            </div>
-          )}
-
           {error && (
-            <div className="mt-5 rounded-xl border border-(--danger-border) bg-(--danger-surface) px-4 py-3 text-sm text-(--danger-text)">
+            <div
+              role="alert"
+              className="mt-5 rounded-xl border border-(--danger-border) bg-(--danger-surface) px-4 py-3 text-sm text-(--danger-text)"
+            >
               {error.message}
             </div>
           )}
@@ -158,12 +154,26 @@ export function AuthPage() {
                     setDisplayName(event.target.value)
                   }
                   autoComplete="name"
-                  className="w-full rounded-xl border border-(--border) bg-(--app-bg) px-4 py-3 text-sm outline-none transition placeholder:text-(--text-faint) focus:border-(--border-strong)"
+                  aria-required="true"
+                  aria-invalid={
+                    Boolean(
+                      displayNameError,
+                    )
+                  }
+                  aria-describedby={
+                    displayNameError
+                      ? "displayName-error"
+                      : undefined
+                  }
+                  className="w-full rounded-xl border border-(--border) bg-(--app-bg) px-4 py-3 text-sm outline-none transition placeholder:text-(--text-faint) focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus)"
                   placeholder="Your name"
                 />
 
                 {displayNameError && (
-                  <p className="mt-1.5 text-xs text-(--danger-text)">
+                  <p
+                    id="displayName-error"
+                    className="mt-1.5 text-xs text-(--danger-text)"
+                  >
                     {displayNameError}
                   </p>
                 )}
@@ -186,12 +196,24 @@ export function AuthPage() {
                   setEmail(event.target.value)
                 }
                 autoComplete="email"
-                className="w-full rounded-xl border border-(--border) bg-(--app-bg) px-4 py-3 text-sm outline-none transition placeholder:text-(--text-faint) focus:border-(--border-strong)"
+                aria-required="true"
+                aria-invalid={
+                  Boolean(emailError)
+                }
+                aria-describedby={
+                  emailError
+                    ? "email-error"
+                    : undefined
+                }
+                className="w-full rounded-xl border border-(--border) bg-(--app-bg) px-4 py-3 text-sm outline-none transition placeholder:text-(--text-faint) focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus)"
                 placeholder="you@example.com"
               />
 
               {emailError && (
-                <p className="mt-1.5 text-xs text-(--danger-text)">
+                <p
+                  id="email-error"
+                  className="mt-1.5 text-xs text-(--danger-text)"
+                >
                   {emailError}
                 </p>
               )}
@@ -217,7 +239,16 @@ export function AuthPage() {
                     ? "current-password"
                     : "new-password"
                 }
-                className="w-full rounded-xl border border-(--border) bg-(--app-bg) px-4 py-3 text-sm outline-none transition placeholder:text-(--text-faint) focus:border-(--border-strong)"
+                aria-required="true"
+                aria-invalid={
+                  Boolean(passwordError)
+                }
+                aria-describedby={
+                  passwordError
+                    ? "password-error"
+                    : undefined
+                }
+                className="w-full rounded-xl border border-(--border) bg-(--app-bg) px-4 py-3 text-sm outline-none transition placeholder:text-(--text-faint) focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus)"
                 placeholder={
                   mode === "register"
                     ? "At least 8 characters"
@@ -226,7 +257,10 @@ export function AuthPage() {
               />
 
               {passwordError && (
-                <p className="mt-1.5 text-xs text-(--danger-text)">
+                <p
+                  id="password-error"
+                  className="mt-1.5 text-xs text-(--danger-text)"
+                >
                   {passwordError}
                 </p>
               )}
@@ -235,12 +269,18 @@ export function AuthPage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-(--primary-bg) px-4 py-3 text-sm font-semibold text-(--primary-text) transition hover:bg-(--primary-bg) disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-(--primary-bg) px-4 py-3 text-sm font-semibold text-(--primary-text) transition hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
             >
               {mode === "login" ? (
-                <LogIn size={17} />
+                <LogIn
+                  size={17}
+                  aria-hidden="true"
+                />
               ) : (
-                <UserPlus size={17} />
+                <UserPlus
+                  size={17}
+                  aria-hidden="true"
+                />
               )}
 
               {isSubmitting

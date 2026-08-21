@@ -84,7 +84,7 @@ export function Topbar() {
               ? "light"
               : "dark"
           } mode`}
-          className="flex h-9 w-9 items-center justify-center rounded-[10px] text-(--text-muted) transition-colors hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)"
+          className="flex h-10 w-10 items-center justify-center rounded-[10px] text-(--text-muted) transition-colors hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)"
         >
           {appearance === "dark" ? (
             <Moon
@@ -111,7 +111,7 @@ export function Topbar() {
               : "Sign out"
           }
           title="Sign out"
-          className="flex h-9 w-9 items-center justify-center rounded-[10px] text-(--text-muted) transition-colors hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
+          className="flex h-10 w-10 items-center justify-center rounded-[10px] text-(--text-muted) transition-colors hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isLoggingOut ? (
             <LoaderCircle

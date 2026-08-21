@@ -295,7 +295,7 @@ export function NoteDetailPage() {
   const deleteDetails =
     deleteImpact
       ? [
-          `${deleteImpact.taskCountToMarkSourceMissing} linked Task(s) will remain and become SOURCE_MISSING.`,
+          `${deleteImpact.taskCountToMarkSourceMissing} linked task(s) will remain, but will no longer be linked to this Note.`,
           deleteImpact.youtubeSourcePreserved
             ? "The exact YouTube source record will be preserved."
             : "The YouTube source will not be preserved.",
@@ -445,7 +445,7 @@ export function NoteDetailPage() {
             <section className="mt-6 rounded-2xl border border-(--border) bg-(--surface) p-5">
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                 <div className="rounded-xl border border-(--border) bg-(--app-bg) p-3">
-                  <p className="text-[11px] font-medium text-(--text-faint)">
+                  <p className="text-[11px] font-medium text-(--text-muted)">
                     Timestamp
                   </p>
 
@@ -460,7 +460,7 @@ export function NoteDetailPage() {
                 </div>
 
                 <div className="rounded-xl border border-(--border) bg-(--app-bg) p-3">
-                  <p className="text-[11px] font-medium text-(--text-faint)">
+                  <p className="text-[11px] font-medium text-(--text-muted)">
                     YouTube source
                   </p>
 
@@ -479,7 +479,7 @@ export function NoteDetailPage() {
                 </div>
 
                 <div className="rounded-xl border border-(--border) bg-(--app-bg) p-3">
-                  <p className="text-[11px] font-medium text-(--text-faint)">
+                  <p className="text-[11px] font-medium text-(--text-muted)">
                     Created
                   </p>
 
@@ -491,7 +491,7 @@ export function NoteDetailPage() {
                 </div>
 
                 <div className="rounded-xl border border-(--border) bg-(--app-bg) p-3">
-                  <p className="text-[11px] font-medium text-(--text-faint)">
+                  <p className="text-[11px] font-medium text-(--text-muted)">
                     Updated
                   </p>
 
@@ -547,7 +547,7 @@ export function NoteDetailPage() {
                         disabled={
                           isMutating
                         }
-                        className="rounded-xl border border-(--border) px-4 py-2 text-sm text-(--text-secondary) transition hover:bg-(--app-bg) hover:text-(--text-primary) disabled:cursor-not-allowed disabled:opacity-50"
+                        className="rounded-xl border border-(--border) px-4 py-2 text-sm text-(--text-secondary) transition hover:bg-(--app-bg) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
                       >
                         Cancel
                       </button>
@@ -561,7 +561,7 @@ export function NoteDetailPage() {
                           isMutating ||
                           !editingContent.trim()
                         }
-                        className="rounded-xl bg-(--primary-bg) px-4 py-2 text-sm font-medium text-(--primary-text) transition hover:bg-(--primary-hover) disabled:cursor-not-allowed disabled:opacity-50"
+                        className="rounded-xl bg-(--primary-bg) px-4 py-2 text-sm font-medium text-(--primary-text) transition hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
                       >
                         {isMutating
                           ? "Saving..."

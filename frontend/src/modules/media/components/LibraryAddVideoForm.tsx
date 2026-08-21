@@ -3,7 +3,6 @@ import {
   type FormEvent,
 } from "react";
 import {
-  ExternalLink,
   LoaderCircle,
   Plus,
 } from "lucide-react";
@@ -18,11 +17,9 @@ interface LibraryAddVideoFormProps {
 /**
  * Compact "Add Video" panel (UI-03).
  *
- * Life Lab intentionally does NOT embed YouTube search here.
- * "Find on YouTube" opens YouTube in a new tab; the user copies
- * a link and pastes it back. This keeps Library Search (finding
- * saved content) and YouTube discovery (finding new content)
- * fully separate — they serve different intents.
+ * YouTube discovery is presented by the owning Library panel.
+ * This form remains responsible only for the existing URL-based
+ * Add Video operation.
  */
 export function LibraryAddVideoForm({
   onVideoAdded,
@@ -110,6 +107,7 @@ export function LibraryAddVideoForm({
             disabled={isMutating}
             autoFocus
             autoComplete="off"
+            aria-required="true"
             aria-invalid={Boolean(youtubeUrlError)}
             aria-describedby={
               youtubeUrlError
@@ -117,7 +115,7 @@ export function LibraryAddVideoForm({
                 : undefined
             }
             placeholder="Paste YouTube URL..."
-            className="h-9 w-full rounded-[8px] border border-(--border) bg-(--surface) px-3 text-sm outline-none transition placeholder:text-(--text-faint) focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-60"
+            className="h-10 w-full rounded-[8px] border border-(--border) bg-(--surface) px-3 text-sm outline-none transition placeholder:text-(--text-faint) focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-60 sm:h-9"
           />
 
           {youtubeUrlError && (
@@ -137,7 +135,7 @@ export function LibraryAddVideoForm({
             isMutating ||
             !youtubeUrl.trim()
           }
-          className="flex h-9 shrink-0 items-center justify-center gap-1.5 rounded-[8px] bg-(--primary-bg) px-3.5 text-sm font-medium text-(--primary-text) transition hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
+          className="flex h-10 shrink-0 items-center justify-center gap-1.5 rounded-[8px] bg-(--primary-bg) px-3.5 text-sm font-medium text-(--primary-text) transition hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50 sm:h-9"
         >
           {isMutating ? (
             <LoaderCircle
@@ -155,18 +153,6 @@ export function LibraryAddVideoForm({
         </button>
       </div>
 
-      <a
-        href="https://www.youtube.com/"
-        target="_blank"
-        rel="noreferrer"
-        className="mt-2 inline-flex items-center gap-1.5 text-xs text-(--text-muted) transition-colors hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)"
-      >
-        Find on YouTube
-        <ExternalLink
-          size={12}
-          aria-hidden="true"
-        />
-      </a>
     </form>
   );
 }

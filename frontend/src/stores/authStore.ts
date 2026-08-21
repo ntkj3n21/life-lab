@@ -91,11 +91,31 @@ export const useAuthStore = create<AuthStore>((set) => ({
     });
 
     try {
-      return await registerRequest(input);
+      /*
+       * UC-01 ends in an authenticated state.
+       * Registration creates the account first, then the
+       * existing login flow issues the auth cookie using
+       * the same credentials supplied by the user.
+       */
+      await registerRequest(input);
+
+      const account = await loginRequest({
+        email: input.email,
+        password: input.password,
+      });
+
+      set({
+        account,
+        isAuthenticated: true,
+      });
+
+      return account;
     } catch (error) {
       const apiError = toApiError(error);
 
       set({
+        account: null,
+        isAuthenticated: false,
         error: apiError,
       });
 

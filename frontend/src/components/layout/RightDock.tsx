@@ -2,7 +2,15 @@ import {
   CheckSquare,
   StickyNote,
 } from "lucide-react";
-import { useState } from "react";
+import {
+  type KeyboardEvent,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+} from "react";
+
+import { useContextStore } from "../../stores/contextStore";
 
 import { QuickNotePanel } from "../../modules/notes/components/QuickNotePanel";
 import { TodoPanel } from "../../modules/todo/components/TodoPanel";
@@ -14,74 +22,251 @@ type DockTab = "notes" | "todos";
 export function RightDock() {
   const [activeTab, setActiveTab] =
     useState<DockTab>("notes");
+  const notesTabRef =
+    useRef<HTMLButtonElement | null>(null);
+  const todosTabRef =
+    useRef<HTMLButtonElement | null>(null);
+  const notesTabId = useId();
+  const todosTabId = useId();
+  const panelId = useId();
 
-  const noteCount = useNoteStore(
-    (state) => state.totalElements,
+  const activeContext = useContextStore(
+    (state) => state.activeContext,
   );
 
-  const taskCount = useTodoStore(
-    (state) => state.totalElements,
+  const videoNotesByVideo = useNoteStore(
+    (state) => state.videoNotes,
   );
+
+  const loadVideoNotes = useNoteStore(
+    (state) => state.loadVideoNotes,
+  );
+
+  const videoNotesLoadStatus =
+    useNoteStore(
+      (state) =>
+        state.videoNotesLoadStatus,
+    );
+
+  const dailyPlan = useTodoStore(
+    (state) => state.dailyPlan,
+  );
+
+  const loadDailyPlan = useTodoStore(
+    (state) => state.loadDailyPlan,
+  );
+
+  const dailyPlanLoadStatus =
+    useTodoStore(
+      (state) =>
+        state.dailyPlanLoadStatus,
+    );
+
+  const activeLibraryVideoId =
+    activeContext?.entityType === "video"
+      ? Number(activeContext.entityId)
+      : null;
+
+  const validVideoId =
+    activeLibraryVideoId !== null &&
+    Number.isFinite(activeLibraryVideoId)
+      ? activeLibraryVideoId
+      : null;
+
+  const currentVideoNotes =
+    validVideoId !== null
+      ? videoNotesByVideo[validVideoId] ?? []
+      : [];
+
+  const relatedNoteIds = new Set(
+    currentVideoNotes.map(
+      (note) => note.id,
+    ),
+  );
+
+  const allTasks = dailyPlan
+    ? [
+        ...dailyPlan.overdue,
+        ...dailyPlan.today,
+        ...dailyPlan.upcoming,
+        ...dailyPlan.noDeadline,
+        ...dailyPlan.completed,
+      ]
+    : [];
+
+  const relatedTasksCount =
+    allTasks.filter(
+      (task) =>
+        task.sourceNoteId !== null &&
+        relatedNoteIds.has(
+          task.sourceNoteId,
+        ),
+    ).length;
+
+  const noteCount =
+    validVideoId !== null &&
+    videoNotesLoadStatus[
+      validVideoId
+    ] === "success"
+      ? currentVideoNotes.length
+      : null;
+
+  const taskCount =
+    noteCount !== null &&
+    dailyPlanLoadStatus ===
+      "success" &&
+    dailyPlan !== null
+      ? relatedTasksCount
+      : null;
+
+  useEffect(() => {
+    if (validVideoId !== null) {
+      void loadVideoNotes(
+        validVideoId,
+      ).catch(() => {
+        // noteStore keeps error.
+      });
+    }
+  }, [
+    validVideoId,
+    loadVideoNotes,
+  ]);
+
+  useEffect(() => {
+    void loadDailyPlan().catch(() => {
+      // todoStore keeps error.
+    });
+  }, [loadDailyPlan]);
+
+  function selectTab(tab: DockTab) {
+    setActiveTab(tab);
+
+    const tabRef =
+      tab === "notes"
+        ? notesTabRef
+        : todosTabRef;
+
+    tabRef.current?.focus();
+  }
+
+  function handleTabKeyDown(
+    event: KeyboardEvent<HTMLButtonElement>,
+  ) {
+    if (
+      event.key !== "ArrowLeft" &&
+      event.key !== "ArrowRight" &&
+      event.key !== "Home" &&
+      event.key !== "End"
+    ) {
+      return;
+    }
+
+    event.preventDefault();
+
+    if (
+      event.key === "Home" ||
+      (event.key === "ArrowLeft" &&
+        activeTab === "todos") ||
+      (event.key === "ArrowRight" &&
+        activeTab === "todos")
+    ) {
+      selectTab("notes");
+      return;
+    }
+
+    selectTab("todos");
+  }
 
   return (
     <div>
       <div
         role="tablist"
         aria-label="Workspace tools"
-        className="grid grid-cols-2 gap-1 rounded-[11px] bg-(--surface) p-1"
+        className="grid grid-cols-2 rounded-lg border border-(--border) bg-(--surface) p-0.5"
       >
         <button
+          ref={notesTabRef}
+          id={notesTabId}
           type="button"
           role="tab"
+          aria-controls={panelId}
           aria-selected={
             activeTab === "notes"
+          }
+          tabIndex={
+            activeTab === "notes"
+              ? 0
+              : -1
+          }
+          onKeyDown={
+            handleTabKeyDown
           }
           onClick={() =>
             setActiveTab("notes")
           }
-          className={`flex h-9 items-center justify-center gap-2 rounded-[9px] px-3 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) ${
+          className={`flex h-10 items-center justify-center gap-1.5 rounded-md px-2.5 text-xs font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) xl:h-8 ${
             activeTab === "notes"
               ? "bg-(--surface-active) text-(--text-primary)"
               : "text-(--text-muted) hover:bg-(--surface-hover) hover:text-(--text-primary)"
           }`}
         >
           <StickyNote
-            size={15}
+            size={14}
             aria-hidden="true"
           />
           Notes
-          <span className="text-[11px] text-(--text-faint)">
-            {noteCount}
+          <span className="text-[11px] text-(--text-muted)">
+            {noteCount ?? "—"}
           </span>
         </button>
 
         <button
+          ref={todosTabRef}
+          id={todosTabId}
           type="button"
           role="tab"
+          aria-controls={panelId}
           aria-selected={
             activeTab === "todos"
+          }
+          tabIndex={
+            activeTab === "todos"
+              ? 0
+              : -1
+          }
+          onKeyDown={
+            handleTabKeyDown
           }
           onClick={() =>
             setActiveTab("todos")
           }
-          className={`flex h-9 items-center justify-center gap-2 rounded-[9px] px-3 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) ${
+          className={`flex h-10 items-center justify-center gap-1.5 rounded-md px-2.5 text-xs font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) xl:h-8 ${
             activeTab === "todos"
               ? "bg-(--surface-active) text-(--text-primary)"
               : "text-(--text-muted) hover:bg-(--surface-hover) hover:text-(--text-primary)"
           }`}
         >
           <CheckSquare
-            size={15}
+            size={14}
             aria-hidden="true"
           />
           Tasks
-          <span className="text-[11px] text-(--text-faint)">
-            {taskCount}
+          <span className="text-[11px] text-(--text-muted)">
+            {taskCount ?? "—"}
           </span>
         </button>
       </div>
 
-      <div className="mt-3">
+      <div
+        id={panelId}
+        role="tabpanel"
+        aria-labelledby={
+          activeTab === "notes"
+            ? notesTabId
+            : todosTabId
+        }
+        className="mt-3"
+      >
         {activeTab === "notes" ? (
           <QuickNotePanel />
         ) : (

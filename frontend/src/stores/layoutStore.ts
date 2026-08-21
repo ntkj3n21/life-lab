@@ -21,7 +21,7 @@ export const useLayoutStore =
   create<LayoutStore>(
     (set) => ({
       isSidebarCollapsed: false,
-      activeRightPanel: "tools",
+      activeRightPanel: null,
 
       toggleSidebar: () => {
         set((state) => ({

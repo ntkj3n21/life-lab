@@ -41,7 +41,7 @@ export function LibraryPagination({
             page === 0 ||
             isLoading
           }
-          className="flex items-center gap-1 rounded-lg border border-(--border) px-3 py-1.5 text-xs text-(--text-secondary) hover:bg-(--surface-hover) hover:text-(--text-primary) disabled:cursor-not-allowed disabled:opacity-40"
+          className="flex items-center gap-1 rounded-lg border border-(--border) px-3 py-1.5 text-xs text-(--text-secondary) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
         >
           <ChevronLeft size={14} />
           Previous
@@ -58,7 +58,7 @@ export function LibraryPagination({
             page + 1 >= totalPages ||
             isLoading
           }
-          className="flex items-center gap-1 rounded-lg border border-(--border) px-3 py-1.5 text-xs text-(--text-secondary) hover:bg-(--surface-hover) hover:text-(--text-primary) disabled:cursor-not-allowed disabled:opacity-40"
+          className="flex items-center gap-1 rounded-lg border border-(--border) px-3 py-1.5 text-xs text-(--text-secondary) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
         >
           Next
           <ChevronRight size={14} />

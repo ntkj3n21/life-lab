@@ -108,7 +108,7 @@ export function Sidebar() {
               Life Lab
             </h1>
 
-            <p className="truncate text-xs text-(--text-faint)">
+            <p className="truncate text-xs text-(--text-muted)">
               Study workspace
             </p>
           </div>
@@ -208,7 +208,7 @@ export function Sidebar() {
                   "Life Lab User"}
               </p>
 
-              <p className="truncate text-[11px] text-(--text-faint)">
+              <p className="truncate text-[11px] text-(--text-muted)">
                 {account?.email ?? ""}
               </p>
             </div>

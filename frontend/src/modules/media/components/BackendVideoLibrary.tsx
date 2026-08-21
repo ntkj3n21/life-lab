@@ -2,7 +2,13 @@ import {
   useEffect,
   useState,
 } from "react";
-import { Plus, RefreshCw, X } from "lucide-react";
+import {
+  ExternalLink,
+  Plus,
+  RefreshCw,
+  Search,
+  X,
+} from "lucide-react";
 
 import { ConfirmDialog } from "../../../components/ui/ConfirmDialog";
 import { useLibraryStore } from "../../../stores/libraryStore";
@@ -16,6 +22,7 @@ import {
 } from "../services/libraryApi";
 import { LibraryAddVideoForm } from "./LibraryAddVideoForm";
 import {
+  type AppliedLibraryFilterItem,
   LibraryFilters,
   type BooleanFilter,
   type LibrarySortBy,
@@ -57,6 +64,108 @@ const DEFAULT_APPLIED_QUERY:
     sortBy: "addedAt",
     sortDirection: "desc",
   };
+
+const LIBRARY_FIELD_LABELS: Record<
+  string,
+  string
+> = {
+  q: "Keyword",
+  minDurationSeconds:
+    "Minimum duration",
+  maxDurationSeconds:
+    "Maximum duration",
+  publishedFrom:
+    "Published from",
+  publishedTo: "Published to",
+  addedFrom: "Added from",
+  addedTo: "Added to",
+  tagId: "Tag",
+  tagIds: "Tags",
+  watched: "Watch status",
+  hasNotes: "Note status",
+  sortBy: "Sort by",
+  sortDirection:
+    "Sort direction",
+  page: "Page",
+  size: "Page size",
+  youtubeUrl: "YouTube URL",
+  customTitle: "Custom title",
+  personalDescription:
+    "Personal description",
+};
+
+function getLibraryFieldLabel(
+  field: string,
+) {
+  const mappedLabel =
+    LIBRARY_FIELD_LABELS[field];
+
+  if (mappedLabel) {
+    return mappedLabel;
+  }
+
+  const words = field
+    .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
+    .replace(/[_-]+/g, " ")
+    .trim();
+
+  return words
+    ? words.charAt(0).toUpperCase() +
+        words.slice(1)
+    : "Field";
+}
+
+function getLibraryValidationMessage(
+  field: string,
+  message: string,
+) {
+  const fieldLabels = {
+    ...LIBRARY_FIELD_LABELS,
+    [field]:
+      getLibraryFieldLabel(field),
+  };
+
+  const identifiers =
+    Object.keys(fieldLabels)
+      .filter((identifier) =>
+        /[A-Z_-]/.test(identifier),
+      )
+      .sort(
+        (left, right) =>
+          right.length - left.length,
+      );
+
+  const presentationMessage =
+    identifiers.reduce(
+      (result, identifier) => {
+        const escapedIdentifier =
+          identifier.replace(
+            /[.*+?^${}()|[\]\\]/g,
+            "\\$&",
+          );
+
+        return result.replace(
+          new RegExp(
+            `\\b${escapedIdentifier}\\b`,
+            "g",
+          ),
+          fieldLabels[identifier],
+        );
+      },
+      message.trim(),
+    );
+
+  if (
+    !presentationMessage ||
+    /[.!?]$/.test(
+      presentationMessage,
+    )
+  ) {
+    return presentationMessage;
+  }
+
+  return `${presentationMessage}.`;
+}
 
 function applyViewMode(
   query: AppliedLibraryQuery,
@@ -114,6 +223,186 @@ function parseOptionalNonNegativeInteger(
   };
 }
 
+function hasAppliedLibraryFilters(
+  query: AppliedLibraryQuery,
+) {
+  return Boolean(
+    query.q ||
+      query.minDurationSeconds !==
+        undefined ||
+      query.maxDurationSeconds !==
+        undefined ||
+      query.publishedFrom ||
+      query.publishedTo ||
+      query.addedFrom ||
+      query.addedTo ||
+      query.tagIds?.length ||
+      query.watched !== undefined ||
+      query.hasNotes !== undefined,
+  );
+}
+
+const LIBRARY_FILTER_DATE_FORMATTER =
+  new Intl.DateTimeFormat("en", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    timeZone: "UTC",
+  });
+
+function formatAppliedDuration(
+  seconds: number,
+) {
+  if (seconds < 60) {
+    return `${seconds} sec`;
+  }
+
+  const minutes = Math.floor(
+    seconds / 60,
+  );
+  const remainingSeconds =
+    seconds % 60;
+
+  if (remainingSeconds === 0) {
+    return `${minutes} min`;
+  }
+
+  return `${minutes} min ${remainingSeconds} sec`;
+}
+
+function formatAppliedDate(
+  value: string,
+) {
+  const date = new Date(
+    `${value}T00:00:00Z`,
+  );
+
+  return Number.isNaN(date.getTime())
+    ? value
+    : LIBRARY_FILTER_DATE_FORMATTER.format(
+        date,
+      );
+}
+
+function getAppliedFilterItems(
+  query: AppliedLibraryQuery,
+  tags: Array<{
+    id: number;
+    name: string;
+  }>,
+  viewMode: LibraryViewMode,
+): AppliedLibraryFilterItem[] {
+  const items:
+    AppliedLibraryFilterItem[] =
+    [];
+
+  if (query.q) {
+    items.push({
+      id: "q",
+      label: `Search: “${query.q}”`,
+    });
+  }
+
+  query.tagIds?.forEach(
+    (tagId) => {
+      const tag = tags.find(
+        (candidate) =>
+          candidate.id === tagId,
+      );
+
+      items.push({
+        id: `tag:${tagId}`,
+        label:
+          tag?.name ??
+          "Selected tag",
+      });
+    },
+  );
+
+  if (
+    viewMode === "all" &&
+    query.watched !== undefined
+  ) {
+    items.push({
+      id: "watched",
+      label: query.watched
+        ? "Watched"
+        : "Not watched",
+    });
+  }
+
+  if (query.hasNotes !== undefined) {
+    items.push({
+      id: "hasNotes",
+      label: query.hasNotes
+        ? "Has notes"
+        : "No notes",
+    });
+  }
+
+  if (
+    query.minDurationSeconds !==
+    undefined
+  ) {
+    items.push({
+      id: "minDurationSeconds",
+      label: `Minimum ${formatAppliedDuration(
+        query.minDurationSeconds,
+      )}`,
+    });
+  }
+
+  if (
+    query.maxDurationSeconds !==
+    undefined
+  ) {
+    items.push({
+      id: "maxDurationSeconds",
+      label: `Maximum ${formatAppliedDuration(
+        query.maxDurationSeconds,
+      )}`,
+    });
+  }
+
+  if (query.publishedFrom) {
+    items.push({
+      id: "publishedFrom",
+      label: `Published from ${formatAppliedDate(
+        query.publishedFrom,
+      )}`,
+    });
+  }
+
+  if (query.publishedTo) {
+    items.push({
+      id: "publishedTo",
+      label: `Published to ${formatAppliedDate(
+        query.publishedTo,
+      )}`,
+    });
+  }
+
+  if (query.addedFrom) {
+    items.push({
+      id: "addedFrom",
+      label: `Added from ${formatAppliedDate(
+        query.addedFrom,
+      )}`,
+    });
+  }
+
+  if (query.addedTo) {
+    items.push({
+      id: "addedTo",
+      label: `Added to ${formatAppliedDate(
+        query.addedTo,
+      )}`,
+    });
+  }
+
+  return items;
+}
+
 export function BackendVideoLibrary({
   activeVideoId,
   onOpenVideo,
@@ -149,6 +438,16 @@ export function BackendVideoLibrary({
   const isLoading =
     useLibraryStore(
       (state) => state.isLoading,
+    );
+
+  const hasLoaded =
+    useLibraryStore(
+      (state) => state.hasLoaded,
+    );
+
+  const hasLoadError =
+    useLibraryStore(
+      (state) => state.hasLoadError,
     );
 
   const isMutating =
@@ -311,7 +610,7 @@ export function BackendVideoLibrary({
   ] = useState(false);
 
   const [isAddFormOpen, setIsAddFormOpen] = useState(false);
-
+  const [youtubeSearchText, setYoutubeSearchText] = useState("");
   useEffect(() => {
     void loadLibrary().catch(() => {
       // libraryStore keeps error.
@@ -498,10 +797,6 @@ export function BackendVideoLibrary({
       return;
     }
 
-    setAppliedQuery(
-      draft.query,
-    );
-
     try {
       await loadLibrary({
         page: 0,
@@ -511,6 +806,10 @@ export function BackendVideoLibrary({
           viewMode,
         ),
       });
+
+      setAppliedQuery(
+        draft.query,
+      );
     } catch {
       // libraryStore keeps error.
     }
@@ -529,9 +828,6 @@ export function BackendVideoLibrary({
     setNotesFilter("");
     setSortBy("addedAt");
     setSortDirection("desc");
-    setAppliedQuery(
-      DEFAULT_APPLIED_QUERY,
-    );
     setValidationMessage(
       null,
     );
@@ -547,6 +843,148 @@ export function BackendVideoLibrary({
           viewMode,
         ),
       });
+
+      setAppliedQuery(
+        DEFAULT_APPLIED_QUERY,
+      );
+    } catch {
+      // libraryStore keeps error.
+    }
+  }
+
+  async function removeAppliedFilter(
+    filterId: string,
+  ) {
+    let nextQuery = {
+      ...appliedQuery,
+    };
+
+    if (filterId.startsWith("tag:")) {
+      const tagId = Number(
+        filterId.slice(4),
+      );
+
+      if (!Number.isSafeInteger(tagId)) {
+        return;
+      }
+
+      const nextTagIds =
+        appliedQuery.tagIds?.filter(
+          (candidateId) =>
+            candidateId !== tagId,
+        );
+
+      nextQuery = {
+        ...nextQuery,
+        tagIds:
+          nextTagIds &&
+          nextTagIds.length > 0
+            ? nextTagIds
+            : undefined,
+      };
+
+      setSelectedTagIds(
+        (current) =>
+          current.filter(
+            (candidateId) =>
+              candidateId !== tagId,
+          ),
+      );
+    } else {
+      switch (filterId) {
+        case "q":
+          nextQuery = {
+            ...nextQuery,
+            q: undefined,
+          };
+          setSearchText("");
+          break;
+
+        case "minDurationSeconds":
+          nextQuery = {
+            ...nextQuery,
+            minDurationSeconds:
+              undefined,
+          };
+          setMinDurationSeconds("");
+          break;
+
+        case "maxDurationSeconds":
+          nextQuery = {
+            ...nextQuery,
+            maxDurationSeconds:
+              undefined,
+          };
+          setMaxDurationSeconds("");
+          break;
+
+        case "publishedFrom":
+          nextQuery = {
+            ...nextQuery,
+            publishedFrom: undefined,
+          };
+          setPublishedFrom("");
+          break;
+
+        case "publishedTo":
+          nextQuery = {
+            ...nextQuery,
+            publishedTo: undefined,
+          };
+          setPublishedTo("");
+          break;
+
+        case "addedFrom":
+          nextQuery = {
+            ...nextQuery,
+            addedFrom: undefined,
+          };
+          setAddedFrom("");
+          break;
+
+        case "addedTo":
+          nextQuery = {
+            ...nextQuery,
+            addedTo: undefined,
+          };
+          setAddedTo("");
+          break;
+
+        case "watched":
+          nextQuery = {
+            ...nextQuery,
+            watched: undefined,
+          };
+          setWatchedFilter("");
+          break;
+
+        case "hasNotes":
+          nextQuery = {
+            ...nextQuery,
+            hasNotes: undefined,
+          };
+          setNotesFilter("");
+          break;
+
+        default:
+          return;
+      }
+    }
+
+    setValidationMessage(null);
+    clearError();
+
+    try {
+      await loadLibrary({
+        page: 0,
+        size,
+        ...applyViewMode(
+          nextQuery,
+          viewMode,
+        ),
+      });
+
+      setAppliedQuery(nextQuery);
     } catch {
       // libraryStore keeps error.
     }
@@ -714,51 +1152,243 @@ export function BackendVideoLibrary({
     }
   }
 
+  function handleYouTubeSearch() {
+    const query =
+      youtubeSearchText.trim();
+
+    if (!query) {
+      return;
+    }
+
+    const url =
+      `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`;
+
+    const width = 900;
+    const height = 700;
+
+    const left =
+      window.screenX +
+      window.outerWidth -
+      width -
+      24;
+
+    const top =
+      window.screenY + 70;
+
+    window.open(
+      url,
+      "life-lab-youtube-search",
+      [
+        `width=${width}`,
+        `height=${height}`,
+        `left=${Math.max(left, 0)}`,
+        `top=${Math.max(top, 0)}`,
+        "resizable=yes",
+        "scrollbars=yes",
+        "noopener,noreferrer",
+      ].join(","),
+    );
+  }
+
+  const hasActiveFilters =
+    hasAppliedLibraryFilters(
+      appliedQuery,
+    );
+
+  const appliedFilterItems =
+    getAppliedFilterItems(
+      appliedQuery,
+      tags,
+      viewMode,
+    );
+
+  const isTrulyEmptyLibrary =
+    hasLoaded &&
+    !hasLoadError &&
+    totalElements === 0 &&
+    viewMode === "all" &&
+    !hasActiveFilters;
+
+  const isAwaitingInitialLoad =
+    !hasLoaded &&
+    !hasLoadError;
+
+  const shouldShowLoadErrorOnly =
+    hasLoadError &&
+    videos.length === 0;
+
+  const shouldShowLoadingState =
+    !shouldShowLoadErrorOnly &&
+    (isAwaitingInitialLoad ||
+      (isLoading &&
+        videos.length === 0));
+
   return (
     <section
       aria-busy={isLoading || isMutating || isPreparingDelete}
       className="w-full rounded-xl border border-(--border) bg-(--surface) p-4 sm:p-5"
     >
-      <div className="mb-4 flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
-        <div>
+      <div className="mb-4 flex items-start justify-between gap-6">
+        <div className="min-w-0">
           <h4 className="text-base font-semibold text-(--text-primary)">
             Library
           </h4>
+
           <p className="mt-1 text-sm text-(--text-muted)">
             Your saved YouTube study sources.
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-2">
           <span className="rounded-full bg-(--surface-hover) px-2.5 py-1 text-xs text-(--text-secondary)">
-            {totalElements} video{totalElements === 1 ? "" : "s"}
+            {totalElements} video
+            {totalElements === 1 ? "" : "s"}
           </span>
 
-          {/* Nút bấm để mở/đóng Form Add Video */}
           <button
             type="button"
-            onClick={() => setIsAddFormOpen((open) => !open)}
+            onClick={() =>
+              setIsAddFormOpen(
+                (open) => !open,
+              )
+            }
             aria-expanded={isAddFormOpen}
             aria-controls="library-add-video-panel"
-            aria-label={isAddFormOpen ? "Close add video" : "Add video"}
-            title={isAddFormOpen ? "Close" : "Add video"}
-            className="flex h-8 w-8 items-center justify-center rounded-lg border border-(--border) text-(--text-muted) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)"
+            aria-label={
+              isAddFormOpen
+                ? "Close find or add video"
+                : "Find or add YouTube video"
+            }
+            title={
+              isAddFormOpen
+                ? "Close"
+                : "Find or add video"
+            }
+            className="flex h-8 items-center justify-center gap-1.5 rounded-lg border border-(--border) px-2.5 text-xs font-medium text-(--text-secondary) transition-colors hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)"
           >
-            {isAddFormOpen ? <X size={14} aria-hidden="true" /> : <Plus size={14} aria-hidden="true" />}
+            {isAddFormOpen ? (
+              <X
+                size={14}
+                aria-hidden="true"
+              />
+            ) : (
+              <Plus
+                size={14}
+                aria-hidden="true"
+              />
+            )}
+
+            <span className="hidden sm:inline">
+              {isAddFormOpen
+                ? "Close"
+                : "Find / Add"}
+            </span>
           </button>
 
           <button
             type="button"
-            onClick={() => void handleRefresh()}
+            onClick={() =>
+              void handleRefresh()
+            }
             disabled={isLoading}
             aria-label="Refresh library"
             title="Refresh library"
-            className="flex h-8 w-8 items-center justify-center rounded-lg border border-(--border) text-(--text-muted) transition hover:bg-(--surface-hover) hover:text-(--text-primary) disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex h-8 w-8 items-center justify-center rounded-lg border border-(--border) text-(--text-muted) transition-colors hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
           >
-            <RefreshCw size={14} className={isLoading ? "animate-spin" : undefined} />
+            <RefreshCw
+              size={14}
+              className={
+                isLoading
+                  ? "animate-spin"
+                  : undefined
+              }
+              aria-hidden="true"
+            />
           </button>
+
         </div>
       </div>
+
+      {isAddFormOpen && (
+        <div
+          id="library-add-video-panel"
+          className="mb-3 rounded-xl border border-(--border) bg-(--app-bg) p-3"
+        >
+          <div className="mb-3">
+            <h5 className="text-sm font-medium text-(--text-primary)">
+              Find or add a YouTube video
+            </h5>
+            <p className="mt-1 text-xs text-(--text-muted)">
+              Discover on YouTube, then paste the video URL below to add it to your Library.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <div className="flex min-w-0 flex-1 items-center gap-2 rounded-lg border border-(--border) bg-(--surface) px-3 transition focus-within:border-(--border-strong) focus-within:ring-2 focus-within:ring-(--focus)">
+              <Search
+                size={14}
+                className="shrink-0 text-(--text-muted)"
+                aria-hidden="true"
+              />
+
+              <label
+                htmlFor="youtube-discovery-search"
+                className="sr-only"
+              >
+                Search YouTube
+              </label>
+
+              <input
+                id="youtube-discovery-search"
+                value={youtubeSearchText}
+                onChange={(event) =>
+                  setYoutubeSearchText(
+                    event.target.value,
+                  )
+                }
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    handleYouTubeSearch();
+                  }
+
+                  if (event.key === "Escape") {
+                    setIsAddFormOpen(false);
+                  }
+                }}
+                autoFocus
+                placeholder="Search YouTube..."
+                className="min-w-0 flex-1 bg-transparent py-2 text-sm outline-none placeholder:text-(--text-faint)"
+              />
+            </div>
+
+            <button
+              type="button"
+              onClick={handleYouTubeSearch}
+              disabled={
+                !youtubeSearchText.trim()
+              }
+              aria-label="Open YouTube search"
+              title="Search YouTube"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-(--primary-bg) text-(--primary-text) transition-colors hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <ExternalLink
+                size={14}
+                aria-hidden="true"
+              />
+            </button>
+          </div>
+
+          <div className="mt-3 border-t border-(--border) pt-3">
+            <LibraryAddVideoForm
+              onVideoAdded={(video) => {
+                setIsAddFormOpen(false);
+                onOpenVideo(video);
+                void loadLibrary(buildAppliedQuery(0)).catch(() => {});
+              }}
+            />
+          </div>
+        </div>
+      )}
 
       <LibraryViewModes
         mode={viewMode}
@@ -766,18 +1396,6 @@ export function BackendVideoLibrary({
         onChange={handleChangeViewMode}
       />
 
-      {/* Form Add Video giờ đây chỉ hiện ra khi bấm nút Plus */}
-      {isAddFormOpen && (
-        <div id="library-add-video-panel" className="mt-3">
-          <LibraryAddVideoForm
-            onVideoAdded={(video) => {
-              setIsAddFormOpen(false); // Tự động đóng form sau khi add thành công
-              onOpenVideo(video);
-              void loadLibrary(buildAppliedQuery(0)).catch(() => {});
-            }}
-          />
-        </div>
-      )}
       <LibraryFilters
         tags={tags}
         searchText={searchText}
@@ -826,6 +1444,9 @@ export function BackendVideoLibrary({
         validationMessage={
           validationMessage
         }
+        appliedFilters={
+          appliedFilterItems
+        }
         onSearchTextChange={
           setSearchText
         }
@@ -867,10 +1488,13 @@ export function BackendVideoLibrary({
         }
         onApply={applyFilters}
         onReset={resetFilters}
+        onRemoveAppliedFilter={
+          removeAppliedFilter
+        }
       />
 
       <details className="mt-4">
-        <summary className="cursor-pointer select-none text-sm text-(--text-secondary) hover:text-(--text-primary)">
+        <summary className="cursor-pointer select-none rounded-lg text-sm text-(--text-secondary) outline-none hover:text-(--text-primary) focus-visible:ring-2 focus-visible:ring-(--focus)">
           Manage tags
         </summary>
 
@@ -903,8 +1527,13 @@ export function BackendVideoLibrary({
                     key={field}
                     className="text-xs text-(--danger-text)"
                   >
-                    {field}:{" "}
-                    {message}
+                    {getLibraryFieldLabel(
+                      field,
+                    )}:{" "}
+                    {getLibraryValidationMessage(
+                      field,
+                      message,
+                    )}
                   </p>
                 ),
               )}
@@ -913,8 +1542,7 @@ export function BackendVideoLibrary({
         </div>
       )}
 
-      {isLoading &&
-      videos.length === 0 ? (
+      {shouldShowLoadErrorOnly ? null : shouldShowLoadingState ? (
         <div
           role="status"
           className="flex min-h-48 items-center justify-center"
@@ -929,12 +1557,41 @@ export function BackendVideoLibrary({
           className="mt-4 rounded-2xl border border-dashed border-(--border) bg-(--app-bg) p-8 text-center"
         >
           <p className="text-sm font-medium text-(--text-secondary)">
-            No videos found
+            {isTrulyEmptyLibrary
+              ? "Your Library is empty"
+              : "No matching videos"}
           </p>
 
           <p className="mt-1 text-sm text-(--text-muted)">
-            No Library Video matches the current search and filter conditions. Change or reset the conditions to search again.
+            {isTrulyEmptyLibrary
+              ? "Add your first YouTube video to start building your saved study sources."
+              : "Try changing your search, filters, or Library view to find different videos."}
           </p>
+
+          {isTrulyEmptyLibrary ? (
+            <div className="mt-4 flex flex-wrap justify-center gap-2">
+              <button
+                type="button"
+                onClick={() =>
+                  setIsAddFormOpen(true)
+                }
+                className="rounded-lg bg-(--primary-bg) px-3 py-2 text-xs font-medium text-(--primary-text) transition hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)"
+              >
+                Find or add your first video
+              </button>
+            </div>
+          ) : hasActiveFilters ? (
+            <button
+              type="button"
+              onClick={() =>
+                void resetFilters()
+              }
+              disabled={isLoading}
+              className="mt-4 rounded-lg border border-(--border) px-3 py-2 text-xs text-(--text-secondary) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              Reset filters
+            </button>
+          ) : null}
         </div>
       ) : (
         <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
@@ -951,6 +1608,7 @@ export function BackendVideoLibrary({
                   isMutating ||
                   isPreparingDelete
                 }
+                viewMode={viewMode}
                 onOpen={
                   onOpenVideo
                 }
@@ -990,14 +1648,14 @@ export function BackendVideoLibrary({
               )}" from your Library?`
             : "Delete video from Library?"
         }
-        description="This removes only the personal Library entry and its Library-specific data. Historical Note and Task context is preserved according to the impact below."
+        description="This removes the personal Library entry, its watch history, and its assigned tags. Notes and Tasks are preserved; exact YouTube source preservation is shown below."
         details={
           pendingDelete
             ? [
-                `${pendingDelete.impact.watchSessionCountToDelete} watch session(s) will be deleted.`,
-                `${pendingDelete.impact.tagLinkCountToDelete} tag link(s) will be removed.`,
-                `${pendingDelete.impact.noteCountPreserved} note(s) will be preserved.`,
-                `${pendingDelete.impact.taskCountPreserved} task(s) will be preserved.`,
+                `${pendingDelete.impact.watchSessionCountToDelete} watch history ${pendingDelete.impact.watchSessionCountToDelete === 1 ? "entry" : "entries"} will be removed.`,
+                `${pendingDelete.impact.tagLinkCountToDelete} ${pendingDelete.impact.tagLinkCountToDelete === 1 ? "tag" : "tags"} will be removed from this Library video.`,
+                `${pendingDelete.impact.noteCountPreserved} ${pendingDelete.impact.noteCountPreserved === 1 ? "Note" : "Notes"} will be preserved.`,
+                `${pendingDelete.impact.taskCountPreserved} ${pendingDelete.impact.taskCountPreserved === 1 ? "Task" : "Tasks"} will be preserved.`,
                 pendingDelete.impact.youtubeSourcePreserved
                   ? "The exact YouTube source will be preserved."
                   : "The exact YouTube source will not be preserved.",

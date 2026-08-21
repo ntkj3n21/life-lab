@@ -218,7 +218,7 @@ export function TagManager() {
                 Tag Manager
               </p>
 
-              <p className="text-xs text-(--text-faint)">
+              <p className="text-xs text-(--text-muted)">
                 Rename or delete your tags.
               </p>
             </div>
@@ -248,7 +248,7 @@ export function TagManager() {
           0 ? (
           <p
             role="status"
-            className="mt-3 rounded-lg border border-dashed border-(--border) p-3 text-xs text-(--text-faint)"
+            className="mt-3 rounded-lg border border-dashed border-(--border) p-3 text-xs text-(--text-muted)"
           >
             No tags yet.
           </p>
@@ -308,7 +308,7 @@ export function TagManager() {
                             cancelEditing();
                           }
                         }}
-                        className="min-w-0 flex-1 rounded-lg border border-(--border-strong) bg-(--app-bg) px-2 py-1.5 text-xs outline-none focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
+                        className="h-10 min-w-0 flex-1 rounded-lg border border-(--border-strong) bg-(--app-bg) px-2 text-xs outline-none focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50 xl:h-8"
                       />
 
                       <button
@@ -323,7 +323,7 @@ export function TagManager() {
                           )
                         }
                         aria-label="Save tag name"
-                        className="rounded-lg border border-(--border-strong) p-1.5 text-(--text-secondary) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
+                        className="flex h-10 w-10 items-center justify-center rounded-lg border border-(--border-strong) text-(--text-secondary) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40 xl:h-8 xl:w-8"
                         title="Save"
                       >
                         <Check
@@ -341,7 +341,7 @@ export function TagManager() {
                           cancelEditing
                         }
                         aria-label="Cancel tag rename"
-                        className="rounded-lg border border-(--border-strong) p-1.5 text-(--text-muted) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
+                        className="flex h-10 w-10 items-center justify-center rounded-lg border border-(--border-strong) text-(--text-muted) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40 xl:h-8 xl:w-8"
                         title="Cancel"
                       >
                         <X
@@ -367,7 +367,7 @@ export function TagManager() {
                           )
                         }
                         aria-label={`Rename tag ${tag.name}`}
-                        className="rounded-lg border border-(--border) p-1.5 text-(--text-muted) hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
+                        className="flex h-10 w-10 items-center justify-center rounded-lg border border-(--border) text-(--text-muted) hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40 xl:h-8 xl:w-8"
                         title="Rename tag"
                       >
                         <Pencil
@@ -387,7 +387,7 @@ export function TagManager() {
                           )
                         }
                         aria-label={`Delete tag ${tag.name}`}
-                        className="rounded-lg border border-(--border) p-1.5 text-(--text-muted) hover:bg-(--surface-hover) hover:text-(--danger-text) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
+                        className="flex h-10 w-10 items-center justify-center rounded-lg border border-(--border) text-(--text-muted) hover:bg-(--surface-hover) hover:text-(--danger-text) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40 xl:h-8 xl:w-8"
                         title="Delete tag"
                       >
                         <Trash2

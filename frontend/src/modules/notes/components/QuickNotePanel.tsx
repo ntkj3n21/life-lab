@@ -2,10 +2,15 @@ import {
   useEffect,
   useState,
 } from "react";
+import { useNavigate } from "react-router-dom";
+
+import {
+  ChevronDown,
+} from "lucide-react";
 
 import { ConfirmDialog } from "../../../components/ui/ConfirmDialog";
+import { ApiError } from "../../../lib/api";
 import { useContextStore } from "../../../stores/contextStore";
-import { useLibraryStore } from "../../../stores/libraryStore";
 import { useNoteStore } from "../../../stores/noteStore";
 import { useReverseContextNavigation } from "../../context/hooks/useReverseContextNavigation";
 import type {
@@ -20,13 +25,24 @@ interface PendingNoteDelete {
   impact: NoteDeleteImpact;
 }
 
+interface ContextError {
+  libraryVideoId: number | null;
+  message: string;
+}
+
+function getErrorMessage(
+  error: unknown,
+) {
+  return error instanceof ApiError
+    ? error.message
+    : "Something went wrong.";
+}
+
 export function QuickNotePanel() {
+  const navigate = useNavigate();
+
   const activeContext = useContextStore(
     (state) => state.activeContext,
-  );
-
-  const videos = useLibraryStore(
-    (state) => state.videos,
   );
 
   const notes = useNoteStore(
@@ -41,17 +57,29 @@ export function QuickNotePanel() {
     (state) => state.totalElements,
   );
 
-  const isLoading = useNoteStore(
-    (state) => state.isLoading,
+  const notesLoadStatus = useNoteStore(
+    (state) => state.notesLoadStatus,
   );
 
   const isMutating = useNoteStore(
     (state) => state.isMutating,
   );
 
-  const error = useNoteStore(
-    (state) => state.error,
+  const notesLoadError = useNoteStore(
+    (state) => state.notesLoadError,
   );
+
+  const videoNotesLoadStatus =
+    useNoteStore(
+      (state) =>
+        state.videoNotesLoadStatus,
+    );
+
+  const videoNotesLoadErrors =
+    useNoteStore(
+      (state) =>
+        state.videoNotesLoadErrors,
+    );
 
   const loadNotes = useNoteStore(
     (state) => state.loadNotes,
@@ -119,6 +147,21 @@ export function QuickNotePanel() {
     setIsPreparingDelete,
   ] = useState(false);
 
+  const [
+    createError,
+    setCreateError,
+  ] = useState<ContextError | null>(null);
+
+  const [
+    actionError,
+    setActionError,
+  ] = useState<ContextError | null>(null);
+
+  const [
+    deleteErrorMessage,
+    setDeleteErrorMessage,
+  ] = useState<string | null>(null);
+
   const activeLibraryVideoId =
     activeContext?.entityType ===
       "video" &&
@@ -130,21 +173,38 @@ export function QuickNotePanel() {
         )
       : null;
 
-  const activeVideo =
-    activeLibraryVideoId !== null
-      ? videos.find(
-          (video) =>
-            video.id ===
-            activeLibraryVideoId,
-        )
-      : undefined;
-
   const currentVideoNotes =
     activeLibraryVideoId !== null
       ? videoNotesByVideo[
           activeLibraryVideoId
         ] ?? []
       : [];
+
+  const currentVideoLoadStatus =
+    activeLibraryVideoId !== null
+      ? videoNotesLoadStatus[
+          activeLibraryVideoId
+        ] ?? "idle"
+      : "idle";
+
+  const currentVideoLoadError =
+    activeLibraryVideoId !== null
+      ? videoNotesLoadErrors[
+          activeLibraryVideoId
+        ] ?? null
+      : null;
+
+  const createErrorMessage =
+    createError?.libraryVideoId ===
+    activeLibraryVideoId
+      ? createError.message
+      : null;
+
+  const actionErrorMessage =
+    actionError?.libraryVideoId ===
+    activeLibraryVideoId
+      ? actionError.message
+      : null;
 
   useEffect(() => {
     void loadNotes({
@@ -187,6 +247,7 @@ export function QuickNotePanel() {
     }
 
     clearError();
+    setCreateError(null);
 
     const timestampSeconds =
       includeTimestamp &&
@@ -213,8 +274,13 @@ export function QuickNotePanel() {
       );
 
       setCaptureContent("");
-    } catch {
-      // noteStore keeps error.
+    } catch (error) {
+      setCreateError({
+        libraryVideoId:
+          activeLibraryVideoId,
+        message:
+          getErrorMessage(error),
+      });
     }
   }
 
@@ -222,6 +288,7 @@ export function QuickNotePanel() {
     note: Note,
   ) {
     clearError();
+    setActionError(null);
 
     setEditingNoteId(
       note.id,
@@ -255,6 +322,8 @@ export function QuickNotePanel() {
       return;
     }
 
+    setActionError(null);
+
     try {
       await updateNote(
         noteId,
@@ -262,8 +331,13 @@ export function QuickNotePanel() {
       );
 
       handleCancelEdit();
-    } catch {
-      // noteStore keeps error.
+    } catch (error) {
+      setActionError({
+        libraryVideoId:
+          activeLibraryVideoId,
+        message:
+          getErrorMessage(error),
+      });
     }
   }
 
@@ -278,6 +352,8 @@ export function QuickNotePanel() {
     }
 
     clearError();
+    setActionError(null);
+    setDeleteErrorMessage(null);
     setIsPreparingDelete(true);
 
     try {
@@ -290,8 +366,13 @@ export function QuickNotePanel() {
         note,
         impact,
       });
-    } catch {
-      // noteStore keeps error.
+    } catch (error) {
+      setActionError({
+        libraryVideoId:
+          activeLibraryVideoId,
+        message:
+          getErrorMessage(error),
+      });
     } finally {
       setIsPreparingDelete(false);
     }
@@ -306,6 +387,7 @@ export function QuickNotePanel() {
     }
 
     clearError();
+    setDeleteErrorMessage(null);
 
     try {
       await deleteNote(
@@ -320,22 +402,29 @@ export function QuickNotePanel() {
       }
 
       setPendingDelete(null);
-    } catch {
-      // noteStore keeps error.
+    } catch (error) {
+      setDeleteErrorMessage(
+        getErrorMessage(error),
+      );
     }
   }
 
   async function handleViewSource(
     noteId: number,
   ) {
+    setActionError(null);
+
     try {
       await openNoteContext(
         noteId,
       );
-    } catch {
-      /*
-       * reverseContextStore keeps the API error.
-       */
+    } catch (error) {
+      setActionError({
+        libraryVideoId:
+          activeLibraryVideoId,
+        message:
+          getErrorMessage(error),
+      });
     }
   }
 
@@ -348,6 +437,11 @@ export function QuickNotePanel() {
         key={note.id}
         note={note}
         current={current}
+        variant={
+          current
+            ? "workspace-current"
+            : "workspace-recent"
+        }
         isMutating={
           isMutating ||
           isPreparingDelete
@@ -377,6 +471,11 @@ export function QuickNotePanel() {
         onViewSource={
           handleViewSource
         }
+        onOpenDetail={(noteId) =>
+          navigate(
+            `/notes/${noteId}`,
+          )
+        }
       />
     );
   }
@@ -384,7 +483,9 @@ export function QuickNotePanel() {
   return (
     <>
       <QuickNoteComposer
-        hasActiveVideo={Boolean(activeVideo)}
+        hasActiveVideo={
+          activeLibraryVideoId !== null
+        }
         timestamp={
           activeContext?.timestamp
         }
@@ -394,10 +495,12 @@ export function QuickNotePanel() {
         }
         isMutating={isMutating}
         errorMessage={
-          error?.message ?? null
+          createErrorMessage
         }
-        onContentChange={
-          setCaptureContent
+        onContentChange={(value) => {
+          setCaptureContent(value);
+          setCreateError(null);
+        }
         }
         onIncludeTimestampChange={
           setIncludeTimestamp
@@ -407,73 +510,126 @@ export function QuickNotePanel() {
         }
       />
 
-      <div className="mt-4 rounded-2xl border border-(--border) bg-(--app-bg) p-4">
-        <div className="flex items-center justify-between gap-3">
-          <h4 className="font-medium">
-            Current Video Notes
+      <div className="mt-4">
+        <div className="flex items-center justify-between gap-3 px-1">
+          <h4 className="text-xs font-medium uppercase tracking-wide text-(--text-muted)">
+            Current video
           </h4>
 
-          <span className="rounded-full bg-(--surface) px-2 py-1 text-xs text-(--text-muted)">
-            {currentVideoNotes.length}
+          <span className="tabular-nums text-xs text-(--text-muted)">
+            {currentVideoLoadStatus ===
+            "success"
+              ? currentVideoNotes.length
+              : "—"}
           </span>
         </div>
 
-        {activeLibraryVideoId ===
-        null ? (
-          <p className="mt-3 text-sm text-(--text-muted)">
+        {actionErrorMessage && (
+          <p
+            role="alert"
+            className="mt-2 rounded-lg border border-(--danger-border) bg-(--danger-surface) px-3 py-2 text-xs text-(--danger-text)"
+          >
+            {actionErrorMessage}
+          </p>
+        )}
+
+        {currentVideoLoadStatus ===
+          "error" && (
+          <p
+            role="alert"
+            className="mt-2 rounded-lg border border-(--danger-border) bg-(--danger-surface) px-3 py-2 text-xs text-(--danger-text)"
+          >
+            {currentVideoLoadError?.message ??
+              "Could not load notes for this video."}
+          </p>
+        )}
+
+        {activeLibraryVideoId === null ? (
+          <p className="mt-2 px-1 text-xs text-(--text-muted)">
             No active video.
           </p>
-        ) : currentVideoNotes.length ===
-          0 ? (
-          <p className="mt-3 text-sm text-(--text-muted)">
+        ) : (currentVideoLoadStatus ===
+            "idle" ||
+            currentVideoLoadStatus ===
+              "loading") &&
+          currentVideoNotes.length === 0 ? (
+          <p
+            role="status"
+            className="mt-2 px-1 text-xs text-(--text-muted)"
+          >
+            Loading video notes...
+          </p>
+        ) : currentVideoLoadStatus ===
+            "success" &&
+          currentVideoNotes.length === 0 ? (
+          <p className="mt-2 px-1 text-xs text-(--text-muted)">
             No notes for this video yet.
           </p>
-        ) : (
-          <div className="mt-3 space-y-3">
-            {currentVideoNotes.map(
-              (note) =>
-                renderNote(
-                  note,
-                  true,
-                ),
+        ) : currentVideoNotes.length > 0 ? (
+          <div className="mt-2 space-y-2">
+            {currentVideoNotes.map((note) =>
+              renderNote(note, true),
             )}
           </div>
-        )}
+        ) : null}
       </div>
 
-      <details className="mt-4 rounded-2xl border border-(--border) bg-(--app-bg) p-4">
-        <summary className="cursor-pointer text-sm font-medium text-(--text-secondary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)">
-          Recent Notes (
-          {totalElements})
+      <details className="group mt-4">
+        <summary className="flex cursor-pointer list-none items-center justify-between gap-2 rounded-lg px-1.5 py-1.5 text-xs font-medium text-(--text-muted) outline-none transition-colors hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:ring-2 focus-visible:ring-(--focus)">
+          <span>
+            Recent notes ·{" "}
+            {notesLoadStatus ===
+            "success"
+              ? totalElements
+              : "—"}
+          </span>
+
+          <ChevronDown
+            size={14}
+            className="shrink-0 text-(--text-faint) transition-transform duration-150 group-open:rotate-180"
+            aria-hidden="true"
+          />
         </summary>
 
-        {isLoading &&
-        notes.length === 0 ? (
+        {notesLoadStatus ===
+          "error" && (
           <p
-            role="status"
-            className="mt-3 text-sm text-(--text-muted)"
+            role="alert"
+            className="mt-3 rounded-lg border border-(--danger-border) bg-(--danger-surface) px-3 py-2 text-xs text-(--danger-text)"
           >
-            Loading notes...
+            {notesLoadError?.message ??
+              "Could not load recent notes."}
           </p>
-        ) : notes.length ===
-          0 ? (
+        )}
+
+        {notes.length > 0 ? (
+          <div className="mt-3 space-y-2">
+            {notes.map((note) =>
+              renderNote(
+                note,
+                false,
+              ),
+            )}
+          </div>
+        ) : notesLoadStatus ===
+          "success" ? (
           <p
             role="status"
-            className="mt-3 text-sm text-(--text-muted)"
+            className="mt-3 px-1 text-xs text-(--text-muted)"
           >
             No notes yet.
           </p>
-        ) : (
-          <div className="mt-3 space-y-3">
-            {notes.map(
-              (note) =>
-                renderNote(
-                  note,
-                  false,
-                ),
-            )}
-          </div>
-        )}
+        ) : notesLoadStatus ===
+            "idle" ||
+          notesLoadStatus ===
+            "loading" ? (
+          <p
+            role="status"
+            className="mt-3 px-1 text-xs text-(--text-muted)"
+          >
+            Loading notes...
+          </p>
+        ) : null}
       </details>
 
       <ConfirmDialog
@@ -499,15 +655,12 @@ export function QuickNotePanel() {
         }
         confirmLabel="Delete Note"
         isBusy={isMutating}
-        errorMessage={
-          pendingDelete
-            ? error?.message ?? null
-            : null
-        }
+        errorMessage={deleteErrorMessage}
         onConfirm={confirmDelete}
-        onCancel={() =>
-          setPendingDelete(null)
-        }
+        onCancel={() => {
+          setPendingDelete(null);
+          setDeleteErrorMessage(null);
+        }}
       />
     </>
   );

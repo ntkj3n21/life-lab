@@ -5,10 +5,12 @@ import {
 } from "react";
 import {
   useNavigate,
+  useOutletContext,
   useParams,
 } from "react-router-dom";
 
 import { ContextSummary } from "../../../components/context/ContextSummary";
+import type { AppShellOutletContext } from "../../../components/layout/AppShell";
 import { useContextStore } from "../../../stores/contextStore";
 import { useLibraryStore } from "../../../stores/libraryStore";
 import { useVideoWatchTracking } from "../hooks/useVideoWatchTracking";
@@ -17,13 +19,25 @@ import {
   type LibraryVideo,
 } from "../services/libraryApi";
 import { BackendVideoLibrary } from "./BackendVideoLibrary";
-import { CaptureTimeCard } from "./CaptureTimeCard";
 import { VideoStage } from "./VideoStage";
 
 export function VideoWorkspace() {
   const navigate = useNavigate();
+  const {
+    isFocusMode,
+    enterFocusMode,
+    exitFocusMode,
+  } =
+    useOutletContext<AppShellOutletContext>();
   const { libraryVideoId } =
     useParams();
+
+  useEffect(
+    () => () => {
+      exitFocusMode();
+    },
+    [exitFocusMode],
+  );
 
   const playerRef =
     useRef<HTMLVideoElement | null>(
@@ -56,6 +70,20 @@ export function VideoWorkspace() {
     useState<LibraryVideo | null>(
       null,
     );
+
+  const [
+    resolvedRouteVideoId,
+    setResolvedRouteVideoId,
+  ] = useState<number | null>(
+    null,
+  );
+
+  const [
+    failedRouteVideoId,
+    setFailedRouteVideoId,
+  ] = useState<number | null>(
+    null,
+  );
 
   const activeContext =
     useContextStore(
@@ -104,6 +132,32 @@ export function VideoWorkspace() {
         state.ensureVideo,
     );
 
+  const parsedRouteVideoId =
+    libraryVideoId === undefined
+      ? null
+      : Number(libraryVideoId);
+
+  const validRouteVideoId =
+    parsedRouteVideoId !== null &&
+    Number.isSafeInteger(
+      parsedRouteVideoId,
+    ) &&
+    parsedRouteVideoId > 0
+      ? parsedRouteVideoId
+      : null;
+
+  const isResolvingRouteVideo =
+    validRouteVideoId !== null &&
+    resolvedRouteVideoId !==
+      validRouteVideoId &&
+    failedRouteVideoId !==
+      validRouteVideoId;
+
+  const hasRouteVideoError =
+    validRouteVideoId !== null &&
+    failedRouteVideoId ===
+      validRouteVideoId;
+
   /*
    * Synchronize /library/:libraryVideoId with the
    * active Workspace context.
@@ -120,15 +174,7 @@ export function VideoWorkspace() {
       return;
     }
 
-    const parsedId =
-      Number(libraryVideoId);
-
-    if (
-      !Number.isSafeInteger(
-        parsedId,
-      ) ||
-      parsedId <= 0
-    ) {
+    if (validRouteVideoId === null) {
       navigate("/library", {
         replace: true,
       });
@@ -138,13 +184,17 @@ export function VideoWorkspace() {
 
     let cancelled = false;
 
-    void ensureVideo(parsedId)
+    void ensureVideo(validRouteVideoId)
       .then((video) => {
         if (cancelled) {
           return;
         }
 
         setRouteVideo(video);
+        setResolvedRouteVideoId(
+          validRouteVideoId,
+        );
+        setFailedRouteVideoId(null);
 
         const currentContext =
           useContextStore
@@ -175,6 +225,11 @@ export function VideoWorkspace() {
       })
       .catch(() => {
         // libraryStore keeps the API error.
+        if (!cancelled) {
+          setFailedRouteVideoId(
+            validRouteVideoId,
+          );
+        }
       });
 
     return () => {
@@ -182,6 +237,7 @@ export function VideoWorkspace() {
     };
   }, [
     libraryVideoId,
+    validRouteVideoId,
     ensureVideo,
     navigate,
     setActiveContext,
@@ -231,7 +287,6 @@ export function VideoWorkspace() {
     routeActiveVideo;
 
   const {
-    watchError,
     clearWatchError,
     finishWatchSession,
     prepareForVideoSwitch,
@@ -255,10 +310,6 @@ export function VideoWorkspace() {
     activeVideo?.youtubeSource
       .availabilityStatus ===
     "UNAVAILABLE";
-
-  const canPlayVideo =
-    Boolean(activeVideo) &&
-    !isVideoUnavailable;
 
   const activeVideoIndex =
     activeVideo
@@ -330,7 +381,8 @@ export function VideoWorkspace() {
 
     if (
       !player ||
-      !activeVideo ||
+      activeLibraryVideoId ===
+        undefined ||
       isVideoUnavailable
     ) {
       return;
@@ -364,7 +416,7 @@ export function VideoWorkspace() {
   }, [
     activeContext?.entityId,
     activeContext?.timestamp,
-    activeVideo,
+    activeLibraryVideoId,
     isVideoUnavailable,
   ]);
 
@@ -409,6 +461,7 @@ export function VideoWorkspace() {
 
     setRouteVideo(null);
     clearActiveContext();
+    exitFocusMode();
 
     navigate("/library");
   }
@@ -431,6 +484,7 @@ export function VideoWorkspace() {
     resetAfterVideoDelete();
     setRouteVideo(null);
     clearActiveContext();
+    exitFocusMode();
 
     navigate("/library", {
       replace: true,
@@ -493,6 +547,12 @@ export function VideoWorkspace() {
           isVideoUnavailable={
             isVideoUnavailable
           }
+          isResolvingVideo={
+            isResolvingRouteVideo
+          }
+          hasVideoLoadError={
+            hasRouteVideoError
+          }
           playerRef={playerRef}
           onOpenVideo={(video) =>
             void handleOpenVideo(
@@ -520,40 +580,31 @@ export function VideoWorkspace() {
           onIncreaseTimestamp={() =>
             increaseTimestamp(10)
           }
+          onEnterFocus={
+            activeVideo &&
+            !isFocusMode
+              ? enterFocusMode
+              : undefined
+          }
+          isFocusMode={
+            isFocusMode
+          }
+          onExitFocus={
+            exitFocusMode
+          }
         />
 
-        <div className="mt-6 grid grid-cols-1 gap-4 xl:grid-cols-[1fr_1.4fr]">
-          <ContextSummary />
+      <div className="mt-4">
+        <ContextSummary />
+      </div>
 
-          <CaptureTimeCard
-            timestamp={
-              activeContext
-                ?.timestamp
-            }
-            canPlayVideo={
-              canPlayVideo
-            }
-            hasActiveVideo={Boolean(
-              activeVideo,
-            )}
-            watchErrorMessage={
-              watchError
-                ?.message ??
-              null
-            }
-            onDecrease={() =>
-              decreaseTimestamp(5)
-            }
-            onReset={() =>
-              setTimestamp(0)
-            }
-            onIncrease={() =>
-              increaseTimestamp(5)
-            }
-          />
-        </div>
-
-        <div className="mt-6 w-full">
+        <div
+          className={`mt-4 w-full ${
+            isFocusMode
+              ? "xl:hidden"
+              : ""
+          }`}
+        >
           <BackendVideoLibrary
             activeVideoId={
               Number.isFinite(

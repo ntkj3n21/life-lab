@@ -58,7 +58,7 @@ export function AuthGate({ children }: AuthGateProps) {
             <button
               type="button"
               onClick={() => void initialize()}
-              className="mt-5 rounded-xl bg-(--primary-bg) px-4 py-2 text-sm font-semibold text-(--primary-text) hover:bg-(--primary-bg)"
+              className="mt-5 rounded-xl bg-(--primary-bg) px-4 py-2 text-sm font-semibold text-(--primary-text) hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)"
             >
               Try again
             </button>

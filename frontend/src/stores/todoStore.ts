@@ -18,6 +18,12 @@ import {
   type UpdateTaskInput,
 } from "../modules/todo/services/taskApi";
 
+type LoadStatus =
+  | "idle"
+  | "loading"
+  | "success"
+  | "error";
+
 interface TodoStore {
   tasks: Task[];
 
@@ -31,6 +37,8 @@ interface TodoStore {
   isLoading: boolean;
   isLoadingPlan: boolean;
   isMutating: boolean;
+  dailyPlanLoadStatus: LoadStatus;
+  dailyPlanRevision: number;
 
   error: ApiError | null;
 
@@ -97,6 +105,9 @@ const initialState = {
   isLoading: false,
   isLoadingPlan: false,
   isMutating: false,
+  dailyPlanLoadStatus:
+    "idle" as LoadStatus,
+  dailyPlanRevision: 0,
 
   error: null as ApiError | null,
 };
@@ -170,6 +181,8 @@ export const useTodoStore =
           set({
             isLoadingPlan:
               true,
+            dailyPlanLoadStatus:
+              "loading",
             error: null,
           });
 
@@ -179,6 +192,8 @@ export const useTodoStore =
 
             set({
               dailyPlan,
+              dailyPlanLoadStatus:
+                "success",
             });
 
             return dailyPlan;
@@ -188,6 +203,8 @@ export const useTodoStore =
 
             set({
               error: apiError,
+              dailyPlanLoadStatus:
+                "error",
             });
 
             throw apiError;
@@ -224,6 +241,12 @@ export const useTodoStore =
 
               totalElements:
                 state.totalElements +
+                1,
+
+              dailyPlanLoadStatus:
+                "idle",
+              dailyPlanRevision:
+                state.dailyPlanRevision +
                 1,
             }));
 
@@ -274,6 +297,12 @@ export const useTodoStore =
               totalElements:
                 state.totalElements +
                 1,
+
+              dailyPlanLoadStatus:
+                "idle",
+              dailyPlanRevision:
+                state.dailyPlanRevision +
+                1,
             }));
 
             return task;
@@ -315,6 +344,11 @@ export const useTodoStore =
                 state.tasks,
                 task,
               ),
+            dailyPlanLoadStatus:
+              "idle",
+            dailyPlanRevision:
+              state.dailyPlanRevision +
+              1,
           }));
 
           return task;
@@ -356,6 +390,11 @@ export const useTodoStore =
                 state.tasks,
                 task,
               ),
+            dailyPlanLoadStatus:
+              "idle",
+            dailyPlanRevision:
+              state.dailyPlanRevision +
+              1,
           }));
 
           return task;
@@ -402,6 +441,12 @@ export const useTodoStore =
                 state.totalElements -
                   1,
               ),
+
+            dailyPlanLoadStatus:
+              "idle",
+            dailyPlanRevision:
+              state.dailyPlanRevision +
+              1,
           }));
         } catch (error) {
           const apiError =

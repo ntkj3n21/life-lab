@@ -43,7 +43,7 @@ export function LibraryViewModes({
       <div
         role="group"
         aria-label="Library view mode"
-        className="flex flex-wrap items-center gap-2"
+        className="inline-flex max-w-full items-center gap-0.5 rounded-lg border border-(--border) bg-(--app-bg) p-1"
       >
         {modes.map((item) => {
           const isActive =
@@ -63,10 +63,10 @@ export function LibraryViewModes({
                   item.value,
                 )
               }
-              className={`rounded-full px-3 py-1.5 text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed ${
+              className={`rounded-md px-3 py-1.5 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed ${
                 isActive
-                  ? "bg-(--primary-bg) text-(--primary-text)"
-                  : "bg-(--surface-subtle) text-(--text-secondary) hover:bg-(--surface-hover) hover:text-(--text-primary) disabled:opacity-70"
+                  ? "bg-(--surface-active) text-(--text-primary)"
+                  : "text-(--text-muted) hover:bg-(--surface-hover) hover:text-(--text-primary) disabled:opacity-70"
               }`}
             >
               {item.label}

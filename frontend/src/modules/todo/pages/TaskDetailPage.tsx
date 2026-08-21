@@ -28,6 +28,10 @@ import {
   type Task,
   type TaskStatus,
 } from "../services/taskApi";
+import {
+  formatTaskSourceLabel,
+  formatTaskStatusLabel,
+} from "../presentation/taskLabels";
 
 function getErrorMessage(error: unknown) {
   if (error instanceof ApiError) {
@@ -57,34 +61,6 @@ function formatDateTime(
       timeStyle: "short",
     },
   ).format(parsed);
-}
-
-function formatSourceLabel(task: Task) {
-  switch (task.sourceStatus) {
-    case "HAS_SOURCE":
-      return task.sourceNoteId
-        ? `Note #${task.sourceNoteId}`
-        : "Note source";
-
-    case "SOURCE_MISSING":
-      return "Source missing";
-
-    default:
-      return "Independent";
-  }
-}
-
-function formatStatusLabel(
-  status: TaskStatus,
-) {
-  switch (status) {
-    case "NOT_STARTED":
-      return "Not started";
-    case "IN_PROGRESS":
-      return "In progress";
-    case "COMPLETED":
-      return "Completed";
-  }
 }
 
 export function TaskDetailPage() {
@@ -507,7 +483,7 @@ export function TaskDetailPage() {
             <section className="mt-6 rounded-2xl border border-(--border) bg-(--surface) p-5">
               <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
                 <div className="rounded-xl border border-(--border) bg-(--app-bg) p-3">
-                  <p className="text-[11px] font-medium text-(--text-faint)">
+                  <p className="text-[11px] font-medium text-(--text-muted)">
                     Status
                   </p>
 
@@ -545,7 +521,7 @@ export function TaskDetailPage() {
                 </div>
 
                 <div className="rounded-xl border border-(--border) bg-(--app-bg) p-3">
-                  <p className="text-[11px] font-medium text-(--text-faint)">
+                  <p className="text-[11px] font-medium text-(--text-muted)">
                     Deadline
                   </p>
 
@@ -556,7 +532,7 @@ export function TaskDetailPage() {
                 </div>
 
                 <div className="rounded-xl border border-(--border) bg-(--app-bg) p-3">
-                  <p className="text-[11px] font-medium text-(--text-faint)">
+                  <p className="text-[11px] font-medium text-(--text-muted)">
                     Source
                   </p>
 
@@ -568,14 +544,14 @@ export function TaskDetailPage() {
                         : "text-(--text-secondary)"
                     }`}
                   >
-                    {formatSourceLabel(
+                    {formatTaskSourceLabel(
                       task,
                     )}
                   </p>
                 </div>
 
                 <div className="rounded-xl border border-(--border) bg-(--app-bg) p-3">
-                  <p className="text-[11px] font-medium text-(--text-faint)">
+                  <p className="text-[11px] font-medium text-(--text-muted)">
                     Created
                   </p>
 
@@ -587,7 +563,7 @@ export function TaskDetailPage() {
                 </div>
 
                 <div className="rounded-xl border border-(--border) bg-(--app-bg) p-3">
-                  <p className="text-[11px] font-medium text-(--text-faint)">
+                  <p className="text-[11px] font-medium text-(--text-muted)">
                     Updated
                   </p>
 
@@ -674,7 +650,7 @@ export function TaskDetailPage() {
                           handleCancelEdit
                         }
                         disabled={isMutating}
-                        className="rounded-xl border border-(--border) px-4 py-2 text-sm text-(--text-secondary) transition hover:bg-(--app-bg) hover:text-(--text-primary) disabled:cursor-not-allowed disabled:opacity-50"
+                        className="rounded-xl border border-(--border) px-4 py-2 text-sm text-(--text-secondary) transition hover:bg-(--app-bg) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
                       >
                         Cancel
                       </button>
@@ -688,7 +664,7 @@ export function TaskDetailPage() {
                           isMutating ||
                           !title.trim()
                         }
-                        className="rounded-xl bg-(--primary-bg) px-4 py-2 text-sm font-medium text-(--primary-text) transition hover:bg-(--primary-hover) disabled:cursor-not-allowed disabled:opacity-50"
+                        className="rounded-xl bg-(--primary-bg) px-4 py-2 text-sm font-medium text-(--primary-text) transition hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
                       >
                         {isMutating
                           ? "Saving..."
@@ -711,24 +687,24 @@ export function TaskDetailPage() {
 
                     <div className="mt-5 grid gap-3 sm:grid-cols-2">
                       <div className="rounded-xl border border-(--border) bg-(--app-bg) p-3">
-                        <p className="text-[11px] font-medium text-(--text-faint)">
+                        <p className="text-[11px] font-medium text-(--text-muted)">
                           Current status
                         </p>
 
                         <p className="mt-1 text-sm text-(--text-secondary)">
-                          {formatStatusLabel(
+                          {formatTaskStatusLabel(
                             task.status,
                           )}
                         </p>
                       </div>
 
                       <div className="rounded-xl border border-(--border) bg-(--app-bg) p-3">
-                        <p className="text-[11px] font-medium text-(--text-faint)">
-                          Source state
+                        <p className="text-[11px] font-medium text-(--text-muted)">
+                          Source
                         </p>
 
                         <p className="mt-1 text-sm text-(--text-secondary)">
-                          {task.sourceStatus}
+                          {formatTaskSourceLabel(task)}
                         </p>
                       </div>
                     </div>

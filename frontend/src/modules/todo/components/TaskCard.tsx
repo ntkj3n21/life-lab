@@ -1,13 +1,22 @@
 import {
+  Ellipsis,
   Eye,
   ExternalLink,
   Pencil,
   Trash2,
 } from "lucide-react";
-import { useState } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 import { ConfirmDialog } from "../../../components/ui/ConfirmDialog";
 import { useReverseContextNavigation } from "../../context/hooks/useReverseContextNavigation";
+import {
+  formatTaskSourceLabel,
+  formatTaskStatusLabel,
+} from "../presentation/taskLabels";
 import type {
   Task,
   TaskStatus,
@@ -16,6 +25,10 @@ import type {
 
 interface TaskCardProps {
   task: Task;
+  variant?:
+    | "default"
+    | "workspace"
+    | "planner";
 
   isMutating: boolean;
 
@@ -38,31 +51,55 @@ interface TaskCardProps {
   ) => void;
 }
 
-function formatSource(
-  task: Task,
+function getTaskStatusClassName(
+  status: TaskStatus,
 ) {
-  switch (task.sourceStatus) {
-    case "HAS_SOURCE":
-      return task.sourceNoteId
-        ? `Note #${task.sourceNoteId}`
-        : "Note source";
-
-    case "SOURCE_MISSING":
-      return "Source missing";
-
-    default:
-      return "Independent";
+  switch (status) {
+    case "NOT_STARTED":
+      return "bg-(--surface-hover) text-(--text-secondary)";
+    case "IN_PROGRESS":
+      return "bg-(--warning-surface) text-(--warning-text)";
+    case "COMPLETED":
+      return "bg-(--success-surface) text-(--success-text)";
   }
 }
 
 export function TaskCard({
   task,
+  variant = "default",
   isMutating,
   onUpdate,
   onStatusChange,
   onDelete,
   onOpenDetail,
 }: TaskCardProps) {
+  const isWorkspace =
+    variant === "workspace";
+
+  const isPlanner =
+    variant === "planner";
+
+  const isCompact =
+    isWorkspace || isPlanner;
+
+  const [
+    plannerActionsOpen,
+    setPlannerActionsOpen,
+  ] = useState(false);
+
+  const plannerActionsTriggerRef =
+    useRef<HTMLButtonElement | null>(
+      null,
+    );
+
+  const plannerActionsPanelRef =
+    useRef<HTMLDivElement | null>(
+      null,
+    );
+
+  const plannerActionsId =
+    `planner-task-actions-${task.id}`;
+
   const [
     isEditing,
     setIsEditing,
@@ -99,6 +136,68 @@ export function TaskCard({
 
   const { openTaskContext } =
     useReverseContextNavigation();
+
+  useEffect(() => {
+    if (!plannerActionsOpen) {
+      return;
+    }
+
+    function handlePointerDown(
+      event: PointerEvent,
+    ) {
+      if (!(event.target instanceof Node)) {
+        return;
+      }
+
+      if (
+        plannerActionsTriggerRef.current?.contains(
+          event.target,
+        ) ||
+        plannerActionsPanelRef.current?.contains(
+          event.target,
+        )
+      ) {
+        return;
+      }
+
+      setPlannerActionsOpen(false);
+    }
+
+    function handleKeyDown(
+      event: KeyboardEvent,
+    ) {
+      if (event.key !== "Escape") {
+        return;
+      }
+
+      setPlannerActionsOpen(false);
+      plannerActionsTriggerRef.current?.focus();
+    }
+
+    document.addEventListener(
+      "pointerdown",
+      handlePointerDown,
+    );
+    document.addEventListener(
+      "keydown",
+      handleKeyDown,
+    );
+
+    return () => {
+      document.removeEventListener(
+        "pointerdown",
+        handlePointerDown,
+      );
+      document.removeEventListener(
+        "keydown",
+        handleKeyDown,
+      );
+    };
+  }, [plannerActionsOpen]);
+
+  function closePlannerActions() {
+    setPlannerActionsOpen(false);
+  }
 
   function handleStartEditing() {
     setTitle(
@@ -204,7 +303,13 @@ export function TaskCard({
 
   return (
     <>
-      <article className="rounded-xl border border-(--border) bg-(--surface) p-3">
+      <article
+        className={`rounded-xl border border-(--border) bg-(--surface) transition-colors duration-150 hover:border-(--border-strong) hover:bg-(--surface-hover) ${
+          isCompact
+            ? "p-2.5"
+            : "p-3"
+        }`}
+      >
         {isEditing ? (
           <div className="space-y-2">
             <label
@@ -225,7 +330,11 @@ export function TaskCard({
                 )
               }
               placeholder="Task title"
-              className="w-full rounded-lg border border-(--border) bg-(--app-bg) px-3 py-2 text-sm outline-none focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
+              className={`w-full rounded-lg border border-(--border) bg-(--app-bg) px-3 py-2 text-sm outline-none focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50 ${
+                isCompact
+                  ? "min-h-10"
+                  : ""
+              }`}
             />
 
             <label
@@ -265,7 +374,11 @@ export function TaskCard({
                   event.target.value,
                 )
               }
-              className="w-full rounded-lg border border-(--border) bg-(--app-bg) px-3 py-2 text-xs outline-none focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
+              className={`w-full rounded-lg border border-(--border) bg-(--app-bg) px-3 py-2 text-xs outline-none focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50 ${
+                isCompact
+                  ? "min-h-10"
+                  : ""
+              }`}
             />
 
             <div className="flex justify-end gap-2">
@@ -275,7 +388,11 @@ export function TaskCard({
                 onClick={
                   handleCancelEditing
                 }
-                className="rounded-lg border border-(--border) px-2 py-1 text-xs text-(--text-secondary) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
+                className={`rounded-lg border border-(--border) px-2 py-1 text-xs text-(--text-secondary) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40 ${
+                  isCompact
+                    ? "min-h-10 xl:min-h-8"
+                    : ""
+                }`}
               >
                 Cancel
               </button>
@@ -289,7 +406,11 @@ export function TaskCard({
                 onClick={() =>
                   void handleSave()
                 }
-                className="rounded-lg bg-(--primary-bg) px-3 py-1 text-xs font-medium text-(--primary-text) transition hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
+                className={`rounded-lg bg-(--primary-bg) px-3 py-1 text-xs font-medium text-(--primary-text) transition hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50 ${
+                  isCompact
+                    ? "min-h-10 xl:min-h-8"
+                    : ""
+                }`}
               >
                 {isMutating
                   ? "Saving..."
@@ -305,53 +426,253 @@ export function TaskCard({
                   {task.title}
                 </p>
 
-                {task.description && (
+                {variant === "default" &&
+                  task.description && (
                   <p className="mt-1 whitespace-pre-wrap wrap-break-word text-xs leading-5 text-(--text-muted)">
                     {task.description}
                   </p>
-                )}
+                  )}
               </div>
 
-              <button
-                type="button"
-                disabled={isMutating}
-                onClick={
-                  handleStartEditing
-                }
-                aria-label={`Edit task ${task.title}`}
-                className="shrink-0 rounded-lg border border-(--border) p-1.5 text-(--text-muted) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
-                title="Edit task"
-              >
-                <Pencil
-                  size={13}
-                  aria-hidden="true"
-                />
-              </button>
+              {isPlanner ? (
+                <button
+                  ref={plannerActionsTriggerRef}
+                  type="button"
+                  disabled={isMutating}
+                  aria-label={`Actions for task ${task.title}`}
+                  aria-expanded={plannerActionsOpen}
+                  aria-controls={plannerActionsId}
+                  onClick={() =>
+                    setPlannerActionsOpen(
+                      (open) => !open,
+                    )
+                  }
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-(--border) text-(--text-muted) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40 xl:h-8 xl:w-8"
+                  title="Task actions"
+                >
+                  <Ellipsis
+                    size={16}
+                    aria-hidden="true"
+                  />
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  disabled={isMutating}
+                  onClick={
+                    handleStartEditing
+                  }
+                  aria-label={`Edit task ${task.title}`}
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-(--border) text-(--text-muted) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40 xl:h-8 xl:w-8"
+                  title="Edit task"
+                >
+                  <Pencil
+                    size={13}
+                    aria-hidden="true"
+                  />
+                </button>
+              )}
             </div>
 
-            <div className="mt-3 flex flex-wrap gap-1.5 text-[10px]">
-              <span
-                className={`rounded-full px-2 py-1 ${
-                  task.sourceStatus ===
-                  "SOURCE_MISSING"
-                    ? "bg-(--danger-surface) text-(--danger-text)"
-                    : task.sourceStatus ===
-                        "HAS_SOURCE"
-                      ? "bg-(--surface-hover) text-(--text-secondary)"
-                      : "bg-(--surface-hover) text-(--text-muted)"
-                }`}
-              >
-                {formatSource(task)}
-              </span>
+            {isPlanner &&
+              plannerActionsOpen && (
+                <div
+                  ref={plannerActionsPanelRef}
+                  id={plannerActionsId}
+                  className="mt-2 grid gap-1 rounded-xl border border-(--border) bg-(--panel-bg) p-2 shadow-[var(--elevated-shadow)] sm:grid-cols-2"
+                >
+                  {onOpenDetail && (
+                    <button
+                      type="button"
+                      disabled={isMutating}
+                      onClick={() => {
+                        closePlannerActions();
+                        onOpenDetail(
+                          task.id,
+                        );
+                      }}
+                      className="flex min-h-10 w-full items-center gap-2 rounded-lg px-2 text-left text-xs text-(--text-secondary) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
+                    >
+                      <Eye
+                        size={13}
+                        aria-hidden="true"
+                      />
+                      Details
+                    </button>
+                  )}
 
-              <span className="rounded-full bg-(--surface-hover) px-2 py-1 text-(--text-secondary)">
-                {task.deadline
-                  ? `Due ${task.deadline}`
-                  : "No deadline"}
-              </span>
-            </div>
+                  {task.sourceStatus ===
+                    "HAS_SOURCE" && (
+                    <button
+                      type="button"
+                      disabled={isMutating}
+                      onClick={() => {
+                        closePlannerActions();
+                        void handleViewSource();
+                      }}
+                      className="flex min-h-10 w-full items-center gap-2 rounded-lg px-2 text-left text-xs text-(--text-secondary) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
+                    >
+                      <ExternalLink
+                        size={13}
+                        aria-hidden="true"
+                      />
+                      View source
+                    </button>
+                  )}
 
-            <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-(--border) pt-3">
+                  <button
+                    type="button"
+                    disabled={isMutating}
+                    onClick={() => {
+                      closePlannerActions();
+                      handleStartEditing();
+                    }}
+                    className="flex min-h-10 w-full items-center gap-2 rounded-lg px-2 text-left text-xs text-(--text-secondary) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
+                  >
+                    <Pencil
+                      size={13}
+                      aria-hidden="true"
+                    />
+                    Edit
+                  </button>
+
+                  <button
+                    type="button"
+                    disabled={isMutating}
+                    onClick={() => {
+                      closePlannerActions();
+                      setDeleteErrorMessage(
+                        null,
+                      );
+                      setIsDeleteDialogOpen(
+                        true,
+                      );
+                    }}
+                    className="flex min-h-10 w-full items-center gap-2 rounded-lg px-2 text-left text-xs text-(--text-muted) transition hover:bg-(--danger-surface) hover:text-(--danger-text) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
+                  >
+                    <Trash2
+                      size={13}
+                      aria-hidden="true"
+                    />
+                    Delete
+                  </button>
+
+                  <div className="sm:col-span-2">
+                    <label
+                      htmlFor={`planner-task-status-${task.id}`}
+                      className="sr-only"
+                    >
+                      Task status
+                    </label>
+
+                    <select
+                      id={`planner-task-status-${task.id}`}
+                      value={task.status}
+                      disabled={isMutating}
+                      onChange={(event) => {
+                        closePlannerActions();
+                        void onStatusChange(
+                          task.id,
+                          event.target
+                            .value as TaskStatus,
+                        );
+                      }}
+                      className="min-h-10 w-full rounded-lg border border-(--border) bg-(--app-bg) px-2 text-xs text-(--text-secondary) outline-none focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
+                    >
+                      <option value="NOT_STARTED">
+                        Not started
+                      </option>
+                      <option value="IN_PROGRESS">
+                        In progress
+                      </option>
+                      <option value="COMPLETED">
+                        Completed
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              )}
+
+            {isCompact ? (
+                <div className="mt-2 flex flex-wrap items-center gap-1.5 text-[10px]">
+                  <span
+                    className={`rounded-full px-2 py-1 font-medium ${getTaskStatusClassName(
+                      task.status,
+                    )}`}
+                  >
+                    {formatTaskStatusLabel(
+                      task.status,
+                    )}
+                  </span>
+
+                  {isPlanner ? (
+                    <span
+                      className={`rounded-full px-2 py-1 ${
+                        task.sourceStatus ===
+                        "SOURCE_MISSING"
+                          ? "bg-(--danger-surface) text-(--danger-text)"
+                          : "bg-(--surface-hover) text-(--text-muted)"
+                      }`}
+                    >
+                      {formatTaskSourceLabel(task)}
+                    </span>
+                  ) : (
+                    task.sourceStatus ===
+                      "SOURCE_MISSING" && (
+                      <span className="rounded-full bg-(--danger-surface) px-2 py-1 text-(--danger-text)">
+                        Source missing
+                      </span>
+                    )
+                  )}
+
+                  {task.deadline && (
+                    <span className="text-(--text-muted)">
+                      Due {task.deadline}
+                    </span>
+                  )}
+                </div>
+            ) : (
+              <div className="mt-3 flex flex-wrap items-center gap-1.5 text-[10px]">
+                <span
+                  className={`rounded-full px-2 py-1 font-medium ${getTaskStatusClassName(
+                    task.status,
+                  )}`}
+                >
+                  {formatTaskStatusLabel(
+                    task.status,
+                  )}
+                </span>
+
+                {task.deadline && (
+                  <span className="rounded-full bg-(--surface-hover) px-2 py-1 text-(--text-secondary)">
+                    Due {task.deadline}
+                  </span>
+                )}
+
+                <span
+                  className={`rounded-full px-2 py-1 ${
+                    task.sourceStatus ===
+                    "SOURCE_MISSING"
+                      ? "bg-(--danger-surface) text-(--danger-text)"
+                      : task.sourceStatus ===
+                          "HAS_SOURCE"
+                        ? "bg-(--surface-hover) text-(--text-secondary)"
+                        : "bg-(--surface-hover) text-(--text-muted)"
+                  }`}
+                >
+                  {formatTaskSourceLabel(task)}
+                </span>
+              </div>
+            )}
+
+            {!isPlanner && (
+            <div
+              className={`flex flex-wrap items-center gap-2 border-t border-(--border) ${
+                isWorkspace
+                  ? "mt-2 pt-2"
+                  : "mt-3 pt-3"
+              }`}
+            >
               {onOpenDetail && (
                 <button
                   type="button"
@@ -361,32 +682,61 @@ export function TaskCard({
                       task.id,
                     )
                   }
-                  className="flex shrink-0 items-center gap-1 rounded-lg border border-(--border) px-2 py-1.5 text-xs text-(--text-muted) hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
+                  aria-label={
+                    isWorkspace
+                      ? `Open task ${task.title} details`
+                      : undefined
+                  }
+                  className={
+                    isWorkspace
+                      ? "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-(--border) text-(--text-muted) hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40 xl:h-8 xl:w-8"
+                      : "flex shrink-0 items-center gap-1 rounded-lg border border-(--border) px-2 py-1.5 text-xs text-(--text-muted) hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
+                  }
+                  title={
+                    isWorkspace
+                      ? "Task details"
+                      : undefined
+                  }
                 >
                   <Eye
                     size={12}
                     aria-hidden="true"
                   />
-                  Details
+                  {!isWorkspace &&
+                    "Details"}
                 </button>
               )}
 
-              <button
-                type="button"
-                disabled={isMutating}
-                onClick={() =>
-                  void handleViewSource()
-                }
-                className="flex shrink-0 items-center gap-1 rounded-lg border border-(--border) px-2 py-1.5 text-xs text-(--text-muted) hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
-                title="View original source"
-              >
-                <ExternalLink
-                  size={12}
-                  aria-hidden="true"
-                />
+              {(!isWorkspace ||
+                task.sourceStatus ===
+                  "HAS_SOURCE") && (
+                <button
+                  type="button"
+                  disabled={isMutating}
+                  onClick={() =>
+                    void handleViewSource()
+                  }
+                  aria-label={
+                    isWorkspace
+                      ? `View source for task ${task.title}`
+                      : undefined
+                  }
+                  className={
+                    isWorkspace
+                      ? "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-(--border) text-(--text-muted) hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40 xl:h-8 xl:w-8"
+                      : "flex shrink-0 items-center gap-1 rounded-lg border border-(--border) px-2 py-1.5 text-xs text-(--text-muted) hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
+                  }
+                  title="View original source"
+                >
+                  <ExternalLink
+                    size={12}
+                    aria-hidden="true"
+                  />
 
-                Source
-              </button>
+                  {!isWorkspace &&
+                    "Source"}
+                </button>
+              )}
 
               <label
                 htmlFor={`task-status-${task.id}`}
@@ -406,7 +756,11 @@ export function TaskCard({
                       .value as TaskStatus,
                   )
                 }
-                className="min-w-36 flex-1 rounded-lg border border-(--border) bg-(--app-bg) px-2 py-1.5 text-xs text-(--text-secondary) outline-none focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
+                className={`flex-1 rounded-lg border border-(--border) bg-(--app-bg) px-2 py-1.5 text-xs text-(--text-secondary) outline-none focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40 ${
+                  isWorkspace
+                    ? "h-10 min-w-28 xl:h-8"
+                    : "min-w-36"
+                }`}
               >
                 <option value="NOT_STARTED">
                   Not started
@@ -433,7 +787,7 @@ export function TaskCard({
                   );
                 }}
                 aria-label={`Delete task ${task.title}`}
-                className="rounded-lg border border-(--border) p-1.5 text-(--text-muted) transition hover:bg-(--surface-hover) hover:text-(--danger-text) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
+                className="flex h-10 w-10 items-center justify-center rounded-lg border border-(--border) text-(--text-muted) transition hover:bg-(--surface-hover) hover:text-(--danger-text) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40 xl:h-8 xl:w-8"
                 title="Delete task"
               >
                 <Trash2
@@ -442,6 +796,7 @@ export function TaskCard({
                 />
               </button>
             </div>
+            )}
           </>
         )}
       </article>

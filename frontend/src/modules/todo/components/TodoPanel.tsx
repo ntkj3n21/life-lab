@@ -2,7 +2,9 @@ import {
   useEffect,
   useState,
 } from "react";
+import { useNavigate } from "react-router-dom";
 
+import { ApiError } from "../../../lib/api";
 import { useNoteStore } from "../../../stores/noteStore";
 import { useTodoStore } from "../../../stores/todoStore";
 
@@ -18,7 +20,17 @@ import {
   type StatusFilter,
 } from "./TaskListPanel";
 
+function getErrorMessage(error: unknown) {
+  if (error instanceof ApiError) {
+    return error.message;
+  }
+
+  return "Something went wrong.";
+}
+
 export function TodoPanel() {
+  const navigate = useNavigate();
+
   const tasks = useTodoStore(
     (state) => state.tasks,
   );
@@ -33,10 +45,6 @@ export function TodoPanel() {
 
   const isMutating = useTodoStore(
     (state) => state.isMutating,
-  );
-
-  const error = useTodoStore(
-    (state) => state.error,
   );
 
   const loadTasks = useTodoStore(
@@ -103,20 +111,53 @@ export function TodoPanel() {
     setStatusFilter,
   ] = useState<StatusFilter>("");
 
-  useEffect(() => {
-    void Promise.all([
-      loadTasks({
-        page: 0,
-        size: 100,
-      }),
+  const [
+    composerErrorMessage,
+    setComposerErrorMessage,
+  ] = useState<string | null>(
+    null,
+  );
 
-      loadNotes({
+  const [
+    taskListLoadErrorMessage,
+    setTaskListLoadErrorMessage,
+  ] = useState<string | null>(
+    null,
+  );
+
+  const [
+    taskActionErrorMessage,
+    setTaskActionErrorMessage,
+  ] = useState<string | null>(
+    null,
+  );
+
+  useEffect(() => {
+    void loadTasks({
+      page: 0,
+      size: 100,
+    })
+      .then(() => {
+        setTaskListLoadErrorMessage(null);
+      })
+      .catch((error: unknown) => {
+        setTaskListLoadErrorMessage(
+          getErrorMessage(error),
+        );
+      });
+
+    void loadNotes({
         page: 0,
         size: 100,
-      }),
-    ]).catch(() => {
-      // Stores keep errors.
-    });
+      })
+      .then(() => {
+        setComposerErrorMessage(null);
+      })
+      .catch((error: unknown) => {
+        setComposerErrorMessage(
+          getErrorMessage(error),
+        );
+      });
   }, [
     loadTasks,
     loadNotes,
@@ -135,8 +176,8 @@ export function TodoPanel() {
   }
 
   async function refresh() {
-    await Promise.all([
-      loadTasks({
+    try {
+      await loadTasks({
         page: 0,
         size: 100,
         q:
@@ -145,9 +186,16 @@ export function TodoPanel() {
         status:
           statusFilter ||
           undefined,
-      }),
+      });
 
-    ]);
+      setTaskListLoadErrorMessage(null);
+      return true;
+    } catch (error) {
+      setTaskListLoadErrorMessage(
+        getErrorMessage(error),
+      );
+      return false;
+    }
   }
 
   async function handleCreate() {
@@ -159,6 +207,7 @@ export function TodoPanel() {
     }
 
     clearError();
+    setComposerErrorMessage(null);
 
     const input =
       buildTaskInput();
@@ -175,64 +224,85 @@ export function TodoPanel() {
         );
       }
 
-      setTitle("");
-      setDescription("");
-      setDeadline("");
-      setSourceNoteId("");
-
-      await refresh();
-    } catch {
-      // Store keeps error.
+    } catch (error) {
+      setComposerErrorMessage(
+        getErrorMessage(error),
+      );
+      return;
     }
+
+    setTitle("");
+    setDescription("");
+    setDeadline("");
+    setSourceNoteId("");
+
+    await refresh();
   }
 
   async function handleUpdate(
     taskId: number,
     input: UpdateTaskInput,
   ) {
+    setTaskActionErrorMessage(null);
+
     try {
       await updateTask(
         taskId,
         input,
       );
-
-      await refresh();
-    } catch {
-      // Store keeps error.
+    } catch (error) {
+      setTaskActionErrorMessage(
+        getErrorMessage(error),
+      );
+      throw error;
     }
+
+    await refresh();
   }
 
   async function handleStatusChange(
     taskId: number,
     status: TaskStatus,
   ) {
+    setTaskActionErrorMessage(null);
+
     try {
       await changeStatus(
         taskId,
         status,
       );
-
-      await refresh();
-    } catch {
-      // Store keeps error.
+    } catch (error) {
+      setTaskActionErrorMessage(
+        getErrorMessage(error),
+      );
+      return;
     }
+
+    await refresh();
   }
 
   async function handleDelete(
     taskId: number,
   ) {
+    setTaskActionErrorMessage(null);
+
     try {
       await deleteTask(
         taskId,
       );
-
-      await refresh();
-    } catch {
-      // Store keeps error.
+    } catch (error) {
+      setTaskActionErrorMessage(
+        getErrorMessage(error),
+      );
+      throw error;
     }
+
+    await refresh();
   }
 
   async function applySearch() {
+    setTaskActionErrorMessage(null);
+
     try {
       await loadTasks({
         page: 0,
@@ -244,8 +314,12 @@ export function TodoPanel() {
           statusFilter ||
           undefined,
       });
-    } catch {
-      // Store keeps error.
+
+      setTaskListLoadErrorMessage(null);
+    } catch (error) {
+      setTaskListLoadErrorMessage(
+        getErrorMessage(error),
+      );
     }
   }
 
@@ -259,7 +333,7 @@ export function TodoPanel() {
         sourceNoteId={sourceNoteId}
         isMutating={isMutating}
         errorMessage={
-          error?.message ?? null
+          composerErrorMessage
         }
         onTitleChange={setTitle}
         onDescriptionChange={
@@ -285,6 +359,12 @@ export function TodoPanel() {
         }
         isLoading={isLoading}
         isMutating={isMutating}
+        loadErrorMessage={
+          taskListLoadErrorMessage
+        }
+        actionErrorMessage={
+          taskActionErrorMessage
+        }
         onSearchTextChange={
           setSearchText
         }
@@ -297,6 +377,11 @@ export function TodoPanel() {
           handleStatusChange
         }
         onDelete={handleDelete}
+        onOpenDetail={(taskId) =>
+          navigate(
+            `/tasks/${taskId}`,
+          )
+        }
       />
     </div>
   );

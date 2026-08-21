@@ -32,6 +32,12 @@ export function ContextSummary() {
         state.loadVideoNotes,
     );
 
+  const videoNotesLoadStatus =
+    useNoteStore(
+      (state) =>
+        state.videoNotesLoadStatus,
+    );
+
   const dailyPlan =
     useTodoStore(
       (state) =>
@@ -42,6 +48,18 @@ export function ContextSummary() {
     useTodoStore(
       (state) =>
         state.loadDailyPlan,
+    );
+
+  const dailyPlanLoadStatus =
+    useTodoStore(
+      (state) =>
+        state.dailyPlanLoadStatus,
+    );
+
+  const dailyPlanRevision =
+    useTodoStore(
+      (state) =>
+        state.dailyPlanRevision,
     );
 
   const activeLibraryVideoId =
@@ -68,13 +86,28 @@ export function ContextSummary() {
         ] ?? []
       : [];
 
+  const notesResolved =
+    validVideoId !== null &&
+    videoNotesLoadStatus[
+      validVideoId
+    ] === "success";
+
+  const tasksResolved =
+    notesResolved &&
+    dailyPlanLoadStatus ===
+      "success" &&
+    dailyPlan !== null;
+
   useEffect(() => {
     void loadDailyPlan().catch(
       () => {
         // todoStore keeps error.
       },
     );
-  }, [loadDailyPlan]);
+  }, [
+    loadDailyPlan,
+    dailyPlanRevision,
+  ]);
 
   useEffect(() => {
     if (
@@ -123,111 +156,75 @@ export function ContextSummary() {
 
   if (!activeContext) {
     return (
-      <div className="rounded-2xl border border-(--border) bg-(--surface) p-4">
-        <div className="flex items-center gap-2">
-          <Link2
-            size={16}
-            className="text-(--text-muted)"
-          />
+      <div className="flex items-center gap-2 rounded-xl border border-(--border) bg-(--surface) px-3 py-2.5">
+        <Link2
+          size={13}
+          className="text-(--text-muted)"
+        />
 
-          <h4 className="whitespace-nowrap font-medium">
-            Now working on
-          </h4>
-        </div>
+        <span className="text-xs font-medium text-(--text-secondary)">
+          Now working on
+        </span>
 
-        <p className="mt-3 text-sm text-(--text-secondary)">
-          No active context yet.
-        </p>
-
-        <p className="mt-1 text-xs text-(--text-faint)">
-          Open a video to start
-          linking notes and tasks.
-        </p>
+        <span className="text-xs text-(--text-muted)">
+          No active video context.
+        </span>
       </div>
     );
   }
 
   return (
-    <div className="rounded-2xl border border-(--border) bg-(--surface) p-4">
-      <div className="flex items-center justify-between gap-3">
-        <div className="flex items-center gap-2">
-          <Link2
-            size={16}
-            className="text-(--text-secondary)"
-          />
-
-          <h4 className="font-medium">
-            Now working on
-          </h4>
-        </div>
-
-        <span className="rounded-full bg-(--surface-hover) px-2 py-1 text-[10px] font-medium text-(--text-secondary)">
-          {
-            activeContext.entityType
-          }
-        </span>
-      </div>
-
-      <p className="mt-3 line-clamp-2 text-base font-semibold text-(--text-primary)">
-        {activeContext.title}
-      </p>
-
-      <div className="mt-3 flex items-center gap-2 text-sm text-(--text-secondary)">
+    <div className="flex flex-wrap items-center gap-x-4 gap-y-2 rounded-xl border border-(--border) bg-(--surface) px-3 py-2.5">
+      <div className="flex items-center gap-1.5 text-xs text-(--text-secondary)">
         <Clock
-          size={14}
+          size={13}
           className="text-(--text-muted)"
+          aria-hidden="true"
         />
-
-        <span>
-          Timestamp{" "}
-
-          <span className="text-(--text-primary)">
-            {typeof activeContext.timestamp ===
-            "number"
-              ? formatTime(
-                  activeContext.timestamp,
-                )
-              : "Not recorded"}
-          </span>
+        <span className="tabular-nums text-(--text-primary)">
+          {typeof activeContext.timestamp ===
+          "number"
+            ? formatTime(
+                activeContext.timestamp,
+              )
+            : "—"}
         </span>
       </div>
 
-      <div className="mt-4 grid grid-cols-2 gap-2">
-        <div className="rounded-xl border border-(--border) bg-(--app-bg) p-3">
-          <div className="flex items-center gap-2 text-(--text-secondary)">
-            <StickyNote
-              size={15}
-            />
+      <div
+        className="h-4 w-px bg-(--border)"
+        aria-hidden="true"
+      />
 
-            <span className="text-xs">
-              Notes
-            </span>
-          </div>
+      <div className="flex items-center gap-1.5 text-xs text-(--text-secondary)">
+        <StickyNote
+          size={13}
+          aria-hidden="true"
+        />
+        <span>Notes</span>
+        <span className="font-medium text-(--text-primary)">
+          {notesResolved
+            ? relatedNotes.length
+            : "—"}
+        </span>
+      </div>
 
-          <p className="mt-2 text-xl font-semibold text-(--text-primary)">
-            {
-              relatedNotes.length
-            }
-          </p>
-        </div>
+      <div
+        className="h-4 w-px bg-(--border)"
+        aria-hidden="true"
+      />
 
-        <div className="rounded-xl border border-(--border) bg-(--app-bg) p-3">
-          <div className="flex items-center gap-2 text-(--text-secondary)">
-            <CheckSquare
-              size={15}
-            />
-
-            <span className="text-xs">
-              Tasks
-            </span>
-          </div>
-
-          <p className="mt-2 text-xl font-semibold text-(--text-primary)">
-            {
-              relatedTasksCount
-            }
-          </p>
-        </div>
+      <div className="flex items-center gap-1.5 text-xs text-(--text-secondary)">
+        <CheckSquare
+          size={13}
+          aria-hidden="true"
+        />
+        <span>Tasks</span>
+        <span className="font-medium text-(--text-primary)">
+          {tasksResolved
+            ? relatedTasksCount
+            : "—"}
+        </span>
       </div>
     </div>
   );

@@ -197,7 +197,7 @@ export function LibraryVideoTags({
                     )
                   }
                   aria-label={`Remove tag ${tag.name}`}
-                  className="shrink-0 rounded-full text-(--text-muted) hover:text-(--danger-text) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
+                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-(--text-muted) hover:text-(--danger-text) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40 xl:h-6 xl:w-6"
                   title={`Remove ${tag.name}`}
                 >
                   <X
@@ -210,7 +210,7 @@ export function LibraryVideoTags({
           )}
         </div>
       ) : (
-        <p className="text-xs text-(--text-faint)">
+        <p className="text-xs text-(--text-muted)">
           No tags.
         </p>
       )}
@@ -251,7 +251,7 @@ export function LibraryVideoTags({
                   "";
               }
             }}
-            className="mt-3 w-full rounded-lg border border-(--border) bg-(--surface) px-2 py-2 text-xs text-(--text-secondary) outline-none focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
+            className="mt-3 min-h-10 w-full rounded-lg border border-(--border) bg-(--surface) px-2 py-2 text-xs text-(--text-secondary) outline-none focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50 xl:min-h-8"
           >
             <option value="">
               Attach existing tag...
@@ -298,7 +298,7 @@ export function LibraryVideoTags({
             }
           }}
           placeholder="Create tag..."
-          className="min-w-0 flex-1 rounded-lg border border-(--border) bg-(--surface) px-2 py-1.5 text-xs outline-none placeholder:text-(--text-faint) focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
+          className="h-10 min-w-0 flex-1 rounded-lg border border-(--border) bg-(--surface) px-2 text-xs outline-none placeholder:text-(--text-faint) focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50 xl:h-8"
         />
 
         <button
@@ -311,7 +311,7 @@ export function LibraryVideoTags({
             void handleCreate()
           }
           aria-label="Create and attach tag"
-          className="flex shrink-0 items-center justify-center rounded-lg border border-(--border) px-2 text-(--text-muted) hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-(--border) text-(--text-muted) hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40 xl:h-8 xl:w-8"
           title="Create and attach tag"
         >
           <Plus

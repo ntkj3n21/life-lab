@@ -38,16 +38,13 @@ export function QuickNoteComposer({
       aria-busy={isMutating}
       className="rounded-xl border border-(--border) bg-(--app-bg) p-3"
     >
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <h4 className="text-sm font-medium text-(--text-secondary)">
-            Quick Note
-          </h4>
-
-        </div>
+      <div className="flex items-center justify-between gap-3">
+        <h4 className="text-sm font-medium text-(--text-secondary)">
+          Quick Note
+        </h4>
 
         {typeof timestamp === "number" && (
-          <span className="rounded-full bg-(--surface) px-2 py-1 text-xs text-(--text-muted)">
+          <span className="tabular-nums text-xs text-(--text-muted)">
             {formatTime(timestamp)}
           </span>
         )}
@@ -57,7 +54,7 @@ export function QuickNoteComposer({
         <p
           id="quick-note-video-required"
           role="status"
-          className="mt-3 rounded-xl border border-dashed border-(--border) p-3 text-xs text-(--text-muted)"
+          className="mt-2 rounded-lg border border-dashed border-(--border) px-3 py-2 text-xs text-(--text-muted)"
         >
           Open a Library video before creating a note.
         </p>
@@ -74,48 +71,49 @@ export function QuickNoteComposer({
         id="quick-note-content"
         value={content}
         disabled={!hasActiveVideo || isMutating}
+        aria-required="true"
         aria-describedby={noteInputDescriptionId}
         aria-invalid={Boolean(errorMessage)}
         onChange={(event) =>
-          onContentChange(
-            event.target.value,
-          )
+          onContentChange(event.target.value)
         }
         placeholder="Write your note..."
-        className="mt-3 h-24 w-full resize-none rounded-lg border border-(--border) bg-(--surface) p-3 text-sm outline-none placeholder:text-(--text-faint) focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
+        className="mt-2 h-20 w-full resize-none rounded-lg border border-(--border) bg-(--surface) p-3 text-sm outline-none placeholder:text-(--text-faint) transition focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
       />
 
-      <label className="mt-2 flex items-center gap-2 text-xs text-(--text-muted)">
-        <input
-          type="checkbox"
-          checked={includeTimestamp}
-          disabled={!hasActiveVideo || isMutating}
-          onChange={(event) =>
-            onIncludeTimestampChange(
-              event.target.checked,
-            )
+      <div className="mt-2 flex items-center justify-between gap-3">
+        <label className="flex min-h-10 min-w-0 items-center gap-2 text-xs text-(--text-muted)">
+          <input
+            type="checkbox"
+            checked={includeTimestamp}
+            disabled={!hasActiveVideo || isMutating}
+            onChange={(event) =>
+              onIncludeTimestampChange(
+                event.target.checked,
+              )
+            }
+          />
+
+          <span className="truncate">
+            Include timestamp
+          </span>
+        </label>
+
+        <button
+          type="button"
+          onClick={() => void onCreate()}
+          disabled={
+            !hasActiveVideo ||
+            isMutating ||
+            !content.trim()
           }
-        />
-
-        Include current timestamp
-      </label>
-
-      <button
-        type="button"
-        onClick={() =>
-          void onCreate()
-        }
-        disabled={
-          !hasActiveVideo ||
-          isMutating ||
-          !content.trim()
-        }
-        className="mt-3 w-full rounded-lg bg-(--primary-bg) px-4 py-2 text-sm font-medium text-(--primary-text) hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
-      >
-        {isMutating
-          ? "Saving..."
-          : "Save Note"}
-      </button>
+          className="h-10 shrink-0 rounded-lg bg-(--primary-bg) px-3 text-xs font-medium text-(--primary-text) transition hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50 xl:h-8"
+        >
+          {isMutating
+            ? "Saving..."
+            : "Save"}
+        </button>
+      </div>
 
       {errorMessage && (
         <p

@@ -19,6 +19,10 @@ interface LibraryVideoCardProps {
   video: LibraryVideo;
   isActive: boolean;
   isMutating: boolean;
+  viewMode:
+    | "all"
+    | "recent"
+    | "most";
 
   onOpen: (
     video: LibraryVideo,
@@ -50,10 +54,32 @@ function formatDuration(
     .padStart(2, "0")}`;
 }
 
+function formatLastWatched(
+  value: string,
+) {
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return value;
+  }
+
+  return new Intl.DateTimeFormat(
+    "en",
+    {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+    },
+  ).format(date);
+}
+
 export function LibraryVideoCard({
   video,
   isActive,
   isMutating,
+  viewMode,
   onOpen,
   onUpdate,
   onDelete,
@@ -150,6 +176,20 @@ export function LibraryVideoCard({
   const durationLabel = formatDuration(
     video.youtubeSource.durationSeconds,
   );
+
+  const watchMetadataLabel =
+    viewMode === "recent" &&
+    video.lastWatchedAt
+      ? `Last watched ${formatLastWatched(
+          video.lastWatchedAt,
+        )}`
+      : video.viewCount > 0
+        ? `${video.viewCount} view${
+            video.viewCount === 1
+              ? ""
+              : "s"
+          }`
+        : null;
 
   return (
     <article
@@ -318,26 +358,6 @@ export function LibraryVideoCard({
               >
                 {displayTitle}
               </h5>
-
-              {video.customTitle &&
-                video.youtubeSource
-                  .title && (
-                  <p
-                    className="mt-1 truncate text-xs text-(--text-muted)"
-                    title={
-                      video
-                        .youtubeSource
-                        .title
-                    }
-                  >
-                    {
-                      video
-                        .youtubeSource
-                        .title
-                    }
-                  </p>
-                )}
-
             </button>
 
             <div className="mt-2 flex min-w-0 items-center gap-2 text-xs text-(--text-muted)">
@@ -364,54 +384,65 @@ export function LibraryVideoCard({
               </p>
             )}
 
-            <div className="mt-3 flex items-center justify-between border-t border-(--border) pt-2.5">
-              <span className="text-[11px] text-(--text-faint)">
-                {video.viewCount > 0 ? `${video.viewCount} view${video.viewCount === 1 ? "" : "s"}` : "Not watched"}
-              </span>
+            <div
+              className={`mt-3 flex items-center gap-2 ${
+                watchMetadataLabel
+                  ? "justify-between"
+                  : "justify-end"
+              }`}
+            >
+              {watchMetadataLabel && (
+                <span className="min-w-0 truncate text-[11px] text-(--text-muted)">
+                  {watchMetadataLabel}
+                </span>
+              )}
 
               <details className="group relative">
                 <summary
-                  className="flex h-7 w-7 cursor-pointer list-none items-center justify-center rounded-lg text-(--text-muted) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) [&::-webkit-details-marker]:hidden"
+                  className="flex h-7 w-7 cursor-pointer list-none items-center justify-center rounded-lg text-(--text-muted) transition-colors hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) [&::-webkit-details-marker]:hidden"
                   aria-label={`More actions for ${displayTitle}`}
                   title="More actions"
                 >
-                  <Ellipsis size={16} aria-hidden="true" />
+                  <Ellipsis
+                    size={16}
+                    aria-hidden="true"
+                  />
                 </summary>
 
                 <div className="absolute bottom-9 right-0 z-10 w-64 rounded-xl border border-(--border-strong) bg-(--surface) p-2 shadow-lg">
                   <div className="flex gap-1">
-                <button
-                  type="button"
-                  onClick={
-                    handleStartEdit
-                  }
-                  disabled={isMutating}
-                  className="flex flex-1 items-center justify-center gap-1.5 rounded-lg px-2 py-1.5 text-xs text-(--text-secondary) hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  <Pencil
-                    size={13}
-                    aria-hidden="true"
-                  />
-                  Edit
-                </button>
+                    <button
+                      type="button"
+                      onClick={handleStartEdit}
+                      disabled={isMutating}
+                      className="flex flex-1 items-center justify-center gap-1.5 rounded-lg px-2 py-1.5 text-xs text-(--text-secondary) hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      <Pencil
+                        size={13}
+                        aria-hidden="true"
+                      />
+                      Edit
+                    </button>
 
-                <button
-                  type="button"
-                  onClick={() =>
-                    onDelete(video)
-                  }
-                  disabled={isMutating}
-                  className="flex flex-1 items-center justify-center gap-1.5 rounded-lg px-2 py-1.5 text-xs text-(--text-secondary) hover:bg-(--danger-surface) hover:text-(--danger-text) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  <Trash2
-                    size={13}
-                    aria-hidden="true"
-                  />
-                  Delete
-                </button>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        onDelete(video)
+                      }
+                      disabled={isMutating}
+                      className="flex flex-1 items-center justify-center gap-1.5 rounded-lg px-2 py-1.5 text-xs text-(--text-secondary) hover:bg-(--danger-surface) hover:text-(--danger-text) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      <Trash2
+                        size={13}
+                        aria-hidden="true"
+                      />
+                      Delete
+                    </button>
                   </div>
 
-                  <LibraryVideoTags libraryVideoId={video.id} />
+                  <LibraryVideoTags
+                    libraryVideoId={video.id}
+                  />
                 </div>
               </details>
             </div>

@@ -11,6 +11,8 @@
   --surface-hover: #1c1c1c;
   --surface-active: #242424;
   --app-bg-translucent: rgb(13 13 13 / 90%);
+  --overlay-backdrop: rgb(0 0 0 / 66%);
+  --elevated-shadow: 0 18px 48px rgb(0 0 0 / 36%);
 
   --text-primary: #f2f2f2;
   --text-secondary: #b5b5b5;
@@ -52,11 +54,13 @@
   --surface-hover: #eeeeea;
   --surface-active: #e6e6e1;
   --app-bg-translucent: rgb(247 247 245 / 92%);
+  --overlay-backdrop: rgb(35 35 31 / 38%);
+  --elevated-shadow: 0 18px 48px rgb(40 40 34 / 13%);
 
   --text-primary: #202020;
   --text-secondary: #5f5f5b;
-  --text-muted: #7b7b75;
-  --text-faint: #999992;
+  --text-muted: #686863;
+  --text-faint: #787872;
 
   --border: rgb(20 20 20 / 9%);
   --border-strong: rgb(20 20 20 / 16%);

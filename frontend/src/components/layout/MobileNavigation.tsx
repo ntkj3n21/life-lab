@@ -47,7 +47,7 @@ export function MobileNavigation() {
             className={({
               isActive,
             }) =>
-              `flex h-9 shrink-0 items-center gap-2 rounded-[9px] px-3 text-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) ${
+              `flex h-10 shrink-0 items-center gap-2 rounded-[9px] px-3 text-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) ${
                 isActive
                   ? "bg-(--surface-hover) font-medium text-(--text-primary)"
                   : "text-(--text-muted) hover:bg-(--surface) hover:text-(--text-primary)"

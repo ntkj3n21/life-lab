@@ -44,3 +44,5 @@ repomix-*.xml
 # OS files
 Thumbs.db
 Desktop.ini
+
+rx.ps1

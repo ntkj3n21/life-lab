@@ -134,8 +134,15 @@ export function TasksPage() {
   ] = useState(false);
 
   const [
-    errorMessage,
-    setErrorMessage,
+    loadErrorMessage,
+    setLoadErrorMessage,
+  ] = useState<string | null>(
+    null,
+  );
+
+  const [
+    actionErrorMessage,
+    setActionErrorMessage,
   ] = useState<string | null>(
     null,
   );
@@ -200,14 +207,14 @@ export function TasksPage() {
         setTotalPages(
           response.totalPages,
         );
-        setErrorMessage(null);
+        setLoadErrorMessage(null);
       })
       .catch((error: unknown) => {
         if (cancelled) {
           return;
         }
 
-        setErrorMessage(
+        setLoadErrorMessage(
           getErrorMessage(error),
         );
       })
@@ -232,6 +239,7 @@ export function TasksPage() {
       Math.max(0, preferredPage);
 
     setIsLoading(true);
+    setLoadErrorMessage(null);
 
     try {
       const response =
@@ -276,7 +284,7 @@ export function TasksPage() {
         setTotalPages(
           normalizedResponse.totalPages,
         );
-        setErrorMessage(null);
+        setLoadErrorMessage(null);
         return;
       }
 
@@ -288,9 +296,9 @@ export function TasksPage() {
       setTotalPages(
         response.totalPages,
       );
-      setErrorMessage(null);
+      setLoadErrorMessage(null);
     } catch (error) {
-      setErrorMessage(
+      setLoadErrorMessage(
         getErrorMessage(error),
       );
       throw error;
@@ -310,7 +318,7 @@ export function TasksPage() {
       deadlineTo &&
       deadlineFrom > deadlineTo
     ) {
-      setErrorMessage(
+      setActionErrorMessage(
         "Deadline from must be on or before deadline to.",
       );
       return;
@@ -324,7 +332,8 @@ export function TasksPage() {
       deadlineTo,
     };
 
-    setErrorMessage(null);
+    setLoadErrorMessage(null);
+    setActionErrorMessage(null);
     setNotice(null);
     setIsLoading(true);
     setPage(0);
@@ -338,7 +347,8 @@ export function TasksPage() {
     setStatusFilter("");
     setDeadlineFrom("");
     setDeadlineTo("");
-    setErrorMessage(null);
+    setLoadErrorMessage(null);
+    setActionErrorMessage(null);
     setNotice(null);
     setIsLoading(true);
     setPage(0);
@@ -359,7 +369,8 @@ export function TasksPage() {
       return;
     }
 
-    setErrorMessage(null);
+    setLoadErrorMessage(null);
+    setActionErrorMessage(null);
     setNotice(null);
     setIsLoading(true);
     setPage(nextPage);
@@ -387,25 +398,33 @@ export function TasksPage() {
       };
 
     setIsMutating(true);
-    setErrorMessage(null);
+    setActionErrorMessage(null);
     setNotice(null);
 
     try {
       await createIndependentTask(
         input,
       );
+    } catch (error) {
+      setActionErrorMessage(
+        getErrorMessage(error),
+      );
+      setIsMutating(false);
+      return;
+    }
 
-      setTitle("");
-      setDescription("");
-      setDeadline("");
+    setTitle("");
+    setDescription("");
+    setDeadline("");
+
+    try {
+      await reloadPage(0);
       setNotice(
         "Independent Task created.",
       );
-
-      await reloadPage(0);
-    } catch (error) {
-      setErrorMessage(
-        getErrorMessage(error),
+    } catch {
+      setLoadErrorMessage(
+        "Task created, but the Task list could not be refreshed.",
       );
     } finally {
       setIsMutating(false);
@@ -421,7 +440,7 @@ export function TasksPage() {
     }
 
     setIsMutating(true);
-    setErrorMessage(null);
+    setActionErrorMessage(null);
     setNotice(null);
 
     try {
@@ -430,21 +449,28 @@ export function TasksPage() {
         input,
       );
 
+    } catch (error) {
+      setActionErrorMessage(
+        getErrorMessage(error),
+      );
+      setIsMutating(false);
+      throw error;
+    }
+
+    try {
       /*
        * Title, description, or deadline changes may
        * make the Task enter or leave the active
        * search/deadline filter. Reload from Backend.
        */
       await reloadPage(page);
-
       setNotice(
         "Task updated.",
       );
-    } catch (error) {
-      setErrorMessage(
-        getErrorMessage(error),
+    } catch {
+      setLoadErrorMessage(
+        "Task updated, but the Task list could not be refreshed.",
       );
-      throw error;
     } finally {
       setIsMutating(false);
     }
@@ -459,7 +485,7 @@ export function TasksPage() {
     }
 
     setIsMutating(true);
-    setErrorMessage(null);
+    setActionErrorMessage(null);
     setNotice(null);
 
     try {
@@ -468,6 +494,15 @@ export function TasksPage() {
         status,
       );
 
+    } catch (error) {
+      setActionErrorMessage(
+        getErrorMessage(error),
+      );
+      setIsMutating(false);
+      return;
+    }
+
+    try {
       /*
        * Always reload from Backend. A status change
        * can make the Task leave an active status
@@ -475,13 +510,12 @@ export function TasksPage() {
        * must remain authoritative as well.
        */
       await reloadPage(page);
-
       setNotice(
         "Task status updated.",
       );
-    } catch (error) {
-      setErrorMessage(
-        getErrorMessage(error),
+    } catch {
+      setLoadErrorMessage(
+        "Task status updated, but the Task list could not be refreshed.",
       );
     } finally {
       setIsMutating(false);
@@ -496,22 +530,28 @@ export function TasksPage() {
     }
 
     setIsMutating(true);
-    setErrorMessage(null);
+    setActionErrorMessage(null);
     setNotice(null);
 
     try {
       await deleteTask(taskId);
+    } catch (error) {
+      setActionErrorMessage(
+        getErrorMessage(error),
+      );
+      setIsMutating(false);
+      throw error;
+    }
 
+    try {
       await reloadPage(page);
-
       setNotice(
         "Task deleted. Its source Note and YouTube source were not deleted.",
       );
-    } catch (error) {
-      setErrorMessage(
-        getErrorMessage(error),
+    } catch {
+      setLoadErrorMessage(
+        "Task deleted, but the Task list could not be refreshed.",
       );
-      throw error;
     } finally {
       setIsMutating(false);
     }
@@ -805,12 +845,21 @@ export function TasksPage() {
           )}
         </form>
 
-        {errorMessage && (
+        {loadErrorMessage && (
           <div
             role="alert"
             className="mt-4 rounded-xl border border-(--danger-border) bg-(--danger-surface) px-4 py-3 text-sm text-(--danger-text)"
           >
-            {errorMessage}
+            {loadErrorMessage}
+          </div>
+        )}
+
+        {actionErrorMessage && (
+          <div
+            role="alert"
+            className="mt-4 rounded-xl border border-(--danger-border) bg-(--danger-surface) px-4 py-3 text-sm text-(--danger-text)"
+          >
+            {actionErrorMessage}
           </div>
         )}
 
@@ -841,7 +890,7 @@ export function TasksPage() {
               </p>
             </div>
           </div>
-        ) : tasks.length === 0 ? (
+        ) : loadErrorMessage ? null : tasks.length === 0 ? (
           <div className="mt-6 flex min-h-56 items-center justify-center rounded-2xl border border-dashed border-(--border) bg-(--app-bg) p-6 text-center">
             <div>
               <ListTodo
@@ -894,6 +943,7 @@ export function TasksPage() {
         )}
 
         {!isLoading &&
+          !loadErrorMessage &&
           totalPages > 1 && (
             <nav
               aria-label="Tasks pagination"

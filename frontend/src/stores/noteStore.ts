@@ -15,6 +15,12 @@ import {
   type NoteQuery,
 } from "../modules/notes/services/noteApi";
 
+type LoadStatus =
+  | "idle"
+  | "loading"
+  | "success"
+  | "error";
+
 interface NoteStore {
   notes: Note[];
 
@@ -32,6 +38,16 @@ interface NoteStore {
   isMutating: boolean;
 
   error: ApiError | null;
+  notesLoadStatus: LoadStatus;
+  notesLoadError: ApiError | null;
+  videoNotesLoadStatus: Record<
+    number,
+    LoadStatus
+  >;
+  videoNotesLoadErrors: Record<
+    number,
+    ApiError | null
+  >;
 
   loadNotes: (
     query?: NoteQuery,
@@ -95,6 +111,18 @@ const initialState = {
   isMutating: false,
 
   error: null as ApiError | null,
+  notesLoadStatus:
+    "idle" as LoadStatus,
+  notesLoadError:
+    null as ApiError | null,
+  videoNotesLoadStatus: {} as Record<
+    number,
+    LoadStatus
+  >,
+  videoNotesLoadErrors: {} as Record<
+    number,
+    ApiError | null
+  >,
 };
 
 function replaceNote(
@@ -118,7 +146,9 @@ export const useNoteStore =
       ) => {
         set({
           isLoading: true,
-          error: null,
+          notesLoadStatus:
+            "loading",
+          notesLoadError: null,
         });
 
         try {
@@ -140,13 +170,20 @@ export const useNoteStore =
               response.totalElements,
             totalPages:
               response.totalPages,
+            notesLoadStatus:
+              "success",
+            notesLoadError:
+              null,
           });
         } catch (error) {
           const apiError =
             toApiError(error);
 
           set({
-            error: apiError,
+            notesLoadStatus:
+              "error",
+            notesLoadError:
+              apiError,
           });
 
           throw apiError;
@@ -161,6 +198,19 @@ export const useNoteStore =
         async (
           libraryVideoId,
         ) => {
+          set((state) => ({
+            videoNotesLoadStatus: {
+              ...state.videoNotesLoadStatus,
+              [libraryVideoId]:
+                "loading",
+            },
+            videoNotesLoadErrors: {
+              ...state.videoNotesLoadErrors,
+              [libraryVideoId]:
+                null,
+            },
+          }));
+
           try {
             const notes =
               await getVideoNotes(
@@ -173,7 +223,16 @@ export const useNoteStore =
                 [libraryVideoId]:
                   notes,
               },
-              error: null,
+              videoNotesLoadStatus: {
+                ...state.videoNotesLoadStatus,
+                [libraryVideoId]:
+                  "success",
+              },
+              videoNotesLoadErrors: {
+                ...state.videoNotesLoadErrors,
+                [libraryVideoId]:
+                  null,
+              },
             }));
 
             return notes;
@@ -181,9 +240,18 @@ export const useNoteStore =
             const apiError =
               toApiError(error);
 
-            set({
-              error: apiError,
-            });
+            set((state) => ({
+              videoNotesLoadStatus: {
+                ...state.videoNotesLoadStatus,
+                [libraryVideoId]:
+                  "error",
+              },
+              videoNotesLoadErrors: {
+                ...state.videoNotesLoadErrors,
+                [libraryVideoId]:
+                  apiError,
+              },
+            }));
 
             throw apiError;
           }

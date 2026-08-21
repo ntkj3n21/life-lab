@@ -152,7 +152,7 @@ export function SourcePreviewPage({
     );
 
   return (
-    <main className="min-h-screen bg-(--app-bg) p-4 text-(--text-primary) sm:p-6">
+    <main className="h-full overflow-y-auto overscroll-contain bg-(--app-bg) p-4 text-(--text-primary) sm:p-6">
       <div className="mx-auto max-w-5xl">
         <button
           type="button"
@@ -169,7 +169,7 @@ export function SourcePreviewPage({
         </button>
 
         <header className="mt-6">
-          <p className="text-xs font-medium uppercase tracking-wider text-(--text-faint)">
+          <p className="text-xs font-medium uppercase tracking-wider text-(--text-muted)">
             Exact Source Preview
           </p>
 
@@ -258,7 +258,7 @@ export function SourcePreviewPage({
                 not currently playable.
               </p>
 
-              <p className="mt-3 text-xs leading-5 text-(--text-faint)">
+              <p className="mt-3 text-xs leading-5 text-(--text-muted)">
                 No similar or replacement video is used.
               </p>
             </div>
@@ -306,7 +306,7 @@ export function SourcePreviewPage({
 
               <div className="mt-4 grid gap-2 sm:grid-cols-2">
                 <div className="rounded-xl border border-(--border) bg-(--app-bg) p-3">
-                  <p className="text-[11px] font-medium text-(--text-faint)">
+                  <p className="text-[11px] font-medium text-(--text-muted)">
                     Timestamp
                   </p>
 
@@ -321,7 +321,7 @@ export function SourcePreviewPage({
                 </div>
 
                 <div className="rounded-xl border border-(--border) bg-(--app-bg) p-3">
-                  <p className="text-[11px] font-medium text-(--text-faint)">
+                  <p className="text-[11px] font-medium text-(--text-muted)">
                     Source mode
                   </p>
 
@@ -336,9 +336,9 @@ export function SourcePreviewPage({
 
               {navigationMode ===
                 "SOURCE_PREVIEW" && (
-                <p className="mt-3 text-xs leading-5 text-(--text-faint)">
-                  Preview playback is intentionally excluded
-                  from WatchSession tracking.
+                <p className="mt-3 text-xs leading-5 text-(--text-muted)">
+                  Source Preview playback does not affect your
+                  watch history.
                 </p>
               )}
             </section>

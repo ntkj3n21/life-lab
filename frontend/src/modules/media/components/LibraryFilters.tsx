@@ -1,8 +1,8 @@
 import {
   LoaderCircle,
-  RotateCcw,
   Search,
   SlidersHorizontal,
+  X,
 } from "lucide-react";
 
 import type { LibraryQuery } from "../services/libraryApi";
@@ -22,6 +22,11 @@ export type LibrarySortDirection =
   NonNullable<
     LibraryQuery["sortDirection"]
   >;
+
+export interface AppliedLibraryFilterItem {
+  id: string;
+  label: string;
+}
 
 interface LibraryFiltersProps {
   tags: Tag[];
@@ -53,6 +58,9 @@ interface LibraryFiltersProps {
   validationMessage?:
     | string
     | null;
+
+  appliedFilters:
+    AppliedLibraryFilterItem[];
 
   onSearchTextChange: (
     value: string,
@@ -108,6 +116,9 @@ interface LibraryFiltersProps {
 
   onApply: () => Promise<void>;
   onReset: () => Promise<void>;
+  onRemoveAppliedFilter: (
+    filterId: string,
+  ) => Promise<void>;
 }
 
 const inputClassName =
@@ -131,6 +142,7 @@ export function LibraryFilters({
   isLoading,
   watchAndSortLocked,
   validationMessage,
+  appliedFilters,
   onSearchTextChange,
   onToggleTag,
   onMinDurationSecondsChange,
@@ -146,14 +158,15 @@ export function LibraryFilters({
   onToggleAdvancedFilters,
   onApply,
   onReset,
+  onRemoveAppliedFilter,
 }: LibraryFiltersProps) {
   return (
     <div
       aria-busy={isLoading}
       className="mt-4"
     >
-      <div className="flex flex-col gap-2 lg:flex-row">
-        <div className="flex min-w-0 flex-1 items-center gap-2 rounded-lg border border-(--border) bg-(--app-bg) px-3 shadow-sm transition focus-within:border-(--border-strong) focus-within:ring-2 focus-within:ring-(--focus)">
+      <div className="flex items-center gap-2">
+        <div className="flex min-w-0 flex-1 items-center gap-2 rounded-lg border border-(--border) bg-(--app-bg) px-3 transition focus-within:border-(--border-strong) focus-within:ring-2 focus-within:ring-(--focus)">
           <Search
             size={15}
             className="shrink-0 text-(--text-muted)"
@@ -177,76 +190,86 @@ export function LibraryFilters({
               )
             }
             onKeyDown={(event) => {
-              if (
-                event.key === "Enter"
-              ) {
+              if (event.key === "Enter") {
                 void onApply();
               }
             }}
             placeholder="Search library..."
-            className="min-w-0 flex-1 bg-transparent py-3 text-sm outline-none placeholder:text-(--text-faint) disabled:cursor-not-allowed disabled:opacity-50"
+            className="min-w-0 flex-1 bg-transparent py-2.5 text-sm outline-none placeholder:text-(--text-faint) disabled:cursor-not-allowed disabled:opacity-50"
           />
+
+          {isLoading && (
+            <LoaderCircle
+              size={14}
+              className="shrink-0 animate-spin text-(--text-muted)"
+              aria-hidden="true"
+            />
+          )}
         </div>
 
         <button
           type="button"
-          onClick={() =>
-            void onApply()
-          }
-          disabled={isLoading}
-          aria-label="Search library"
-          title="Search library"
-          className="flex h-10 w-10 items-center justify-center rounded-lg bg-(--primary-bg) text-(--primary-text) hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          {isLoading && (
-            <LoaderCircle
-              size={14}
-              className="animate-spin"
-              aria-hidden="true"
-            />
-          )}
-
-          {!isLoading && (
-            <Search
-              size={16}
-              aria-hidden="true"
-            />
-          )}
-        </button>
-
-        <button
-          type="button"
-          onClick={
-            onToggleAdvancedFilters
-          }
-          aria-expanded={
+          onClick={onToggleAdvancedFilters}
+          aria-expanded={showAdvancedFilters}
+          className={`flex h-10 shrink-0 items-center justify-center gap-1.5 rounded-lg px-2.5 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) ${
             showAdvancedFilters
-          }
-          className="flex h-10 items-center justify-center gap-2 rounded-lg px-3 text-sm text-(--text-secondary) hover:bg-(--surface-subtle) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)"
+              ? "bg-(--surface-active) text-(--text-primary)"
+              : "text-(--text-muted) hover:bg-(--surface-hover) hover:text-(--text-primary)"
+          }`}
         >
           <SlidersHorizontal
-            size={15}
+            size={14}
             aria-hidden="true"
           />
           Filters
         </button>
 
-        <button
-          type="button"
-          onClick={() =>
-            void onReset()
-          }
-          disabled={isLoading}
-          aria-label="Reset library filters"
-          title="Reset filters"
-          className="flex h-10 w-10 items-center justify-center rounded-lg text-(--text-muted) hover:bg-(--surface-subtle) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          <RotateCcw
-            size={15}
-            aria-hidden="true"
-          />
-        </button>
       </div>
+
+      {appliedFilters.length > 0 && (
+        <div
+          aria-label="Applied Library filters"
+          className="mt-3 flex flex-wrap items-center gap-2"
+        >
+          {appliedFilters.map(
+            (filter) => (
+              <button
+                key={filter.id}
+                type="button"
+                disabled={isLoading}
+                onClick={() =>
+                  void onRemoveAppliedFilter(
+                    filter.id,
+                  )
+                }
+                aria-label={`Remove ${filter.label} filter`}
+                className="flex min-h-10 min-w-0 max-w-full items-center gap-1.5 rounded-full border border-(--border) bg-(--surface-subtle) px-3 text-xs text-(--text-secondary) transition hover:border-(--border-strong) hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50 sm:min-h-8"
+              >
+                <span className="min-w-0 truncate">
+                  {filter.label}
+                </span>
+
+                <X
+                  size={13}
+                  className="shrink-0"
+                  aria-hidden="true"
+                />
+              </button>
+            ),
+          )}
+
+          <button
+            type="button"
+            onClick={() =>
+              void onReset()
+            }
+            disabled={isLoading}
+            className="min-h-10 rounded-lg px-2.5 text-xs font-medium text-(--text-muted) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50 sm:min-h-8"
+          >
+            Clear all
+          </button>
+        </div>
+      )}
 
       {validationMessage && (
         <p
@@ -268,6 +291,10 @@ export function LibraryFilters({
             </p>
           )}
 
+          <p className="text-xs font-medium text-(--text-secondary)">
+            Primary filters
+          </p>
+
           <div className="grid gap-3 xl:grid-cols-2">
             <fieldset className="rounded-xl border border-(--border) bg-(--surface-subtle) p-3">
               <legend className="px-1 text-xs font-medium text-(--text-secondary)">
@@ -275,7 +302,7 @@ export function LibraryFilters({
               </legend>
 
               {tags.length === 0 ? (
-                <p className="text-xs text-(--text-faint)">
+                <p className="text-xs text-(--text-muted)">
                   No tags available.
                 </p>
               ) : (
@@ -322,7 +349,7 @@ export function LibraryFilters({
                     )}
                   </div>
 
-                  <p className="mt-2 text-[10px] leading-4 text-(--text-faint)">
+                  <p className="mt-2 text-[10px] leading-4 text-(--text-muted)">
                     Multiple selected tags are matched with OR. Tag filtering is combined with other filter groups using AND.
                   </p>
                 </>
@@ -338,7 +365,7 @@ export function LibraryFilters({
                 <div>
                   <label
                     htmlFor="library-watched-filter"
-                    className="mb-1 block text-[11px] font-medium text-(--text-faint)"
+                    className="mb-1 block text-[11px] font-medium text-(--text-muted)"
                   >
                     Watch status
                   </label>
@@ -379,7 +406,7 @@ export function LibraryFilters({
                 <div>
                   <label
                     htmlFor="library-notes-filter"
-                    className="mb-1 block text-[11px] font-medium text-(--text-faint)"
+                    className="mb-1 block text-[11px] font-medium text-(--text-muted)"
                   >
                     Note status
                   </label>
@@ -415,7 +442,17 @@ export function LibraryFilters({
             </fieldset>
           </div>
 
-          <div className="grid gap-3 lg:grid-cols-3">
+          <details className="group rounded-xl border border-(--border) bg-(--app-bg)">
+            <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 px-3 py-2 text-xs font-medium text-(--text-secondary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)">
+              <span>More filters</span>
+              <SlidersHorizontal
+                size={14}
+                className="text-(--text-muted)"
+                aria-hidden="true"
+              />
+            </summary>
+
+          <div className="grid gap-3 border-t border-(--border) p-3 lg:grid-cols-3">
             <fieldset className="rounded-xl border border-(--border) bg-(--surface-subtle) p-3">
               <legend className="px-1 text-xs font-medium text-(--text-secondary)">
                 Duration
@@ -425,7 +462,7 @@ export function LibraryFilters({
                 <div>
                   <label
                     htmlFor="library-duration-min"
-                    className="mb-1 block text-[11px] font-medium text-(--text-faint)"
+                    className="mb-1 block text-[11px] font-medium text-(--text-muted)"
                   >
                     Min seconds
                   </label>
@@ -458,7 +495,7 @@ export function LibraryFilters({
                 <div>
                   <label
                     htmlFor="library-duration-max"
-                    className="mb-1 block text-[11px] font-medium text-(--text-faint)"
+                    className="mb-1 block text-[11px] font-medium text-(--text-muted)"
                   >
                     Max seconds
                   </label>
@@ -499,7 +536,7 @@ export function LibraryFilters({
                 <div>
                   <label
                     htmlFor="library-published-from"
-                    className="mb-1 block text-[11px] font-medium text-(--text-faint)"
+                    className="mb-1 block text-[11px] font-medium text-(--text-muted)"
                   >
                     From
                   </label>
@@ -528,7 +565,7 @@ export function LibraryFilters({
                 <div>
                   <label
                     htmlFor="library-published-to"
-                    className="mb-1 block text-[11px] font-medium text-(--text-faint)"
+                    className="mb-1 block text-[11px] font-medium text-(--text-muted)"
                   >
                     To
                   </label>
@@ -563,7 +600,7 @@ export function LibraryFilters({
                 <div>
                   <label
                     htmlFor="library-added-from"
-                    className="mb-1 block text-[11px] font-medium text-(--text-faint)"
+                    className="mb-1 block text-[11px] font-medium text-(--text-muted)"
                   >
                     From
                   </label>
@@ -590,7 +627,7 @@ export function LibraryFilters({
                 <div>
                   <label
                     htmlFor="library-added-to"
-                    className="mb-1 block text-[11px] font-medium text-(--text-faint)"
+                    className="mb-1 block text-[11px] font-medium text-(--text-muted)"
                   >
                     To
                   </label>
@@ -616,17 +653,18 @@ export function LibraryFilters({
               </div>
             </fieldset>
           </div>
+          </details>
 
-          <fieldset className="rounded-xl border border-(--border) bg-(--surface-subtle) p-3">
+          <fieldset className="rounded-xl border border-(--border) bg-(--app-bg) p-3">
             <legend className="px-1 text-xs font-medium text-(--text-secondary)">
-              Sort Library
+              Sort
             </legend>
 
             <div className="grid gap-2 sm:grid-cols-2">
               <div>
                 <label
                   htmlFor="library-sort-by"
-                  className="mb-1 block text-[11px] font-medium text-(--text-faint)"
+                  className="mb-1 block text-[11px] font-medium text-(--text-muted)"
                 >
                   Sort by
                 </label>
@@ -668,7 +706,7 @@ export function LibraryFilters({
               <div>
                 <label
                   htmlFor="library-sort-direction"
-                  className="mb-1 block text-[11px] font-medium text-(--text-faint)"
+                  className="mb-1 block text-[11px] font-medium text-(--text-muted)"
                 >
                   Direction
                 </label>
@@ -704,6 +742,29 @@ export function LibraryFilters({
               </div>
             </div>
           </fieldset>
+
+          <div className="flex justify-end border-t border-(--border) pt-3">
+            <button
+              type="button"
+              onClick={() =>
+                void onApply()
+              }
+              disabled={isLoading}
+              className="flex min-h-11 w-full items-center justify-center gap-2 rounded-lg bg-(--primary-bg) px-4 py-2 text-sm font-medium text-(--primary-text) transition hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto sm:min-w-32"
+            >
+              {isLoading && (
+                <LoaderCircle
+                  size={15}
+                  className="animate-spin"
+                  aria-hidden="true"
+                />
+              )}
+
+              {isLoading
+                ? "Applying..."
+                : "Apply filters"}
+            </button>
+          </div>
         </div>
       )}
     </div>
