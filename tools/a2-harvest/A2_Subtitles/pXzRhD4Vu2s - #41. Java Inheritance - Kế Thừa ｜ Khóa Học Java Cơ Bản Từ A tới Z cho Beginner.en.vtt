@@ -1,0 +1,2024 @@
+WEBVTT
+Kind: captions
+Language: en
+
+00:00:06.879 --> 00:00:08.790 align:start position:0%
+ 
+Hello <00:00:07.215><c>everyone, </c><00:00:07.551><c>it's </c><00:00:07.887><c>me, </c><00:00:08.223><c>Eric, </c><00:00:08.559><c>again.</c>
+
+00:00:08.790 --> 00:00:08.800 align:start position:0%
+Hello everyone, it's me, Eric, again.
+ 
+
+00:00:08.800 --> 00:00:10.270 align:start position:0%
+Hello everyone, it's me, Eric, again.
+In <00:00:09.120><c>this </c><00:00:09.440><c>chapter, </c><00:00:09.760><c>we'll </c><00:00:10.080><c>be</c>
+
+00:00:10.270 --> 00:00:10.280 align:start position:0%
+In this chapter, we'll be
+ 
+
+00:00:10.280 --> 00:00:12.390 align:start position:0%
+In this chapter, we'll be
+exploring <00:00:11.140><c>Java's </c><00:00:12.000><c>inheritance.</c>
+
+00:00:12.390 --> 00:00:12.400 align:start position:0%
+exploring Java's inheritance.
+ 
+
+00:00:12.400 --> 00:00:14.350 align:start position:0%
+exploring Java's inheritance.
+More <00:00:13.320><c>specifically, </c><00:00:14.240><c>in</c>
+
+00:00:14.350 --> 00:00:14.360 align:start position:0%
+More specifically, in
+ 
+
+00:00:14.360 --> 00:00:15.990 align:start position:0%
+More specifically, in
+this <00:00:14.689><c>first </c><00:00:15.018><c>video, </c><00:00:15.347><c>we'll </c><00:00:15.676><c>learn</c>
+
+00:00:15.990 --> 00:00:16.000 align:start position:0%
+this first video, we'll learn
+ 
+
+00:00:16.000 --> 00:00:18.670 align:start position:0%
+this first video, we'll learn
+about <00:00:16.520><c>the </c><00:00:17.040><c>Java </c><00:00:17.560><c>inheritance </c><00:00:18.080><c>principle.</c>
+
+00:00:18.670 --> 00:00:18.680 align:start position:0%
+about the Java inheritance principle.
+ 
+
+00:00:18.680 --> 00:00:20.230 align:start position:0%
+about the Java inheritance principle.
+We'll <00:00:19.399><c>call </c><00:00:20.118><c>this</c>
+
+00:00:20.230 --> 00:00:20.240 align:start position:0%
+We'll call this
+ 
+
+00:00:20.240 --> 00:00:22.310 align:start position:0%
+We'll call this
+inheritance.
+
+00:00:22.310 --> 00:00:22.320 align:start position:0%
+inheritance.
+ 
+
+00:00:22.320 --> 00:00:24.150 align:start position:0%
+inheritance.
+You
+
+00:00:24.150 --> 00:00:24.160 align:start position:0%
+You
+ 
+
+00:00:24.160 --> 00:00:25.630 align:start position:0%
+You
+can <00:00:24.295><c>find </c><00:00:24.430><c>more </c><00:00:24.565><c>documentation </c><00:00:24.700><c>on </c><00:00:24.835><c>this </c><00:00:24.970><c>term </c><00:00:25.105><c>at </c><00:00:25.240><c>the </c><00:00:25.375><c>link </c><00:00:25.510><c>I've</c>
+
+00:00:25.630 --> 00:00:25.640 align:start position:0%
+can find more documentation on this term at the link I've
+ 
+
+00:00:25.640 --> 00:00:27.870 align:start position:0%
+can find more documentation on this term at the link I've
+provided. <00:00:26.333><c>Please </c><00:00:27.026><c>note: </c><00:00:27.719><c>in</c>
+
+00:00:27.870 --> 00:00:27.880 align:start position:0%
+provided. Please note: in
+ 
+
+00:00:27.880 --> 00:00:29.990 align:start position:0%
+provided. Please note: in
+Java, <00:00:28.289><c>we </c><00:00:28.698><c>can </c><00:00:29.107><c>inherit </c><00:00:29.516><c>attributes</c>
+
+00:00:29.990 --> 00:00:32.030 align:start position:0%
+Java, we can inherit attributes
+ 
+
+00:00:32.030 --> 00:00:33.470 align:start position:0%
+ 
+ 
+
+00:00:33.470 --> 00:00:33.480 align:start position:0%
+ 
+ 
+
+00:00:33.480 --> 00:00:35.630 align:start position:0%
+ 
+and <00:00:33.919><c>methods </c><00:00:34.358><c>from </c><00:00:34.797><c>another </c><00:00:35.236><c>class.</c>
+
+00:00:35.630 --> 00:00:35.640 align:start position:0%
+and methods from another class.
+ 
+
+00:00:35.640 --> 00:00:37.590 align:start position:0%
+and methods from another class.
+Imagine <00:00:36.420><c>it </c><00:00:37.200><c>like</c>
+
+00:00:37.590 --> 00:00:37.600 align:start position:0%
+Imagine it like
+ 
+
+00:00:37.600 --> 00:00:38.990 align:start position:0%
+Imagine it like
+in <00:00:38.120><c>real </c><00:00:38.640><c>life;</c>
+
+00:00:38.990 --> 00:00:39.000 align:start position:0%
+in real life;
+ 
+
+00:00:39.000 --> 00:00:40.709 align:start position:0%
+in real life;
+we're <00:00:39.760><c>simulating </c><00:00:40.520><c>life</c>
+
+00:00:40.709 --> 00:00:40.719 align:start position:0%
+we're simulating life
+ 
+
+00:00:40.719 --> 00:00:42.590 align:start position:0%
+we're simulating life
+within <00:00:41.149><c>programming. </c><00:00:41.579><c>In </c><00:00:42.009><c>real </c><00:00:42.439><c>life,</c>
+
+00:00:42.590 --> 00:00:42.600 align:start position:0%
+within programming. In real life,
+ 
+
+00:00:42.600 --> 00:00:44.670 align:start position:0%
+within programming. In real life,
+parents <00:00:43.480><c>leave </c><00:00:44.360><c>property</c>
+
+00:00:44.670 --> 00:00:44.680 align:start position:0%
+parents leave property
+ 
+
+00:00:44.680 --> 00:00:46.350 align:start position:0%
+parents leave property
+to <00:00:44.848><c>their </c><00:00:45.016><c>children, </c><00:00:45.184><c>and </c><00:00:45.352><c>they </c><00:00:45.520><c>have </c><00:00:45.688><c>the </c><00:00:45.856><c>right </c><00:00:46.024><c>to </c><00:00:46.192><c>use</c>
+
+00:00:46.350 --> 00:00:46.360 align:start position:0%
+to their children, and they have the right to use
+ 
+
+00:00:46.360 --> 00:00:48.350 align:start position:0%
+to their children, and they have the right to use
+it. <00:00:46.672><c>It's </c><00:00:46.984><c>the </c><00:00:47.296><c>same </c><00:00:47.608><c>in </c><00:00:47.920><c>Java.</c>
+
+00:00:48.350 --> 00:00:48.360 align:start position:0%
+it. It's the same in Java.
+ 
+
+00:00:48.360 --> 00:00:50.670 align:start position:0%
+it. It's the same in Java.
+We <00:00:48.909><c>have </c><00:00:49.458><c>parent </c><00:00:50.007><c>classes </c><00:00:50.556><c>(we</c>
+
+00:00:50.670 --> 00:00:50.680 align:start position:0%
+We have parent classes (we
+ 
+
+00:00:50.680 --> 00:00:53.310 align:start position:0%
+We have parent classes (we
+call <00:00:51.519><c>them </c><00:00:52.358><c>superclasses) </c><00:00:53.197><c>and</c>
+
+00:00:53.310 --> 00:00:53.320 align:start position:0%
+call them superclasses) and
+ 
+
+00:00:53.320 --> 00:00:55.229 align:start position:0%
+call them superclasses) and
+child <00:00:53.749><c>classes </c><00:00:54.178><c>(we </c><00:00:54.607><c>call </c><00:00:55.036><c>them</c>
+
+00:00:55.229 --> 00:00:55.239 align:start position:0%
+child classes (we call them
+ 
+
+00:00:55.239 --> 00:00:57.590 align:start position:0%
+child classes (we call them
+subclasses).
+
+00:00:57.590 --> 00:00:57.600 align:start position:0%
+subclasses).
+ 
+
+00:00:57.600 --> 00:01:00.470 align:start position:0%
+subclasses).
+These <00:00:57.982><c>subclasses </c><00:00:58.364><c>have </c><00:00:58.746><c>the </c><00:00:59.128><c>right </c><00:00:59.510><c>to </c><00:00:59.892><c>inherit </c><00:01:00.274><c>and</c>
+
+00:01:00.470 --> 00:01:00.480 align:start position:0%
+These subclasses have the right to inherit and
+ 
+
+00:01:00.480 --> 00:01:02.830 align:start position:0%
+These subclasses have the right to inherit and
+reuse <00:01:01.039><c>properties.  </c><00:01:01.598><c>The </c><00:01:02.157><c>methods </c><00:01:02.716><c>and</c>
+
+00:01:02.830 --> 00:01:02.840 align:start position:0%
+reuse properties.  The methods and
+ 
+
+00:01:02.840 --> 00:01:05.550 align:start position:0%
+reuse properties.  The methods and
+attributes <00:01:03.460><c>of </c><00:01:04.080><c>a </c><00:01:04.700><c>superclass </c><00:01:05.320><c>are</c>
+
+00:01:05.550 --> 00:01:05.560 align:start position:0%
+attributes of a superclass are
+ 
+
+00:01:05.560 --> 00:01:07.149 align:start position:0%
+attributes of a superclass are
+more <00:01:05.816><c>specifically </c><00:01:06.072><c>illustrated </c><00:01:06.328><c>in </c><00:01:06.584><c>the </c><00:01:06.840><c>code.</c>
+
+00:01:07.149 --> 00:01:07.159 align:start position:0%
+more specifically illustrated in the code.
+ 
+
+00:01:07.159 --> 00:01:09.510 align:start position:0%
+more specifically illustrated in the code.
+You <00:01:07.879><c>can </c><00:01:08.599><c>see, </c><00:01:09.319><c>for</c>
+
+00:01:09.510 --> 00:01:09.520 align:start position:0%
+You can see, for
+ 
+
+00:01:09.520 --> 00:01:10.990 align:start position:0%
+You can see, for
+example, <00:01:10.139><c>that </c><00:01:10.758><c>yesterday</c>
+
+00:01:10.990 --> 00:01:11.000 align:start position:0%
+example, that yesterday
+ 
+
+00:01:11.000 --> 00:01:12.870 align:start position:0%
+example, that yesterday
+we <00:01:11.449><c>wrote </c><00:01:11.898><c>a </c><00:01:12.347><c>class </c><00:01:12.796><c>like</c>
+
+00:01:12.870 --> 00:01:12.880 align:start position:0%
+we wrote a class like
+ 
+
+00:01:12.880 --> 00:01:14.870 align:start position:0%
+we wrote a class like
+this: <00:01:13.310><c>These </c><00:01:13.740><c>are </c><00:01:14.170><c>called </c><00:01:14.600><c>attributes,</c>
+
+00:01:14.870 --> 00:01:16.390 align:start position:0%
+this: These are called attributes,
+ 
+
+00:01:16.390 --> 00:01:16.400 align:start position:0%
+ 
+ 
+
+00:01:16.400 --> 00:01:18.149 align:start position:0%
+ 
+right? <00:01:16.720><c>And </c><00:01:17.040><c>the </c><00:01:17.360><c>ones </c><00:01:17.680><c>below </c><00:01:18.000><c>are</c>
+
+00:01:18.149 --> 00:01:19.670 align:start position:0%
+right? And the ones below are
+ 
+
+00:01:19.670 --> 00:01:19.680 align:start position:0%
+ 
+ 
+
+00:01:19.680 --> 00:01:21.550 align:start position:0%
+ 
+called <00:01:21.360><c>methods.</c>
+
+00:01:21.550 --> 00:01:21.560 align:start position:0%
+called methods.
+ 
+
+00:01:21.560 --> 00:01:23.469 align:start position:0%
+called methods.
+Regarding <00:01:22.133><c>Java's </c><00:01:22.706><c>inheritance </c><00:01:23.279><c>principle,</c>
+
+00:01:23.469 --> 00:01:23.479 align:start position:0%
+Regarding Java's inheritance principle,
+ 
+
+00:01:23.479 --> 00:01:25.990 align:start position:0%
+Regarding Java's inheritance principle,
+any <00:01:24.009><c>class </c><00:01:24.539><c>that </c><00:01:25.069><c>inherits </c><00:01:25.599><c>from</c>
+
+00:01:25.990 --> 00:01:26.000 align:start position:0%
+any class that inherits from
+ 
+
+00:01:26.000 --> 00:01:27.910 align:start position:0%
+any class that inherits from
+this <00:01:26.257><c>class </c><00:01:26.514><c>has </c><00:01:26.771><c>the </c><00:01:27.028><c>right </c><00:01:27.285><c>to </c><00:01:27.542><c>use </c><00:01:27.799><c>the</c>
+
+00:01:27.910 --> 00:01:27.920 align:start position:0%
+this class has the right to use the
+ 
+
+00:01:27.920 --> 00:01:29.870 align:start position:0%
+this class has the right to use the
+attributes <00:01:28.600><c>you </c><00:01:29.280><c>see</c>
+
+00:01:29.870 --> 00:01:29.880 align:start position:0%
+attributes you see
+ 
+
+00:01:29.880 --> 00:01:31.910 align:start position:0%
+attributes you see
+inside <00:01:30.240><c>the </c><00:01:30.600><c>class. </c><00:01:30.960><c>This </c><00:01:31.320><c>is </c><00:01:31.680><c>the</c>
+
+00:01:31.910 --> 00:01:31.920 align:start position:0%
+inside the class. This is the
+ 
+
+00:01:31.920 --> 00:01:34.230 align:start position:0%
+inside the class. This is the
+idea <00:01:32.639><c>behind </c><00:01:33.358><c>inheritance. </c><00:01:34.077><c>Next,</c>
+
+00:01:34.230 --> 00:01:34.240 align:start position:0%
+idea behind inheritance. Next,
+ 
+
+00:01:34.240 --> 00:01:36.149 align:start position:0%
+idea behind inheritance. Next,
+please <00:01:35.040><c>note </c><00:01:35.840><c>the</c>
+
+00:01:36.149 --> 00:01:36.159 align:start position:0%
+please note the
+ 
+
+00:01:36.159 --> 00:01:38.870 align:start position:0%
+please note the
+Java <00:01:36.759><c>inheritance </c><00:01:37.359><c>principle: </c><00:01:37.959><c>in </c><00:01:38.559><c>Java,</c>
+
+00:01:38.870 --> 00:01:38.880 align:start position:0%
+Java inheritance principle: in Java,
+ 
+
+00:01:38.880 --> 00:01:40.710 align:start position:0%
+Java inheritance principle: in Java,
+one <00:01:40.640><c>class</c>
+
+00:01:40.710 --> 00:01:40.720 align:start position:0%
+one class
+ 
+
+00:01:40.720 --> 00:01:42.510 align:start position:0%
+one class
+can <00:01:41.055><c>only </c><00:01:41.390><c>inherit </c><00:01:41.725><c>from </c><00:01:42.060><c>another </c><00:01:42.395><c>class.</c>
+
+00:01:42.510 --> 00:01:42.520 align:start position:0%
+can only inherit from another class.
+ 
+
+00:01:42.520 --> 00:01:44.910 align:start position:0%
+can only inherit from another class.
+This <00:01:43.100><c>is </c><00:01:43.680><c>called </c><00:01:44.260><c>single </c><00:01:44.840><c>inheritance.</c>
+
+00:01:44.910 --> 00:01:44.920 align:start position:0%
+This is called single inheritance.
+ 
+
+00:01:44.920 --> 00:01:47.990 align:start position:0%
+This is called single inheritance.
+Why <00:01:45.331><c>is </c><00:01:45.742><c>it </c><00:01:46.153><c>single </c><00:01:46.564><c>inheritance? </c><00:01:46.975><c>Because, </c><00:01:47.386><c>as </c><00:01:47.797><c>we've</c>
+
+00:01:47.990 --> 00:01:49.670 align:start position:0%
+Why is it single inheritance? Because, as we've
+ 
+
+00:01:49.670 --> 00:01:49.680 align:start position:0%
+ 
+ 
+
+00:01:49.680 --> 00:01:51.389 align:start position:0%
+ 
+heard,
+
+00:01:51.389 --> 00:01:51.399 align:start position:0%
+heard,
+ 
+
+00:01:51.399 --> 00:01:53.109 align:start position:0%
+heard,
+Java <00:01:52.159><c>chooses </c><00:01:52.919><c>a</c>
+
+00:01:53.109 --> 00:01:53.119 align:start position:0%
+Java chooses a
+ 
+
+00:01:53.119 --> 00:01:55.469 align:start position:0%
+Java chooses a
+safe <00:01:53.689><c>form, </c><00:01:54.259><c>single </c><00:01:54.829><c>inheritance, </c><00:01:55.399><c>for</c>
+
+00:01:55.469 --> 00:01:55.479 align:start position:0%
+safe form, single inheritance, for
+ 
+
+00:01:55.479 --> 00:01:56.950 align:start position:0%
+safe form, single inheritance, for
+some <00:01:55.654><c>classes.  </c><00:01:55.829><c>In </c><00:01:56.004><c>other </c><00:01:56.179><c>languages, </c><00:01:56.354><c>for </c><00:01:56.529><c>example, </c><00:01:56.704><c>if </c><00:01:56.879><c>I</c>
+
+00:01:56.950 --> 00:01:56.960 align:start position:0%
+some classes.  In other languages, for example, if I
+ 
+
+00:01:56.960 --> 00:01:58.590 align:start position:0%
+some classes.  In other languages, for example, if I
+remember <00:01:58.399><c>correctly,</c>
+
+00:01:58.590 --> 00:01:58.600 align:start position:0%
+remember correctly,
+ 
+
+00:01:58.600 --> 00:02:00.149 align:start position:0%
+remember correctly,
+it's <00:02:00.000><c>called</c>
+
+00:02:00.149 --> 00:02:00.159 align:start position:0%
+it's called
+ 
+
+00:02:00.159 --> 00:02:02.230 align:start position:0%
+it's called
+multiple <00:02:00.389><c>inheritance </c><00:02:00.619><c>in </c><00:02:00.849><c>Java. </c><00:02:01.079><c>But </c><00:02:01.309><c>if </c><00:02:01.539><c>you </c><00:02:01.769><c>want </c><00:02:01.999><c>to</c>
+
+00:02:02.230 --> 00:02:02.240 align:start position:0%
+multiple inheritance in Java. But if you want to
+ 
+
+00:02:02.240 --> 00:02:04.230 align:start position:0%
+multiple inheritance in Java. But if you want to
+use <00:02:02.719><c>multiple </c><00:02:03.198><c>inheritance </c><00:02:03.677><c>in </c><00:02:04.156><c>Java,</c>
+
+00:02:04.230 --> 00:02:04.240 align:start position:0%
+use multiple inheritance in Java,
+ 
+
+00:02:04.240 --> 00:02:06.389 align:start position:0%
+use multiple inheritance in Java,
+you <00:02:04.573><c>can </c><00:02:04.906><c>learn </c><00:02:05.239><c>about </c><00:02:05.572><c>interfaces. </c><00:02:05.905><c>Don't </c><00:02:06.238><c>worry,</c>
+
+00:02:06.389 --> 00:02:06.399 align:start position:0%
+you can learn about interfaces. Don't worry,
+ 
+
+00:02:06.399 --> 00:02:08.469 align:start position:0%
+you can learn about interfaces. Don't worry,
+I'll
+
+00:02:08.469 --> 00:02:08.479 align:start position:0%
+I'll
+ 
+
+00:02:08.479 --> 00:02:10.430 align:start position:0%
+I'll
+explain <00:02:08.909><c>why </c><00:02:09.339><c>interfaces </c><00:02:09.769><c>are </c><00:02:10.199><c>single-</c>
+
+00:02:10.430 --> 00:02:10.440 align:start position:0%
+explain why interfaces are single-
+ 
+
+00:02:10.440 --> 00:02:12.510 align:start position:0%
+explain why interfaces are single-
+inheritance <00:02:10.766><c>and </c><00:02:11.092><c>why </c><00:02:11.418><c>they </c><00:02:11.744><c>are </c><00:02:12.070><c>multi-inheritance </c><00:02:12.396><c>later.</c>
+
+00:02:12.510 --> 00:02:12.520 align:start position:0%
+inheritance and why they are multi-inheritance later.
+ 
+
+00:02:12.520 --> 00:02:14.430 align:start position:0%
+inheritance and why they are multi-inheritance later.
+Next, <00:02:13.360><c>to </c><00:02:14.200><c>use</c>
+
+00:02:14.430 --> 00:02:14.440 align:start position:0%
+Next, to use
+ 
+
+00:02:14.440 --> 00:02:16.190 align:start position:0%
+Next, to use
+inheritance, <00:02:14.893><c>we </c><00:02:15.346><c>have </c><00:02:15.799><c>a</c>
+
+00:02:16.190 --> 00:02:16.200 align:start position:0%
+inheritance, we have a
+ 
+
+00:02:16.200 --> 00:02:18.509 align:start position:0%
+inheritance, we have a
+special <00:02:16.740><c>keyword </c><00:02:17.280><c>called </c><00:02:17.820><c>`extend`. </c><00:02:18.360><c>Don't</c>
+
+00:02:18.509 --> 00:02:18.519 align:start position:0%
+special keyword called `extend`. Don't
+ 
+
+00:02:18.519 --> 00:02:20.670 align:start position:0%
+special keyword called `extend`. Don't
+ever <00:02:18.839><c>translate </c><00:02:19.159><c>the </c><00:02:19.479><c>keyword </c><00:02:19.799><c>`extend` </c><00:02:20.119><c>to </c><00:02:20.439><c>understand</c>
+
+00:02:20.670 --> 00:02:20.680 align:start position:0%
+ever translate the keyword `extend` to understand
+ 
+
+00:02:20.680 --> 00:02:22.470 align:start position:0%
+ever translate the keyword `extend` to understand
+what <00:02:20.920><c>it </c><00:02:21.160><c>means. </c><00:02:21.400><c>Just </c><00:02:21.640><c>ignore </c><00:02:21.880><c>it; </c><00:02:22.120><c>we'll</c>
+
+00:02:22.470 --> 00:02:22.480 align:start position:0%
+what it means. Just ignore it; we'll
+ 
+
+00:02:22.480 --> 00:02:24.869 align:start position:0%
+what it means. Just ignore it; we'll
+understand <00:02:23.020><c>`extend` </c><00:02:23.560><c>as </c><00:02:24.100><c>inheritance. </c><00:02:24.640><c>Note</c>
+
+00:02:24.869 --> 00:02:24.879 align:start position:0%
+understand `extend` as inheritance. Note
+ 
+
+00:02:24.879 --> 00:02:27.030 align:start position:0%
+understand `extend` as inheritance. Note
+that <00:02:25.170><c>the </c><00:02:25.461><c>word </c><00:02:25.752><c>`extend` </c><00:02:26.043><c>has </c><00:02:26.334><c>an </c><00:02:26.625><c>`s` </c><00:02:26.916><c>at</c>
+
+00:02:27.030 --> 00:02:27.040 align:start position:0%
+that the word `extend` has an `s` at
+ 
+
+00:02:27.040 --> 00:02:29.030 align:start position:0%
+that the word `extend` has an `s` at
+the <00:02:27.519><c>end. </c><00:02:27.998><c>Regarding </c><00:02:28.477><c>our </c><00:02:28.956><c>syntax,</c>
+
+00:02:29.030 --> 00:02:29.040 align:start position:0%
+the end. Regarding our syntax,
+ 
+
+00:02:29.040 --> 00:02:31.670 align:start position:0%
+the end. Regarding our syntax,
+this <00:02:29.382><c>child </c><00:02:29.724><c>class </c><00:02:30.066><c>inherits </c><00:02:30.408><c>from </c><00:02:30.750><c>the </c><00:02:31.092><c>`tra` </c><00:02:31.434><c>class.</c>
+
+00:02:31.670 --> 00:02:31.680 align:start position:0%
+this child class inherits from the `tra` class.
+ 
+
+00:02:31.680 --> 00:02:33.670 align:start position:0%
+this child class inherits from the `tra` class.
+Now, <00:02:33.519><c>let's</c>
+
+00:02:33.670 --> 00:02:33.680 align:start position:0%
+Now, let's
+ 
+
+00:02:33.680 --> 00:02:35.710 align:start position:0%
+Now, let's
+look <00:02:34.580><c>at </c><00:02:35.480><c>some</c>
+
+00:02:35.710 --> 00:02:35.720 align:start position:0%
+look at some
+ 
+
+00:02:35.720 --> 00:02:37.949 align:start position:0%
+look at some
+examples <00:02:36.140><c>I've </c><00:02:36.560><c>already </c><00:02:36.980><c>written </c><00:02:37.400><c>here.</c>
+
+00:02:37.949 --> 00:02:37.959 align:start position:0%
+examples I've already written here.
+ 
+
+00:02:37.959 --> 00:02:39.309 align:start position:0%
+examples I've already written here.
+First, <00:02:38.346><c>we </c><00:02:38.733><c>have </c><00:02:39.120><c>a</c>
+
+00:02:39.309 --> 00:02:39.319 align:start position:0%
+First, we have a
+ 
+
+00:02:39.319 --> 00:02:41.070 align:start position:0%
+First, we have a
+general <00:02:39.699><c>class, </c><00:02:40.079><c>a </c><00:02:40.459><c>parent </c><00:02:40.839><c>class</c>
+
+00:02:41.070 --> 00:02:41.080 align:start position:0%
+general class, a parent class
+ 
+
+00:02:41.080 --> 00:02:42.910 align:start position:0%
+general class, a parent class
+called <00:02:42.560><c>`vehicle`.</c>
+
+00:02:42.910 --> 00:02:44.470 align:start position:0%
+called `vehicle`.
+ 
+
+00:02:44.470 --> 00:02:44.480 align:start position:0%
+ 
+ 
+
+00:02:44.480 --> 00:02:45.790 align:start position:0%
+ 
+Inside <00:02:44.672><c>this </c><00:02:44.864><c>class, </c><00:02:45.056><c>we </c><00:02:45.248><c>declare...  </c><00:02:45.440><c>We</c>
+
+00:02:45.790 --> 00:02:45.800 align:start position:0%
+Inside this class, we declare...  We
+ 
+
+00:02:45.800 --> 00:02:47.670 align:start position:0%
+Inside this class, we declare...  We
+declare <00:02:46.200><c>an </c><00:02:46.600><c>attribute, </c><00:02:47.000><c>and </c><00:02:47.400><c>then</c>
+
+00:02:47.670 --> 00:02:47.680 align:start position:0%
+declare an attribute, and then
+ 
+
+00:02:47.680 --> 00:02:49.110 align:start position:0%
+declare an attribute, and then
+we <00:02:48.093><c>declare </c><00:02:48.506><c>a </c><00:02:48.919><c>behavior,</c>
+
+00:02:49.110 --> 00:02:49.120 align:start position:0%
+we declare a behavior,
+ 
+
+00:02:49.120 --> 00:02:51.110 align:start position:0%
+we declare a behavior,
+a <00:02:49.520><c>method </c><00:02:49.920><c>of </c><00:02:50.320><c>it, </c><00:02:50.720><c>right?</c>
+
+00:02:51.110 --> 00:02:51.120 align:start position:0%
+a method of it, right?
+ 
+
+00:02:51.120 --> 00:02:53.030 align:start position:0%
+a method of it, right?
+Also, <00:02:51.430><c>we </c><00:02:51.740><c>have </c><00:02:52.050><c>a </c><00:02:52.360><c>class,</c>
+
+00:02:53.030 --> 00:02:53.040 align:start position:0%
+Also, we have a class,
+ 
+
+00:02:53.040 --> 00:02:55.030 align:start position:0%
+Also, we have a class,
+guys. <00:02:53.490><c>Our </c><00:02:53.940><c>class </c><00:02:54.390><c>is </c><00:02:54.840><c>called</c>
+
+00:02:55.030 --> 00:02:55.040 align:start position:0%
+guys. Our class is called
+ 
+
+00:02:55.040 --> 00:02:57.990 align:start position:0%
+guys. Our class is called
+a <00:02:56.400><c>try </c><00:02:57.760><c>class,</c>
+
+00:02:57.990 --> 00:02:58.000 align:start position:0%
+a try class,
+ 
+
+00:02:58.000 --> 00:02:59.910 align:start position:0%
+a try class,
+a <00:02:58.344><c>more </c><00:02:58.688><c>specific </c><00:02:59.032><c>class. </c><00:02:59.376><c>It </c><00:02:59.720><c>usually</c>
+
+00:02:59.910 --> 00:02:59.920 align:start position:0%
+a more specific class. It usually
+ 
+
+00:02:59.920 --> 00:03:02.110 align:start position:0%
+a more specific class. It usually
+follows <00:03:00.211><c>the </c><00:03:00.502><c>example. </c><00:03:00.793><c>To </c><00:03:01.084><c>test </c><00:03:01.375><c>this </c><00:03:01.666><c>example, </c><00:03:01.957><c>let's</c>
+
+00:03:02.110 --> 00:03:02.120 align:start position:0%
+follows the example. To test this example, let's
+ 
+
+00:03:02.120 --> 00:03:04.309 align:start position:0%
+follows the example. To test this example, let's
+go
+
+00:03:04.309 --> 00:03:04.319 align:start position:0%
+go
+ 
+
+00:03:04.319 --> 00:03:06.070 align:start position:0%
+go
+inside <00:03:04.639><c>Chapter </c><00:03:04.959><c>6. </c><00:03:05.279><c>You </c><00:03:05.599><c>guys </c><00:03:05.919><c>create</c>
+
+00:03:06.070 --> 00:03:06.080 align:start position:0%
+inside Chapter 6. You guys create
+ 
+
+00:03:06.080 --> 00:03:08.110 align:start position:0%
+inside Chapter 6. You guys create
+two <00:03:07.019><c>classes. </c><00:03:07.958><c>First,</c>
+
+00:03:08.110 --> 00:03:08.120 align:start position:0%
+two classes. First,
+ 
+
+00:03:08.120 --> 00:03:09.470 align:start position:0%
+two classes. First,
+we'll <00:03:08.257><c>create </c><00:03:08.394><c>the </c><00:03:08.531><c>first </c><00:03:08.668><c>class. </c><00:03:08.805><c>Okay, </c><00:03:08.942><c>I'll </c><00:03:09.079><c>make </c><00:03:09.216><c>it </c><00:03:09.353><c>'</c>
+
+00:03:09.470 --> 00:03:10.509 align:start position:0%
+we'll create the first class. Okay, I'll make it '
+ 
+
+00:03:10.509 --> 00:03:10.519 align:start position:0%
+ 
+ 
+
+00:03:10.519 --> 00:03:13.190 align:start position:0%
+ 
+vehicle'. <00:03:13.120><c>I</c>
+
+00:03:13.190 --> 00:03:13.200 align:start position:0%
+vehicle'. I
+ 
+
+00:03:13.200 --> 00:03:15.710 align:start position:0%
+vehicle'. I
+misspelled <00:03:13.663><c>it. </c><00:03:14.126><c>This </c><00:03:14.589><c>is </c><00:03:15.052><c>my </c><00:03:15.515><c>vehicle.</c>
+
+00:03:15.710 --> 00:03:15.720 align:start position:0%
+misspelled it. This is my vehicle.
+ 
+
+00:03:15.720 --> 00:03:17.509 align:start position:0%
+misspelled it. This is my vehicle.
+I'll <00:03:16.519><c>choose </c><00:03:17.318><c>'finish'.</c>
+
+00:03:17.509 --> 00:03:17.519 align:start position:0%
+I'll choose 'finish'.
+ 
+
+00:03:17.519 --> 00:03:19.430 align:start position:0%
+I'll choose 'finish'.
+This <00:03:17.929><c>is </c><00:03:18.339><c>the </c><00:03:18.749><c>first </c><00:03:19.159><c>class.</c>
+
+00:03:19.430 --> 00:03:19.440 align:start position:0%
+This is the first class.
+ 
+
+00:03:19.440 --> 00:03:21.149 align:start position:0%
+This is the first class.
+Next, <00:03:19.880><c>we'll </c><00:03:20.320><c>give </c><00:03:20.760><c>it</c>
+
+00:03:21.149 --> 00:03:21.159 align:start position:0%
+Next, we'll give it
+ 
+
+00:03:21.159 --> 00:03:23.430 align:start position:0%
+Next, we'll give it
+another <00:03:21.689><c>class. </c><00:03:22.219><c>First, </c><00:03:22.749><c>let's </c><00:03:23.279><c>just</c>
+
+00:03:23.430 --> 00:03:23.440 align:start position:0%
+another class. First, let's just
+ 
+
+00:03:23.440 --> 00:03:25.270 align:start position:0%
+another class. First, let's just
+write <00:03:23.720><c>the </c><00:03:24.000><c>name. </c><00:03:24.280><c>This </c><00:03:24.560><c>is </c><00:03:24.840><c>our </c><00:03:25.120><c>car,</c>
+
+00:03:25.270 --> 00:03:25.280 align:start position:0%
+write the name. This is our car,
+ 
+
+00:03:25.280 --> 00:03:27.589 align:start position:0%
+write the name. This is our car,
+right? <00:03:25.986><c>Okay, </c><00:03:26.692><c>so </c><00:03:27.398><c>formally</c>
+
+00:03:27.589 --> 00:03:27.599 align:start position:0%
+right? Okay, so formally
+ 
+
+00:03:27.599 --> 00:03:29.390 align:start position:0%
+right? Okay, so formally
+we
+
+00:03:29.390 --> 00:03:29.400 align:start position:0%
+we
+ 
+
+00:03:29.400 --> 00:03:31.589 align:start position:0%
+we
+have <00:03:30.053><c>this </c><00:03:30.706><c>stuff </c><00:03:31.359><c>inside</c>
+
+00:03:31.589 --> 00:03:31.599 align:start position:0%
+have this stuff inside
+ 
+
+00:03:31.599 --> 00:03:33.670 align:start position:0%
+have this stuff inside
+this <00:03:32.226><c>class. </c><00:03:32.853><c>Now </c><00:03:33.480><c>let's</c>
+
+00:03:33.670 --> 00:03:33.680 align:start position:0%
+this class. Now let's
+ 
+
+00:03:33.680 --> 00:03:36.270 align:start position:0%
+this class. Now let's
+write <00:03:34.160><c>the </c><00:03:34.640><c>inheritance </c><00:03:35.120><c>for </c><00:03:35.600><c>it, </c><00:03:36.080><c>for</c>
+
+00:03:36.270 --> 00:03:36.280 align:start position:0%
+write the inheritance for it, for
+ 
+
+00:03:36.280 --> 00:03:38.149 align:start position:0%
+write the inheritance for it, for
+the <00:03:36.615><c>parent </c><00:03:36.950><c>class. </c><00:03:37.285><c>For </c><00:03:37.620><c>now, </c><00:03:37.955><c>let's</c>
+
+00:03:38.149 --> 00:03:38.159 align:start position:0%
+the parent class. For now, let's
+ 
+
+00:03:38.159 --> 00:03:39.949 align:start position:0%
+the parent class. For now, let's
+try <00:03:38.405><c>it </c><00:03:38.651><c>out.  </c><00:03:38.897><c>Now, </c><00:03:39.143><c>just </c><00:03:39.389><c>copy </c><00:03:39.635><c>it</c>
+
+00:03:39.949 --> 00:03:39.959 align:start position:0%
+try it out.  Now, just copy it
+ 
+
+00:03:39.959 --> 00:03:41.910 align:start position:0%
+try it out.  Now, just copy it
+for <00:03:41.640><c>me.</c>
+
+00:03:41.910 --> 00:03:41.920 align:start position:0%
+for me.
+ 
+
+00:03:41.920 --> 00:03:44.149 align:start position:0%
+for me.
+We're <00:03:42.120><c>not </c><00:03:42.320><c>in </c><00:03:42.520><c>a </c><00:03:42.720><c>hurry </c><00:03:42.920><c>to </c><00:03:43.120><c>start </c><00:03:43.320><c>writing </c><00:03:43.520><c>from </c><00:03:43.720><c>scratch. </c><00:03:43.920><c>Don't</c>
+
+00:03:44.149 --> 00:03:44.159 align:start position:0%
+We're not in a hurry to start writing from scratch. Don't
+ 
+
+00:03:44.159 --> 00:03:45.550 align:start position:0%
+We're not in a hurry to start writing from scratch. Don't
+worry, <00:03:44.739><c>we'll </c><00:03:45.319><c>have</c>
+
+00:03:45.550 --> 00:03:45.560 align:start position:0%
+worry, we'll have
+ 
+
+00:03:45.560 --> 00:03:47.110 align:start position:0%
+worry, we'll have
+analysis <00:03:45.973><c>exercises </c><00:03:46.386><c>later. </c><00:03:46.799><c>In</c>
+
+00:03:47.110 --> 00:03:47.120 align:start position:0%
+analysis exercises later. In
+ 
+
+00:03:47.120 --> 00:03:48.550 align:start position:0%
+analysis exercises later. In
+this <00:03:47.290><c>video, </c><00:03:47.460><c>we're </c><00:03:47.630><c>coding </c><00:03:47.800><c>it </c><00:03:47.970><c>to </c><00:03:48.140><c>make </c><00:03:48.310><c>it </c><00:03:48.480><c>work.</c>
+
+00:03:48.550 --> 00:03:48.560 align:start position:0%
+this video, we're coding it to make it work.
+ 
+
+00:03:48.560 --> 00:03:51.429 align:start position:0%
+this video, we're coding it to make it work.
+First, <00:03:49.249><c>let's </c><00:03:49.938><c>talk </c><00:03:50.627><c>about... </c><00:03:51.316><c>(Sorry,</c>
+
+00:03:51.429 --> 00:03:51.439 align:start position:0%
+First, let's talk about... (Sorry,
+ 
+
+00:03:51.439 --> 00:03:53.229 align:start position:0%
+First, let's talk about... (Sorry,
+I <00:03:51.679><c>accidentally </c><00:03:51.919><c>cut </c><00:03:52.159><c>it </c><00:03:52.399><c>wrong. </c><00:03:52.639><c>This </c><00:03:52.879><c>is </c><00:03:53.119><c>the</c>
+
+00:03:53.229 --> 00:03:53.239 align:start position:0%
+I accidentally cut it wrong. This is the
+ 
+
+00:03:53.239 --> 00:03:55.750 align:start position:0%
+I accidentally cut it wrong. This is the
+correct <00:03:53.639><c>part.) </c><00:03:54.039><c>First, </c><00:03:54.439><c>let's </c><00:03:54.839><c>talk </c><00:03:55.239><c>about </c><00:03:55.639><c>the</c>
+
+00:03:55.750 --> 00:03:55.760 align:start position:0%
+correct part.) First, let's talk about the
+ 
+
+00:03:55.760 --> 00:03:57.670 align:start position:0%
+correct part.) First, let's talk about the
+car. <00:03:56.160><c>You </c><00:03:56.560><c>see, </c><00:03:56.960><c>by </c><00:03:57.360><c>default,</c>
+
+00:03:57.670 --> 00:03:57.680 align:start position:0%
+car. You see, by default,
+ 
+
+00:03:57.680 --> 00:03:59.910 align:start position:0%
+car. You see, by default,
+it <00:03:58.080><c>has </c><00:03:58.480><c>an </c><00:03:58.880><c>attribute </c><00:03:59.280><c>called </c><00:03:59.680><c>'</c>
+
+00:03:59.910 --> 00:03:59.920 align:start position:0%
+it has an attribute called '
+ 
+
+00:03:59.920 --> 00:04:01.509 align:start position:0%
+it has an attribute called '
+brand'. <00:04:01.439><c>Let's</c>
+
+00:04:01.509 --> 00:04:01.519 align:start position:0%
+brand'. Let's
+ 
+
+00:04:01.519 --> 00:04:03.630 align:start position:0%
+brand'. Let's
+call <00:04:01.911><c>it </c><00:04:02.303><c>Ford, </c><00:04:02.695><c>for </c><00:04:03.087><c>example. </c><00:04:03.479><c>Inside,</c>
+
+00:04:03.630 --> 00:04:03.640 align:start position:0%
+call it Ford, for example. Inside,
+ 
+
+00:04:03.640 --> 00:04:05.750 align:start position:0%
+call it Ford, for example. Inside,
+it <00:04:03.999><c>has </c><00:04:04.358><c>a </c><00:04:04.717><c>method </c><00:04:05.076><c>called </c><00:04:05.435><c>'hong'.</c>
+
+00:04:05.750 --> 00:04:05.760 align:start position:0%
+it has a method called 'hong'.
+ 
+
+00:04:05.760 --> 00:04:07.869 align:start position:0%
+it has a method called 'hong'.
+You <00:04:06.152><c>can </c><00:04:06.544><c>call </c><00:04:06.936><c>it </c><00:04:07.328><c>Bitcoin. </c><00:04:07.720><c>When</c>
+
+00:04:07.869 --> 00:04:07.879 align:start position:0%
+You can call it Bitcoin. When
+ 
+
+00:04:07.879 --> 00:04:09.949 align:start position:0%
+You can call it Bitcoin. When
+we <00:04:08.263><c>honk </c><00:04:08.647><c>to </c><00:04:09.031><c>share, </c><00:04:09.415><c>by </c><00:04:09.799><c>default</c>
+
+00:04:09.949 --> 00:04:09.959 align:start position:0%
+we honk to share, by default
+ 
+
+00:04:09.959 --> 00:04:11.750 align:start position:0%
+we honk to share, by default
+it <00:04:10.159><c>says </c><00:04:10.359><c>'toot </c><00:04:10.559><c>toot' </c><00:04:10.759><c>like </c><00:04:10.959><c>this. </c><00:04:11.159><c>Just </c><00:04:11.359><c>ignore </c><00:04:11.559><c>that.</c>
+
+00:04:11.750 --> 00:04:11.760 align:start position:0%
+it says 'toot toot' like this. Just ignore that.
+ 
+
+00:04:11.760 --> 00:04:13.270 align:start position:0%
+it says 'toot toot' like this. Just ignore that.
+First, <00:04:12.226><c>we </c><00:04:12.692><c>have </c><00:04:13.158><c>a</c>
+
+00:04:13.270 --> 00:04:13.280 align:start position:0%
+First, we have a
+ 
+
+00:04:13.280 --> 00:04:15.149 align:start position:0%
+First, we have a
+class <00:04:13.699><c>like </c><00:04:14.118><c>this, </c><00:04:14.537><c>a </c><00:04:14.956><c>pretty</c>
+
+00:04:15.149 --> 00:04:15.159 align:start position:0%
+class like this, a pretty
+ 
+
+00:04:15.159 --> 00:04:17.150 align:start position:0%
+class like this, a pretty
+normal <00:04:15.759><c>class. </c><00:04:16.359><c>But </c><00:04:16.959><c>now,</c>
+
+00:04:17.150 --> 00:04:17.160 align:start position:0%
+normal class. But now,
+ 
+
+00:04:17.160 --> 00:04:18.949 align:start position:0%
+normal class. But now,
+something
+
+00:04:18.949 --> 00:04:18.959 align:start position:0%
+something
+ 
+
+00:04:18.959 --> 00:04:20.670 align:start position:0%
+something
+special <00:04:19.385><c>is </c><00:04:19.811><c>coming. </c><00:04:20.237><c>For</c>
+
+00:04:20.670 --> 00:04:20.680 align:start position:0%
+special is coming. For
+ 
+
+00:04:20.680 --> 00:04:22.710 align:start position:0%
+special is coming. For
+this <00:04:21.032><c>class, </c><00:04:21.384><c>a </c><00:04:21.736><c>guy, </c><00:04:22.088><c>a </c><00:04:22.440><c>car,</c>
+
+00:04:22.710 --> 00:04:22.720 align:start position:0%
+this class, a guy, a car,
+ 
+
+00:04:22.720 --> 00:04:24.469 align:start position:0%
+this class, a guy, a car,
+we'll <00:04:23.040><c>use </c><00:04:23.360><c>`kyw` </c><00:04:23.680><c>which </c><00:04:24.000><c>extends.</c>
+
+00:04:24.469 --> 00:04:24.479 align:start position:0%
+we'll use `kyw` which extends.
+ 
+
+00:04:24.479 --> 00:04:26.390 align:start position:0%
+we'll use `kyw` which extends.
+We'll <00:04:25.079><c>extend, </c><00:04:25.679><c>but </c><00:04:26.279><c>we'll</c>
+
+00:04:26.390 --> 00:04:26.400 align:start position:0%
+We'll extend, but we'll
+ 
+
+00:04:26.400 --> 00:04:27.830 align:start position:0%
+We'll extend, but we'll
+add <00:04:26.739><c>an </c><00:04:27.078><c>'s'. </c><00:04:27.417><c>If </c><00:04:27.756><c>you</c>
+
+00:04:27.830 --> 00:04:27.840 align:start position:0%
+add an 's'. If you
+ 
+
+00:04:27.840 --> 00:04:29.670 align:start position:0%
+add an 's'. If you
+don't <00:04:28.025><c>add </c><00:04:28.210><c>an </c><00:04:28.395><c>'s'...  </c><00:04:28.580><c>It </c><00:04:28.765><c>will </c><00:04:28.950><c>underline </c><00:04:29.135><c>the </c><00:04:29.320><c>error,</c>
+
+00:04:29.670 --> 00:04:29.680 align:start position:0%
+don't add an 's'...  It will underline the error,
+ 
+
+00:04:29.680 --> 00:04:31.510 align:start position:0%
+don't add an 's'...  It will underline the error,
+right? <00:04:30.266><c>For </c><00:04:30.852><c>example, </c><00:04:31.438><c>here</c>
+
+00:04:31.510 --> 00:04:31.520 align:start position:0%
+right? For example, here
+ 
+
+00:04:31.520 --> 00:04:33.469 align:start position:0%
+right? For example, here
+we'll <00:04:32.093><c>type </c><00:04:32.666><c>"vehicle" </c><00:04:33.239><c>again.</c>
+
+00:04:33.469 --> 00:04:33.479 align:start position:0%
+we'll type "vehicle" again.
+ 
+
+00:04:33.479 --> 00:04:35.310 align:start position:0%
+we'll type "vehicle" again.
+You <00:04:34.319><c>see, </c><00:04:35.159><c>it</c>
+
+00:04:35.310 --> 00:04:35.320 align:start position:0%
+You see, it
+ 
+
+00:04:35.320 --> 00:04:37.390 align:start position:0%
+You see, it
+underlines <00:04:36.300><c>like </c><00:04:37.280><c>this.</c>
+
+00:04:37.390 --> 00:04:37.400 align:start position:0%
+underlines like this.
+ 
+
+00:04:37.400 --> 00:04:39.390 align:start position:0%
+underlines like this.
+And <00:04:37.680><c>if </c><00:04:37.960><c>we </c><00:04:38.240><c>add </c><00:04:38.520><c>the </c><00:04:38.800><c>letter </c><00:04:39.080><c>'</c>
+
+00:04:39.390 --> 00:04:39.400 align:start position:0%
+And if we add the letter '
+ 
+
+00:04:39.400 --> 00:04:40.990 align:start position:0%
+And if we add the letter '
+s' <00:04:39.640><c>here, </c><00:04:39.880><c>you </c><00:04:40.120><c>see </c><00:04:40.360><c>that </c><00:04:40.600><c>it </c><00:04:40.840><c>eliminates</c>
+
+00:04:40.990 --> 00:04:41.000 align:start position:0%
+s' here, you see that it eliminates
+ 
+
+00:04:41.000 --> 00:04:43.189 align:start position:0%
+s' here, you see that it eliminates
+the <00:04:41.520><c>error. </c><00:04:42.040><c>So </c><00:04:42.560><c>later, </c><00:04:43.080><c>when</c>
+
+00:04:43.189 --> 00:04:43.199 align:start position:0%
+the error. So later, when
+ 
+
+00:04:43.199 --> 00:04:45.230 align:start position:0%
+the error. So later, when
+you <00:04:43.519><c>code </c><00:04:43.839><c>and </c><00:04:44.159><c>use </c><00:04:44.479><c>the </c><00:04:44.799><c>IDE, </c><00:04:45.119><c>it</c>
+
+00:04:45.230 --> 00:04:45.240 align:start position:0%
+you code and use the IDE, it
+ 
+
+00:04:45.240 --> 00:04:47.070 align:start position:0%
+you code and use the IDE, it
+will <00:04:45.543><c>suggest </c><00:04:45.846><c>it </c><00:04:46.149><c>to </c><00:04:46.452><c>you. </c><00:04:46.755><c>We</c>
+
+00:04:47.070 --> 00:04:47.080 align:start position:0%
+will suggest it to you. We
+ 
+
+00:04:47.080 --> 00:04:48.830 align:start position:0%
+will suggest it to you. We
+inherit, <00:04:47.586><c>but </c><00:04:48.092><c>after </c><00:04:48.598><c>we</c>
+
+00:04:48.830 --> 00:04:48.840 align:start position:0%
+inherit, but after we
+ 
+
+00:04:48.840 --> 00:04:50.550 align:start position:0%
+inherit, but after we
+inherit, <00:04:49.144><c>I'll </c><00:04:49.448><c>be </c><00:04:49.752><c>honest </c><00:04:50.056><c>with </c><00:04:50.360><c>you,</c>
+
+00:04:50.550 --> 00:04:50.560 align:start position:0%
+inherit, I'll be honest with you,
+ 
+
+00:04:50.560 --> 00:04:52.390 align:start position:0%
+inherit, I'll be honest with you,
+we <00:04:50.840><c>don't </c><00:04:51.120><c>even </c><00:04:51.400><c>know </c><00:04:51.680><c>what </c><00:04:51.960><c>we're </c><00:04:52.240><c>inheriting,</c>
+
+00:04:52.390 --> 00:04:52.400 align:start position:0%
+we don't even know what we're inheriting,
+ 
+
+00:04:52.400 --> 00:04:54.310 align:start position:0%
+we don't even know what we're inheriting,
+right? <00:04:53.280><c>Now, </c><00:04:54.160><c>let's</c>
+
+00:04:54.310 --> 00:04:54.320 align:start position:0%
+right? Now, let's
+ 
+
+00:04:54.320 --> 00:04:56.550 align:start position:0%
+right? Now, let's
+copy <00:04:56.320><c>all</c>
+
+00:04:56.550 --> 00:04:56.560 align:start position:0%
+copy all
+ 
+
+00:04:56.560 --> 00:04:58.029 align:start position:0%
+copy all
+this <00:04:56.986><c>sheet. </c><00:04:57.412><c>Copy </c><00:04:57.838><c>all</c>
+
+00:04:58.029 --> 00:04:58.039 align:start position:0%
+this sheet. Copy all
+ 
+
+00:04:58.039 --> 00:05:02.150 align:start position:0%
+this sheet. Copy all
+this <00:04:58.799><c>sheet. </c><00:04:59.559><c>Yes, </c><00:05:00.319><c>copy </c><00:05:01.079><c>everything </c><00:05:01.839><c>here.</c>
+
+00:05:02.150 --> 00:05:02.160 align:start position:0%
+this sheet. Yes, copy everything here.
+ 
+
+00:05:02.160 --> 00:05:04.029 align:start position:0%
+this sheet. Yes, copy everything here.
+It <00:05:03.060><c>seems </c><00:05:03.960><c>like...</c>
+
+00:05:04.029 --> 00:05:04.039 align:start position:0%
+It seems like...
+ 
+
+00:05:04.039 --> 00:05:06.390 align:start position:0%
+It seems like...
+here, <00:05:04.292><c>I'll </c><00:05:04.545><c>press </c><00:05:04.798><c>Enter </c><00:05:05.051><c>to </c><00:05:05.304><c>go </c><00:05:05.557><c>to </c><00:05:05.810><c>the </c><00:05:06.063><c>next </c><00:05:06.316><c>line.</c>
+
+00:05:06.390 --> 00:05:06.400 align:start position:0%
+here, I'll press Enter to go to the next line.
+ 
+
+00:05:06.400 --> 00:05:07.749 align:start position:0%
+here, I'll press Enter to go to the next line.
+Copy <00:05:06.813><c>inside </c><00:05:07.226><c>this </c><00:05:07.639><c>section.</c>
+
+00:05:07.749 --> 00:05:07.759 align:start position:0%
+Copy inside this section.
+ 
+
+00:05:07.759 --> 00:05:09.749 align:start position:0%
+Copy inside this section.
+Copy <00:05:08.039><c>inside </c><00:05:08.319><c>this </c><00:05:08.599><c>section. </c><00:05:08.879><c>Go </c><00:05:09.159><c>back </c><00:05:09.439><c>and</c>
+
+00:05:09.749 --> 00:05:09.759 align:start position:0%
+Copy inside this section. Go back and
+ 
+
+00:05:09.759 --> 00:05:11.990 align:start position:0%
+Copy inside this section. Go back and
+throw <00:05:10.279><c>it </c><00:05:10.799><c>in </c><00:05:11.319><c>here. </c><00:05:11.839><c>So,</c>
+
+00:05:11.990 --> 00:05:12.000 align:start position:0%
+throw it in here. So,
+ 
+
+00:05:12.000 --> 00:05:14.590 align:start position:0%
+throw it in here. So,
+we <00:05:12.373><c>now </c><00:05:12.746><c>have </c><00:05:13.119><c>a </c><00:05:13.492><c>class </c><00:05:13.865><c>and </c><00:05:14.238><c>a</c>
+
+00:05:14.590 --> 00:05:14.600 align:start position:0%
+we now have a class and a
+ 
+
+00:05:14.600 --> 00:05:16.310 align:start position:0%
+we now have a class and a
+subclass. <00:05:16.240><c>Inside,</c>
+
+00:05:16.310 --> 00:05:16.320 align:start position:0%
+subclass. Inside,
+ 
+
+00:05:16.320 --> 00:05:18.749 align:start position:0%
+subclass. Inside,
+we <00:05:16.611><c>declare </c><00:05:16.902><c>some </c><00:05:17.193><c>properties, </c><00:05:17.484><c>like </c><00:05:17.775><c>the </c><00:05:18.066><c>model.  </c><00:05:18.357><c>Let's</c>
+
+00:05:18.749 --> 00:05:18.759 align:start position:0%
+we declare some properties, like the model.  Let's
+ 
+
+00:05:18.759 --> 00:05:20.950 align:start position:0%
+we declare some properties, like the model.  Let's
+call <00:05:19.149><c>it </c><00:05:19.539><c>Mustang, </c><00:05:19.929><c>for </c><00:05:20.319><c>example.</c>
+
+00:05:20.950 --> 00:05:20.960 align:start position:0%
+call it Mustang, for example.
+ 
+
+00:05:20.960 --> 00:05:23.189 align:start position:0%
+call it Mustang, for example.
+This <00:05:21.626><c>is </c><00:05:22.292><c>called </c><00:05:22.958><c>a</c>
+
+00:05:23.189 --> 00:05:23.199 align:start position:0%
+This is called a
+ 
+
+00:05:23.199 --> 00:05:25.110 align:start position:0%
+This is called a
+product <00:05:24.919><c>lifecycle.</c>
+
+00:05:25.110 --> 00:05:25.120 align:start position:0%
+product lifecycle.
+ 
+
+00:05:25.120 --> 00:05:26.469 align:start position:0%
+product lifecycle.
+Next, <00:05:25.680><c>we </c><00:05:26.240><c>initialize</c>
+
+00:05:26.469 --> 00:05:26.479 align:start position:0%
+Next, we initialize
+ 
+
+00:05:26.479 --> 00:05:28.430 align:start position:0%
+Next, we initialize
+this <00:05:26.741><c>child, </c><00:05:27.003><c>we </c><00:05:27.265><c>create </c><00:05:27.527><c>an </c><00:05:27.789><c>object, </c><00:05:28.051><c>and </c><00:05:28.313><c>now</c>
+
+00:05:28.430 --> 00:05:28.440 align:start position:0%
+this child, we create an object, and now
+ 
+
+00:05:28.440 --> 00:05:30.309 align:start position:0%
+this child, we create an object, and now
+we <00:05:28.674><c>call </c><00:05:28.908><c>it </c><00:05:29.142><c>from </c><00:05:29.376><c>a </c><00:05:29.610><c>method </c><00:05:29.844><c>called </c><00:05:30.078><c>My</c>
+
+00:05:30.309 --> 00:05:30.319 align:start position:0%
+we call it from a method called My
+ 
+
+00:05:30.319 --> 00:05:32.550 align:start position:0%
+we call it from a method called My
+car.  <00:05:30.839><c>Hey </c><00:05:31.359><c>guys, </c><00:05:31.879><c>there's </c><00:05:32.399><c>something</c>
+
+00:05:32.550 --> 00:05:32.560 align:start position:0%
+car.  Hey guys, there's something
+ 
+
+00:05:32.560 --> 00:05:34.749 align:start position:0%
+car.  Hey guys, there's something
+special <00:05:33.070><c>here. </c><00:05:33.580><c>That </c><00:05:34.090><c>is, </c><00:05:34.600><c>we're</c>
+
+00:05:34.749 --> 00:05:34.759 align:start position:0%
+special here. That is, we're
+ 
+
+00:05:34.759 --> 00:05:36.909 align:start position:0%
+special here. That is, we're
+creating <00:05:35.199><c>this </c><00:05:35.639><c>car </c><00:05:36.079><c>object, </c><00:05:36.519><c>right?</c>
+
+00:05:36.909 --> 00:05:36.919 align:start position:0%
+creating this car object, right?
+ 
+
+00:05:36.919 --> 00:05:38.629 align:start position:0%
+creating this car object, right?
+But <00:05:37.239><c>inside </c><00:05:37.559><c>this </c><00:05:37.879><c>car </c><00:05:38.199><c>object, </c><00:05:38.519><c>there's</c>
+
+00:05:38.629 --> 00:05:38.639 align:start position:0%
+But inside this car object, there's
+ 
+
+00:05:38.639 --> 00:05:40.590 align:start position:0%
+But inside this car object, there's
+no <00:05:39.539><c>function. </c><00:05:40.439><c>There's</c>
+
+00:05:40.590 --> 00:05:40.600 align:start position:0%
+no function. There's
+ 
+
+00:05:40.600 --> 00:05:42.510 align:start position:0%
+no function. There's
+no <00:05:40.893><c>function </c><00:05:41.186><c>to </c><00:05:41.479><c>press </c><00:05:41.772><c>the </c><00:05:42.065><c>horn </c><00:05:42.358><c>button.</c>
+
+00:05:42.510 --> 00:05:44.990 align:start position:0%
+no function to press the horn button.
+ 
+
+00:05:44.990 --> 00:05:45.000 align:start position:0%
+ 
+ 
+
+00:05:45.000 --> 00:05:46.390 align:start position:0%
+ 
+It's <00:05:45.426><c>defined </c><00:05:45.852><c>here. </c><00:05:46.278><c>It's</c>
+
+00:05:46.390 --> 00:05:46.400 align:start position:0%
+It's defined here. It's
+ 
+
+00:05:46.400 --> 00:05:48.390 align:start position:0%
+It's defined here. It's
+defined <00:05:46.712><c>by </c><00:05:47.024><c>the </c><00:05:47.336><c>parent </c><00:05:47.648><c>object, </c><00:05:47.960><c>right?</c>
+
+00:05:48.390 --> 00:05:48.400 align:start position:0%
+defined by the parent object, right?
+ 
+
+00:05:48.400 --> 00:05:50.350 align:start position:0%
+defined by the parent object, right?
+And <00:05:48.752><c>furthermore, </c><00:05:49.104><c>you </c><00:05:49.456><c>can </c><00:05:49.808><c>see </c><00:05:50.160><c>that</c>
+
+00:05:50.350 --> 00:05:50.360 align:start position:0%
+And furthermore, you can see that
+ 
+
+00:05:50.360 --> 00:05:51.909 align:start position:0%
+And furthermore, you can see that
+our <00:05:50.840><c>Model </c><00:05:51.320><c>name </c><00:05:51.800><c>is</c>
+
+00:05:51.909 --> 00:05:51.919 align:start position:0%
+our Model name is
+ 
+
+00:05:51.919 --> 00:05:53.830 align:start position:0%
+our Model name is
+this, <00:05:53.720><c>but</c>
+
+00:05:53.830 --> 00:05:55.510 align:start position:0%
+this, but
+ 
+
+00:05:55.510 --> 00:05:55.520 align:start position:0%
+ 
+ 
+
+00:05:55.520 --> 00:05:56.990 align:start position:0%
+ 
+we <00:05:55.784><c>haven't </c><00:05:56.048><c>declared </c><00:05:56.312><c>the </c><00:05:56.576><c>Brand </c><00:05:56.840><c>inside</c>
+
+00:05:56.990 --> 00:05:57.000 align:start position:0%
+we haven't declared the Brand inside
+ 
+
+00:05:57.000 --> 00:05:58.830 align:start position:0%
+we haven't declared the Brand inside
+this <00:05:57.409><c>car </c><00:05:57.818><c>object. </c><00:05:58.227><c>So </c><00:05:58.636><c>we're</c>
+
+00:05:58.830 --> 00:05:58.840 align:start position:0%
+this car object. So we're
+ 
+
+00:05:58.840 --> 00:06:00.870 align:start position:0%
+this car object. So we're
+enjoying <00:05:59.700><c>the </c><00:06:00.560><c>benefits</c>
+
+00:06:00.870 --> 00:06:00.880 align:start position:0%
+enjoying the benefits
+ 
+
+00:06:00.880 --> 00:06:02.670 align:start position:0%
+enjoying the benefits
+of <00:06:01.160><c>the </c><00:06:01.440><c>parent </c><00:06:01.720><c>object. </c><00:06:02.000><c>For </c><00:06:02.280><c>example, </c><00:06:02.560><c>the</c>
+
+00:06:02.670 --> 00:06:02.680 align:start position:0%
+of the parent object. For example, the
+ 
+
+00:06:02.680 --> 00:06:04.629 align:start position:0%
+of the parent object. For example, the
+parent <00:06:02.953><c>object </c><00:06:03.226><c>has </c><00:06:03.499><c>a </c><00:06:03.772><c>name </c><00:06:04.045><c>like </c><00:06:04.318><c>this.</c>
+
+00:06:04.629 --> 00:06:04.639 align:start position:0%
+parent object has a name like this.
+ 
+
+00:06:04.639 --> 00:06:06.270 align:start position:0%
+parent object has a name like this.
+At <00:06:04.824><c>the </c><00:06:05.009><c>same </c><00:06:05.194><c>time, </c><00:06:05.379><c>it </c><00:06:05.564><c>has </c><00:06:05.749><c>a </c><00:06:05.934><c>function </c><00:06:06.119><c>like</c>
+
+00:06:06.270 --> 00:06:06.280 align:start position:0%
+At the same time, it has a function like
+ 
+
+00:06:06.280 --> 00:06:07.950 align:start position:0%
+At the same time, it has a function like
+this, <00:06:06.786><c>and </c><00:06:07.292><c>you </c><00:06:07.798><c>can</c>
+
+00:06:07.950 --> 00:06:07.960 align:start position:0%
+this, and you can
+ 
+
+00:06:07.960 --> 00:06:09.589 align:start position:0%
+this, and you can
+use <00:06:08.177><c>it </c><00:06:08.394><c>in </c><00:06:08.611><c>the </c><00:06:08.828><c>child </c><00:06:09.045><c>object. </c><00:06:09.262><c>Now, </c><00:06:09.479><c>let's</c>
+
+00:06:09.589 --> 00:06:09.599 align:start position:0%
+use it in the child object. Now, let's
+ 
+
+00:06:09.599 --> 00:06:11.749 align:start position:0%
+use it in the child object. Now, let's
+run <00:06:10.265><c>this </c><00:06:10.931><c>file. </c><00:06:11.597><c>We</c>
+
+00:06:11.749 --> 00:06:11.759 align:start position:0%
+run this file. We
+ 
+
+00:06:11.759 --> 00:06:12.950 align:start position:0%
+run this file. We
+'ll <00:06:12.259><c>run </c><00:06:12.759><c>this</c>
+
+00:06:12.950 --> 00:06:12.960 align:start position:0%
+'ll run this
+ 
+
+00:06:12.960 --> 00:06:15.029 align:start position:0%
+'ll run this
+car <00:06:13.600><c>object, </c><00:06:14.240><c>and </c><00:06:14.880><c>you'll</c>
+
+00:06:15.029 --> 00:06:15.039 align:start position:0%
+car object, and you'll
+ 
+
+00:06:15.039 --> 00:06:16.629 align:start position:0%
+car object, and you'll
+see <00:06:15.256><c>that </c><00:06:15.473><c>it </c><00:06:15.690><c>runs </c><00:06:15.907><c>the </c><00:06:16.124><c>method </c><00:06:16.341><c>called </c><00:06:16.558><c>'</c>
+
+00:06:16.629 --> 00:06:16.639 align:start position:0%
+see that it runs the method called '
+ 
+
+00:06:16.639 --> 00:06:18.430 align:start position:0%
+see that it runs the method called '
+uncle' <00:06:16.905><c>and </c><00:06:17.171><c>it </c><00:06:17.437><c>prints </c><00:06:17.703><c>out </c><00:06:17.969><c>the </c><00:06:18.235><c>names:</c>
+
+00:06:18.430 --> 00:06:18.440 align:start position:0%
+uncle' and it prints out the names:
+ 
+
+00:06:18.440 --> 00:06:20.589 align:start position:0%
+uncle' and it prints out the names:
+Ford <00:06:18.786><c>and </c><00:06:19.132><c>Mustang. </c><00:06:19.478><c>The </c><00:06:19.824><c>keyword </c><00:06:20.170><c>'Ford' </c><00:06:20.516><c>is</c>
+
+00:06:20.589 --> 00:06:20.599 align:start position:0%
+Ford and Mustang. The keyword 'Ford' is
+ 
+
+00:06:20.599 --> 00:06:22.990 align:start position:0%
+Ford and Mustang. The keyword 'Ford' is
+...  <00:06:20.874><c>The </c><00:06:21.149><c>parent </c><00:06:21.424><c>and </c><00:06:21.699><c>child... </c><00:06:21.974><c>It </c><00:06:22.249><c>only </c><00:06:22.524><c>has </c><00:06:22.799><c>the</c>
+
+00:06:22.990 --> 00:06:23.000 align:start position:0%
+...  The parent and child... It only has the
+ 
+
+00:06:23.000 --> 00:06:25.029 align:start position:0%
+...  The parent and child... It only has the
+mod <00:06:23.376><c>name. </c><00:06:23.752><c>Well, </c><00:06:24.128><c>I </c><00:06:24.504><c>believe </c><00:06:24.880><c>that</c>
+
+00:06:25.029 --> 00:06:25.039 align:start position:0%
+mod name. Well, I believe that
+ 
+
+00:06:25.039 --> 00:06:26.790 align:start position:0%
+mod name. Well, I believe that
+through <00:06:25.532><c>a </c><00:06:26.025><c>simple </c><00:06:26.518><c>example</c>
+
+00:06:26.790 --> 00:06:26.800 align:start position:0%
+through a simple example
+ 
+
+00:06:26.800 --> 00:06:29.029 align:start position:0%
+through a simple example
+like <00:06:27.280><c>this, </c><00:06:27.760><c>you've </c><00:06:28.240><c>already </c><00:06:28.720><c>grasped</c>
+
+00:06:29.029 --> 00:06:29.039 align:start position:0%
+like this, you've already grasped
+ 
+
+00:06:29.039 --> 00:06:31.309 align:start position:0%
+like this, you've already grasped
+something <00:06:30.099><c>about </c><00:06:31.159><c>inheritance,</c>
+
+00:06:31.309 --> 00:06:31.319 align:start position:0%
+something about inheritance,
+ 
+
+00:06:31.319 --> 00:06:33.029 align:start position:0%
+something about inheritance,
+right? <00:06:31.839><c>And </c><00:06:32.359><c>rest </c><00:06:32.879><c>assured,</c>
+
+00:06:33.029 --> 00:06:33.039 align:start position:0%
+right? And rest assured,
+ 
+
+00:06:33.039 --> 00:06:34.909 align:start position:0%
+right? And rest assured,
+later <00:06:33.325><c>when </c><00:06:33.611><c>we </c><00:06:33.897><c>do </c><00:06:34.183><c>practical </c><00:06:34.469><c>exercises </c><00:06:34.755><c>with</c>
+
+00:06:34.909 --> 00:06:34.919 align:start position:0%
+later when we do practical exercises with
+ 
+
+00:06:34.919 --> 00:06:36.629 align:start position:0%
+later when we do practical exercises with
+this <00:06:35.119><c>example, </c><00:06:35.319><c>we'll </c><00:06:35.519><c>be </c><00:06:35.719><c>able </c><00:06:35.919><c>to </c><00:06:36.119><c>code </c><00:06:36.319><c>it </c><00:06:36.519><c>correctly.</c>
+
+00:06:36.629 --> 00:06:36.639 align:start position:0%
+this example, we'll be able to code it correctly.
+ 
+
+00:06:36.639 --> 00:06:38.790 align:start position:0%
+this example, we'll be able to code it correctly.
+Now, <00:06:37.149><c>let's </c><00:06:37.659><c>talk </c><00:06:38.169><c>about </c><00:06:38.679><c>the</c>
+
+00:06:38.790 --> 00:06:38.800 align:start position:0%
+Now, let's talk about the
+ 
+
+00:06:38.800 --> 00:06:41.070 align:start position:0%
+Now, let's talk about the
+purpose <00:06:39.506><c>of </c><00:06:40.212><c>inheritance. </c><00:06:40.918><c>The</c>
+
+00:06:41.070 --> 00:06:41.080 align:start position:0%
+purpose of inheritance. The
+ 
+
+00:06:41.080 --> 00:06:43.110 align:start position:0%
+purpose of inheritance. The
+deeper <00:06:41.406><c>purpose </c><00:06:41.732><c>of </c><00:06:42.058><c>inheritance </c><00:06:42.384><c>is </c><00:06:42.710><c>to </c><00:06:43.036><c>help</c>
+
+00:06:43.110 --> 00:06:43.120 align:start position:0%
+deeper purpose of inheritance is to help
+ 
+
+00:06:43.120 --> 00:06:45.029 align:start position:0%
+deeper purpose of inheritance is to help
+you <00:06:43.960><c>reuse </c><00:06:44.800><c>code.</c>
+
+00:06:45.029 --> 00:06:45.039 align:start position:0%
+you reuse code.
+ 
+
+00:06:45.039 --> 00:06:47.150 align:start position:0%
+you reuse code.
+Imagine <00:06:45.399><c>that </c><00:06:45.759><c>instead </c><00:06:46.119><c>of </c><00:06:46.479><c>writing </c><00:06:46.839><c>code</c>
+
+00:06:47.150 --> 00:06:47.160 align:start position:0%
+Imagine that instead of writing code
+ 
+
+00:06:47.160 --> 00:06:49.270 align:start position:0%
+Imagine that instead of writing code
+repeatedly,
+
+00:06:49.270 --> 00:06:49.280 align:start position:0%
+repeatedly,
+ 
+
+00:06:49.280 --> 00:06:51.070 align:start position:0%
+repeatedly,
+we <00:06:49.607><c>declare </c><00:06:49.934><c>all </c><00:06:50.261><c>the </c><00:06:50.588><c>common </c><00:06:50.915><c>points</c>
+
+00:06:51.070 --> 00:06:51.080 align:start position:0%
+we declare all the common points
+ 
+
+00:06:51.080 --> 00:06:53.150 align:start position:0%
+we declare all the common points
+in <00:06:51.456><c>the </c><00:06:51.832><c>parent </c><00:06:52.208><c>code </c><00:06:52.584><c>for </c><00:06:52.960><c>the</c>
+
+00:06:53.150 --> 00:06:53.160 align:start position:0%
+in the parent code for the
+ 
+
+00:06:53.160 --> 00:06:54.990 align:start position:0%
+in the parent code for the
+children <00:06:53.980><c>that </c><00:06:54.800><c>share</c>
+
+00:06:54.990 --> 00:06:55.000 align:start position:0%
+children that share
+ 
+
+00:06:55.000 --> 00:06:57.150 align:start position:0%
+children that share
+these <00:06:55.319><c>attributes. </c><00:06:55.638><c>They </c><00:06:55.957><c>call </c><00:06:56.276><c>and </c><00:06:56.595><c>use </c><00:06:56.914><c>them.</c>
+
+00:06:57.150 --> 00:06:57.160 align:start position:0%
+these attributes. They call and use them.
+ 
+
+00:06:57.160 --> 00:06:58.909 align:start position:0%
+these attributes. They call and use them.
+This <00:06:57.626><c>is </c><00:06:58.092><c>how </c><00:06:58.558><c>you</c>
+
+00:06:58.909 --> 00:06:58.919 align:start position:0%
+This is how you
+ 
+
+00:06:58.919 --> 00:07:01.869 align:start position:0%
+This is how you
+reuse <00:06:59.519><c>code. </c><00:07:00.119><c>The </c><00:07:00.719><c>second </c><00:07:01.319><c>benefit,</c>
+
+00:07:01.869 --> 00:07:01.879 align:start position:0%
+reuse code. The second benefit,
+ 
+
+00:07:01.879 --> 00:07:03.550 align:start position:0%
+reuse code. The second benefit,
+besides <00:07:02.239><c>reusing </c><00:07:02.599><c>code, </c><00:07:02.959><c>is </c><00:07:03.319><c>that</c>
+
+00:07:03.550 --> 00:07:05.430 align:start position:0%
+besides reusing code, is that
+ 
+
+00:07:05.430 --> 00:07:05.440 align:start position:0%
+ 
+ 
+
+00:07:05.440 --> 00:07:07.469 align:start position:0%
+ 
+inheritance <00:07:05.986><c>reflects </c><00:07:06.532><c>reality </c><00:07:07.078><c>to</c>
+
+00:07:07.469 --> 00:07:07.479 align:start position:0%
+inheritance reflects reality to
+ 
+
+00:07:07.479 --> 00:07:09.430 align:start position:0%
+inheritance reflects reality to
+some <00:07:08.106><c>extent. </c><00:07:08.733><c>That </c><00:07:09.360><c>is,</c>
+
+00:07:09.430 --> 00:07:09.440 align:start position:0%
+some extent. That is,
+ 
+
+00:07:09.440 --> 00:07:11.110 align:start position:0%
+some extent. That is,
+we <00:07:10.140><c>are </c><00:07:10.840><c>mapping</c>
+
+00:07:11.110 --> 00:07:11.120 align:start position:0%
+we are mapping
+ 
+
+00:07:11.120 --> 00:07:12.990 align:start position:0%
+we are mapping
+reality <00:07:11.471><c>into </c><00:07:11.822><c>the </c><00:07:12.173><c>project.  </c><00:07:12.524><c>Our </c><00:07:12.875><c>solution</c>
+
+00:07:12.990 --> 00:07:13.000 align:start position:0%
+reality into the project.  Our solution
+ 
+
+00:07:13.000 --> 00:07:14.909 align:start position:0%
+reality into the project.  Our solution
+for <00:07:13.920><c>our </c><00:07:14.840><c>subclass:</c>
+
+00:07:14.909 --> 00:07:16.990 align:start position:0%
+for our subclass:
+ 
+
+00:07:16.990 --> 00:07:17.000 align:start position:0%
+ 
+ 
+
+00:07:17.000 --> 00:07:19.270 align:start position:0%
+ 
+This <00:07:17.226><c>subclass, </c><00:07:17.452><c>also </c><00:07:17.678><c>called </c><00:07:17.904><c>a </c><00:07:18.130><c>try </c><00:07:18.356><c>class, </c><00:07:18.582><c>can </c><00:07:18.808><c>reuse </c><00:07:19.034><c>the</c>
+
+00:07:19.270 --> 00:07:19.280 align:start position:0%
+This subclass, also called a try class, can reuse the
+ 
+
+00:07:19.280 --> 00:07:20.990 align:start position:0%
+This subclass, also called a try class, can reuse the
+attributes <00:07:19.479><c>and </c><00:07:19.678><c>methods </c><00:07:19.877><c>of </c><00:07:20.076><c>our </c><00:07:20.275><c>try </c><00:07:20.474><c>class, </c><00:07:20.673><c>which </c><00:07:20.872><c>we</c>
+
+00:07:20.990 --> 00:07:21.000 align:start position:0%
+attributes and methods of our try class, which we
+ 
+
+00:07:21.000 --> 00:07:23.110 align:start position:0%
+attributes and methods of our try class, which we
+call <00:07:21.490><c>a </c><00:07:21.980><c>superclass. </c><00:07:22.470><c>There's </c><00:07:22.960><c>a</c>
+
+00:07:23.110 --> 00:07:23.120 align:start position:0%
+call a superclass. There's a
+ 
+
+00:07:23.120 --> 00:07:25.430 align:start position:0%
+call a superclass. There's a
+small <00:07:23.512><c>point </c><00:07:23.904><c>to </c><00:07:24.296><c>note </c><00:07:24.688><c>here: </c><00:07:25.080><c>regarding</c>
+
+00:07:25.430 --> 00:07:25.440 align:start position:0%
+small point to note here: regarding
+ 
+
+00:07:25.440 --> 00:07:26.950 align:start position:0%
+small point to note here: regarding
+inheritance, <00:07:25.790><c>for </c><00:07:26.140><c>those </c><00:07:26.490><c>attributes </c><00:07:26.840><c>and</c>
+
+00:07:26.950 --> 00:07:26.960 align:start position:0%
+inheritance, for those attributes and
+ 
+
+00:07:26.960 --> 00:07:28.749 align:start position:0%
+inheritance, for those attributes and
+methods, <00:07:27.506><c>it </c><00:07:28.052><c>only </c><00:07:28.598><c>inherits</c>
+
+00:07:28.749 --> 00:07:28.759 align:start position:0%
+methods, it only inherits
+ 
+
+00:07:28.759 --> 00:07:30.749 align:start position:0%
+methods, it only inherits
+public <00:07:29.219><c>protect; </c><00:07:29.679><c>it </c><00:07:30.139><c>doesn't </c><00:07:30.599><c>inherit</c>
+
+00:07:30.749 --> 00:07:30.759 align:start position:0%
+public protect; it doesn't inherit
+ 
+
+00:07:30.759 --> 00:07:32.950 align:start position:0%
+public protect; it doesn't inherit
+private. <00:07:32.840><c>So,</c>
+
+00:07:32.950 --> 00:07:32.960 align:start position:0%
+private. So,
+ 
+
+00:07:32.960 --> 00:07:34.710 align:start position:0%
+private. So,
+in <00:07:33.186><c>our </c><00:07:33.412><c>code, </c><00:07:33.638><c>pay </c><00:07:33.864><c>attention </c><00:07:34.090><c>to </c><00:07:34.316><c>this:</c>
+
+00:07:34.710 --> 00:07:36.150 align:start position:0%
+in our code, pay attention to this:
+ 
+
+00:07:36.150 --> 00:07:36.160 align:start position:0%
+ 
+ 
+
+00:07:36.160 --> 00:07:38.150 align:start position:0%
+ 
+if <00:07:36.480><c>we </c><00:07:36.800><c>declare </c><00:07:37.120><c>something </c><00:07:37.440><c>as </c><00:07:37.760><c>protected, </c><00:07:38.080><c>but</c>
+
+00:07:38.150 --> 00:07:38.160 align:start position:0%
+if we declare something as protected, but
+ 
+
+00:07:38.160 --> 00:07:39.670 align:start position:0%
+if we declare something as protected, but
+you <00:07:38.447><c>declare </c><00:07:38.734><c>it </c><00:07:39.021><c>as </c><00:07:39.308><c>Private, </c><00:07:39.595><c>then</c>
+
+00:07:39.670 --> 00:07:41.469 align:start position:0%
+you declare it as Private, then
+ 
+
+00:07:41.469 --> 00:07:41.479 align:start position:0%
+ 
+ 
+
+00:07:41.479 --> 00:07:43.150 align:start position:0%
+ 
+you <00:07:43.000><c>think</c>
+
+00:07:43.150 --> 00:07:43.160 align:start position:0%
+you think
+ 
+
+00:07:43.160 --> 00:07:44.830 align:start position:0%
+you think
+we <00:07:43.333><c>can </c><00:07:43.506><c>access </c><00:07:43.679><c>it </c><00:07:43.852><c>directly. </c><00:07:44.025><c>This </c><00:07:44.198><c>side </c><00:07:44.371><c>already </c><00:07:44.544><c>shows </c><00:07:44.717><c>an</c>
+
+00:07:44.830 --> 00:07:44.840 align:start position:0%
+we can access it directly. This side already shows an
+ 
+
+00:07:44.840 --> 00:07:46.510 align:start position:0%
+we can access it directly. This side already shows an
+error. <00:07:46.400><c>You</c>
+
+00:07:46.510 --> 00:07:46.520 align:start position:0%
+error. You
+ 
+
+00:07:46.520 --> 00:07:48.029 align:start position:0%
+error. You
+can't <00:07:47.160><c>directly </c><00:07:47.800><c>access</c>
+
+00:07:48.029 --> 00:07:48.039 align:start position:0%
+can't directly access
+ 
+
+00:07:48.039 --> 00:07:50.149 align:start position:0%
+can't directly access
+this <00:07:48.324><c>attribute, </c><00:07:48.609><c>so </c><00:07:48.894><c>please </c><00:07:49.179><c>note </c><00:07:49.464><c>that. </c><00:07:49.749><c>Later, </c><00:07:50.034><c>when</c>
+
+00:07:50.149 --> 00:07:50.159 align:start position:0%
+this attribute, so please note that. Later, when
+ 
+
+00:07:50.159 --> 00:07:52.189 align:start position:0%
+this attribute, so please note that. Later, when
+you <00:07:51.079><c>use </c><00:07:51.999><c>inheritance,</c>
+
+00:07:52.189 --> 00:07:52.199 align:start position:0%
+you use inheritance,
+ 
+
+00:07:52.199 --> 00:07:53.790 align:start position:0%
+you use inheritance,
+you'll <00:07:52.599><c>mostly </c><00:07:52.999><c>use </c><00:07:53.399><c>Keyword</c>
+
+00:07:53.790 --> 00:07:53.800 align:start position:0%
+you'll mostly use Keyword
+ 
+
+00:07:53.800 --> 00:07:55.670 align:start position:0%
+you'll mostly use Keyword
+protected <00:07:54.399><c>like </c><00:07:54.998><c>this </c><00:07:55.597><c>to</c>
+
+00:07:55.670 --> 00:07:55.680 align:start position:0%
+protected like this to
+ 
+
+00:07:55.680 --> 00:07:57.149 align:start position:0%
+protected like this to
+ensure <00:07:55.906><c>that </c><00:07:56.132><c>the </c><00:07:56.358><c>parent </c><00:07:56.584><c>and </c><00:07:56.810><c>child </c><00:07:57.036><c>classes</c>
+
+00:07:57.149 --> 00:07:57.159 align:start position:0%
+ensure that the parent and child classes
+ 
+
+00:07:57.159 --> 00:07:59.430 align:start position:0%
+ensure that the parent and child classes
+can <00:07:57.583><c>communicate </c><00:07:58.007><c>with </c><00:07:58.431><c>each </c><00:07:58.855><c>other. </c><00:07:59.279><c>Please</c>
+
+00:07:59.430 --> 00:07:59.440 align:start position:0%
+can communicate with each other. Please
+ 
+
+00:07:59.440 --> 00:08:01.469 align:start position:0%
+can communicate with each other. Please
+note <00:07:59.909><c>this </c><00:08:00.378><c>point, </c><00:08:00.847><c>okay? </c><00:08:01.316><c>One</c>
+
+00:08:01.469 --> 00:08:01.479 align:start position:0%
+note this point, okay? One
+ 
+
+00:08:01.479 --> 00:08:03.070 align:start position:0%
+note this point, okay? One
+final <00:08:01.743><c>point.  </c><00:08:02.007><c>I </c><00:08:02.271><c>want </c><00:08:02.535><c>to </c><00:08:02.799><c>reveal</c>
+
+00:08:03.070 --> 00:08:03.080 align:start position:0%
+final point.  I want to reveal
+ 
+
+00:08:03.080 --> 00:08:04.710 align:start position:0%
+final point.  I want to reveal
+to <00:08:03.383><c>you </c><00:08:03.686><c>that </c><00:08:03.989><c>a </c><00:08:04.292><c>child </c><00:08:04.595><c>class</c>
+
+00:08:04.710 --> 00:08:04.720 align:start position:0%
+to you that a child class
+ 
+
+00:08:04.720 --> 00:08:06.550 align:start position:0%
+to you that a child class
+cannot <00:08:05.519><c>inherit </c><00:08:06.318><c>the</c>
+
+00:08:06.550 --> 00:08:06.560 align:start position:0%
+cannot inherit the
+ 
+
+00:08:06.560 --> 00:08:08.629 align:start position:0%
+cannot inherit the
+parent <00:08:07.519><c>class's </c><00:08:08.478><c>constructor.</c>
+
+00:08:08.629 --> 00:08:08.639 align:start position:0%
+parent class's constructor.
+ 
+
+00:08:08.639 --> 00:08:10.510 align:start position:0%
+parent class's constructor.
+So, <00:08:09.069><c>through </c><00:08:09.499><c>this </c><00:08:09.929><c>video, </c><00:08:10.359><c>I</c>
+
+00:08:10.510 --> 00:08:10.520 align:start position:0%
+So, through this video, I
+ 
+
+00:08:10.520 --> 00:08:12.469 align:start position:0%
+So, through this video, I
+hope <00:08:10.888><c>you've </c><00:08:11.256><c>gained </c><00:08:11.624><c>some </c><00:08:11.992><c>understanding </c><00:08:12.360><c>of</c>
+
+00:08:12.469 --> 00:08:12.479 align:start position:0%
+hope you've gained some understanding of
+ 
+
+00:08:12.479 --> 00:08:14.749 align:start position:0%
+hope you've gained some understanding of
+Java's <00:08:13.439><c>inheritance </c><00:08:14.399><c>nature.</c>
+
+00:08:14.749 --> 00:08:14.759 align:start position:0%
+Java's inheritance nature.
+ 
+
+00:08:14.759 --> 00:08:16.830 align:start position:0%
+Java's inheritance nature.
+Our <00:08:15.412><c>ultimate </c><00:08:16.065><c>goal </c><00:08:16.718><c>is</c>
+
+00:08:16.830 --> 00:08:16.840 align:start position:0%
+Our ultimate goal is
+ 
+
+00:08:16.840 --> 00:08:18.710 align:start position:0%
+Our ultimate goal is
+code <00:08:17.176><c>reuse. </c><00:08:17.512><c>If </c><00:08:17.848><c>you </c><00:08:18.184><c>want </c><00:08:18.520><c>to</c>
+
+00:08:18.710 --> 00:08:18.720 align:start position:0%
+code reuse. If you want to
+ 
+
+00:08:18.720 --> 00:08:20.110 align:start position:0%
+code reuse. If you want to
+know <00:08:18.939><c>about </c><00:08:19.158><c>a </c><00:08:19.377><c>second </c><00:08:19.596><c>purpose, </c><00:08:19.815><c>which </c><00:08:20.034><c>is</c>
+
+00:08:20.110 --> 00:08:20.120 align:start position:0%
+know about a second purpose, which is
+ 
+
+00:08:20.120 --> 00:08:21.869 align:start position:0%
+know about a second purpose, which is
+simulating <00:08:20.666><c>real-world </c><00:08:21.212><c>scenarios </c><00:08:21.758><c>in</c>
+
+00:08:21.869 --> 00:08:21.879 align:start position:0%
+simulating real-world scenarios in
+ 
+
+00:08:21.879 --> 00:08:23.830 align:start position:0%
+simulating real-world scenarios in
+programming,
+
+00:08:23.830 --> 00:08:23.840 align:start position:0%
+programming,
+ 
+
+00:08:23.840 --> 00:08:25.309 align:start position:0%
+programming,
+I'll <00:08:23.986><c>guide </c><00:08:24.132><c>you </c><00:08:24.278><c>through </c><00:08:24.424><c>it </c><00:08:24.570><c>in </c><00:08:24.716><c>the </c><00:08:24.862><c>next </c><00:08:25.008><c>video. </c><00:08:25.154><c>We</c>
+
+00:08:25.309 --> 00:08:25.319 align:start position:0%
+I'll guide you through it in the next video. We
+ 
+
+00:08:25.319 --> 00:08:27.070 align:start position:0%
+I'll guide you through it in the next video. We
+'ll <00:08:25.699><c>explore </c><00:08:26.079><c>using </c><00:08:26.459><c>the </c><00:08:26.839><c>`</c>
+
+00:08:27.070 --> 00:08:27.080 align:start position:0%
+'ll explore using the `
+ 
+
+00:08:27.080 --> 00:08:29.670 align:start position:0%
+'ll explore using the `
+Super` <00:08:27.893><c>keyword </c><00:08:28.706><c>within </c><00:08:29.519><c>inheritance.</c>
+
+00:08:29.670 --> 00:08:29.680 align:start position:0%
+Super` keyword within inheritance.
+ 
+
+00:08:29.680 --> 00:08:31.629 align:start position:0%
+Super` keyword within inheritance.
+What <00:08:29.966><c>is </c><00:08:30.252><c>the </c><00:08:30.538><c>`Super` </c><00:08:30.824><c>keyword </c><00:08:31.110><c>used </c><00:08:31.396><c>for?</c>
+
+00:08:31.629 --> 00:08:31.639 align:start position:0%
+What is the `Super` keyword used for?
+ 
+
+00:08:31.639 --> 00:08:33.070 align:start position:0%
+What is the `Super` keyword used for?
+We'll <00:08:31.852><c>discuss </c><00:08:32.065><c>that </c><00:08:32.278><c>in </c><00:08:32.491><c>the </c><00:08:32.704><c>next </c><00:08:32.917><c>video.</c>
+
+00:08:33.070 --> 00:08:36.360 align:start position:0%
+We'll discuss that in the next video.
+ 
+

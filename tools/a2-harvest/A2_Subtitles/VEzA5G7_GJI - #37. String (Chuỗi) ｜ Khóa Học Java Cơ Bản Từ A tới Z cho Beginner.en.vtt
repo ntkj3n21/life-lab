@@ -1,0 +1,1552 @@
+WEBVTT
+Kind: captions
+Language: en
+
+00:00:06.759 --> 00:00:08.870 align:start position:0%
+ 
+In <00:00:07.072><c>the </c><00:00:07.385><c>first </c><00:00:07.698><c>video </c><00:00:08.011><c>of </c><00:00:08.324><c>this </c><00:00:08.637><c>chapter,</c>
+
+00:00:08.870 --> 00:00:08.880 align:start position:0%
+In the first video of this chapter,
+ 
+
+00:00:08.880 --> 00:00:11.350 align:start position:0%
+In the first video of this chapter,
+I'll <00:00:09.239><c>introduce </c><00:00:09.598><c>you </c><00:00:09.957><c>to </c><00:00:10.316><c>strings. </c><00:00:10.675><c>The</c>
+
+00:00:11.350 --> 00:00:11.360 align:start position:0%
+I'll introduce you to strings. The
+ 
+
+00:00:11.360 --> 00:00:12.950 align:start position:0%
+I'll introduce you to strings. The
+first <00:00:11.571><c>question </c><00:00:11.782><c>many </c><00:00:11.993><c>of </c><00:00:12.204><c>you </c><00:00:12.415><c>will </c><00:00:12.626><c>ask </c><00:00:12.837><c>is</c>
+
+00:00:12.950 --> 00:00:12.960 align:start position:0%
+first question many of you will ask is
+ 
+
+00:00:12.960 --> 00:00:14.589 align:start position:0%
+first question many of you will ask is
+why <00:00:13.440><c>we're </c><00:00:13.920><c>learning </c><00:00:14.400><c>about</c>
+
+00:00:14.589 --> 00:00:14.599 align:start position:0%
+why we're learning about
+ 
+
+00:00:14.599 --> 00:00:16.590 align:start position:0%
+why we're learning about
+strings. <00:00:15.226><c>Is </c><00:00:15.853><c>there </c><00:00:16.480><c>something</c>
+
+00:00:16.590 --> 00:00:16.600 align:start position:0%
+strings. Is there something
+ 
+
+00:00:16.600 --> 00:00:18.470 align:start position:0%
+strings. Is there something
+special <00:00:16.951><c>about </c><00:00:17.302><c>them? </c><00:00:17.653><c>Well, </c><00:00:18.004><c>that's </c><00:00:18.355><c>right.</c>
+
+00:00:18.470 --> 00:00:18.480 align:start position:0%
+special about them? Well, that's right.
+ 
+
+00:00:18.480 --> 00:00:20.590 align:start position:0%
+special about them? Well, that's right.
+We <00:00:20.439><c>usually</c>
+
+00:00:20.590 --> 00:00:20.600 align:start position:0%
+We usually
+ 
+
+00:00:20.600 --> 00:00:22.550 align:start position:0%
+We usually
+work <00:00:20.900><c>with </c><00:00:21.200><c>the </c><00:00:21.500><c>string </c><00:00:21.800><c>type; </c><00:00:22.100><c>it's </c><00:00:22.400><c>one</c>
+
+00:00:22.550 --> 00:00:22.560 align:start position:0%
+work with the string type; it's one
+ 
+
+00:00:22.560 --> 00:00:24.670 align:start position:0%
+work with the string type; it's one
+of <00:00:22.840><c>the </c><00:00:23.120><c>most </c><00:00:23.400><c>frequently </c><00:00:23.680><c>used </c><00:00:23.960><c>data </c><00:00:24.240><c>types,</c>
+
+00:00:24.670 --> 00:00:24.680 align:start position:0%
+of the most frequently used data types,
+ 
+
+00:00:24.680 --> 00:00:27.429 align:start position:0%
+of the most frequently used data types,
+alongside <00:00:25.293><c>objects </c><00:00:25.906><c>and </c><00:00:26.519><c>arrays,</c>
+
+00:00:27.429 --> 00:00:27.439 align:start position:0%
+alongside objects and arrays,
+ 
+
+00:00:27.439 --> 00:00:29.509 align:start position:0%
+alongside objects and arrays,
+in <00:00:27.656><c>the </c><00:00:27.873><c>Java </c><00:00:28.090><c>world. </c><00:00:28.307><c>The </c><00:00:28.524><c>first </c><00:00:28.741><c>thing </c><00:00:28.958><c>we </c><00:00:29.175><c>need </c><00:00:29.392><c>to</c>
+
+00:00:29.509 --> 00:00:29.519 align:start position:0%
+in the Java world. The first thing we need to
+ 
+
+00:00:29.519 --> 00:00:31.349 align:start position:0%
+in the Java world. The first thing we need to
+remember
+
+00:00:31.349 --> 00:00:31.359 align:start position:0%
+remember
+ 
+
+00:00:31.359 --> 00:00:33.310 align:start position:0%
+remember
+is <00:00:31.619><c>that </c><00:00:31.879><c>we </c><00:00:32.139><c>must </c><00:00:32.399><c>understand </c><00:00:32.659><c>the </c><00:00:32.919><c>string</c>
+
+00:00:33.310 --> 00:00:33.320 align:start position:0%
+is that we must understand the string
+ 
+
+00:00:33.320 --> 00:00:35.549 align:start position:0%
+is that we must understand the string
+data <00:00:34.013><c>type. </c><00:00:34.706><c>If </c><00:00:35.399><c>you</c>
+
+00:00:35.549 --> 00:00:35.559 align:start position:0%
+data type. If you
+ 
+
+00:00:35.559 --> 00:00:37.030 align:start position:0%
+data type. If you
+translate <00:00:35.742><c>"string" </c><00:00:35.925><c>into </c><00:00:36.108><c>Vietnamese, </c><00:00:36.291><c>we </c><00:00:36.474><c>call </c><00:00:36.657><c>it </c><00:00:36.840><c>a</c>
+
+00:00:37.030 --> 00:00:37.040 align:start position:0%
+translate "string" into Vietnamese, we call it a
+ 
+
+00:00:37.040 --> 00:00:39.110 align:start position:0%
+translate "string" into Vietnamese, we call it a
+character <00:00:37.680><c>string. </c><00:00:38.320><c>If </c><00:00:38.960><c>we</c>
+
+00:00:39.110 --> 00:00:39.120 align:start position:0%
+character string. If we
+ 
+
+00:00:39.120 --> 00:00:41.310 align:start position:0%
+character string. If we
+use <00:00:39.620><c>a </c><00:00:40.120><c>parent </c><00:00:40.620><c>data </c><00:00:41.120><c>type,</c>
+
+00:00:41.310 --> 00:00:41.320 align:start position:0%
+use a parent data type,
+ 
+
+00:00:41.320 --> 00:00:43.549 align:start position:0%
+use a parent data type,
+it <00:00:42.359><c>only </c><00:00:43.398><c>stores</c>
+
+00:00:43.549 --> 00:00:43.559 align:start position:0%
+it only stores
+ 
+
+00:00:43.559 --> 00:00:46.310 align:start position:0%
+it only stores
+individual <00:00:44.199><c>characters. </c><00:00:44.839><c>For </c><00:00:45.479><c>example, </c><00:00:46.119><c>the</c>
+
+00:00:46.310 --> 00:00:46.320 align:start position:0%
+individual characters. For example, the
+ 
+
+00:00:46.320 --> 00:00:48.790 align:start position:0%
+individual characters. For example, the
+Genit <00:00:48.559><c>query.</c>
+
+00:00:48.790 --> 00:00:51.270 align:start position:0%
+Genit query.
+ 
+
+00:00:51.270 --> 00:00:51.280 align:start position:0%
+ 
+ 
+
+00:00:51.280 --> 00:00:53.470 align:start position:0%
+ 
+Look, <00:00:53.199><c>the</c>
+
+00:00:53.470 --> 00:00:53.480 align:start position:0%
+Look, the
+ 
+
+00:00:53.480 --> 00:00:55.709 align:start position:0%
+Look, the
+parent <00:00:53.692><c>only </c><00:00:53.904><c>stores </c><00:00:54.116><c>one </c><00:00:54.328><c>character </c><00:00:54.540><c>at </c><00:00:54.752><c>a </c><00:00:54.964><c>time. </c><00:00:55.176><c>For </c><00:00:55.388><c>example, </c><00:00:55.600><c>the</c>
+
+00:00:55.709 --> 00:00:55.719 align:start position:0%
+parent only stores one character at a time. For example, the
+ 
+
+00:00:55.719 --> 00:00:57.709 align:start position:0%
+parent only stores one character at a time. For example, the
+letter <00:00:56.103><c>'S', </c><00:00:56.487><c>or </c><00:00:56.871><c>the </c><00:00:57.255><c>letter </c><00:00:57.639><c>'o',</c>
+
+00:00:57.709 --> 00:00:57.719 align:start position:0%
+letter 'S', or the letter 'o',
+ 
+
+00:00:57.719 --> 00:00:59.630 align:start position:0%
+letter 'S', or the letter 'o',
+or <00:00:58.071><c>the </c><00:00:58.423><c>letter </c><00:00:58.775><c>'i' </c><00:00:59.127><c>– </c><00:00:59.479><c>they</c>
+
+00:00:59.630 --> 00:00:59.640 align:start position:0%
+or the letter 'i' – they
+ 
+
+00:00:59.640 --> 00:01:01.670 align:start position:0%
+or the letter 'i' – they
+store <00:00:59.946><c>each </c><00:01:00.252><c>character </c><00:01:00.558><c>individually. </c><00:01:00.864><c>But </c><00:01:01.170><c>if...  </c><00:01:01.476><c>If</c>
+
+00:01:01.670 --> 00:01:01.680 align:start position:0%
+store each character individually. But if...  If
+ 
+
+00:01:01.680 --> 00:01:03.549 align:start position:0%
+store each character individually. But if...  If
+you <00:01:02.023><c>want </c><00:01:02.366><c>to </c><00:01:02.709><c>store </c><00:01:03.052><c>many </c><00:01:03.395><c>characters,</c>
+
+00:01:03.549 --> 00:01:03.559 align:start position:0%
+you want to store many characters,
+ 
+
+00:01:03.559 --> 00:01:05.070 align:start position:0%
+you want to store many characters,
+we'll <00:01:03.892><c>use </c><00:01:04.225><c>the </c><00:01:04.558><c>string.</c>
+
+00:01:05.070 --> 00:01:05.080 align:start position:0%
+we'll use the string.
+ 
+
+00:01:05.080 --> 00:01:06.910 align:start position:0%
+we'll use the string.
+Many <00:01:05.353><c>of </c><00:01:05.626><c>you </c><00:01:05.899><c>might </c><00:01:06.172><c>ask </c><00:01:06.445><c>why </c><00:01:06.718><c>it</c>
+
+00:01:06.910 --> 00:01:06.920 align:start position:0%
+Many of you might ask why it
+ 
+
+00:01:06.920 --> 00:01:09.230 align:start position:0%
+Many of you might ask why it
+stores <00:01:07.253><c>them </c><00:01:07.586><c>individually </c><00:01:07.919><c>and </c><00:01:08.252><c>why </c><00:01:08.585><c>it </c><00:01:08.918><c>stores</c>
+
+00:01:09.230 --> 00:01:09.240 align:start position:0%
+stores them individually and why it stores
+ 
+
+00:01:09.240 --> 00:01:10.870 align:start position:0%
+stores them individually and why it stores
+so <00:01:09.415><c>many </c><00:01:09.590><c>important </c><00:01:09.765><c>things. </c><00:01:09.940><c>This </c><00:01:10.115><c>is </c><00:01:10.290><c>simply </c><00:01:10.465><c>because </c><00:01:10.640><c>of</c>
+
+00:01:10.870 --> 00:01:10.880 align:start position:0%
+so many important things. This is simply because of
+ 
+
+00:01:10.880 --> 00:01:12.749 align:start position:0%
+so many important things. This is simply because of
+our <00:01:11.310><c>computer's </c><00:01:11.740><c>memory. </c><00:01:12.170><c>For </c><00:01:12.600><c>example,</c>
+
+00:01:12.749 --> 00:01:12.759 align:start position:0%
+our computer's memory. For example,
+ 
+
+00:01:12.759 --> 00:01:14.789 align:start position:0%
+our computer's memory. For example,
+storing <00:01:13.386><c>one </c><00:01:14.013><c>character </c><00:01:14.640><c>only</c>
+
+00:01:14.789 --> 00:01:14.799 align:start position:0%
+storing one character only
+ 
+
+00:01:14.799 --> 00:01:16.990 align:start position:0%
+storing one character only
+takes <00:01:15.139><c>½ </c><00:01:15.479><c>B, </c><00:01:15.819><c>but </c><00:01:16.159><c>storing </c><00:01:16.499><c>many </c><00:01:16.839><c>characters</c>
+
+00:01:16.990 --> 00:01:17.000 align:start position:0%
+takes ½ B, but storing many characters
+ 
+
+00:01:17.000 --> 00:01:18.789 align:start position:0%
+takes ½ B, but storing many characters
+will <00:01:17.546><c>naturally </c><00:01:18.092><c>use </c><00:01:18.638><c>less</c>
+
+00:01:18.789 --> 00:01:18.799 align:start position:0%
+will naturally use less
+ 
+
+00:01:18.799 --> 00:01:21.230 align:start position:0%
+will naturally use less
+½ <00:01:19.239><c>B. </c><00:01:19.679><c>Ultimately, </c><00:01:20.119><c>it's </c><00:01:20.559><c>to </c><00:01:20.999><c>save</c>
+
+00:01:21.230 --> 00:01:23.109 align:start position:0%
+½ B. Ultimately, it's to save
+ 
+
+00:01:23.109 --> 00:01:23.119 align:start position:0%
+ 
+ 
+
+00:01:23.119 --> 00:01:25.069 align:start position:0%
+ 
+our <00:01:23.471><c>computer's </c><00:01:23.823><c>memory </c><00:01:24.175><c>resources. </c><00:01:24.527><c>So, </c><00:01:24.879><c>Java,</c>
+
+00:01:25.069 --> 00:01:25.079 align:start position:0%
+our computer's memory resources. So, Java,
+ 
+
+00:01:25.079 --> 00:01:26.990 align:start position:0%
+our computer's memory resources. So, Java,
+besides <00:01:25.431><c>the </c><00:01:25.783><c>Ultra </c><00:01:26.135><c>data </c><00:01:26.487><c>type, </c><00:01:26.839><c>created</c>
+
+00:01:26.990 --> 00:01:27.000 align:start position:0%
+besides the Ultra data type, created
+ 
+
+00:01:27.000 --> 00:01:28.910 align:start position:0%
+besides the Ultra data type, created
+the <00:01:27.430><c>string. </c><00:01:27.860><c>But </c><00:01:28.290><c>please </c><00:01:28.720><c>note,</c>
+
+00:01:28.910 --> 00:01:28.920 align:start position:0%
+the string. But please note,
+ 
+
+00:01:28.920 --> 00:01:30.710 align:start position:0%
+the string. But please note,
+as <00:01:29.240><c>I've </c><00:01:29.560><c>shared </c><00:01:29.880><c>before, </c><00:01:30.200><c>the </c><00:01:30.520><c>'</c>
+
+00:01:30.710 --> 00:01:30.720 align:start position:0%
+as I've shared before, the '
+ 
+
+00:01:30.720 --> 00:01:32.550 align:start position:0%
+as I've shared before, the '
+s'
+
+00:01:32.550 --> 00:01:32.560 align:start position:0%
+s'
+ 
+
+00:01:32.560 --> 00:01:35.069 align:start position:0%
+s'
+is <00:01:33.100><c>capitalized </c><00:01:33.640><c>because </c><00:01:34.180><c>it's </c><00:01:34.720><c>a</c>
+
+00:01:35.069 --> 00:01:35.079 align:start position:0%
+is capitalized because it's a
+ 
+
+00:01:35.079 --> 00:01:37.030 align:start position:0%
+is capitalized because it's a
+class. <00:01:35.652><c>It's </c><00:01:36.225><c>an </c><00:01:36.798><c>object,</c>
+
+00:01:37.030 --> 00:01:37.040 align:start position:0%
+class. It's an object,
+ 
+
+00:01:37.040 --> 00:01:38.630 align:start position:0%
+class. It's an object,
+not <00:01:37.379><c>a </c><00:01:37.718><c>primitive </c><00:01:38.057><c>data </c><00:01:38.396><c>type.</c>
+
+00:01:38.630 --> 00:01:38.640 align:start position:0%
+not a primitive data type.
+ 
+
+00:01:38.640 --> 00:01:40.429 align:start position:0%
+not a primitive data type.
+Therefore, <00:01:39.200><c>the </c><00:01:39.760><c>'add' </c><00:01:40.320><c>is</c>
+
+00:01:40.429 --> 00:01:40.439 align:start position:0%
+Therefore, the 'add' is
+ 
+
+00:01:40.439 --> 00:01:42.270 align:start position:0%
+Therefore, the 'add' is
+capitalized <00:01:41.259><c>like </c><00:01:42.079><c>this,</c>
+
+00:01:42.270 --> 00:01:42.280 align:start position:0%
+capitalized like this,
+ 
+
+00:01:42.280 --> 00:01:44.510 align:start position:0%
+capitalized like this,
+representing <00:01:42.670><c>the </c><00:01:43.060><c>object </c><00:01:43.450><c>data </c><00:01:43.840><c>type.</c>
+
+00:01:44.510 --> 00:01:44.520 align:start position:0%
+representing the object data type.
+ 
+
+00:01:44.520 --> 00:01:46.149 align:start position:0%
+representing the object data type.
+However, <00:01:46.040><c>during</c>
+
+00:01:46.149 --> 00:01:46.159 align:start position:0%
+However, during
+ 
+
+00:01:46.159 --> 00:01:48.109 align:start position:0%
+However, during
+use, <00:01:46.579><c>we </c><00:01:46.999><c>treat </c><00:01:47.419><c>this </c><00:01:47.839><c>string</c>
+
+00:01:48.109 --> 00:01:48.119 align:start position:0%
+use, we treat this string
+ 
+
+00:01:48.119 --> 00:01:49.830 align:start position:0%
+use, we treat this string
+no <00:01:48.365><c>differently </c><00:01:48.611><c>than </c><00:01:48.857><c>a </c><00:01:49.103><c>primitive </c><00:01:49.349><c>data </c><00:01:49.595><c>type.</c>
+
+00:01:49.830 --> 00:01:49.840 align:start position:0%
+no differently than a primitive data type.
+ 
+
+00:01:49.840 --> 00:01:51.910 align:start position:0%
+no differently than a primitive data type.
+I've <00:01:50.231><c>heard </c><00:01:50.622><c>that </c><00:01:51.013><c>many </c><00:01:51.404><c>of </c><00:01:51.795><c>you</c>
+
+00:01:51.910 --> 00:01:51.920 align:start position:0%
+I've heard that many of you
+ 
+
+00:01:51.920 --> 00:01:53.870 align:start position:0%
+I've heard that many of you
+might <00:01:52.165><c>consider </c><00:01:52.410><c>it...  </c><00:01:52.655><c>The </c><00:01:52.900><c>primitive </c><00:01:53.145><c>data </c><00:01:53.390><c>type </c><00:01:53.635><c>is</c>
+
+00:01:53.870 --> 00:01:53.880 align:start position:0%
+might consider it...  The primitive data type is
+ 
+
+00:01:53.880 --> 00:01:56.069 align:start position:0%
+might consider it...  The primitive data type is
+also <00:01:54.199><c>fine, </c><00:01:54.518><c>it </c><00:01:54.837><c>doesn't </c><00:01:55.156><c>matter. </c><00:01:55.475><c>But </c><00:01:55.794><c>if</c>
+
+00:01:56.069 --> 00:01:56.079 align:start position:0%
+also fine, it doesn't matter. But if
+ 
+
+00:01:56.079 --> 00:01:58.310 align:start position:0%
+also fine, it doesn't matter. But if
+we <00:01:56.382><c>think </c><00:01:56.685><c>about </c><00:01:56.988><c>the </c><00:01:57.291><c>issue </c><00:01:57.594><c>thoroughly, </c><00:01:57.897><c>we </c><00:01:58.200><c>should</c>
+
+00:01:58.310 --> 00:01:58.320 align:start position:0%
+we think about the issue thoroughly, we should
+ 
+
+00:01:58.320 --> 00:02:00.670 align:start position:0%
+we think about the issue thoroughly, we should
+note <00:01:58.679><c>that </c><00:01:59.038><c>it's </c><00:01:59.397><c>an </c><00:01:59.756><c>object </c><00:02:00.115><c>type. </c><00:02:00.474><c>And</c>
+
+00:02:00.670 --> 00:02:00.680 align:start position:0%
+note that it's an object type. And
+ 
+
+00:02:00.680 --> 00:02:02.550 align:start position:0%
+note that it's an object type. And
+once <00:02:00.925><c>you </c><00:02:01.170><c>understand, </c><00:02:01.415><c>it's </c><00:02:01.660><c>an </c><00:02:01.905><c>OB </c><00:02:02.150><c>data </c><00:02:02.395><c>type.</c>
+
+00:02:02.550 --> 00:02:02.560 align:start position:0%
+once you understand, it's an OB data type.
+ 
+
+00:02:02.560 --> 00:02:05.069 align:start position:0%
+once you understand, it's an OB data type.
+In <00:02:03.279><c>the </c><00:02:03.998><c>previous </c><00:02:04.717><c>exercise,</c>
+
+00:02:05.069 --> 00:02:05.079 align:start position:0%
+In the previous exercise,
+ 
+
+00:02:05.079 --> 00:02:06.789 align:start position:0%
+In the previous exercise,
+we <00:02:05.479><c>used </c><00:02:05.879><c>a </c><00:02:06.279><c>feature </c><00:02:06.679><c>of</c>
+
+00:02:06.789 --> 00:02:06.799 align:start position:0%
+we used a feature of
+ 
+
+00:02:06.799 --> 00:02:08.669 align:start position:0%
+we used a feature of
+OBs.
+
+00:02:08.669 --> 00:02:08.679 align:start position:0%
+OBs.
+ 
+
+00:02:08.679 --> 00:02:10.710 align:start position:0%
+OBs.
+I'll <00:02:08.983><c>reveal </c><00:02:09.287><c>it </c><00:02:09.591><c>to </c><00:02:09.895><c>you </c><00:02:10.199><c>later.</c>
+
+00:02:10.710 --> 00:02:10.720 align:start position:0%
+I'll reveal it to you later.
+ 
+
+00:02:10.720 --> 00:02:12.309 align:start position:0%
+I'll reveal it to you later.
+Here, <00:02:11.090><c>for </c><00:02:11.460><c>strings, </c><00:02:11.830><c>there </c><00:02:12.200><c>are</c>
+
+00:02:12.309 --> 00:02:12.319 align:start position:0%
+Here, for strings, there are
+ 
+
+00:02:12.319 --> 00:02:14.430 align:start position:0%
+Here, for strings, there are
+some <00:02:12.809><c>special </c><00:02:13.299><c>characters. </c><00:02:13.789><c>For </c><00:02:14.279><c>example,</c>
+
+00:02:14.430 --> 00:02:14.440 align:start position:0%
+some special characters. For example,
+ 
+
+00:02:14.440 --> 00:02:17.390 align:start position:0%
+some special characters. For example,
+if <00:02:14.992><c>you </c><00:02:15.544><c>want </c><00:02:16.096><c>a </c><00:02:16.648><c>line </c><00:02:17.200><c>break,</c>
+
+00:02:17.390 --> 00:02:17.400 align:start position:0%
+if you want a line break,
+ 
+
+00:02:17.400 --> 00:02:19.390 align:start position:0%
+if you want a line break,
+you <00:02:17.760><c>use </c><00:02:18.120><c>a </c><00:02:18.480><c>tab, </c><00:02:18.840><c>a </c><00:02:19.200><c>forward</c>
+
+00:02:19.390 --> 00:02:19.400 align:start position:0%
+you use a tab, a forward
+ 
+
+00:02:19.400 --> 00:02:20.830 align:start position:0%
+you use a tab, a forward
+slash <00:02:19.853><c>(t). </c><00:02:20.306><c>If </c><00:02:20.759><c>you</c>
+
+00:02:20.830 --> 00:02:20.840 align:start position:0%
+slash (t). If you
+ 
+
+00:02:20.840 --> 00:02:22.589 align:start position:0%
+slash (t). If you
+want <00:02:21.168><c>a </c><00:02:21.496><c>new </c><00:02:21.824><c>line, </c><00:02:22.152><c>you </c><00:02:22.480><c>use</c>
+
+00:02:22.589 --> 00:02:22.599 align:start position:0%
+want a new line, you use
+ 
+
+00:02:22.599 --> 00:02:24.750 align:start position:0%
+want a new line, you use
+a <00:02:23.186><c>forward </c><00:02:23.773><c>slash </c><00:02:24.360><c>(n).</c>
+
+00:02:24.750 --> 00:02:24.760 align:start position:0%
+a forward slash (n).
+ 
+
+00:02:24.760 --> 00:02:26.869 align:start position:0%
+a forward slash (n).
+To <00:02:25.679><c>see </c><00:02:26.598><c>what</c>
+
+00:02:26.869 --> 00:02:26.879 align:start position:0%
+To see what
+ 
+
+00:02:26.879 --> 00:02:28.470 align:start position:0%
+To see what
+special <00:02:27.112><c>characters </c><00:02:27.345><c>there </c><00:02:27.578><c>are, </c><00:02:27.811><c>you </c><00:02:28.044><c>can </c><00:02:28.277><c>check</c>
+
+00:02:28.470 --> 00:02:28.480 align:start position:0%
+special characters there are, you can check
+ 
+
+00:02:28.480 --> 00:02:30.670 align:start position:0%
+special characters there are, you can check
+here. <00:02:29.133><c>Here </c><00:02:29.786><c>are </c><00:02:30.439><c>some</c>
+
+00:02:30.670 --> 00:02:30.680 align:start position:0%
+here. Here are some
+ 
+
+00:02:30.680 --> 00:02:32.150 align:start position:0%
+here. Here are some
+links. <00:02:31.106><c>Here </c><00:02:31.532><c>are </c><00:02:31.958><c>some</c>
+
+00:02:32.150 --> 00:02:32.160 align:start position:0%
+links. Here are some
+ 
+
+00:02:32.160 --> 00:02:34.030 align:start position:0%
+links. Here are some
+special <00:02:32.453><c>characters </c><00:02:32.746><c>that </c><00:02:33.039><c>we </c><00:02:33.332><c>can </c><00:02:33.625><c>print </c><00:02:33.918><c>out.</c>
+
+00:02:34.030 --> 00:02:34.040 align:start position:0%
+special characters that we can print out.
+ 
+
+00:02:34.040 --> 00:02:35.830 align:start position:0%
+special characters that we can print out.
+For <00:02:34.376><c>example, </c><00:02:34.712><c>if </c><00:02:35.048><c>you </c><00:02:35.384><c>want </c><00:02:35.720><c>to</c>
+
+00:02:35.830 --> 00:02:35.840 align:start position:0%
+For example, if you want to
+ 
+
+00:02:35.840 --> 00:02:37.790 align:start position:0%
+For example, if you want to
+print <00:02:36.085><c>it </c><00:02:36.330><c>out </c><00:02:36.575><c>like </c><00:02:36.820><c>this, </c><00:02:37.065><c>you </c><00:02:37.310><c>can </c><00:02:37.555><c>click</c>
+
+00:02:37.790 --> 00:02:37.800 align:start position:0%
+print it out like this, you can click
+ 
+
+00:02:37.800 --> 00:02:39.350 align:start position:0%
+print it out like this, you can click
+on <00:02:38.159><c>"Trade </c><00:02:38.518><c>yourself" </c><00:02:38.877><c>and </c><00:02:39.236><c>you'll</c>
+
+00:02:39.350 --> 00:02:39.360 align:start position:0%
+on "Trade yourself" and you'll
+ 
+
+00:02:39.360 --> 00:02:41.430 align:start position:0%
+on "Trade yourself" and you'll
+see. <00:02:39.622><c>You </c><00:02:39.884><c>can </c><00:02:40.146><c>see </c><00:02:40.408><c>that </c><00:02:40.670><c>to </c><00:02:40.932><c>print </c><00:02:41.194><c>it</c>
+
+00:02:41.430 --> 00:02:41.440 align:start position:0%
+see. You can see that to print it
+ 
+
+00:02:41.440 --> 00:02:43.390 align:start position:0%
+see. You can see that to print it
+out...  <00:02:41.880><c>Our </c><00:02:42.320><c>double </c><00:02:42.760><c>code, </c><00:02:43.200><c>that</c>
+
+00:02:43.390 --> 00:02:43.400 align:start position:0%
+out...  Our double code, that
+ 
+
+00:02:43.400 --> 00:02:44.830 align:start position:0%
+out...  Our double code, that
+double <00:02:43.582><c>quotation </c><00:02:43.764><c>mark, </c><00:02:43.946><c>we </c><00:02:44.128><c>need </c><00:02:44.310><c>to </c><00:02:44.492><c>use </c><00:02:44.674><c>a</c>
+
+00:02:44.830 --> 00:02:44.840 align:start position:0%
+double quotation mark, we need to use a
+ 
+
+00:02:44.840 --> 00:02:46.190 align:start position:0%
+double quotation mark, we need to use a
+slash <00:02:45.088><c>like </c><00:02:45.336><c>this </c><00:02:45.584><c>to </c><00:02:45.832><c>make </c><00:02:46.080><c>it</c>
+
+00:02:46.190 --> 00:02:46.200 align:start position:0%
+slash like this to make it
+ 
+
+00:02:46.200 --> 00:02:48.149 align:start position:0%
+slash like this to make it
+escape. <00:02:46.544><c>If </c><00:02:46.888><c>you </c><00:02:47.232><c>don't </c><00:02:47.576><c>use </c><00:02:47.920><c>a</c>
+
+00:02:48.149 --> 00:02:48.159 align:start position:0%
+escape. If you don't use a
+ 
+
+00:02:48.159 --> 00:02:49.790 align:start position:0%
+escape. If you don't use a
+slash <00:02:48.489><c>like </c><00:02:48.819><c>this, </c><00:02:49.149><c>it </c><00:02:49.479><c>won't</c>
+
+00:02:49.790 --> 00:02:49.800 align:start position:0%
+slash like this, it won't
+ 
+
+00:02:49.800 --> 00:02:51.390 align:start position:0%
+slash like this, it won't
+print <00:02:51.239><c>because</c>
+
+00:02:51.390 --> 00:02:51.400 align:start position:0%
+print because
+ 
+
+00:02:51.400 --> 00:02:52.949 align:start position:0%
+print because
+this <00:02:51.640><c>slash </c><00:02:51.880><c>and </c><00:02:52.120><c>this </c><00:02:52.360><c>double </c><00:02:52.600><c>quotation </c><00:02:52.840><c>mark</c>
+
+00:02:52.949 --> 00:02:52.959 align:start position:0%
+this slash and this double quotation mark
+ 
+
+00:02:52.959 --> 00:02:55.070 align:start position:0%
+this slash and this double quotation mark
+correspond <00:02:53.279><c>to </c><00:02:53.599><c>the </c><00:02:53.919><c>initial </c><00:02:54.239><c>double </c><00:02:54.559><c>quotation </c><00:02:54.879><c>mark.</c>
+
+00:02:55.070 --> 00:02:55.080 align:start position:0%
+correspond to the initial double quotation mark.
+ 
+
+00:02:55.080 --> 00:02:57.229 align:start position:0%
+correspond to the initial double quotation mark.
+It <00:02:55.590><c>will </c><00:02:56.100><c>be </c><00:02:56.610><c>a </c><00:02:57.120><c>pair,</c>
+
+00:02:57.229 --> 00:02:57.239 align:start position:0%
+It will be a pair,
+ 
+
+00:02:57.239 --> 00:02:59.110 align:start position:0%
+It will be a pair,
+and <00:02:57.434><c>that </c><00:02:57.629><c>will </c><00:02:57.824><c>cause </c><00:02:58.019><c>an </c><00:02:58.214><c>error. </c><00:02:58.409><c>To </c><00:02:58.604><c>put </c><00:02:58.799><c>it </c><00:02:58.994><c>simply,</c>
+
+00:02:59.110 --> 00:02:59.120 align:start position:0%
+and that will cause an error. To put it simply,
+ 
+
+00:02:59.120 --> 00:03:00.949 align:start position:0%
+and that will cause an error. To put it simply,
+we're <00:02:59.880><c>talking </c><00:03:00.640><c>about</c>
+
+00:03:00.949 --> 00:03:00.959 align:start position:0%
+we're talking about
+ 
+
+00:03:00.959 --> 00:03:03.350 align:start position:0%
+we're talking about
+this <00:03:01.105><c>double </c><00:03:01.251><c>quotation </c><00:03:01.397><c>mark </c><00:03:01.543><c>and </c><00:03:01.689><c>the </c><00:03:01.835><c>first </c><00:03:01.981><c>double </c><00:03:02.127><c>quotation </c><00:03:02.273><c>mark </c><00:03:02.419><c>at </c><00:03:02.565><c>the </c><00:03:02.711><c>beginning </c><00:03:02.857><c>of </c><00:03:03.003><c>the </c><00:03:03.149><c>line.</c>
+
+00:03:03.350 --> 00:03:03.360 align:start position:0%
+this double quotation mark and the first double quotation mark at the beginning of the line.
+ 
+
+00:03:03.360 --> 00:03:04.949 align:start position:0%
+this double quotation mark and the first double quotation mark at the beginning of the line.
+They're <00:03:03.719><c>not </c><00:03:04.078><c>a </c><00:03:04.437><c>pair, </c><00:03:04.796><c>so</c>
+
+00:03:04.949 --> 00:03:04.959 align:start position:0%
+They're not a pair, so
+ 
+
+00:03:04.959 --> 00:03:06.390 align:start position:0%
+They're not a pair, so
+we'll <00:03:05.359><c>use </c><00:03:05.759><c>a </c><00:03:06.159><c>slash</c>
+
+00:03:06.390 --> 00:03:06.400 align:start position:0%
+we'll use a slash
+ 
+
+00:03:06.400 --> 00:03:08.670 align:start position:0%
+we'll use a slash
+to <00:03:06.920><c>make </c><00:03:07.440><c>it </c><00:03:07.960><c>escape. </c><00:03:08.480><c>For</c>
+
+00:03:08.670 --> 00:03:08.680 align:start position:0%
+to make it escape. For
+ 
+
+00:03:08.680 --> 00:03:10.190 align:start position:0%
+to make it escape. For
+example, <00:03:08.893><c>if </c><00:03:09.106><c>you </c><00:03:09.319><c>want </c><00:03:09.532><c>a </c><00:03:09.745><c>line </c><00:03:09.958><c>break,</c>
+
+00:03:10.190 --> 00:03:10.200 align:start position:0%
+example, if you want a line break,
+ 
+
+00:03:10.200 --> 00:03:11.550 align:start position:0%
+example, if you want a line break,
+right? <00:03:10.500><c>Here, </c><00:03:10.800><c>we'll </c><00:03:11.100><c>use </c><00:03:11.400><c>a</c>
+
+00:03:11.550 --> 00:03:11.560 align:start position:0%
+right? Here, we'll use a
+ 
+
+00:03:11.560 --> 00:03:13.190 align:start position:0%
+right? Here, we'll use a
+slash <00:03:11.950><c>N. </c><00:03:12.340><c>You'll </c><00:03:12.730><c>see, </c><00:03:13.120><c>we'll</c>
+
+00:03:13.190 --> 00:03:13.200 align:start position:0%
+slash N. You'll see, we'll
+ 
+
+00:03:13.200 --> 00:03:15.190 align:start position:0%
+slash N. You'll see, we'll
+make <00:03:13.493><c>it </c><00:03:13.786><c>run, </c><00:03:14.079><c>it </c><00:03:14.372><c>will </c><00:03:14.665><c>split </c><00:03:14.958><c>the</c>
+
+00:03:15.190 --> 00:03:15.200 align:start position:0%
+make it run, it will split the
+ 
+
+00:03:15.200 --> 00:03:16.830 align:start position:0%
+make it run, it will split the
+King <00:03:15.330><c>section </c><00:03:15.460><c>in </c><00:03:15.590><c>half, </c><00:03:15.720><c>and </c><00:03:15.850><c>it </c><00:03:15.980><c>will </c><00:03:16.110><c>break </c><00:03:16.240><c>to </c><00:03:16.370><c>the </c><00:03:16.500><c>next </c><00:03:16.630><c>line.</c>
+
+00:03:16.830 --> 00:03:16.840 align:start position:0%
+King section in half, and it will break to the next line.
+ 
+
+00:03:16.840 --> 00:03:19.070 align:start position:0%
+King section in half, and it will break to the next line.
+Yes, <00:03:17.880><c>you </c><00:03:18.920><c>see,</c>
+
+00:03:19.070 --> 00:03:19.080 align:start position:0%
+Yes, you see,
+ 
+
+00:03:19.080 --> 00:03:20.470 align:start position:0%
+Yes, you see,
+it <00:03:19.268><c>will </c><00:03:19.456><c>automatically </c><00:03:19.644><c>break </c><00:03:19.832><c>to </c><00:03:20.020><c>the </c><00:03:20.208><c>next </c><00:03:20.396><c>line.</c>
+
+00:03:20.470 --> 00:03:20.480 align:start position:0%
+it will automatically break to the next line.
+ 
+
+00:03:20.480 --> 00:03:22.229 align:start position:0%
+it will automatically break to the next line.
+These <00:03:20.880><c>are </c><00:03:21.280><c>some </c><00:03:21.680><c>special </c><00:03:22.080><c>characters,</c>
+
+00:03:22.229 --> 00:03:22.239 align:start position:0%
+These are some special characters,
+ 
+
+00:03:22.239 --> 00:03:24.309 align:start position:0%
+These are some special characters,
+and <00:03:22.905><c>if </c><00:03:23.571><c>you're </c><00:03:24.237><c>interested,</c>
+
+00:03:24.309 --> 00:03:24.319 align:start position:0%
+and if you're interested,
+ 
+
+00:03:24.319 --> 00:03:26.630 align:start position:0%
+and if you're interested,
+you <00:03:24.659><c>can </c><00:03:24.999><c>check </c><00:03:25.339><c>them </c><00:03:25.679><c>out </c><00:03:26.019><c>here.  </c><00:03:26.359><c>Yes,</c>
+
+00:03:26.630 --> 00:03:26.640 align:start position:0%
+you can check them out here.  Yes,
+ 
+
+00:03:26.640 --> 00:03:28.270 align:start position:0%
+you can check them out here.  Yes,
+besides <00:03:26.949><c>understanding </c><00:03:27.258><c>the </c><00:03:27.567><c>string, </c><00:03:27.876><c>there</c>
+
+00:03:28.270 --> 00:03:28.280 align:start position:0%
+besides understanding the string, there
+ 
+
+00:03:28.280 --> 00:03:30.789 align:start position:0%
+besides understanding the string, there
+are <00:03:29.439><c>a </c><00:03:30.598><c>few</c>
+
+00:03:30.789 --> 00:03:30.799 align:start position:0%
+are a few
+ 
+
+00:03:30.799 --> 00:03:32.710 align:start position:0%
+are a few
+methods <00:03:31.050><c>you </c><00:03:31.301><c>often </c><00:03:31.552><c>use. </c><00:03:31.803><c>Please </c><00:03:32.054><c>note </c><00:03:32.305><c>that </c><00:03:32.556><c>the</c>
+
+00:03:32.710 --> 00:03:32.720 align:start position:0%
+methods you often use. Please note that the
+ 
+
+00:03:32.720 --> 00:03:34.350 align:start position:0%
+methods you often use. Please note that the
+string <00:03:33.500><c>is </c><00:03:34.280><c>an</c>
+
+00:03:34.350 --> 00:03:34.360 align:start position:0%
+string is an
+ 
+
+00:03:34.360 --> 00:03:36.309 align:start position:0%
+string is an
+object <00:03:34.679><c>variable. </c><00:03:34.998><c>It's </c><00:03:35.317><c>an </c><00:03:35.636><c>object, </c><00:03:35.955><c>so</c>
+
+00:03:36.309 --> 00:03:36.319 align:start position:0%
+object variable. It's an object, so
+ 
+
+00:03:36.319 --> 00:03:38.190 align:start position:0%
+object variable. It's an object, so
+it <00:03:37.179><c>has </c><00:03:38.039><c>many</c>
+
+00:03:38.190 --> 00:03:38.200 align:start position:0%
+it has many
+ 
+
+00:03:38.200 --> 00:03:40.869 align:start position:0%
+it has many
+built-in <00:03:38.537><c>methods. </c><00:03:38.874><c>And </c><00:03:39.211><c>because </c><00:03:39.548><c>it's </c><00:03:39.885><c>an </c><00:03:40.222><c>object </c><00:03:40.559><c>variable,</c>
+
+00:03:40.869 --> 00:03:40.879 align:start position:0%
+built-in methods. And because it's an object variable,
+ 
+
+00:03:40.879 --> 00:03:42.670 align:start position:0%
+built-in methods. And because it's an object variable,
+later <00:03:41.101><c>on, </c><00:03:41.323><c>if </c><00:03:41.545><c>you </c><00:03:41.767><c>want </c><00:03:41.989><c>to </c><00:03:42.211><c>compare </c><00:03:42.433><c>two</c>
+
+00:03:42.670 --> 00:03:42.680 align:start position:0%
+later on, if you want to compare two
+ 
+
+00:03:42.680 --> 00:03:44.589 align:start position:0%
+later on, if you want to compare two
+object <00:03:43.040><c>variables, </c><00:03:43.400><c>please </c><00:03:43.760><c>note </c><00:03:44.120><c>that </c><00:03:44.480><c>here</c>
+
+00:03:44.589 --> 00:03:44.599 align:start position:0%
+object variables, please note that here
+ 
+
+00:03:44.599 --> 00:03:46.550 align:start position:0%
+object variables, please note that here
+we <00:03:45.519><c>use </c><00:03:46.439><c>the</c>
+
+00:03:46.550 --> 00:03:46.560 align:start position:0%
+we use the
+ 
+
+00:03:46.560 --> 00:03:48.830 align:start position:0%
+we use the
+equals <00:03:46.992><c>function </c><00:03:47.424><c>because </c><00:03:47.856><c>our </c><00:03:48.288><c>option </c><00:03:48.720><c>variable</c>
+
+00:03:48.830 --> 00:03:48.840 align:start position:0%
+equals function because our option variable
+ 
+
+00:03:48.840 --> 00:03:50.670 align:start position:0%
+equals function because our option variable
+is <00:03:49.035><c>a </c><00:03:49.230><c>string. </c><00:03:49.425><c>For </c><00:03:49.620><c>comparison </c><00:03:49.815><c>with </c><00:03:50.010><c>the </c><00:03:50.205><c>object </c><00:03:50.400><c>variable,</c>
+
+00:03:50.670 --> 00:03:50.680 align:start position:0%
+is a string. For comparison with the object variable,
+ 
+
+00:03:50.680 --> 00:03:52.270 align:start position:0%
+is a string. For comparison with the object variable,
+we <00:03:51.010><c>use </c><00:03:51.340><c>the </c><00:03:51.670><c>equals </c><00:03:52.000><c>function.</c>
+
+00:03:52.270 --> 00:03:53.789 align:start position:0%
+we use the equals function.
+ 
+
+00:03:53.789 --> 00:03:53.799 align:start position:0%
+ 
+ 
+
+00:03:53.799 --> 00:03:55.710 align:start position:0%
+ 
+Use <00:03:54.085><c>the </c><00:03:54.371><c>equals </c><00:03:54.657><c>function, </c><00:03:54.943><c>not </c><00:03:55.229><c>like </c><00:03:55.515><c>this.</c>
+
+00:03:55.710 --> 00:03:55.720 align:start position:0%
+Use the equals function, not like this.
+ 
+
+00:03:55.720 --> 00:03:57.190 align:start position:0%
+Use the equals function, not like this.
+If
+
+00:03:57.190 --> 00:03:57.200 align:start position:0%
+If
+ 
+
+00:03:57.200 --> 00:04:00.309 align:start position:0%
+If
+you <00:03:57.693><c>use </c><00:03:58.186><c>this </c><00:03:58.679><c>OB </c><00:03:59.172><c>and </c><00:03:59.665><c>type </c><00:04:00.158><c>like</c>
+
+00:04:00.309 --> 00:04:00.319 align:start position:0%
+you use this OB and type like
+ 
+
+00:04:00.319 --> 00:04:01.910 align:start position:0%
+you use this OB and type like
+this, <00:04:01.019><c>comparing </c><00:04:01.719><c>equals</c>
+
+00:04:01.910 --> 00:04:01.920 align:start position:0%
+this, comparing equals
+ 
+
+00:04:01.920 --> 00:04:03.789 align:start position:0%
+this, comparing equals
+n <00:04:02.820><c>like </c><00:04:03.720><c>this,</c>
+
+00:04:03.789 --> 00:04:03.799 align:start position:0%
+n like this,
+ 
+
+00:04:03.799 --> 00:04:05.789 align:start position:0%
+n like this,
+it <00:04:04.056><c>can </c><00:04:04.313><c>sometimes </c><00:04:04.570><c>be </c><00:04:04.827><c>wrong. </c><00:04:05.084><c>Please </c><00:04:05.341><c>note </c><00:04:05.598><c>this.</c>
+
+00:04:05.789 --> 00:04:07.869 align:start position:0%
+it can sometimes be wrong. Please note this.
+ 
+
+00:04:07.869 --> 00:04:07.879 align:start position:0%
+ 
+ 
+
+00:04:07.879 --> 00:04:09.190 align:start position:0%
+ 
+Personally, <00:04:08.169><c>I </c><00:04:08.459><c>intentionally </c><00:04:08.749><c>wrote </c><00:04:09.039><c>the</c>
+
+00:04:09.190 --> 00:04:09.200 align:start position:0%
+Personally, I intentionally wrote the
+ 
+
+00:04:09.200 --> 00:04:11.270 align:start position:0%
+Personally, I intentionally wrote the
+equals <00:04:09.450><c>function </c><00:04:09.700><c>like </c><00:04:09.950><c>this </c><00:04:10.200><c>so </c><00:04:10.450><c>that </c><00:04:10.700><c>you'll </c><00:04:10.950><c>remember </c><00:04:11.200><c>it</c>
+
+00:04:11.270 --> 00:04:11.280 align:start position:0%
+equals function like this so that you'll remember it
+ 
+
+00:04:11.280 --> 00:04:12.789 align:start position:0%
+equals function like this so that you'll remember it
+in <00:04:11.560><c>your </c><00:04:11.840><c>head. </c><00:04:12.120><c>Later, </c><00:04:12.400><c>when </c><00:04:12.680><c>we</c>
+
+00:04:12.789 --> 00:04:12.799 align:start position:0%
+in your head. Later, when we
+ 
+
+00:04:12.799 --> 00:04:14.270 align:start position:0%
+in your head. Later, when we
+work <00:04:13.479><c>with </c><00:04:14.159><c>objects,</c>
+
+00:04:14.270 --> 00:04:14.280 align:start position:0%
+work with objects,
+ 
+
+00:04:14.280 --> 00:04:16.229 align:start position:0%
+work with objects,
+we'll <00:04:14.648><c>use </c><00:04:15.016><c>the </c><00:04:15.384><c>equals </c><00:04:15.752><c>function.  </c><00:04:16.120><c>When</c>
+
+00:04:16.229 --> 00:04:16.239 align:start position:0%
+we'll use the equals function.  When
+ 
+
+00:04:16.239 --> 00:04:17.789 align:start position:0%
+we'll use the equals function.  When
+we <00:04:16.503><c>work </c><00:04:16.767><c>with </c><00:04:17.031><c>primitive </c><00:04:17.295><c>data </c><00:04:17.559><c>types,</c>
+
+00:04:17.789 --> 00:04:17.799 align:start position:0%
+we work with primitive data types,
+ 
+
+00:04:17.799 --> 00:04:19.310 align:start position:0%
+we work with primitive data types,
+we <00:04:17.999><c>compare </c><00:04:18.199><c>them </c><00:04:18.399><c>using </c><00:04:18.599><c>the </c><00:04:18.799><c>equals </c><00:04:18.999><c>sign </c><00:04:19.199><c>like</c>
+
+00:04:19.310 --> 00:04:19.320 align:start position:0%
+we compare them using the equals sign like
+ 
+
+00:04:19.320 --> 00:04:20.870 align:start position:0%
+we compare them using the equals sign like
+this <00:04:19.508><c>– </c><00:04:19.696><c>this </c><00:04:19.884><c>is </c><00:04:20.072><c>a </c><00:04:20.260><c>hard-won </c><00:04:20.448><c>lesson </c><00:04:20.636><c>from</c>
+
+00:04:20.870 --> 00:04:20.880 align:start position:0%
+this – this is a hard-won lesson from
+ 
+
+00:04:20.880 --> 00:04:22.710 align:start position:0%
+this – this is a hard-won lesson from
+my <00:04:21.090><c>experience. </c><00:04:21.300><c>There's </c><00:04:21.510><c>a </c><00:04:21.720><c>funny </c><00:04:21.930><c>story </c><00:04:22.140><c>from </c><00:04:22.350><c>the </c><00:04:22.560><c>past:</c>
+
+00:04:22.710 --> 00:04:22.720 align:start position:0%
+my experience. There's a funny story from the past:
+ 
+
+00:04:22.720 --> 00:04:24.030 align:start position:0%
+my experience. There's a funny story from the past:
+I <00:04:23.800><c>coded</c>
+
+00:04:24.030 --> 00:04:24.040 align:start position:0%
+I coded
+ 
+
+00:04:24.040 --> 00:04:25.590 align:start position:0%
+I coded
+a <00:04:24.312><c>lot </c><00:04:24.584><c>of </c><00:04:24.856><c>JavaScript, </c><00:04:25.128><c>and </c><00:04:25.400><c>in</c>
+
+00:04:25.590 --> 00:04:25.600 align:start position:0%
+a lot of JavaScript, and in
+ 
+
+00:04:25.600 --> 00:04:27.550 align:start position:0%
+a lot of JavaScript, and in
+JavaScript, <00:04:26.020><c>there's </c><00:04:26.440><c>only </c><00:04:26.860><c>one </c><00:04:27.280><c>function:</c>
+
+00:04:27.550 --> 00:04:27.560 align:start position:0%
+JavaScript, there's only one function:
+ 
+
+00:04:27.560 --> 00:04:29.029 align:start position:0%
+JavaScript, there's only one function:
+three <00:04:28.159><c>equals </c><00:04:28.758><c>signs.</c>
+
+00:04:29.029 --> 00:04:29.039 align:start position:0%
+three equals signs.
+ 
+
+00:04:29.039 --> 00:04:30.749 align:start position:0%
+three equals signs.
+We <00:04:29.359><c>compare </c><00:04:29.679><c>the </c><00:04:29.999><c>type </c><00:04:30.319><c>and </c><00:04:30.639><c>value</c>
+
+00:04:30.749 --> 00:04:30.759 align:start position:0%
+We compare the type and value
+ 
+
+00:04:30.759 --> 00:04:32.550 align:start position:0%
+We compare the type and value
+directly. <00:04:31.169><c>We </c><00:04:31.579><c>don't </c><00:04:31.989><c>differentiate </c><00:04:32.399><c>between</c>
+
+00:04:32.550 --> 00:04:32.560 align:start position:0%
+directly. We don't differentiate between
+ 
+
+00:04:32.560 --> 00:04:34.990 align:start position:0%
+directly. We don't differentiate between
+working <00:04:33.739><c>with </c><00:04:34.918><c>primitive</c>
+
+00:04:34.990 --> 00:04:35.000 align:start position:0%
+working with primitive
+ 
+
+00:04:35.000 --> 00:04:36.390 align:start position:0%
+working with primitive
+data <00:04:35.660><c>types </c><00:04:36.320><c>and</c>
+
+00:04:36.390 --> 00:04:36.400 align:start position:0%
+data types and
+ 
+
+00:04:36.400 --> 00:04:37.950 align:start position:0%
+data types and
+working <00:04:36.800><c>with </c><00:04:37.200><c>objects. </c><00:04:37.600><c>That's</c>
+
+00:04:37.950 --> 00:04:37.960 align:start position:0%
+working with objects. That's
+ 
+
+00:04:37.960 --> 00:04:38.950 align:start position:0%
+working with objects. That's
+not <00:04:38.266><c>how </c><00:04:38.572><c>it </c><00:04:38.878><c>works.</c>
+
+00:04:38.950 --> 00:04:38.960 align:start position:0%
+not how it works.
+ 
+
+00:04:38.960 --> 00:04:40.350 align:start position:0%
+not how it works.
+In
+
+00:04:40.350 --> 00:04:40.360 align:start position:0%
+In
+ 
+
+00:04:40.360 --> 00:04:41.909 align:start position:0%
+In
+JavaScript, <00:04:40.700><c>there's </c><00:04:41.040><c>only </c><00:04:41.380><c>one </c><00:04:41.720><c>way.</c>
+
+00:04:41.909 --> 00:04:41.919 align:start position:0%
+JavaScript, there's only one way.
+ 
+
+00:04:41.919 --> 00:04:43.390 align:start position:0%
+JavaScript, there's only one way.
+You <00:04:43.280><c>can</c>
+
+00:04:43.390 --> 00:04:43.400 align:start position:0%
+You can
+ 
+
+00:04:43.400 --> 00:04:45.469 align:start position:0%
+You can
+use <00:04:43.662><c>three </c><00:04:43.924><c>equals </c><00:04:44.186><c>signs </c><00:04:44.448><c>to </c><00:04:44.710><c>compare, </c><00:04:44.972><c>and </c><00:04:45.234><c>this</c>
+
+00:04:45.469 --> 00:04:45.479 align:start position:0%
+use three equals signs to compare, and this
+ 
+
+00:04:45.479 --> 00:04:47.550 align:start position:0%
+use three equals signs to compare, and this
+is <00:04:45.929><c>my </c><00:04:46.379><c>story, </c><00:04:46.829><c>and </c><00:04:47.279><c>I</c>
+
+00:04:47.550 --> 00:04:47.560 align:start position:0%
+is my story, and I
+ 
+
+00:04:47.560 --> 00:04:49.390 align:start position:0%
+is my story, and I
+paid <00:04:47.969><c>the </c><00:04:48.378><c>price </c><00:04:48.787><c>for </c><00:04:49.196><c>it.</c>
+
+00:04:49.390 --> 00:04:49.400 align:start position:0%
+paid the price for it.
+ 
+
+00:04:49.400 --> 00:04:51.310 align:start position:0%
+paid the price for it.
+Because <00:04:49.640><c>when </c><00:04:49.880><c>I </c><00:04:50.120><c>read </c><00:04:50.360><c>my </c><00:04:50.600><c>own </c><00:04:50.840><c>logic,</c>
+
+00:04:51.310 --> 00:04:51.320 align:start position:0%
+Because when I read my own logic,
+ 
+
+00:04:51.320 --> 00:04:52.629 align:start position:0%
+Because when I read my own logic,
+I <00:04:52.520><c>thought</c>
+
+00:04:52.629 --> 00:04:52.639 align:start position:0%
+I thought
+ 
+
+00:04:52.639 --> 00:04:54.189 align:start position:0%
+I thought
+it <00:04:52.927><c>was </c><00:04:53.215><c>correct. </c><00:04:53.503><c>But </c><00:04:53.791><c>actually, </c><00:04:54.079><c>when</c>
+
+00:04:54.189 --> 00:04:54.199 align:start position:0%
+it was correct. But actually, when
+ 
+
+00:04:54.199 --> 00:04:55.870 align:start position:0%
+it was correct. But actually, when
+you <00:04:54.589><c>work </c><00:04:54.979><c>with </c><00:04:55.369><c>object </c><00:04:55.759><c>types,</c>
+
+00:04:55.870 --> 00:04:55.880 align:start position:0%
+you work with object types,
+ 
+
+00:04:55.880 --> 00:04:57.430 align:start position:0%
+you work with object types,
+you <00:04:56.160><c>add </c><00:04:56.440><c>the </c><00:04:56.720><c>`equals` </c><00:04:57.000><c>operator. </c><00:04:57.280><c>This</c>
+
+00:04:57.430 --> 00:04:57.440 align:start position:0%
+you add the `equals` operator. This
+ 
+
+00:04:57.440 --> 00:04:59.310 align:start position:0%
+you add the `equals` operator. This
+is <00:04:57.860><c>one </c><00:04:58.280><c>of </c><00:04:58.700><c>its </c><00:04:59.120><c>methods.</c>
+
+00:04:59.310 --> 00:04:59.320 align:start position:0%
+is one of its methods.
+ 
+
+00:04:59.320 --> 00:05:01.150 align:start position:0%
+is one of its methods.
+Next, <00:04:59.560><c>we </c><00:04:59.800><c>have </c><00:05:00.040><c>a </c><00:05:00.280><c>few </c><00:05:00.520><c>functions,</c>
+
+00:05:01.150 --> 00:05:01.160 align:start position:0%
+Next, we have a few functions,
+ 
+
+00:05:01.160 --> 00:05:02.870 align:start position:0%
+Next, we have a few functions,
+for <00:05:01.371><c>example...  </c><00:05:01.582><c>If </c><00:05:01.793><c>you </c><00:05:02.004><c>want </c><00:05:02.215><c>to </c><00:05:02.426><c>get </c><00:05:02.637><c>the</c>
+
+00:05:02.870 --> 00:05:02.880 align:start position:0%
+for example...  If you want to get the
+ 
+
+00:05:02.880 --> 00:05:04.270 align:start position:0%
+for example...  If you want to get the
+length <00:05:03.040><c>of </c><00:05:03.200><c>a </c><00:05:03.360><c>string, </c><00:05:03.520><c>you </c><00:05:03.680><c>can </c><00:05:03.840><c>use </c><00:05:04.000><c>the </c><00:05:04.160><c>`</c>
+
+00:05:04.270 --> 00:05:04.280 align:start position:0%
+length of a string, you can use the `
+ 
+
+00:05:04.280 --> 00:05:06.469 align:start position:0%
+length of a string, you can use the `
+&lt;l&gt;` <00:05:04.613><c>function. </c><00:05:04.946><c>If </c><00:05:05.279><c>you </c><00:05:05.612><c>want </c><00:05:05.945><c>to </c><00:05:06.278><c>remove</c>
+
+00:05:06.469 --> 00:05:06.479 align:start position:0%
+&lt;l&gt;` function. If you want to remove
+ 
+
+00:05:06.479 --> 00:05:08.670 align:start position:0%
+&lt;l&gt;` function. If you want to remove
+leading <00:05:08.520><c>and</c>
+
+00:05:08.670 --> 00:05:08.680 align:start position:0%
+leading and
+ 
+
+00:05:08.680 --> 00:05:10.270 align:start position:0%
+leading and
+trailing <00:05:08.792><c>spaces, </c><00:05:08.904><c>you </c><00:05:09.016><c>can </c><00:05:09.128><c>use </c><00:05:09.240><c>the </c><00:05:09.352><c>`</c><00:05:09.464><c>&lt;a&gt;</c><00:05:09.576><c>` </c><00:05:09.688><c>function. </c><00:05:09.800><c>If </c><00:05:09.912><c>you</c>
+
+00:05:10.270 --> 00:05:10.280 align:start position:0%
+trailing spaces, you can use the `&lt;a&gt;` function. If you
+ 
+
+00:05:10.280 --> 00:05:12.189 align:start position:0%
+trailing spaces, you can use the `&lt;a&gt;` function. If you
+want <00:05:11.159><c>to </c><00:05:12.038><c>lowercase</c>
+
+00:05:12.189 --> 00:05:12.199 align:start position:0%
+want to lowercase
+ 
+
+00:05:12.199 --> 00:05:14.230 align:start position:0%
+want to lowercase
+all <00:05:12.450><c>characters, </c><00:05:12.701><c>you </c><00:05:12.952><c>can </c><00:05:13.203><c>use </c><00:05:13.454><c>`</c><00:05:13.705><c>&lt;a&gt;</c><00:05:13.956><c>`.</c>
+
+00:05:14.230 --> 00:05:14.240 align:start position:0%
+all characters, you can use `&lt;a&gt;`.
+ 
+
+00:05:14.240 --> 00:05:16.390 align:start position:0%
+all characters, you can use `&lt;a&gt;`.
+Or <00:05:14.640><c>if </c><00:05:15.040><c>you </c><00:05:15.440><c>want </c><00:05:15.840><c>to </c><00:05:16.240><c>uppercase</c>
+
+00:05:16.390 --> 00:05:16.400 align:start position:0%
+Or if you want to uppercase
+ 
+
+00:05:16.400 --> 00:05:18.350 align:start position:0%
+Or if you want to uppercase
+all <00:05:16.622><c>characters, </c><00:05:16.844><c>you </c><00:05:17.066><c>can </c><00:05:17.288><c>use </c><00:05:17.510><c>`</c><00:05:17.732><c>&lt;a&gt;</c><00:05:17.954><c>`.</c>
+
+00:05:18.350 --> 00:05:18.360 align:start position:0%
+all characters, you can use `&lt;a&gt;`.
+ 
+
+00:05:18.360 --> 00:05:20.749 align:start position:0%
+all characters, you can use `&lt;a&gt;`.
+Or <00:05:18.720><c>if </c><00:05:19.080><c>you </c><00:05:19.440><c>want </c><00:05:19.800><c>to </c><00:05:20.160><c>split </c><00:05:20.520><c>a</c>
+
+00:05:20.749 --> 00:05:20.759 align:start position:0%
+Or if you want to split a
+ 
+
+00:05:20.759 --> 00:05:22.550 align:start position:0%
+Or if you want to split a
+string <00:05:21.306><c>into </c><00:05:21.853><c>smaller </c><00:05:22.400><c>strings,</c>
+
+00:05:22.550 --> 00:05:22.560 align:start position:0%
+string into smaller strings,
+ 
+
+00:05:22.560 --> 00:05:24.110 align:start position:0%
+string into smaller strings,
+you <00:05:22.775><c>can </c><00:05:22.990><c>use </c><00:05:23.205><c>the </c><00:05:23.420><c>`substring` </c><00:05:23.635><c>function.</c>
+
+00:05:24.110 --> 00:05:24.120 align:start position:0%
+you can use the `substring` function.
+ 
+
+00:05:24.120 --> 00:05:25.950 align:start position:0%
+you can use the `substring` function.
+Actually, <00:05:24.680><c>none </c><00:05:25.240><c>of </c><00:05:25.800><c>the</c>
+
+00:05:25.950 --> 00:05:25.960 align:start position:0%
+Actually, none of the
+ 
+
+00:05:25.960 --> 00:05:28.070 align:start position:0%
+Actually, none of the
+functions <00:05:26.319><c>I'm </c><00:05:26.678><c>talking </c><00:05:27.037><c>about </c><00:05:27.396><c>here </c><00:05:27.755><c>are</c>
+
+00:05:28.070 --> 00:05:28.080 align:start position:0%
+functions I'm talking about here are
+ 
+
+00:05:28.080 --> 00:05:29.950 align:start position:0%
+functions I'm talking about here are
+available <00:05:28.530><c>on </c><00:05:28.980><c>this </c><00:05:29.430><c>site. </c><00:05:29.880><c>You</c>
+
+00:05:29.950 --> 00:05:29.960 align:start position:0%
+available on this site. You
+ 
+
+00:05:29.960 --> 00:05:31.469 align:start position:0%
+available on this site. You
+can <00:05:30.125><c>search </c><00:05:30.290><c>for </c><00:05:30.455><c>them </c><00:05:30.620><c>like </c><00:05:30.785><c>this. </c><00:05:30.950><c>This </c><00:05:31.115><c>is </c><00:05:31.280><c>an</c>
+
+00:05:31.469 --> 00:05:31.479 align:start position:0%
+can search for them like this. This is an
+ 
+
+00:05:31.479 --> 00:05:33.749 align:start position:0%
+can search for them like this. This is an
+example. <00:05:31.879><c>Here, </c><00:05:32.279><c>I'll </c><00:05:32.679><c>use </c><00:05:33.079><c>`Java </c><00:05:33.479><c>to</c>
+
+00:05:33.749 --> 00:05:33.759 align:start position:0%
+example. Here, I'll use `Java to
+ 
+
+00:05:33.759 --> 00:05:36.150 align:start position:0%
+example. Here, I'll use `Java to
+low`. <00:05:34.207><c>Okay, </c><00:05:34.655><c>you </c><00:05:35.103><c>can </c><00:05:35.551><c>search </c><00:05:35.999><c>like</c>
+
+00:05:36.150 --> 00:05:36.160 align:start position:0%
+low`. Okay, you can search like
+ 
+
+00:05:36.160 --> 00:05:38.230 align:start position:0%
+low`. Okay, you can search like
+this, <00:05:36.640><c>and </c><00:05:37.120><c>it </c><00:05:37.600><c>will </c><00:05:38.080><c>immediately</c>
+
+00:05:38.230 --> 00:05:38.240 align:start position:0%
+this, and it will immediately
+ 
+
+00:05:38.240 --> 00:05:40.430 align:start position:0%
+this, and it will immediately
+show <00:05:38.580><c>up </c><00:05:38.920><c>on </c><00:05:39.260><c>the </c><00:05:39.600><c>stack </c><00:05:39.940><c>of </c><00:05:40.280><c>flow.</c>
+
+00:05:40.430 --> 00:05:40.440 align:start position:0%
+show up on the stack of flow.
+ 
+
+00:05:40.440 --> 00:05:42.909 align:start position:0%
+show up on the stack of flow.
+Where <00:05:40.989><c>is </c><00:05:41.538><c>it </c><00:05:42.087><c>located? </c><00:05:42.636><c>Here,</c>
+
+00:05:42.909 --> 00:05:42.919 align:start position:0%
+Where is it located? Here,
+ 
+
+00:05:42.919 --> 00:05:45.270 align:start position:0%
+Where is it located? Here,
+I'll <00:05:43.367><c>search </c><00:05:43.815><c>for </c><00:05:44.263><c>`</c><00:05:44.711><c>&lt;a&gt;</c><00:05:45.159><c>`</c>
+
+00:05:45.270 --> 00:05:45.280 align:start position:0%
+I'll search for `&lt;a&gt;`
+ 
+
+00:05:45.280 --> 00:05:48.150 align:start position:0%
+I'll search for `&lt;a&gt;`
+to <00:05:45.750><c>see </c><00:05:46.220><c>where </c><00:05:46.690><c>it's </c><00:05:47.160><c>displayed.</c>
+
+00:05:48.150 --> 00:05:48.160 align:start position:0%
+to see where it's displayed.
+ 
+
+00:05:48.160 --> 00:05:50.909 align:start position:0%
+to see where it's displayed.
+I'll <00:05:49.040><c>search </c><00:05:49.920><c>here. </c><00:05:50.800><c>I</c>
+
+00:05:50.909 --> 00:05:50.919 align:start position:0%
+I'll search here. I
+ 
+
+00:05:50.919 --> 00:05:52.469 align:start position:0%
+I'll search here. I
+can't <00:05:51.207><c>find </c><00:05:51.495><c>the </c><00:05:51.783><c>menu </c><00:05:52.071><c>here, </c><00:05:52.359><c>but</c>
+
+00:05:52.469 --> 00:05:52.479 align:start position:0%
+can't find the menu here, but
+ 
+
+00:05:52.479 --> 00:05:54.270 align:start position:0%
+can't find the menu here, but
+here <00:05:52.879><c>it </c><00:05:53.279><c>is.  </c><00:05:53.679><c>Within </c><00:05:54.079><c>the</c>
+
+00:05:54.270 --> 00:05:54.280 align:start position:0%
+here it is.  Within the
+ 
+
+00:05:54.280 --> 00:05:56.430 align:start position:0%
+here it is.  Within the
+string <00:05:56.360><c>method,</c>
+
+00:05:56.430 --> 00:05:56.440 align:start position:0%
+string method,
+ 
+
+00:05:56.440 --> 00:05:58.110 align:start position:0%
+string method,
+you <00:05:56.668><c>can </c><00:05:56.896><c>click </c><00:05:57.124><c>on </c><00:05:57.352><c>"Try </c><00:05:57.580><c>it </c><00:05:57.808><c>yourself" </c><00:05:58.036><c>and</c>
+
+00:05:58.110 --> 00:05:58.120 align:start position:0%
+you can click on "Try it yourself" and
+ 
+
+00:05:58.120 --> 00:06:00.029 align:start position:0%
+you can click on "Try it yourself" and
+you'll <00:05:58.733><c>see </c><00:05:59.346><c>this: </c><00:05:59.959><c>If</c>
+
+00:06:00.029 --> 00:06:00.039 align:start position:0%
+you'll see this: If
+ 
+
+00:06:00.039 --> 00:06:01.390 align:start position:0%
+you'll see this: If
+you <00:06:00.349><c>use </c><00:06:00.659><c>the </c><00:06:00.969><c>string </c><00:06:01.279><c>method,</c>
+
+00:06:01.390 --> 00:06:01.400 align:start position:0%
+you use the string method,
+ 
+
+00:06:01.400 --> 00:06:03.390 align:start position:0%
+you use the string method,
+calling <00:06:01.776><c>the </c><00:06:02.152><c>`to </c><00:06:02.528><c>uppercase` </c><00:06:02.904><c>function </c><00:06:03.280><c>will</c>
+
+00:06:03.390 --> 00:06:03.400 align:start position:0%
+calling the `to uppercase` function will
+ 
+
+00:06:03.400 --> 00:06:05.070 align:start position:0%
+calling the `to uppercase` function will
+immediately <00:06:04.120><c>capitalize </c><00:06:04.840><c>everything.</c>
+
+00:06:05.070 --> 00:06:05.080 align:start position:0%
+immediately capitalize everything.
+ 
+
+00:06:05.080 --> 00:06:06.870 align:start position:0%
+immediately capitalize everything.
+If <00:06:06.759><c>you</c>
+
+00:06:06.870 --> 00:06:06.880 align:start position:0%
+If you
+ 
+
+00:06:06.880 --> 00:06:08.870 align:start position:0%
+If you
+use <00:06:07.105><c>the </c><00:06:07.330><c>`to </c><00:06:07.555><c>low </c><00:06:07.780><c>case` </c><00:06:08.005><c>function, </c><00:06:08.230><c>it </c><00:06:08.455><c>will </c><00:06:08.680><c>lowercase</c>
+
+00:06:08.870 --> 00:06:08.880 align:start position:0%
+use the `to low case` function, it will lowercase
+ 
+
+00:06:08.880 --> 00:06:10.629 align:start position:0%
+use the `to low case` function, it will lowercase
+everything. <00:06:09.720><c>These </c><00:06:10.560><c>are</c>
+
+00:06:10.629 --> 00:06:10.639 align:start position:0%
+everything. These are
+ 
+
+00:06:10.639 --> 00:06:12.749 align:start position:0%
+everything. These are
+some <00:06:11.031><c>of </c><00:06:11.423><c>the </c><00:06:11.815><c>most </c><00:06:12.207><c>commonly </c><00:06:12.599><c>used</c>
+
+00:06:12.749 --> 00:06:12.759 align:start position:0%
+some of the most commonly used
+ 
+
+00:06:12.759 --> 00:06:14.670 align:start position:0%
+some of the most commonly used
+string <00:06:13.045><c>methods. </c><00:06:13.331><c>In </c><00:06:13.617><c>the </c><00:06:13.903><c>next </c><00:06:14.189><c>video, </c><00:06:14.475><c>to</c>
+
+00:06:14.670 --> 00:06:14.680 align:start position:0%
+string methods. In the next video, to
+ 
+
+00:06:14.680 --> 00:06:16.790 align:start position:0%
+string methods. In the next video, to
+better <00:06:15.071><c>understand </c><00:06:15.462><c>all </c><00:06:15.853><c>the </c><00:06:16.244><c>methods </c><00:06:16.635><c>you've</c>
+
+00:06:16.790 --> 00:06:16.800 align:start position:0%
+better understand all the methods you've
+ 
+
+00:06:16.800 --> 00:06:18.469 align:start position:0%
+better understand all the methods you've
+learned <00:06:17.170><c>here, </c><00:06:17.540><c>we'll </c><00:06:17.910><c>do </c><00:06:18.280><c>some</c>
+
+00:06:18.469 --> 00:06:18.479 align:start position:0%
+learned here, we'll do some
+ 
+
+00:06:18.479 --> 00:06:20.309 align:start position:0%
+learned here, we'll do some
+exercises <00:06:18.807><c>together. </c><00:06:19.135><c>See </c><00:06:19.463><c>you </c><00:06:19.791><c>in </c><00:06:20.119><c>the</c>
+
+00:06:20.309 --> 00:06:20.319 align:start position:0%
+exercises together. See you in the
+ 
+
+00:06:20.319 --> 00:06:23.479 align:start position:0%
+exercises together. See you in the
+next <00:06:20.509><c>part </c><00:06:20.699><c>of </c><00:06:20.889><c>this </c><00:06:21.079><c>video!</c>
+

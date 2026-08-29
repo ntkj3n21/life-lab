@@ -1,0 +1,2168 @@
+WEBVTT
+Kind: captions
+Language: vi
+
+00:00:06.359 --> 00:00:08.350 align:start position:0%
+ 
+trong<00:00:06.919><c> video</c><00:00:07.399><c> lần</c><00:00:07.560><c> trước</c><00:00:07.720><c> chúng</c><00:00:07.839><c> ta</c><00:00:08.000><c> đang</c><00:00:08.200><c> cùng</c>
+
+00:00:08.350 --> 00:00:08.360 align:start position:0%
+trong video lần trước chúng ta đang cùng
+ 
+
+00:00:08.360 --> 00:00:10.350 align:start position:0%
+trong video lần trước chúng ta đang cùng
+nhau<00:00:08.519><c> tìm</c><00:00:08.679><c> hiểu</c><00:00:08.880><c> về</c><00:00:09.040><c> kiểu</c><00:00:09.320><c> dữ</c><00:00:09.599><c> liệu</c><00:00:09.800><c> array</c><00:00:10.240><c> rồi</c>
+
+00:00:10.350 --> 00:00:10.360 align:start position:0%
+nhau tìm hiểu về kiểu dữ liệu array rồi
+ 
+
+00:00:10.360 --> 00:00:12.230 align:start position:0%
+nhau tìm hiểu về kiểu dữ liệu array rồi
+đúng<00:00:10.519><c> không</c><00:00:10.840><c> Và</c><00:00:11.000><c> mình</c><00:00:11.120><c> có</c><00:00:11.360><c> đề</c><00:00:11.679><c> cập</c><00:00:11.840><c> tới</c><00:00:12.040><c> các</c><00:00:12.120><c> bạn</c>
+
+00:00:12.230 --> 00:00:12.240 align:start position:0%
+đúng không Và mình có đề cập tới các bạn
+ 
+
+00:00:12.240 --> 00:00:14.549 align:start position:0%
+đúng không Và mình có đề cập tới các bạn
+một<00:00:12.360><c> cái</c><00:00:12.639><c> Keyword</c><00:00:13.080><c> chính</c><00:00:13.240><c> là</c><00:00:13.360><c> generic</c><00:00:14.240><c> lưu</c><00:00:14.440><c> ý</c>
+
+00:00:14.549 --> 00:00:14.559 align:start position:0%
+một cái Keyword chính là generic lưu ý
+ 
+
+00:00:14.559 --> 00:00:16.430 align:start position:0%
+một cái Keyword chính là generic lưu ý
+giúp<00:00:14.799><c> mình</c><00:00:15.000><c> là</c><00:00:15.160><c> video</c><00:00:15.440><c> này</c><00:00:15.599><c> chúng</c><00:00:15.799><c> ta</c><00:00:16.080><c> chỉ</c><00:00:16.279><c> tìm</c>
+
+00:00:16.430 --> 00:00:16.440 align:start position:0%
+giúp mình là video này chúng ta chỉ tìm
+ 
+
+00:00:16.440 --> 00:00:18.670 align:start position:0%
+giúp mình là video này chúng ta chỉ tìm
+hiểu<00:00:16.680><c> tại</c><00:00:16.920><c> level</c><00:00:17.279><c> basic</c><00:00:17.680><c> thôi</c><00:00:17.960><c> Bởi</c><00:00:18.119><c> vì</c><00:00:18.279><c> ấ</c><00:00:18.520><c> đối</c>
+
+00:00:18.670 --> 00:00:18.680 align:start position:0%
+hiểu tại level basic thôi Bởi vì ấ đối
+ 
+
+00:00:18.680 --> 00:00:20.870 align:start position:0%
+hiểu tại level basic thôi Bởi vì ấ đối
+với<00:00:18.800><c> thằng</c><00:00:18.920><c> genic</c><00:00:19.560><c> này</c><00:00:19.680><c> nó</c><00:00:19.840><c> có</c><00:00:19.960><c> rất</c><00:00:20.279><c> nhiều</c><00:00:20.600><c> kiểu</c>
+
+00:00:20.870 --> 00:00:20.880 align:start position:0%
+với thằng genic này nó có rất nhiều kiểu
+ 
+
+00:00:20.880 --> 00:00:23.150 align:start position:0%
+với thằng genic này nó có rất nhiều kiểu
+sử<00:00:21.039><c> dụng</c><00:00:21.519><c> và</c><00:00:21.680><c> nó</c><00:00:21.880><c> sẽ</c><00:00:22.039><c> theo</c><00:00:22.279><c> cùng</c><00:00:22.519><c> với</c><00:00:22.720><c> các</c><00:00:22.840><c> bạn</c>
+
+00:00:23.150 --> 00:00:23.160 align:start position:0%
+sử dụng và nó sẽ theo cùng với các bạn
+ 
+
+00:00:23.160 --> 00:00:25.349 align:start position:0%
+sử dụng và nó sẽ theo cùng với các bạn
+trong<00:00:23.359><c> cái</c><00:00:23.880><c> cuộc</c><00:00:24.160><c> hành</c><00:00:24.320><c> trình</c><00:00:24.480><c> là</c><00:00:24.760><c> một</c><00:00:25.000><c> Java</c>
+
+00:00:25.349 --> 00:00:25.359 align:start position:0%
+trong cái cuộc hành trình là một Java
+ 
+
+00:00:25.359 --> 00:00:27.429 align:start position:0%
+trong cái cuộc hành trình là một Java
+developer<00:00:26.160><c> tuy</c><00:00:26.480><c> nhiên</c><00:00:26.679><c> rằng</c><00:00:26.800><c> Ấy</c><00:00:27.039><c> do</c><00:00:27.240><c> chúng</c><00:00:27.359><c> ta</c>
+
+00:00:27.429 --> 00:00:27.439 align:start position:0%
+developer tuy nhiên rằng Ấy do chúng ta
+ 
+
+00:00:27.439 --> 00:00:29.390 align:start position:0%
+developer tuy nhiên rằng Ấy do chúng ta
+là<00:00:27.599><c> beginner</c><00:00:28.279><c> nên</c><00:00:28.480><c> là</c><00:00:28.599><c> mình</c><00:00:28.720><c> chỉ</c><00:00:28.960><c> hướng</c><00:00:29.240><c> dẫn</c>
+
+00:00:29.390 --> 00:00:29.400 align:start position:0%
+là beginner nên là mình chỉ hướng dẫn
+ 
+
+00:00:29.400 --> 00:00:31.550 align:start position:0%
+là beginner nên là mình chỉ hướng dẫn
+các<00:00:29.480><c> bạn</c><00:00:29.560><c> ở</c><00:00:29.800><c> một</c><00:00:29.960><c> mức</c><00:00:30.119><c> độ</c><00:00:30.279><c> basic</c><00:00:30.759><c> Trước</c><00:00:31.080><c> tiên</c><00:00:31.240><c> ấy</c>
+
+00:00:31.550 --> 00:00:31.560 align:start position:0%
+các bạn ở một mức độ basic Trước tiên ấy
+ 
+
+00:00:31.560 --> 00:00:33.110 align:start position:0%
+các bạn ở một mức độ basic Trước tiên ấy
+về<00:00:31.720><c> tài</c><00:00:31.920><c> liệu</c><00:00:32.119><c> của</c><00:00:32.239><c> cái</c><00:00:32.439><c> này</c><00:00:32.599><c> các</c><00:00:32.680><c> bạn</c><00:00:32.800><c> có</c><00:00:32.920><c> thể</c>
+
+00:00:33.110 --> 00:00:33.120 align:start position:0%
+về tài liệu của cái này các bạn có thể
+ 
+
+00:00:33.120 --> 00:00:34.950 align:start position:0%
+về tài liệu của cái này các bạn có thể
+tham<00:00:33.239><c> khảo</c><00:00:33.440><c> đối</c><00:00:33.680><c> với</c><00:00:33.800><c> thằng</c><00:00:33.920><c> oracle</c><00:00:34.440><c> nha</c><00:00:34.719><c> nó</c>
+
+00:00:34.950 --> 00:00:34.960 align:start position:0%
+tham khảo đối với thằng oracle nha nó
+ 
+
+00:00:34.960 --> 00:00:37.270 align:start position:0%
+tham khảo đối với thằng oracle nha nó
+viết<00:00:35.200><c> gọi</c><00:00:35.480><c> là</c><00:00:36.000><c> nó</c><00:00:36.200><c> viết</c><00:00:36.399><c> rất</c><00:00:36.559><c> chi</c><00:00:36.760><c> là</c><00:00:36.840><c> nhiều</c><00:00:37.040><c> đấy</c>
+
+00:00:37.270 --> 00:00:37.280 align:start position:0%
+viết gọi là nó viết rất chi là nhiều đấy
+ 
+
+00:00:37.280 --> 00:00:38.709 align:start position:0%
+viết gọi là nó viết rất chi là nhiều đấy
+các<00:00:37.360><c> bạn</c><00:00:37.480><c> Bạn</c><00:00:37.640><c> nào</c><00:00:37.960><c> mà</c><00:00:38.079><c> có</c><00:00:38.200><c> thời</c><00:00:38.360><c> gian</c><00:00:38.520><c> các</c><00:00:38.640><c> bạn</c>
+
+00:00:38.709 --> 00:00:38.719 align:start position:0%
+các bạn Bạn nào mà có thời gian các bạn
+ 
+
+00:00:38.719 --> 00:00:40.229 align:start position:0%
+các bạn Bạn nào mà có thời gian các bạn
+có<00:00:38.840><c> thể</c><00:00:38.960><c> đọc</c><00:00:39.120><c> hết</c><00:00:39.280><c> cái</c><00:00:39.440><c> đống</c><00:00:39.640><c> shit</c><00:00:40.000><c> này</c><00:00:40.120><c> các</c><00:00:40.160><c> bạn</c>
+
+00:00:40.229 --> 00:00:40.239 align:start position:0%
+có thể đọc hết cái đống shit này các bạn
+ 
+
+00:00:40.239 --> 00:00:41.869 align:start position:0%
+có thể đọc hết cái đống shit này các bạn
+này<00:00:40.520><c> Các</c><00:00:40.600><c> bạn</c><00:00:40.719><c> nhìn</c><00:00:40.840><c> thấy</c><00:00:41.039><c> về</c><00:00:41.239><c> generic</c><00:00:41.800><c> của</c>
+
+00:00:41.869 --> 00:00:41.879 align:start position:0%
+này Các bạn nhìn thấy về generic của
+ 
+
+00:00:41.879 --> 00:00:44.229 align:start position:0%
+này Các bạn nhìn thấy về generic của
+chúng<00:00:42.000><c> ta</c><00:00:42.079><c> đấy</c><00:00:42.440><c> Nó</c><00:00:42.760><c> rất</c><00:00:43.079><c> nhiều</c><00:00:43.440><c> kiến</c><00:00:43.719><c> thức</c><00:00:44.160><c> các</c>
+
+00:00:44.229 --> 00:00:44.239 align:start position:0%
+chúng ta đấy Nó rất nhiều kiến thức các
+ 
+
+00:00:44.239 --> 00:00:46.069 align:start position:0%
+chúng ta đấy Nó rất nhiều kiến thức các
+bạn<00:00:44.399><c> có</c><00:00:44.520><c> thể</c><00:00:44.680><c> đọc</c><00:00:44.840><c> như</c><00:00:44.960><c> thế</c><00:00:45.160><c> này</c><00:00:45.440><c> Đấy</c><00:00:45.719><c> chính</c><00:00:46.000><c> là</c>
+
+00:00:46.069 --> 00:00:46.079 align:start position:0%
+bạn có thể đọc như thế này Đấy chính là
+ 
+
+00:00:46.079 --> 00:00:47.990 align:start position:0%
+bạn có thể đọc như thế này Đấy chính là
+lý<00:00:46.239><c> do</c><00:00:46.399><c> tại</c><00:00:46.520><c> sao</c><00:00:46.680><c> mình</c><00:00:46.800><c> chỉ</c><00:00:46.960><c> ghi</c><00:00:47.120><c> là</c><00:00:47.280><c> basic</c><00:00:47.680><c> thôi</c>
+
+00:00:47.990 --> 00:00:48.000 align:start position:0%
+lý do tại sao mình chỉ ghi là basic thôi
+ 
+
+00:00:48.000 --> 00:00:49.790 align:start position:0%
+lý do tại sao mình chỉ ghi là basic thôi
+nếu<00:00:48.160><c> như</c><00:00:48.280><c> rằng</c><00:00:48.520><c> là</c><00:00:48.600><c> mình</c><00:00:48.719><c> ngồi</c><00:00:49.039><c> giải</c><00:00:49.239><c> thích</c><00:00:49.559><c> tới</c>
+
+00:00:49.790 --> 00:00:49.800 align:start position:0%
+nếu như rằng là mình ngồi giải thích tới
+ 
+
+00:00:49.800 --> 00:00:51.310 align:start position:0%
+nếu như rằng là mình ngồi giải thích tới
+các<00:00:49.879><c> bạn</c><00:00:50.000><c> tất</c><00:00:50.239><c> cả</c><00:00:50.360><c> những</c><00:00:50.559><c> cái</c><00:00:50.680><c> tham</c><00:00:50.920><c> số</c><00:00:51.039><c> ở</c><00:00:51.160><c> đây</c>
+
+00:00:51.310 --> 00:00:51.320 align:start position:0%
+các bạn tất cả những cái tham số ở đây
+ 
+
+00:00:51.320 --> 00:00:53.029 align:start position:0%
+các bạn tất cả những cái tham số ở đây
+đấy<00:00:51.640><c> mình</c><00:00:51.760><c> tin</c><00:00:51.960><c> rằng</c><00:00:52.160><c> là</c><00:00:52.280><c> sẽ</c><00:00:52.480><c> không</c><00:00:52.600><c> đủ</c><00:00:52.879><c> thời</c>
+
+00:00:53.029 --> 00:00:53.039 align:start position:0%
+đấy mình tin rằng là sẽ không đủ thời
+ 
+
+00:00:53.039 --> 00:00:55.110 align:start position:0%
+đấy mình tin rằng là sẽ không đủ thời
+gian<00:00:53.480><c> và</c><00:00:53.960><c> đối</c><00:00:54.079><c> với</c><00:00:54.199><c> beginner</c><00:00:54.760><c> các</c><00:00:54.879><c> bạn</c><00:00:54.960><c> đọc</c>
+
+00:00:55.110 --> 00:00:55.120 align:start position:0%
+gian và đối với beginner các bạn đọc
+ 
+
+00:00:55.120 --> 00:00:56.549 align:start position:0%
+gian và đối với beginner các bạn đọc
+xong<00:00:55.359><c> các</c><00:00:55.440><c> bạn</c><00:00:55.520><c> thấy</c><00:00:55.719><c> rằng</c><00:00:55.879><c> là</c><00:00:55.960><c> nó</c><00:00:56.079><c> vô</c><00:00:56.280><c> nghĩa</c>
+
+00:00:56.549 --> 00:00:56.559 align:start position:0%
+xong các bạn thấy rằng là nó vô nghĩa
+ 
+
+00:00:56.559 --> 00:00:57.869 align:start position:0%
+xong các bạn thấy rằng là nó vô nghĩa
+thôi<00:00:56.800><c> chúng</c><00:00:56.920><c> ta</c><00:00:57.039><c> không</c><00:00:57.160><c> thực</c><00:00:57.359><c> hành</c><00:00:57.600><c> thì</c><00:00:57.719><c> làm</c>
+
+00:00:57.869 --> 00:00:57.879 align:start position:0%
+thôi chúng ta không thực hành thì làm
+ 
+
+00:00:57.879 --> 00:00:59.910 align:start position:0%
+thôi chúng ta không thực hành thì làm
+sao<00:00:58.079><c> chúng</c><00:00:58.239><c> ta</c><00:00:58.359><c> có</c><00:00:58.480><c> thể</c><00:00:58.640><c> biết</c><00:00:58.800><c> được</c><00:00:59.280><c> như</c><00:00:59.519><c> vậy</c><00:00:59.719><c> là</c>
+
+00:00:59.910 --> 00:00:59.920 align:start position:0%
+sao chúng ta có thể biết được như vậy là
+ 
+
+00:00:59.920 --> 00:01:01.470 align:start position:0%
+sao chúng ta có thể biết được như vậy là
+rằng<00:01:00.120><c> là</c><00:01:00.199><c> vấn</c><00:01:00.359><c> đề</c><00:01:00.519><c> đầu</c><00:01:00.640><c> tiên</c><00:01:00.840><c> về</c><00:01:01.000><c> tài</c><00:01:01.160><c> liệu</c><00:01:01.399><c> thì</c>
+
+00:01:01.470 --> 00:01:01.480 align:start position:0%
+rằng là vấn đề đầu tiên về tài liệu thì
+ 
+
+00:01:01.480 --> 00:01:03.110 align:start position:0%
+rằng là vấn đề đầu tiên về tài liệu thì
+mình<00:01:01.640><c> đã</c><00:01:01.800><c> chỉ</c><00:01:02.039><c> cho</c><00:01:02.160><c> các</c><00:01:02.239><c> bạn</c><00:01:02.399><c> rồi</c><00:01:02.600><c> Bạn</c><00:01:02.719><c> nào</c><00:01:02.879><c> muốn</c>
+
+00:01:03.110 --> 00:01:03.120 align:start position:0%
+mình đã chỉ cho các bạn rồi Bạn nào muốn
+ 
+
+00:01:03.120 --> 00:01:04.590 align:start position:0%
+mình đã chỉ cho các bạn rồi Bạn nào muốn
+chuyên<00:01:03.440><c> sâu</c><00:01:03.640><c> hơn</c><00:01:03.800><c> các</c><00:01:03.879><c> bạn</c><00:01:04.000><c> có</c><00:01:04.119><c> thể</c><00:01:04.280><c> tham</c><00:01:04.400><c> khảo</c>
+
+00:01:04.590 --> 00:01:04.600 align:start position:0%
+chuyên sâu hơn các bạn có thể tham khảo
+ 
+
+00:01:04.600 --> 00:01:06.750 align:start position:0%
+chuyên sâu hơn các bạn có thể tham khảo
+về<00:01:04.720><c> tài</c><00:01:04.879><c> liệu</c><00:01:05.080><c> này</c><00:01:05.519><c> cái</c><00:01:05.720><c> thứ</c><00:01:05.880><c> hai</c><00:01:06.080><c> đấy</c><00:01:06.479><c> về</c><00:01:06.640><c> cái</c>
+
+00:01:06.750 --> 00:01:06.760 align:start position:0%
+về tài liệu này cái thứ hai đấy về cái
+ 
+
+00:01:06.760 --> 00:01:08.749 align:start position:0%
+về tài liệu này cái thứ hai đấy về cái
+phần<00:01:07.080><c> generic</c><00:01:07.640><c> này</c><00:01:07.759><c> các</c><00:01:07.920><c> bạn</c><00:01:08.000><c> này</c><00:01:08.280><c> mình</c><00:01:08.560><c> cũng</c>
+
+00:01:08.749 --> 00:01:08.759 align:start position:0%
+phần generic này các bạn này mình cũng
+ 
+
+00:01:08.759 --> 00:01:10.630 align:start position:0%
+phần generic này các bạn này mình cũng
+lưu<00:01:08.880><c> ý</c><00:01:09.040><c> luôn</c><00:01:09.200><c> ở</c><00:01:09.360><c> đây</c><00:01:09.520><c> generic</c><00:01:10.159><c> là</c><00:01:10.240><c> một</c><00:01:10.360><c> topic</c>
+
+00:01:10.630 --> 00:01:10.640 align:start position:0%
+lưu ý luôn ở đây generic là một topic
+ 
+
+00:01:10.640 --> 00:01:12.469 align:start position:0%
+lưu ý luôn ở đây generic là một topic
+rất<00:01:10.840><c> ch</c><00:01:11.040><c> là</c><00:01:11.159><c> rộng</c><00:01:11.360><c> video</c><00:01:11.680><c> này</c><00:01:11.799><c> là</c><00:01:11.920><c> video</c><00:01:12.159><c> cơ</c><00:01:12.320><c> bản</c>
+
+00:01:12.469 --> 00:01:12.479 align:start position:0%
+rất ch là rộng video này là video cơ bản
+ 
+
+00:01:12.479 --> 00:01:14.870 align:start position:0%
+rất ch là rộng video này là video cơ bản
+này<00:01:12.880><c> điều</c><00:01:13.400><c> đầu</c><00:01:13.520><c> tiên</c><00:01:13.680><c> ấy</c><00:01:14.000><c> mình</c><00:01:14.240><c> sẽ</c><00:01:14.479><c> nói</c><00:01:14.640><c> về</c>
+
+00:01:14.870 --> 00:01:14.880 align:start position:0%
+này điều đầu tiên ấy mình sẽ nói về
+ 
+
+00:01:14.880 --> 00:01:17.429 align:start position:0%
+này điều đầu tiên ấy mình sẽ nói về
+generic<00:01:15.439><c> khái</c><00:01:15.680><c> niệm</c><00:01:15.920><c> generic</c><00:01:16.479><c> là</c><00:01:16.600><c> gì</c><00:01:17.119><c> Các</c><00:01:17.280><c> bạn</c>
+
+00:01:17.429 --> 00:01:17.439 align:start position:0%
+generic khái niệm generic là gì Các bạn
+ 
+
+00:01:17.439 --> 00:01:19.390 align:start position:0%
+generic khái niệm generic là gì Các bạn
+lưu<00:01:17.600><c> ý</c><00:01:17.759><c> đấy</c><00:01:18.280><c> Các</c><00:01:18.400><c> bạn</c><00:01:18.520><c> nhìn</c><00:01:18.680><c> chúng</c><00:01:18.840><c> ta</c><00:01:19.000><c> code</c><00:01:19.280><c> các</c>
+
+00:01:19.390 --> 00:01:19.400 align:start position:0%
+lưu ý đấy Các bạn nhìn chúng ta code các
+ 
+
+00:01:19.400 --> 00:01:21.270 align:start position:0%
+lưu ý đấy Các bạn nhìn chúng ta code các
+bạn<00:01:19.520><c> này</c><00:01:19.920><c> mình</c><00:01:20.040><c> đã</c><00:01:20.240><c> giải</c><00:01:20.400><c> thích</c><00:01:20.560><c> rồi</c><00:01:20.680><c> đấy</c><00:01:21.119><c> trong</c>
+
+00:01:21.270 --> 00:01:21.280 align:start position:0%
+bạn này mình đã giải thích rồi đấy trong
+ 
+
+00:01:21.280 --> 00:01:23.069 align:start position:0%
+bạn này mình đã giải thích rồi đấy trong
+video<00:01:21.600><c> lần</c><00:01:21.759><c> trước</c><00:01:22.000><c> tại</c><00:01:22.159><c> sao</c><00:01:22.439><c> mà</c><00:01:22.600><c> Ban</c><00:01:22.759><c> đầu</c><00:01:22.920><c> chúng</c>
+
+00:01:23.069 --> 00:01:23.079 align:start position:0%
+video lần trước tại sao mà Ban đầu chúng
+ 
+
+00:01:23.079 --> 00:01:24.670 align:start position:0%
+video lần trước tại sao mà Ban đầu chúng
+ta<00:01:23.240><c> code</c><00:01:23.439><c> như</c><00:01:23.560><c> thế</c><00:01:23.680><c> này</c><00:01:23.880><c> nhá</c><00:01:24.079><c> mình</c><00:01:24.320><c> sẽ</c><00:01:24.479><c> viết</c>
+
+00:01:24.670 --> 00:01:24.680 align:start position:0%
+ta code như thế này nhá mình sẽ viết
+ 
+
+00:01:24.680 --> 00:01:26.350 align:start position:0%
+ta code như thế này nhá mình sẽ viết
+kiểu<00:01:24.960><c> code</c><00:01:25.240><c> ban</c><00:01:25.360><c> đầu</c><00:01:25.520><c> cho</c><00:01:25.640><c> các</c><00:01:25.720><c> bạn</c><00:01:25.799><c> xem</c><00:01:26.079><c> này</c>
+
+00:01:26.350 --> 00:01:26.360 align:start position:0%
+kiểu code ban đầu cho các bạn xem này
+ 
+
+00:01:26.360 --> 00:01:27.789 align:start position:0%
+kiểu code ban đầu cho các bạn xem này
+kiểu<00:01:26.759><c> code</c><00:01:26.960><c> ban</c><00:01:27.079><c> đầu</c><00:01:27.240><c> của</c><00:01:27.320><c> chúng</c><00:01:27.439><c> ta</c><00:01:27.560><c> là</c><00:01:27.680><c> như</c>
+
+00:01:27.789 --> 00:01:27.799 align:start position:0%
+kiểu code ban đầu của chúng ta là như
+ 
+
+00:01:27.799 --> 00:01:30.390 align:start position:0%
+kiểu code ban đầu của chúng ta là như
+thế<00:01:27.920><c> này</c><00:01:28.079><c> mình</c><00:01:28.159><c> sẽ</c><00:01:28.320><c> thay</c><00:01:28.479><c> nó</c><00:01:28.600><c> bằng</c><00:01:28.759><c> A2</c><00:01:29.200><c> đi</c>
+
+00:01:30.390 --> 00:01:30.400 align:start position:0%
+thế này mình sẽ thay nó bằng A2 đi
+ 
+
+00:01:30.400 --> 00:01:32.350 align:start position:0%
+thế này mình sẽ thay nó bằng A2 đi
+mình<00:01:30.759><c> sẽ</c><00:01:30.960><c> code</c><00:01:31.200><c> kiểu</c><00:01:31.520><c> ban</c><00:01:31.640><c> đầu</c><00:01:31.759><c> cho</c><00:01:31.920><c> nó</c><00:01:32.079><c> đây</c><00:01:32.280><c> các</c>
+
+00:01:32.350 --> 00:01:32.360 align:start position:0%
+mình sẽ code kiểu ban đầu cho nó đây các
+ 
+
+00:01:32.360 --> 00:01:33.830 align:start position:0%
+mình sẽ code kiểu ban đầu cho nó đây các
+bạn<00:01:32.439><c> này</c><00:01:32.680><c> đây</c><00:01:32.840><c> chính</c><00:01:33.000><c> là</c><00:01:33.079><c> kiểu</c><00:01:33.320><c> code</c><00:01:33.560><c> ban</c><00:01:33.680><c> đầu</c>
+
+00:01:33.830 --> 00:01:33.840 align:start position:0%
+bạn này đây chính là kiểu code ban đầu
+ 
+
+00:01:33.840 --> 00:01:36.030 align:start position:0%
+bạn này đây chính là kiểu code ban đầu
+không<00:01:33.960><c> có</c><00:01:34.200><c> generic</c><00:01:34.960><c> và</c><00:01:35.200><c> kiểu</c><00:01:35.439><c> code</c><00:01:35.720><c> Thứ</c><00:01:35.840><c> hai</c>
+
+00:01:36.030 --> 00:01:36.040 align:start position:0%
+không có generic và kiểu code Thứ hai
+ 
+
+00:01:36.040 --> 00:01:38.030 align:start position:0%
+không có generic và kiểu code Thứ hai
+chúng<00:01:36.159><c> ta</c><00:01:36.280><c> sử</c><00:01:36.399><c> dụng</c><00:01:36.600><c> generic</c><00:01:37.360><c> bản</c><00:01:37.640><c> chất</c><00:01:37.920><c> của</c>
+
+00:01:38.030 --> 00:01:38.040 align:start position:0%
+chúng ta sử dụng generic bản chất của
+ 
+
+00:01:38.040 --> 00:01:39.950 align:start position:0%
+chúng ta sử dụng generic bản chất của
+vấn<00:01:38.200><c> đề</c><00:01:38.320><c> chúng</c><00:01:38.479><c> ta</c><00:01:38.560><c> sử</c><00:01:38.680><c> dụng</c><00:01:38.920><c> generic</c><00:01:39.520><c> ấy</c><00:01:39.799><c> chính</c>
+
+00:01:39.950 --> 00:01:39.960 align:start position:0%
+vấn đề chúng ta sử dụng generic ấy chính
+ 
+
+00:01:39.960 --> 00:01:41.870 align:start position:0%
+vấn đề chúng ta sử dụng generic ấy chính
+là<00:01:40.079><c> việc</c><00:01:40.280><c> các</c><00:01:40.399><c> bạn</c><00:01:40.560><c> dùng</c><00:01:40.799><c> dấu</c><00:01:41.000><c> đóng</c><00:01:41.200><c> mở</c><00:01:41.600><c> ngoặc</c>
+
+00:01:41.870 --> 00:01:41.880 align:start position:0%
+là việc các bạn dùng dấu đóng mở ngoặc
+ 
+
+00:01:41.880 --> 00:01:43.429 align:start position:0%
+là việc các bạn dùng dấu đóng mở ngoặc
+vuông<00:01:42.079><c> như</c><00:01:42.159><c> thế</c><00:01:42.399><c> này</c><00:01:42.680><c> Đồng</c><00:01:42.880><c> thời</c><00:01:43.119><c> chúng</c><00:01:43.240><c> ta</c>
+
+00:01:43.429 --> 00:01:43.439 align:start position:0%
+vuông như thế này Đồng thời chúng ta
+ 
+
+00:01:43.439 --> 00:01:46.630 align:start position:0%
+vuông như thế này Đồng thời chúng ta
+truyền<00:01:43.759><c> vào</c><00:01:43.880><c> một</c><00:01:44.000><c> cái</c><00:01:44.200><c> t</c><00:01:45.200><c> t</c><00:01:45.600><c> ở</c><00:01:45.719><c> đây</c><00:01:45.920><c> thì</c><00:01:46.200><c> mình</c>
+
+00:01:46.630 --> 00:01:46.640 align:start position:0%
+truyền vào một cái t t ở đây thì mình
+ 
+
+00:01:46.640 --> 00:01:47.830 align:start position:0%
+truyền vào một cái t t ở đây thì mình
+chúng<00:01:46.759><c> ta</c><00:01:46.920><c> hay</c><00:01:47.159><c> viết</c><00:01:47.320><c> như</c><00:01:47.439><c> thế</c><00:01:47.560><c> này</c><00:01:47.640><c> các</c><00:01:47.719><c> bạn</c>
+
+00:01:47.830 --> 00:01:47.840 align:start position:0%
+chúng ta hay viết như thế này các bạn
+ 
+
+00:01:47.840 --> 00:01:49.550 align:start position:0%
+chúng ta hay viết như thế này các bạn
+này<00:01:48.040><c> chúng</c><00:01:48.159><c> ta</c><00:01:48.240><c> hay</c><00:01:48.439><c> viết</c><00:01:48.560><c> là</c><00:01:48.680><c> t</c><00:01:48.920><c> như</c><00:01:49.040><c> thế</c><00:01:49.159><c> này</c><00:01:49.280><c> t</c>
+
+00:01:49.550 --> 00:01:49.560 align:start position:0%
+này chúng ta hay viết là t như thế này t
+ 
+
+00:01:49.560 --> 00:01:51.069 align:start position:0%
+này chúng ta hay viết là t như thế này t
+là<00:01:49.640><c> viết</c><00:01:49.880><c> tắt</c><00:01:50.040><c> của</c><00:01:50.159><c> từ</c><00:01:50.280><c> t</c><00:01:50.560><c> thôi</c><00:01:50.719><c> mà</c><00:01:50.840><c> chúng</c><00:01:50.960><c> ta</c>
+
+00:01:51.069 --> 00:01:51.079 align:start position:0%
+là viết tắt của từ t thôi mà chúng ta
+ 
+
+00:01:51.079 --> 00:01:52.910 align:start position:0%
+là viết tắt của từ t thôi mà chúng ta
+truyền<00:01:51.360><c> vào</c><00:01:51.520><c> cái</c><00:01:51.600><c> t</c><00:01:52.119><c> Ví</c><00:01:52.280><c> dụ</c><00:01:52.399><c> ở</c><00:01:52.600><c> đây</c><00:01:52.719><c> thì</c><00:01:52.799><c> mình</c>
+
+00:01:52.910 --> 00:01:52.920 align:start position:0%
+truyền vào cái t Ví dụ ở đây thì mình
+ 
+
+00:01:52.920 --> 00:01:54.510 align:start position:0%
+truyền vào cái t Ví dụ ở đây thì mình
+đang<00:01:53.079><c> truyền</c><00:01:53.360><c> vào</c><00:01:53.479><c> kiểu</c><00:01:53.719><c> dữ</c><00:01:53.960><c> liệu</c><00:01:54.159><c> là</c><00:01:54.240><c> string</c>
+
+00:01:54.510 --> 00:01:54.520 align:start position:0%
+đang truyền vào kiểu dữ liệu là string
+ 
+
+00:01:54.520 --> 00:01:56.029 align:start position:0%
+đang truyền vào kiểu dữ liệu là string
+các<00:01:54.600><c> bạn</c><00:01:54.680><c> này</c><00:01:54.880><c> T</c><00:01:55.200><c> của</c><00:01:55.280><c> chúng</c><00:01:55.399><c> ta</c><00:01:55.520><c> string</c><00:01:55.880><c> đúng</c>
+
+00:01:56.029 --> 00:01:56.039 align:start position:0%
+các bạn này T của chúng ta string đúng
+ 
+
+00:01:56.039 --> 00:01:57.630 align:start position:0%
+các bạn này T của chúng ta string đúng
+không<00:01:56.399><c> bạn</c><00:01:56.600><c> nào</c><00:01:56.759><c> không</c><00:01:56.880><c> thích</c><00:01:57.039><c> thì</c><00:01:57.320><c> các</c><00:01:57.399><c> bạn</c><00:01:57.520><c> có</c>
+
+00:01:57.630 --> 00:01:57.640 align:start position:0%
+không bạn nào không thích thì các bạn có
+ 
+
+00:01:57.640 --> 00:01:59.190 align:start position:0%
+không bạn nào không thích thì các bạn có
+thể<00:01:57.799><c> viết</c><00:01:58.000><c> như</c><00:01:58.079><c> thế</c><00:01:58.240><c> này</c><00:01:58.479><c> mình</c><00:01:58.759><c> có</c><00:01:58.880><c> thể</c><00:01:59.000><c> viết</c>
+
+00:01:59.190 --> 00:01:59.200 align:start position:0%
+thể viết như thế này mình có thể viết
+ 
+
+00:01:59.200 --> 00:02:01.389 align:start position:0%
+thể viết như thế này mình có thể viết
+gọi<00:01:59.560><c> là</c><00:02:00.000><c> ví</c><00:02:00.119><c> dụ</c><00:02:00.240><c> hôm</c><00:02:00.399><c> trước</c><00:02:00.600><c> thì</c><00:02:00.840><c> chúng</c><00:02:01.000><c> ta</c><00:02:01.159><c> có</c>
+
+00:02:01.389 --> 00:02:01.399 align:start position:0%
+gọi là ví dụ hôm trước thì chúng ta có
+ 
+
+00:02:01.399 --> 00:02:03.590 align:start position:0%
+gọi là ví dụ hôm trước thì chúng ta có
+cái<00:02:02.119><c> chúng</c><00:02:02.320><c> ta</c><00:02:02.399><c> có</c><00:02:02.560><c> là</c><00:02:02.799><c> student</c><00:02:03.360><c> đúng</c><00:02:03.479><c> không</c>
+
+00:02:03.590 --> 00:02:03.600 align:start position:0%
+cái chúng ta có là student đúng không
+ 
+
+00:02:03.600 --> 00:02:04.789 align:start position:0%
+cái chúng ta có là student đúng không
+Các<00:02:03.680><c> bạn</c><00:02:03.799><c> có</c><00:02:03.920><c> thể</c><00:02:04.079><c> khai</c><00:02:04.280><c> báo</c><00:02:04.439><c> như</c><00:02:04.520><c> thế</c><00:02:04.680><c> này</c>
+
+00:02:04.789 --> 00:02:04.799 align:start position:0%
+Các bạn có thể khai báo như thế này
+ 
+
+00:02:04.799 --> 00:02:06.270 align:start position:0%
+Các bạn có thể khai báo như thế này
+chúng<00:02:04.920><c> ta</c><00:02:05.000><c> truyền</c><00:02:05.280><c> vào</c><00:02:05.399><c> một</c><00:02:05.479><c> cái</c><00:02:05.640><c> là</c><00:02:05.799><c> student</c>
+
+00:02:06.270 --> 00:02:06.280 align:start position:0%
+chúng ta truyền vào một cái là student
+ 
+
+00:02:06.280 --> 00:02:08.510 align:start position:0%
+chúng ta truyền vào một cái là student
+này<00:02:06.680><c> thì</c><00:02:07.079><c> bên</c><00:02:07.240><c> này</c><00:02:07.399><c> nha</c><00:02:07.799><c> các</c><00:02:07.920><c> bạn</c><00:02:08.160><c> sẽ</c><00:02:08.280><c> cho</c><00:02:08.399><c> mình</c>
+
+00:02:08.510 --> 00:02:08.520 align:start position:0%
+này thì bên này nha các bạn sẽ cho mình
+ 
+
+00:02:08.520 --> 00:02:10.350 align:start position:0%
+này thì bên này nha các bạn sẽ cho mình
+tương<00:02:08.759><c> ứng</c><00:02:08.920><c> là</c><00:02:09.080><c> student</c><00:02:09.560><c> này</c><00:02:09.800><c> ở</c><00:02:10.039><c> đây</c><00:02:10.160><c> thì</c><00:02:10.280><c> mình</c>
+
+00:02:10.350 --> 00:02:10.360 align:start position:0%
+tương ứng là student này ở đây thì mình
+ 
+
+00:02:10.360 --> 00:02:12.110 align:start position:0%
+tương ứng là student này ở đây thì mình
+sẽ<00:02:10.479><c> cho</c><00:02:10.599><c> nó</c><00:02:10.759><c> là</c><00:02:10.800><c> A3</c><00:02:11.360><c> đồng</c><00:02:11.560><c> thời</c><00:02:11.720><c> thì</c><00:02:11.840><c> mình</c><00:02:11.959><c> sẽ</c>
+
+00:02:12.110 --> 00:02:12.120 align:start position:0%
+sẽ cho nó là A3 đồng thời thì mình sẽ
+ 
+
+00:02:12.120 --> 00:02:13.869 align:start position:0%
+sẽ cho nó là A3 đồng thời thì mình sẽ
+import<00:02:12.480><c> cái</c><00:02:12.680><c> thằng</c><00:02:12.879><c> student</c><00:02:13.400><c> này</c><00:02:13.520><c> vào</c><00:02:13.680><c> các</c><00:02:13.800><c> bạn</c>
+
+00:02:13.869 --> 00:02:13.879 align:start position:0%
+import cái thằng student này vào các bạn
+ 
+
+00:02:13.879 --> 00:02:16.430 align:start position:0%
+import cái thằng student này vào các bạn
+nhá<00:02:14.519><c> mình</c><00:02:14.640><c> sẽ</c><00:02:14.800><c> import</c><00:02:15.120><c> student</c><00:02:15.599><c> vào</c><00:02:15.840><c> đấy</c><00:02:16.239><c> như</c>
+
+00:02:16.430 --> 00:02:16.440 align:start position:0%
+nhá mình sẽ import student vào đấy như
+ 
+
+00:02:16.440 --> 00:02:18.190 align:start position:0%
+nhá mình sẽ import student vào đấy như
+vậy<00:02:16.599><c> rằng</c><00:02:16.840><c> là</c><00:02:16.920><c> đối</c><00:02:17.040><c> với</c><00:02:17.160><c> r</c><00:02:17.599><c> list</c><00:02:17.800><c> ấ</c><00:02:18.040><c> các</c><00:02:18.120><c> bạn</c>
+
+00:02:18.190 --> 00:02:18.200 align:start position:0%
+vậy rằng là đối với r list ấ các bạn
+ 
+
+00:02:18.200 --> 00:02:20.509 align:start position:0%
+vậy rằng là đối với r list ấ các bạn
+muốn<00:02:18.400><c> lưu</c><00:02:18.599><c> trữ</c><00:02:18.959><c> cái</c><00:02:19.160><c> gì</c><00:02:19.360><c> cũng</c><00:02:19.519><c> được</c><00:02:19.879><c> miễn</c><00:02:20.160><c> Nó</c><00:02:20.319><c> là</c>
+
+00:02:20.509 --> 00:02:20.519 align:start position:0%
+muốn lưu trữ cái gì cũng được miễn Nó là
+ 
+
+00:02:20.519 --> 00:02:23.190 align:start position:0%
+muốn lưu trữ cái gì cũng được miễn Nó là
+một<00:02:20.680><c> biến</c><00:02:21.080><c> object</c><00:02:21.560><c> nó</c><00:02:21.680><c> sẽ</c><00:02:21.840><c> là</c><00:02:21.959><c> ok</c><00:02:22.640><c> đối</c><00:02:22.879><c> với</c><00:02:23.040><c> Cách</c>
+
+00:02:23.190 --> 00:02:23.200 align:start position:0%
+một biến object nó sẽ là ok đối với Cách
+ 
+
+00:02:23.200 --> 00:02:25.030 align:start position:0%
+một biến object nó sẽ là ok đối với Cách
+viết<00:02:23.400><c> thứ</c><00:02:23.560><c> Hai</c><00:02:23.920><c> và</c><00:02:24.040><c> thứ</c><00:02:24.200><c> ba</c><00:02:24.319><c> này</c><00:02:24.560><c> các</c><00:02:24.640><c> bạn</c><00:02:24.720><c> này</c>
+
+00:02:25.030 --> 00:02:25.040 align:start position:0%
+viết thứ Hai và thứ ba này các bạn này
+ 
+
+00:02:25.040 --> 00:02:26.990 align:start position:0%
+viết thứ Hai và thứ ba này các bạn này
+chúng<00:02:25.200><c> ta</c><00:02:25.280><c> sử</c><00:02:25.440><c> dụng</c><00:02:25.560><c> generic</c><00:02:26.400><c> còn</c><00:02:26.599><c> cách</c><00:02:26.760><c> viết</c>
+
+00:02:26.990 --> 00:02:27.000 align:start position:0%
+chúng ta sử dụng generic còn cách viết
+ 
+
+00:02:27.000 --> 00:02:28.270 align:start position:0%
+chúng ta sử dụng generic còn cách viết
+đầu<00:02:27.120><c> tiên</c><00:02:27.280><c> ấy</c><00:02:27.560><c> chúng</c><00:02:27.720><c> ta</c><00:02:27.840><c> không</c><00:02:27.959><c> sử</c><00:02:28.160><c> dụng</c>
+
+00:02:28.270 --> 00:02:28.280 align:start position:0%
+đầu tiên ấy chúng ta không sử dụng
+ 
+
+00:02:28.280 --> 00:02:30.630 align:start position:0%
+đầu tiên ấy chúng ta không sử dụng
+generic<00:02:29.200><c> thanh</c><00:02:29.800><c> rằng</c><00:02:30.000><c> ở</c><00:02:30.120><c> đây</c><00:02:30.239><c> Các</c><00:02:30.319><c> bạn</c><00:02:30.480><c> nhìn</c>
+
+00:02:30.630 --> 00:02:30.640 align:start position:0%
+generic thanh rằng ở đây Các bạn nhìn
+ 
+
+00:02:30.640 --> 00:02:32.190 align:start position:0%
+generic thanh rằng ở đây Các bạn nhìn
+thấy<00:02:30.840><c> được</c><00:02:31.000><c> tác</c><00:02:31.200><c> dụng</c><00:02:31.360><c> của</c><00:02:31.480><c> nó</c><00:02:31.640><c> không</c><00:02:31.879><c> Nếu</c><00:02:32.080><c> như</c>
+
+00:02:32.190 --> 00:02:32.200 align:start position:0%
+thấy được tác dụng của nó không Nếu như
+ 
+
+00:02:32.200 --> 00:02:33.830 align:start position:0%
+thấy được tác dụng của nó không Nếu như
+rằng<00:02:32.440><c> là</c><00:02:32.560><c> các</c><00:02:32.640><c> bạn</c><00:02:32.800><c> xem</c><00:02:32.959><c> ví</c><00:02:33.120><c> dụ</c><00:02:33.280><c> này</c><00:02:33.480><c> này</c><00:02:33.760><c> các</c>
+
+00:02:33.830 --> 00:02:33.840 align:start position:0%
+rằng là các bạn xem ví dụ này này các
+ 
+
+00:02:33.840 --> 00:02:35.309 align:start position:0%
+rằng là các bạn xem ví dụ này này các
+bạn<00:02:33.959><c> có</c><00:02:34.080><c> thể</c><00:02:34.280><c> tư</c><00:02:34.440><c> duy</c><00:02:34.680><c> được</c><00:02:34.800><c> tác</c><00:02:34.959><c> dụng</c><00:02:35.120><c> của</c><00:02:35.200><c> nó</c>
+
+00:02:35.309 --> 00:02:35.319 align:start position:0%
+bạn có thể tư duy được tác dụng của nó
+ 
+
+00:02:35.319 --> 00:02:37.790 align:start position:0%
+bạn có thể tư duy được tác dụng của nó
+đấy<00:02:35.840><c> thực</c><00:02:36.040><c> tế</c><00:02:36.200><c> rằng</c><00:02:36.360><c> là</c><00:02:36.400><c> cái</c><00:02:36.560><c> thằng</c><00:02:36.720><c> generic</c><00:02:37.519><c> nó</c>
+
+00:02:37.790 --> 00:02:37.800 align:start position:0%
+đấy thực tế rằng là cái thằng generic nó
+ 
+
+00:02:37.800 --> 00:02:40.070 align:start position:0%
+đấy thực tế rằng là cái thằng generic nó
+sinh<00:02:38.040><c> ra</c><00:02:38.160><c> đấy</c><00:02:38.519><c> là</c><00:02:38.599><c> để</c><00:02:39.080><c> code</c><00:02:39.319><c> của</c><00:02:39.440><c> các</c><00:02:39.519><c> bạn</c><00:02:39.640><c> nó</c><00:02:39.840><c> ít</c>
+
+00:02:40.070 --> 00:02:40.080 align:start position:0%
+sinh ra đấy là để code của các bạn nó ít
+ 
+
+00:02:40.080 --> 00:02:42.949 align:start position:0%
+sinh ra đấy là để code của các bạn nó ít
+bấc<00:02:40.400><c> hơn</c><00:02:40.920><c> và</c><00:02:41.239><c> chúng</c><00:02:41.440><c> ta</c><00:02:41.640><c> nói</c><00:02:41.920><c> rõ</c><00:02:42.200><c> cho</c><00:02:42.360><c> cái</c><00:02:42.720><c> trình</c>
+
+00:02:42.949 --> 00:02:42.959 align:start position:0%
+bấc hơn và chúng ta nói rõ cho cái trình
+ 
+
+00:02:42.959 --> 00:02:45.110 align:start position:0%
+bấc hơn và chúng ta nói rõ cho cái trình
+dịch<00:02:43.159><c> code</c><00:02:43.440><c> của</c><00:02:43.519><c> chúng</c><00:02:43.640><c> ta</c><00:02:43.760><c> đấy</c><00:02:44.360><c> Cái</c><00:02:44.640><c> trình</c><00:02:44.920><c> mà</c>
+
+00:02:45.110 --> 00:02:45.120 align:start position:0%
+dịch code của chúng ta đấy Cái trình mà
+ 
+
+00:02:45.120 --> 00:02:46.550 align:start position:0%
+dịch code của chúng ta đấy Cái trình mà
+chạy<00:02:45.360><c> trong</c><00:02:45.519><c> quá</c><00:02:45.879><c> trình</c><00:02:46.040><c> gọi</c><00:02:46.280><c> là</c><00:02:46.360><c> các</c><00:02:46.440><c> bạn</c>
+
+00:02:46.550 --> 00:02:46.560 align:start position:0%
+chạy trong quá trình gọi là các bạn
+ 
+
+00:02:46.560 --> 00:02:48.270 align:start position:0%
+chạy trong quá trình gọi là các bạn
+check<00:02:46.840><c> code</c><00:02:47.040><c> trước</c><00:02:47.280><c> khi</c><00:02:47.400><c> mà</c><00:02:47.480><c> các</c><00:02:47.560><c> bạn</c><00:02:47.720><c> run</c><00:02:48.040><c> ấy</c>
+
+00:02:48.270 --> 00:02:48.280 align:start position:0%
+check code trước khi mà các bạn run ấy
+ 
+
+00:02:48.280 --> 00:02:49.910 align:start position:0%
+check code trước khi mà các bạn run ấy
+chúng<00:02:48.400><c> ta</c><00:02:48.480><c> gọi</c><00:02:48.680><c> là</c><00:02:48.800><c> compile</c><00:02:49.280><c> đấy</c><00:02:49.560><c> chúng</c><00:02:49.680><c> ta</c><00:02:49.760><c> gọi</c>
+
+00:02:49.910 --> 00:02:49.920 align:start position:0%
+chúng ta gọi là compile đấy chúng ta gọi
+ 
+
+00:02:49.920 --> 00:02:51.790 align:start position:0%
+chúng ta gọi là compile đấy chúng ta gọi
+là<00:02:50.040><c> compile</c><00:02:50.480><c> code</c><00:02:50.640><c> ấy</c><00:02:51.159><c> chúng</c><00:02:51.319><c> ta</c><00:02:51.440><c> nói</c><00:02:51.599><c> với</c>
+
+00:02:51.790 --> 00:02:51.800 align:start position:0%
+là compile code ấy chúng ta nói với
+ 
+
+00:02:51.800 --> 00:02:54.030 align:start position:0%
+là compile code ấy chúng ta nói với
+thằng<00:02:52.000><c> compiler</c><00:02:52.640><c> biết</c><00:02:52.800><c> được</c><00:02:52.879><c> rằng</c><00:02:53.040><c> ấy</c><00:02:53.319><c> cái</c><00:02:53.640><c> đa</c>
+
+00:02:54.030 --> 00:02:54.040 align:start position:0%
+thằng compiler biết được rằng ấy cái đa
+ 
+
+00:02:54.040 --> 00:02:56.270 align:start position:0%
+thằng compiler biết được rằng ấy cái đa
+của<00:02:54.159><c> tao</c><00:02:54.440><c> chứa</c><00:02:54.760><c> dữ</c><00:02:54.920><c> liệu</c><00:02:55.120><c> gì</c><00:02:55.560><c> nếu</c><00:02:55.760><c> mà</c><00:02:55.879><c> nó</c><00:02:56.080><c> khác</c>
+
+00:02:56.270 --> 00:02:56.280 align:start position:0%
+của tao chứa dữ liệu gì nếu mà nó khác
+ 
+
+00:02:56.280 --> 00:02:58.550 align:start position:0%
+của tao chứa dữ liệu gì nếu mà nó khác
+đi<00:02:56.519><c> mày</c><00:02:56.720><c> sẽ</c><00:02:56.840><c> báo</c><00:02:57.080><c> lỗi</c><00:02:57.319><c> cho</c><00:02:57.400><c> tao</c><00:02:57.519><c> Thy</c><00:02:58.080><c> Nga</c><00:02:58.280><c> rằng</c><00:02:58.440><c> ở</c>
+
+00:02:58.550 --> 00:02:58.560 align:start position:0%
+đi mày sẽ báo lỗi cho tao Thy Nga rằng ở
+ 
+
+00:02:58.560 --> 00:03:00.030 align:start position:0%
+đi mày sẽ báo lỗi cho tao Thy Nga rằng ở
+đây<00:02:58.680><c> nếu</c><00:02:58.840><c> mà</c><00:02:58.920><c> các</c><00:02:59.000><c> bạn</c><00:02:59.080><c> thêm</c><00:02:59.319><c> kiểu</c><00:02:59.720><c> string</c><00:02:59.959><c> như</c>
+
+00:03:00.030 --> 00:03:00.040 align:start position:0%
+đây nếu mà các bạn thêm kiểu string như
+ 
+
+00:03:00.040 --> 00:03:01.589 align:start position:0%
+đây nếu mà các bạn thêm kiểu string như
+thế<00:03:00.200><c> này</c><00:03:00.319><c> chúng</c><00:03:00.440><c> ta</c><00:03:00.519><c> sẽ</c><00:03:00.640><c> bảo</c><00:03:00.800><c> rằng</c><00:03:00.959><c> là</c><00:03:01.000><c> à</c><00:03:01.360><c> Cái</c>
+
+00:03:01.589 --> 00:03:01.599 align:start position:0%
+thế này chúng ta sẽ bảo rằng là à Cái
+ 
+
+00:03:01.599 --> 00:03:04.309 align:start position:0%
+thế này chúng ta sẽ bảo rằng là à Cái
+biến<00:03:01.840><c> A1</c><00:03:02.200><c> của</c><00:03:02.280><c> tao</c><00:03:02.400><c> ấy</c><00:03:02.640><c> Cái</c><00:03:02.760><c> earist</c><00:03:03.640><c> này</c><00:03:03.959><c> mặc</c><00:03:04.159><c> dù</c>
+
+00:03:04.309 --> 00:03:04.319 align:start position:0%
+biến A1 của tao ấy Cái earist này mặc dù
+ 
+
+00:03:04.319 --> 00:03:06.589 align:start position:0%
+biến A1 của tao ấy Cái earist này mặc dù
+nó<00:03:04.480><c> có</c><00:03:04.599><c> thể</c><00:03:04.799><c> lưu</c><00:03:05.000><c> trữ</c><00:03:05.360><c> được</c><00:03:05.560><c> rất</c><00:03:05.760><c> nhiều</c><00:03:06.080><c> kiểu</c><00:03:06.400><c> dữ</c>
+
+00:03:06.589 --> 00:03:06.599 align:start position:0%
+nó có thể lưu trữ được rất nhiều kiểu dữ
+ 
+
+00:03:06.599 --> 00:03:08.309 align:start position:0%
+nó có thể lưu trữ được rất nhiều kiểu dữ
+liệu<00:03:07.000><c> nhưng</c><00:03:07.159><c> mà</c><00:03:07.280><c> mày</c><00:03:07.720><c> chỉ</c><00:03:07.879><c> quan</c><00:03:08.000><c> tâm</c><00:03:08.159><c> rằng</c><00:03:08.280><c> là</c>
+
+00:03:08.309 --> 00:03:08.319 align:start position:0%
+liệu nhưng mà mày chỉ quan tâm rằng là
+ 
+
+00:03:08.319 --> 00:03:10.949 align:start position:0%
+liệu nhưng mà mày chỉ quan tâm rằng là
+eris<00:03:09.239><c> này</c><00:03:09.360><c> chỉ</c><00:03:09.640><c> chứa</c><00:03:09.959><c> string</c><00:03:10.319><c> thôi</c><00:03:10.640><c> nếu</c><00:03:10.840><c> như</c>
+
+00:03:10.949 --> 00:03:10.959 align:start position:0%
+eris này chỉ chứa string thôi nếu như
+ 
+
+00:03:10.959 --> 00:03:13.070 align:start position:0%
+eris này chỉ chứa string thôi nếu như
+rằng<00:03:11.159><c> là</c><00:03:11.280><c> nó</c><00:03:11.400><c> khác</c><00:03:11.760><c> string</c><00:03:12.120><c> mày</c><00:03:12.319><c> sẽ</c><00:03:12.400><c> bao</c><00:03:12.599><c> lỗi</c>
+
+00:03:13.070 --> 00:03:13.080 align:start position:0%
+rằng là nó khác string mày sẽ bao lỗi
+ 
+
+00:03:13.080 --> 00:03:14.750 align:start position:0%
+rằng là nó khác string mày sẽ bao lỗi
+tương<00:03:13.360><c> tự</c><00:03:13.480><c> thì</c><00:03:13.640><c> đối</c><00:03:13.799><c> với</c><00:03:13.920><c> thằng</c><00:03:14.080><c> A3</c><00:03:14.440><c> này</c><00:03:14.640><c> này</c>
+
+00:03:14.750 --> 00:03:14.760 align:start position:0%
+tương tự thì đối với thằng A3 này này
+ 
+
+00:03:14.760 --> 00:03:16.470 align:start position:0%
+tương tự thì đối với thằng A3 này này
+chúng<00:03:14.879><c> ta</c><00:03:14.959><c> sẽ</c><00:03:15.080><c> bảo</c><00:03:15.280><c> với</c><00:03:15.440><c> thằng</c><00:03:15.720><c> arist</c><00:03:16.120><c> ấy</c><00:03:16.360><c> mày</c>
+
+00:03:16.470 --> 00:03:16.480 align:start position:0%
+chúng ta sẽ bảo với thằng arist ấy mày
+ 
+
+00:03:16.480 --> 00:03:18.550 align:start position:0%
+chúng ta sẽ bảo với thằng arist ấy mày
+sẽ<00:03:16.599><c> kiểm</c><00:03:16.840><c> ra</c><00:03:17.040><c> cho</c><00:03:17.200><c> tao</c><00:03:17.560><c> Tao</c><00:03:17.760><c> chỉ</c><00:03:17.920><c> muốn</c><00:03:18.120><c> lưu</c><00:03:18.319><c> cả</c>
+
+00:03:18.550 --> 00:03:18.560 align:start position:0%
+sẽ kiểm ra cho tao Tao chỉ muốn lưu cả
+ 
+
+00:03:18.560 --> 00:03:20.190 align:start position:0%
+sẽ kiểm ra cho tao Tao chỉ muốn lưu cả
+đối<00:03:18.720><c> tượng</c><00:03:18.879><c> student</c><00:03:19.440><c> thôi</c><00:03:19.599><c> mày</c><00:03:19.760><c> lưu</c><00:03:19.959><c> cái</c><00:03:20.080><c> khác</c>
+
+00:03:20.190 --> 00:03:20.200 align:start position:0%
+đối tượng student thôi mày lưu cái khác
+ 
+
+00:03:20.200 --> 00:03:22.270 align:start position:0%
+đối tượng student thôi mày lưu cái khác
+vào<00:03:20.360><c> mày</c><00:03:20.560><c> báo</c><00:03:20.760><c> lỗi</c><00:03:21.000><c> ngay</c><00:03:21.200><c> cho</c><00:03:21.319><c> tao</c><00:03:21.720><c> Còn</c><00:03:21.920><c> đối</c><00:03:22.120><c> với</c>
+
+00:03:22.270 --> 00:03:22.280 align:start position:0%
+vào mày báo lỗi ngay cho tao Còn đối với
+ 
+
+00:03:22.280 --> 00:03:23.509 align:start position:0%
+vào mày báo lỗi ngay cho tao Còn đối với
+việc<00:03:22.440><c> các</c><00:03:22.519><c> bạn</c><00:03:22.599><c> khai</c><00:03:22.840><c> báo</c><00:03:23.000><c> như</c><00:03:23.080><c> thế</c><00:03:23.239><c> này</c><00:03:23.319><c> này</c>
+
+00:03:23.509 --> 00:03:23.519 align:start position:0%
+việc các bạn khai báo như thế này này
+ 
+
+00:03:23.519 --> 00:03:25.309 align:start position:0%
+việc các bạn khai báo như thế này này
+các<00:03:23.599><c> bạn</c><00:03:23.760><c> không</c><00:03:23.879><c> dùng</c><00:03:24.120><c> generic</c><00:03:24.720><c> ấy</c><00:03:24.959><c> ngay</c><00:03:25.159><c> lập</c>
+
+00:03:25.309 --> 00:03:25.319 align:start position:0%
+các bạn không dùng generic ấy ngay lập
+ 
+
+00:03:25.319 --> 00:03:26.710 align:start position:0%
+các bạn không dùng generic ấy ngay lập
+tức<00:03:25.480><c> chúng</c><00:03:25.599><c> ta</c><00:03:25.680><c> sẽ</c><00:03:25.879><c> hiểu</c><00:03:26.080><c> rằng</c><00:03:26.239><c> là</c><00:03:26.400><c> chúng</c><00:03:26.560><c> ta</c>
+
+00:03:26.710 --> 00:03:26.720 align:start position:0%
+tức chúng ta sẽ hiểu rằng là chúng ta
+ 
+
+00:03:26.720 --> 00:03:28.710 align:start position:0%
+tức chúng ta sẽ hiểu rằng là chúng ta
+muốn<00:03:26.959><c> lưu</c><00:03:27.319><c> cái</c><00:03:27.440><c> gì</c><00:03:27.560><c> cũng</c><00:03:27.720><c> được</c><00:03:28.080><c> thì</c><00:03:28.159><c> đây</c><00:03:28.360><c> gọi</c><00:03:28.599><c> là</c>
+
+00:03:28.710 --> 00:03:28.720 align:start position:0%
+muốn lưu cái gì cũng được thì đây gọi là
+ 
+
+00:03:28.720 --> 00:03:30.429 align:start position:0%
+muốn lưu cái gì cũng được thì đây gọi là
+lý<00:03:28.840><c> do</c><00:03:28.959><c> tại</c><00:03:29.120><c> sao</c><00:03:29.280><c> chúng</c><00:03:29.439><c> ta</c><00:03:29.720><c> cần</c><00:03:29.879><c> generic</c><00:03:30.360><c> các</c>
+
+00:03:30.429 --> 00:03:30.439 align:start position:0%
+lý do tại sao chúng ta cần generic các
+ 
+
+00:03:30.439 --> 00:03:32.190 align:start position:0%
+lý do tại sao chúng ta cần generic các
+bạn<00:03:30.560><c> nha</c><00:03:31.040><c> thực</c><00:03:31.239><c> tế</c><00:03:31.400><c> rằng</c><00:03:31.560><c> ấy</c><00:03:31.799><c> đối</c><00:03:31.959><c> với</c><00:03:32.080><c> cái</c>
+
+00:03:32.190 --> 00:03:32.200 align:start position:0%
+bạn nha thực tế rằng ấy đối với cái
+ 
+
+00:03:32.200 --> 00:03:33.990 align:start position:0%
+bạn nha thực tế rằng ấy đối với cái
+thằng<00:03:32.400><c> aray</c><00:03:32.760><c> list</c><00:03:33.040><c> này</c><00:03:33.200><c> nếu</c><00:03:33.360><c> mà</c><00:03:33.480><c> các</c><00:03:33.560><c> bạn</c><00:03:33.720><c> Click</c>
+
+00:03:33.990 --> 00:03:34.000 align:start position:0%
+thằng aray list này nếu mà các bạn Click
+ 
+
+00:03:34.000 --> 00:03:35.390 align:start position:0%
+thằng aray list này nếu mà các bạn Click
+vào<00:03:34.120><c> nhá</c><00:03:34.360><c> mình</c><00:03:34.519><c> Click</c><00:03:34.760><c> vào</c><00:03:34.920><c> các</c><00:03:35.000><c> bạn</c><00:03:35.080><c> nhìn</c><00:03:35.239><c> thấy</c>
+
+00:03:35.390 --> 00:03:35.400 align:start position:0%
+vào nhá mình Click vào các bạn nhìn thấy
+ 
+
+00:03:35.400 --> 00:03:37.390 align:start position:0%
+vào nhá mình Click vào các bạn nhìn thấy
+đây<00:03:35.640><c> này</c><00:03:35.760><c> Đây</c><00:03:36.040><c> này</c><00:03:36.319><c> nó</c><00:03:36.439><c> có</c><00:03:36.519><c> một</c><00:03:36.599><c> cái</c><00:03:36.720><c> e</c><00:03:37.159><c> này</c><00:03:37.280><c> này</c>
+
+00:03:37.390 --> 00:03:37.400 align:start position:0%
+đây này Đây này nó có một cái e này này
+ 
+
+00:03:37.400 --> 00:03:39.750 align:start position:0%
+đây này Đây này nó có một cái e này này
+e<00:03:37.879><c> này</c><00:03:38.000><c> viết</c><00:03:38.200><c> tắt</c><00:03:38.400><c> của</c><00:03:38.519><c> từ</c><00:03:38.640><c> Element</c><00:03:39.200><c> thôi</c><00:03:39.519><c> tuy</c>
+
+00:03:39.750 --> 00:03:39.760 align:start position:0%
+e này viết tắt của từ Element thôi tuy
+ 
+
+00:03:39.760 --> 00:03:41.869 align:start position:0%
+e này viết tắt của từ Element thôi tuy
+nhiên<00:03:40.000><c> rằng</c><00:03:40.120><c> là</c><00:03:40.680><c> bên</c><00:03:40.799><c> trong</c><00:03:40.959><c> cái</c><00:03:41.239><c> S</c><00:03:41.599><c> code</c><00:03:41.799><c> của</c>
+
+00:03:41.869 --> 00:03:41.879 align:start position:0%
+nhiên rằng là bên trong cái S code của
+ 
+
+00:03:41.879 --> 00:03:43.390 align:start position:0%
+nhiên rằng là bên trong cái S code của
+nó<00:03:42.000><c> đấy</c><00:03:42.239><c> bên</c><00:03:42.360><c> trong</c><00:03:42.439><c> s</c><00:03:42.799><c> code</c><00:03:42.959><c> của</c><00:03:43.080><c> nó</c><00:03:43.159><c> nó</c><00:03:43.280><c> cũng</c>
+
+00:03:43.390 --> 00:03:43.400 align:start position:0%
+nó đấy bên trong s code của nó nó cũng
+ 
+
+00:03:43.400 --> 00:03:45.030 align:start position:0%
+nó đấy bên trong s code của nó nó cũng
+dùng<00:03:43.640><c> generic</c><00:03:44.120><c> này</c><00:03:44.319><c> các</c><00:03:44.360><c> bạn</c><00:03:44.480><c> này</c><00:03:44.640><c> đây</c><00:03:44.799><c> này</c>
+
+00:03:45.030 --> 00:03:45.040 align:start position:0%
+dùng generic này các bạn này đây này
+ 
+
+00:03:45.040 --> 00:03:47.110 align:start position:0%
+dùng generic này các bạn này đây này
+generic<00:03:45.879><c> là</c><00:03:46.040><c> chúng</c><00:03:46.159><c> ta</c><00:03:46.360><c> không</c><00:03:46.480><c> biết</c><00:03:46.720><c> trước</c>
+
+00:03:47.110 --> 00:03:47.120 align:start position:0%
+generic là chúng ta không biết trước
+ 
+
+00:03:47.120 --> 00:03:49.229 align:start position:0%
+generic là chúng ta không biết trước
+được<00:03:47.280><c> Kiểu</c><00:03:47.599><c> tai</c><00:03:48.159><c> nào</c><00:03:48.480><c> các</c><00:03:48.560><c> bạn</c><00:03:48.640><c> muốn</c><00:03:48.920><c> truyền</c>
+
+00:03:49.229 --> 00:03:49.239 align:start position:0%
+được Kiểu tai nào các bạn muốn truyền
+ 
+
+00:03:49.239 --> 00:03:51.509 align:start position:0%
+được Kiểu tai nào các bạn muốn truyền
+cho<00:03:49.360><c> nó</c><00:03:49.439><c> thành</c><00:03:49.920><c> ra</c><00:03:50.159><c> rằng</c><00:03:50.319><c> là</c><00:03:50.480><c> chúng</c><00:03:50.599><c> ta</c><00:03:51.319><c> các</c><00:03:51.400><c> bạn</c>
+
+00:03:51.509 --> 00:03:51.519 align:start position:0%
+cho nó thành ra rằng là chúng ta các bạn
+ 
+
+00:03:51.519 --> 00:03:52.750 align:start position:0%
+cho nó thành ra rằng là chúng ta các bạn
+hình<00:03:51.760><c> dung</c><00:03:51.920><c> rằng</c><00:03:52.079><c> là</c><00:03:52.159><c> đây</c><00:03:52.280><c> chính</c><00:03:52.480><c> là</c><00:03:52.599><c> cách</c>
+
+00:03:52.750 --> 00:03:52.760 align:start position:0%
+hình dung rằng là đây chính là cách
+ 
+
+00:03:52.760 --> 00:03:54.390 align:start position:0%
+hình dung rằng là đây chính là cách
+chúng<00:03:52.920><c> ta</c><00:03:53.000><c> viết</c><00:03:53.200><c> một</c><00:03:53.319><c> cái</c><00:03:53.599><c> lớp</c><00:03:53.799><c> tổng</c><00:03:53.959><c> quát</c><00:03:54.159><c> ấy</c>
+
+00:03:54.390 --> 00:03:54.400 align:start position:0%
+chúng ta viết một cái lớp tổng quát ấy
+ 
+
+00:03:54.400 --> 00:03:55.750 align:start position:0%
+chúng ta viết một cái lớp tổng quát ấy
+đây<00:03:54.519><c> chính</c><00:03:54.680><c> là</c><00:03:54.760><c> cách</c><00:03:54.920><c> các</c><00:03:55.040><c> bạn</c><00:03:55.120><c> viết</c><00:03:55.400><c> lớp</c><00:03:55.599><c> tổng</c>
+
+00:03:55.750 --> 00:03:55.760 align:start position:0%
+đây chính là cách các bạn viết lớp tổng
+ 
+
+00:03:55.760 --> 00:03:57.309 align:start position:0%
+đây chính là cách các bạn viết lớp tổng
+quát<00:03:55.959><c> này</c><00:03:56.280><c> còn</c><00:03:56.439><c> khi</c><00:03:56.599><c> các</c><00:03:56.720><c> bạn</c><00:03:56.840><c> thực</c><00:03:57.000><c> hành</c><00:03:57.239><c> các</c>
+
+00:03:57.309 --> 00:03:57.319 align:start position:0%
+quát này còn khi các bạn thực hành các
+ 
+
+00:03:57.319 --> 00:03:59.229 align:start position:0%
+quát này còn khi các bạn thực hành các
+bạn<00:03:57.480><c> muốn</c><00:03:57.640><c> truyền</c><00:03:58.000><c> vào</c><00:03:58.159><c> một</c><00:03:58.280><c> cái</c><00:03:58.519><c> kiểu</c><00:03:58.760><c> data</c>
+
+00:03:59.229 --> 00:03:59.239 align:start position:0%
+bạn muốn truyền vào một cái kiểu data
+ 
+
+00:03:59.239 --> 00:04:00.990 align:start position:0%
+bạn muốn truyền vào một cái kiểu data
+tye<00:03:59.480><c> cụ</c><00:03:59.640><c> cụ</c><00:03:59.799><c> thể</c><00:04:00.079><c> thì</c><00:04:00.200><c> đây</c><00:04:00.360><c> chính</c><00:04:00.519><c> là</c><00:04:00.599><c> cách</c><00:04:00.799><c> dùng</c>
+
+00:04:00.990 --> 00:04:01.000 align:start position:0%
+tye cụ cụ thể thì đây chính là cách dùng
+ 
+
+00:04:01.000 --> 00:04:02.869 align:start position:0%
+tye cụ cụ thể thì đây chính là cách dùng
+của<00:04:01.079><c> nó</c><00:04:01.239><c> nha</c><00:04:01.720><c> quay</c><00:04:02.040><c> lại</c><00:04:02.159><c> với</c><00:04:02.360><c> lý</c><00:04:02.519><c> thuyết</c><00:04:02.760><c> một</c>
+
+00:04:02.869 --> 00:04:02.879 align:start position:0%
+của nó nha quay lại với lý thuyết một
+ 
+
+00:04:02.879 --> 00:04:04.710 align:start position:0%
+của nó nha quay lại với lý thuyết một
+xíu<00:04:03.040><c> các</c><00:04:03.120><c> bạn</c><00:04:03.239><c> này</c><00:04:03.560><c> mình</c><00:04:03.879><c> cũng</c><00:04:04.200><c> có</c><00:04:04.400><c> giải</c><00:04:04.560><c> thích</c>
+
+00:04:04.710 --> 00:04:04.720 align:start position:0%
+xíu các bạn này mình cũng có giải thích
+ 
+
+00:04:04.720 --> 00:04:06.869 align:start position:0%
+xíu các bạn này mình cũng có giải thích
+luôn<00:04:04.920><c> các</c><00:04:05.040><c> bạn</c><00:04:05.200><c> này</c><00:04:05.439><c> đây</c><00:04:05.599><c> này</c><00:04:06.200><c> Nói</c><00:04:06.439><c> một</c><00:04:06.519><c> chút</c><00:04:06.720><c> về</c>
+
+00:04:06.869 --> 00:04:06.879 align:start position:0%
+luôn các bạn này đây này Nói một chút về
+ 
+
+00:04:06.879 --> 00:04:08.869 align:start position:0%
+luôn các bạn này đây này Nói một chút về
+cái<00:04:07.040><c> lịch</c><00:04:07.239><c> sử</c><00:04:07.400><c> ra</c><00:04:07.680><c> đời</c><00:04:07.879><c> đấy</c><00:04:08.200><c> Tại</c><00:04:08.360><c> thời</c><00:04:08.560><c> điểm</c><00:04:08.799><c> các</c>
+
+00:04:08.869 --> 00:04:08.879 align:start position:0%
+cái lịch sử ra đời đấy Tại thời điểm các
+ 
+
+00:04:08.879 --> 00:04:10.750 align:start position:0%
+cái lịch sử ra đời đấy Tại thời điểm các
+bạn<00:04:09.040><c> xem</c><00:04:09.239><c> video</c><00:04:09.480><c> này</c><00:04:09.640><c> của</c><00:04:09.799><c> mình</c><00:04:09.920><c> là</c><00:04:10.360><c> Java</c>
+
+00:04:10.750 --> 00:04:10.760 align:start position:0%
+bạn xem video này của mình là Java
+ 
+
+00:04:10.760 --> 00:04:12.869 align:start position:0%
+bạn xem video này của mình là Java
+version<00:04:11.200><c> 17</c><00:04:11.599><c> mình</c><00:04:11.680><c> đã</c><00:04:11.959><c> sử</c><00:04:12.079><c> dụng</c><00:04:12.319><c> cho</c><00:04:12.439><c> các</c><00:04:12.560><c> bạn</c>
+
+00:04:12.869 --> 00:04:12.879 align:start position:0%
+version 17 mình đã sử dụng cho các bạn
+ 
+
+00:04:12.879 --> 00:04:15.949 align:start position:0%
+version 17 mình đã sử dụng cho các bạn
+còn<00:04:13.159><c> Java</c><00:04:13.519><c> version</c><00:04:13.879><c> mới</c><00:04:14.079><c> nhất</c><00:04:14.239><c> là</c><00:04:14.519><c> Java</c><00:04:14.920><c> 21</c><00:04:15.720><c> tuy</c>
+
+00:04:15.949 --> 00:04:15.959 align:start position:0%
+còn Java version mới nhất là Java 21 tuy
+ 
+
+00:04:15.959 --> 00:04:17.550 align:start position:0%
+còn Java version mới nhất là Java 21 tuy
+nhiên<00:04:16.160><c> rằng</c><00:04:16.280><c> cái</c><00:04:16.359><c> thằng</c><00:04:16.479><c> Chic</c><00:04:17.120><c> này</c><00:04:17.239><c> được</c><00:04:17.400><c> giới</c>
+
+00:04:17.550 --> 00:04:17.560 align:start position:0%
+nhiên rằng cái thằng Chic này được giới
+ 
+
+00:04:17.560 --> 00:04:20.030 align:start position:0%
+nhiên rằng cái thằng Chic này được giới
+thiệu<00:04:17.919><c> từ</c><00:04:18.079><c> Java</c><00:04:18.479><c> version</c><00:04:18.880><c> 5</c><00:04:19.199><c> các</c><00:04:19.280><c> bạn</c><00:04:19.359><c> nhá</c>
+
+00:04:20.030 --> 00:04:20.040 align:start position:0%
+thiệu từ Java version 5 các bạn nhá
+ 
+
+00:04:20.040 --> 00:04:21.909 align:start position:0%
+thiệu từ Java version 5 các bạn nhá
+Thông<00:04:20.239><c> thường</c><00:04:20.440><c> các</c><00:04:20.519><c> bạn</c><00:04:20.880><c> đi</c><00:04:21.040><c> làm</c><00:04:21.160><c> thì</c><00:04:21.519><c> tối</c>
+
+00:04:21.909 --> 00:04:21.919 align:start position:0%
+Thông thường các bạn đi làm thì tối
+ 
+
+00:04:21.919 --> 00:04:23.670 align:start position:0%
+Thông thường các bạn đi làm thì tối
+thiểu<00:04:22.160><c> công</c><00:04:22.280><c> ty</c><00:04:22.400><c> sẽ</c><00:04:22.560><c> dùng</c><00:04:22.720><c> Java</c><00:04:23.080><c> version</c><00:04:23.440><c> là</c>
+
+00:04:23.670 --> 00:04:23.680 align:start position:0%
+thiểu công ty sẽ dùng Java version là
+ 
+
+00:04:23.680 --> 00:04:26.590 align:start position:0%
+thiểu công ty sẽ dùng Java version là
+1.8<00:04:24.520><c> tức</c><00:04:24.759><c> rằng</c><00:04:25.000><c> là</c><00:04:25.199><c> Java</c><00:04:25.560><c> 8</c><00:04:25.800><c> ấy</c><00:04:26.040><c> nó</c><00:04:26.120><c> đã</c><00:04:26.280><c> mặc</c><00:04:26.440><c> định</c>
+
+00:04:26.590 --> 00:04:26.600 align:start position:0%
+1.8 tức rằng là Java 8 ấy nó đã mặc định
+ 
+
+00:04:26.600 --> 00:04:28.990 align:start position:0%
+1.8 tức rằng là Java 8 ấy nó đã mặc định
+hỗ<00:04:26.800><c> trợ</c><00:04:26.960><c> thằng</c><00:04:27.120><c> jck</c><00:04:27.759><c> này</c><00:04:27.919><c> rồi</c><00:04:28.280><c> ngoài</c><00:04:28.759><c> ra</c><00:04:28.840><c> nữa</c>
+
+00:04:28.990 --> 00:04:29.000 align:start position:0%
+hỗ trợ thằng jck này rồi ngoài ra nữa
+ 
+
+00:04:29.000 --> 00:04:30.550 align:start position:0%
+hỗ trợ thằng jck này rồi ngoài ra nữa
+thì<00:04:29.080><c> ở</c><00:04:29.240><c> đây</c><00:04:29.360><c> chính</c><00:04:29.759><c> là</c><00:04:29.840><c> một</c><00:04:29.960><c> vài</c><00:04:30.080><c> cách</c><00:04:30.280><c> code</c><00:04:30.479><c> các</c>
+
+00:04:30.550 --> 00:04:30.560 align:start position:0%
+thì ở đây chính là một vài cách code các
+ 
+
+00:04:30.560 --> 00:04:31.870 align:start position:0%
+thì ở đây chính là một vài cách code các
+bạn<00:04:30.639><c> này</c><00:04:30.840><c> Đây</c><00:04:31.000><c> này</c><00:04:31.199><c> đây</c><00:04:31.360><c> chính</c><00:04:31.520><c> là</c><00:04:31.600><c> một</c><00:04:31.720><c> vài</c>
+
+00:04:31.870 --> 00:04:31.880 align:start position:0%
+bạn này Đây này đây chính là một vài
+ 
+
+00:04:31.880 --> 00:04:33.629 align:start position:0%
+bạn này Đây này đây chính là một vài
+cách<00:04:32.120><c> code</c><00:04:32.360><c> mà</c><00:04:32.440><c> mình</c><00:04:32.560><c> hướng</c><00:04:32.800><c> dẫn</c><00:04:33.000><c> các</c><00:04:33.039><c> bạn</c><00:04:33.120><c> này</c>
+
+00:04:33.629 --> 00:04:33.639 align:start position:0%
+cách code mà mình hướng dẫn các bạn này
+ 
+
+00:04:33.639 --> 00:04:35.189 align:start position:0%
+cách code mà mình hướng dẫn các bạn này
+nếu<00:04:33.840><c> như</c><00:04:33.960><c> rằng</c><00:04:34.160><c> là</c><00:04:34.360><c> các</c><00:04:34.440><c> bạn</c><00:04:34.600><c> nhìn</c><00:04:34.759><c> thấy</c><00:04:35.000><c> cách</c>
+
+00:04:35.189 --> 00:04:35.199 align:start position:0%
+nếu như rằng là các bạn nhìn thấy cách
+ 
+
+00:04:35.199 --> 00:04:37.390 align:start position:0%
+nếu như rằng là các bạn nhìn thấy cách
+viết<00:04:35.479><c> này</c><00:04:35.759><c> nó</c><00:04:35.919><c> hơi</c><00:04:36.160><c> lạ</c><00:04:36.360><c> một</c><00:04:36.560><c> xíu</c><00:04:36.759><c> ấy</c><00:04:37.080><c> thì</c><00:04:37.160><c> yên</c>
+
+00:04:37.390 --> 00:04:37.400 align:start position:0%
+viết này nó hơi lạ một xíu ấy thì yên
+ 
+
+00:04:37.400 --> 00:04:39.909 align:start position:0%
+viết này nó hơi lạ một xíu ấy thì yên
+tâm<00:04:37.600><c> đi</c><00:04:37.800><c> hôm</c><00:04:38.000><c> sau</c><00:04:38.199><c> thì</c><00:04:38.400><c> mình</c><00:04:38.520><c> sẽ</c><00:04:38.759><c> giải</c><00:04:38.960><c> thích</c><00:04:39.360><c> về</c>
+
+00:04:39.909 --> 00:04:39.919 align:start position:0%
+tâm đi hôm sau thì mình sẽ giải thích về
+ 
+
+00:04:39.919 --> 00:04:41.390 align:start position:0%
+tâm đi hôm sau thì mình sẽ giải thích về
+về<00:04:40.160><c> cách</c><00:04:40.320><c> viết</c><00:04:40.520><c> như</c><00:04:40.680><c> thế</c><00:04:40.800><c> này</c><00:04:40.960><c> Tại</c><00:04:41.120><c> sao</c><00:04:41.280><c> chúng</c>
+
+00:04:41.390 --> 00:04:41.400 align:start position:0%
+về cách viết như thế này Tại sao chúng
+ 
+
+00:04:41.400 --> 00:04:43.070 align:start position:0%
+về cách viết như thế này Tại sao chúng
+ta<00:04:41.520><c> lại</c><00:04:41.680><c> viết</c><00:04:41.880><c> gọi</c><00:04:42.080><c> là</c><00:04:42.160><c> list</c><00:04:42.479><c> string</c><00:04:42.800><c> này</c><00:04:42.919><c> bằng</c>
+
+00:04:43.070 --> 00:04:43.080 align:start position:0%
+ta lại viết gọi là list string này bằng
+ 
+
+00:04:43.080 --> 00:04:45.110 align:start position:0%
+ta lại viết gọi là list string này bằng
+new<00:04:43.320><c> array</c><00:04:43.720><c> list</c><00:04:44.000><c> này</c><00:04:44.120><c> tại</c><00:04:44.479><c> thự</c><00:04:44.720><c> đến</c><00:04:44.919><c> bây</c><00:04:45.039><c> giờ</c>
+
+00:04:45.110 --> 00:04:45.120 align:start position:0%
+new array list này tại thự đến bây giờ
+ 
+
+00:04:45.120 --> 00:04:46.430 align:start position:0%
+new array list này tại thự đến bây giờ
+các<00:04:45.199><c> bạn</c><00:04:45.280><c> đừng</c><00:04:45.600><c> quan</c><00:04:45.759><c> tâm</c><00:04:45.919><c> rằng</c><00:04:46.039><c> là</c><00:04:46.160><c> tại</c><00:04:46.320><c> sao</c>
+
+00:04:46.430 --> 00:04:46.440 align:start position:0%
+các bạn đừng quan tâm rằng là tại sao
+ 
+
+00:04:46.440 --> 00:04:47.950 align:start position:0%
+các bạn đừng quan tâm rằng là tại sao
+chúng<00:04:46.560><c> ta</c><00:04:46.720><c> lại</c><00:04:46.919><c> viết</c><00:04:47.120><c> list</c><00:04:47.479><c> thay</c><00:04:47.680><c> vì</c><00:04:47.800><c> việc</c>
+
+00:04:47.950 --> 00:04:47.960 align:start position:0%
+chúng ta lại viết list thay vì việc
+ 
+
+00:04:47.960 --> 00:04:49.510 align:start position:0%
+chúng ta lại viết list thay vì việc
+chúng<00:04:48.080><c> ta</c><00:04:48.160><c> viết</c><00:04:48.360><c> là</c><00:04:48.440><c> array</c><00:04:48.919><c> list</c><00:04:49.240><c> chúng</c><00:04:49.400><c> ta</c>
+
+00:04:49.510 --> 00:04:49.520 align:start position:0%
+chúng ta viết là array list chúng ta
+ 
+
+00:04:49.520 --> 00:04:51.029 align:start position:0%
+chúng ta viết là array list chúng ta
+quan<00:04:49.720><c> tâm</c><00:04:49.880><c> cho</c><00:04:50.000><c> mình</c><00:04:50.160><c> rằng</c><00:04:50.360><c> là</c><00:04:50.479><c> chúng</c><00:04:50.600><c> ta</c><00:04:50.759><c> dùng</c>
+
+00:04:51.029 --> 00:04:51.039 align:start position:0%
+quan tâm cho mình rằng là chúng ta dùng
+ 
+
+00:04:51.039 --> 00:04:52.990 align:start position:0%
+quan tâm cho mình rằng là chúng ta dùng
+cái<00:04:51.199><c> dấu</c><00:04:51.400><c> đóng</c><00:04:51.600><c> mở</c><00:04:52.080><c> ngoặc</c><00:04:52.440><c> như</c><00:04:52.600><c> thế</c><00:04:52.759><c> này</c><00:04:52.880><c> các</c>
+
+00:04:52.990 --> 00:04:53.000 align:start position:0%
+cái dấu đóng mở ngoặc như thế này các
+ 
+
+00:04:53.000 --> 00:04:54.990 align:start position:0%
+cái dấu đóng mở ngoặc như thế này các
+bạn<00:04:53.120><c> này</c><00:04:53.400><c> đóng</c><00:04:53.639><c> mở</c><00:04:53.919><c> ngoặc</c><00:04:54.160><c> dấu</c><00:04:54.320><c> lớn</c><00:04:54.520><c> hơn</c><00:04:54.639><c> và</c><00:04:54.800><c> dấu</c>
+
+00:04:54.990 --> 00:04:55.000 align:start position:0%
+bạn này đóng mở ngoặc dấu lớn hơn và dấu
+ 
+
+00:04:55.000 --> 00:04:57.390 align:start position:0%
+bạn này đóng mở ngoặc dấu lớn hơn và dấu
+bé<00:04:55.199><c> hơn</c><00:04:55.400><c> bên</c><00:04:55.520><c> trong</c><00:04:55.639><c> đấy</c><00:04:55.880><c> chính</c><00:04:56.080><c> là</c><00:04:56.160><c> data</c><00:04:56.560><c> tye</c>
+
+00:04:57.390 --> 00:04:57.400 align:start position:0%
+bé hơn bên trong đấy chính là data tye
+ 
+
+00:04:57.400 --> 00:04:59.189 align:start position:0%
+bé hơn bên trong đấy chính là data tye
+bây<00:04:57.600><c> giờ</c><00:04:57.720><c> thì</c><00:04:58.039><c> chúng</c><00:04:58.160><c> ta</c><00:04:58.320><c> sẽ</c><00:04:58.479><c> cùng</c><00:04:58.639><c> nhau</c><00:04:58.800><c> đi</c><00:04:59.039><c> nói</c>
+
+00:04:59.189 --> 00:04:59.199 align:start position:0%
+bây giờ thì chúng ta sẽ cùng nhau đi nói
+ 
+
+00:04:59.199 --> 00:05:01.550 align:start position:0%
+bây giờ thì chúng ta sẽ cùng nhau đi nói
+lại<00:04:59.560><c> lại</c><00:04:59.800><c> về</c><00:04:59.919><c> cái</c><00:05:00.039><c> phần</c><00:05:00.400><c> Tại</c><00:05:00.560><c> sao</c><00:05:00.759><c> cần</c><00:05:00.960><c> generic</c>
+
+00:05:01.550 --> 00:05:01.560 align:start position:0%
+lại lại về cái phần Tại sao cần generic
+ 
+
+00:05:01.560 --> 00:05:03.070 align:start position:0%
+lại lại về cái phần Tại sao cần generic
+nha<00:05:01.720><c> mình</c><00:05:01.840><c> đã</c><00:05:02.000><c> giải</c><00:05:02.160><c> thích</c><00:05:02.280><c> trước</c><00:05:02.520><c> đấy</c><00:05:02.680><c> rồi</c><00:05:02.759><c> đấy</c>
+
+00:05:03.070 --> 00:05:03.080 align:start position:0%
+nha mình đã giải thích trước đấy rồi đấy
+ 
+
+00:05:03.080 --> 00:05:05.110 align:start position:0%
+nha mình đã giải thích trước đấy rồi đấy
+nhưng<00:05:03.199><c> mà</c><00:05:03.360><c> ở</c><00:05:03.560><c> đây</c><00:05:03.680><c> thì</c><00:05:03.960><c> mình</c><00:05:04.400><c> mình</c><00:05:04.520><c> viết</c><00:05:04.720><c> cụ</c><00:05:04.919><c> thể</c>
+
+00:05:05.110 --> 00:05:05.120 align:start position:0%
+nhưng mà ở đây thì mình mình viết cụ thể
+ 
+
+00:05:05.120 --> 00:05:06.950 align:start position:0%
+nhưng mà ở đây thì mình mình viết cụ thể
+hơn<00:05:05.240><c> các</c><00:05:05.400><c> bạn</c><00:05:05.560><c> này</c><00:05:05.840><c> generic</c><00:05:06.479><c> thì</c><00:05:06.639><c> giúp</c><00:05:06.800><c> chúng</c>
+
+00:05:06.950 --> 00:05:06.960 align:start position:0%
+hơn các bạn này generic thì giúp chúng
+ 
+
+00:05:06.960 --> 00:05:08.590 align:start position:0%
+hơn các bạn này generic thì giúp chúng
+ta<00:05:07.080><c> báo</c><00:05:07.320><c> lỗi</c><00:05:07.639><c> khi</c><00:05:07.800><c> dịch</c><00:05:07.919><c> code</c><00:05:08.160><c> thôi</c><00:05:08.440><c> Các</c><00:05:08.520><c> bạn</c>
+
+00:05:08.590 --> 00:05:08.600 align:start position:0%
+ta báo lỗi khi dịch code thôi Các bạn
+ 
+
+00:05:08.600 --> 00:05:09.950 align:start position:0%
+ta báo lỗi khi dịch code thôi Các bạn
+nhìn<00:05:08.759><c> thấy</c><00:05:08.919><c> rằng</c><00:05:09.080><c> là</c><00:05:09.199><c> code</c><00:05:09.440><c> của</c><00:05:09.560><c> chúng</c><00:05:09.680><c> ta</c><00:05:09.759><c> gồm</c>
+
+00:05:09.950 --> 00:05:09.960 align:start position:0%
+nhìn thấy rằng là code của chúng ta gồm
+ 
+
+00:05:09.960 --> 00:05:12.469 align:start position:0%
+nhìn thấy rằng là code của chúng ta gồm
+hai<00:05:10.160><c> giai</c><00:05:10.360><c> đoạn</c><00:05:10.560><c> compile</c><00:05:11.039><c> và</c><00:05:11.160><c> run</c><00:05:11.360><c> ấy</c><00:05:11.720><c> compile</c>
+
+00:05:12.469 --> 00:05:12.479 align:start position:0%
+hai giai đoạn compile và run ấy compile
+ 
+
+00:05:12.479 --> 00:05:14.150 align:start position:0%
+hai giai đoạn compile và run ấy compile
+chính<00:05:12.680><c> là</c><00:05:12.840><c> việc</c><00:05:13.080><c> mà</c><00:05:13.199><c> các</c><00:05:13.280><c> bạn</c><00:05:13.560><c> dịch</c><00:05:13.720><c> cái</c><00:05:13.960><c> phần</c>
+
+00:05:14.150 --> 00:05:14.160 align:start position:0%
+chính là việc mà các bạn dịch cái phần
+ 
+
+00:05:14.160 --> 00:05:15.510 align:start position:0%
+chính là việc mà các bạn dịch cái phần
+này<00:05:14.280><c> các</c><00:05:14.400><c> bạn</c><00:05:14.520><c> này</c><00:05:14.759><c> các</c><00:05:14.840><c> bạn</c><00:05:14.960><c> dịch</c><00:05:15.160><c> những</c><00:05:15.320><c> cái</c>
+
+00:05:15.510 --> 00:05:15.520 align:start position:0%
+này các bạn này các bạn dịch những cái
+ 
+
+00:05:15.520 --> 00:05:17.749 align:start position:0%
+này các bạn này các bạn dịch những cái
+đống<00:05:15.720><c> sheet</c><00:05:16.080><c> này</c><00:05:16.360><c> ra</c><00:05:16.800><c> phần</c><00:05:16.960><c> byy</c><00:05:17.320><c> code</c><00:05:17.560><c> đúng</c>
+
+00:05:17.749 --> 00:05:17.759 align:start position:0%
+đống sheet này ra phần byy code đúng
+ 
+
+00:05:17.759 --> 00:05:19.350 align:start position:0%
+đống sheet này ra phần byy code đúng
+không<00:05:17.960><c> sau</c><00:05:18.160><c> khi</c><00:05:18.280><c> mà</c><00:05:18.400><c> các</c><00:05:18.479><c> bạn</c><00:05:18.720><c> dịch</c><00:05:18.919><c> ra</c><00:05:19.120><c> buy</c>
+
+00:05:19.350 --> 00:05:19.360 align:start position:0%
+không sau khi mà các bạn dịch ra buy
+ 
+
+00:05:19.360 --> 00:05:21.629 align:start position:0%
+không sau khi mà các bạn dịch ra buy
+code<00:05:19.520><c> ấy</c><00:05:19.759><c> Java</c><00:05:20.120><c> Virtual</c><00:05:20.600><c> machine</c><00:05:21.039><c> nó</c><00:05:21.160><c> sẽ</c><00:05:21.319><c> chạy</c>
+
+00:05:21.629 --> 00:05:21.639 align:start position:0%
+code ấy Java Virtual machine nó sẽ chạy
+ 
+
+00:05:21.639 --> 00:05:23.550 align:start position:0%
+code ấy Java Virtual machine nó sẽ chạy
+cái<00:05:21.840><c> phần</c><00:05:22.400><c> nó</c><00:05:22.560><c> sẽ</c><00:05:22.680><c> chạy</c><00:05:22.880><c> cái</c><00:05:23.000><c> phần</c><00:05:23.160><c> buy</c><00:05:23.360><c> code</c>
+
+00:05:23.550 --> 00:05:23.560 align:start position:0%
+cái phần nó sẽ chạy cái phần buy code
+ 
+
+00:05:23.560 --> 00:05:25.550 align:start position:0%
+cái phần nó sẽ chạy cái phần buy code
+đấy<00:05:23.800><c> như</c><00:05:23.919><c> vậy</c><00:05:24.080><c> nó</c><00:05:24.199><c> sẽ</c><00:05:24.319><c> gồm</c><00:05:24.520><c> hai</c><00:05:24.720><c> bước</c><00:05:24.880><c> Thanh</c><00:05:25.319><c> ra</c>
+
+00:05:25.550 --> 00:05:25.560 align:start position:0%
+đấy như vậy nó sẽ gồm hai bước Thanh ra
+ 
+
+00:05:25.560 --> 00:05:26.870 align:start position:0%
+đấy như vậy nó sẽ gồm hai bước Thanh ra
+rằng<00:05:25.720><c> là</c><00:05:25.840><c> quá</c><00:05:25.960><c> trình</c><00:05:26.120><c> mà</c><00:05:26.199><c> chúng</c><00:05:26.360><c> ta</c><00:05:26.479><c> dịch</c><00:05:26.680><c> code</c>
+
+00:05:26.870 --> 00:05:26.880 align:start position:0%
+rằng là quá trình mà chúng ta dịch code
+ 
+
+00:05:26.880 --> 00:05:28.110 align:start position:0%
+rằng là quá trình mà chúng ta dịch code
+đây<00:05:27.039><c> này</c><00:05:27.199><c> chính</c><00:05:27.360><c> là</c><00:05:27.479><c> việc</c><00:05:27.639><c> mà</c><00:05:27.720><c> các</c><00:05:27.800><c> bạn</c><00:05:27.919><c> nhấn</c>
+
+00:05:28.110 --> 00:05:28.120 align:start position:0%
+đây này chính là việc mà các bạn nhấn
+ 
+
+00:05:28.120 --> 00:05:30.189 align:start position:0%
+đây này chính là việc mà các bạn nhấn
+nút<00:05:28.319><c> ở</c><00:05:28.479><c> đây</c><00:05:28.639><c> Đấy</c><00:05:28.960><c> nó</c><00:05:29.080><c> sẽ</c><00:05:29.520><c> chạy</c><00:05:29.680><c> đống</c><00:05:29.880><c> code</c><00:05:30.080><c> này</c>
+
+00:05:30.189 --> 00:05:30.199 align:start position:0%
+nút ở đây Đấy nó sẽ chạy đống code này
+ 
+
+00:05:30.199 --> 00:05:32.189 align:start position:0%
+nút ở đây Đấy nó sẽ chạy đống code này
+của<00:05:30.319><c> chúng</c><00:05:30.440><c> ta</c><00:05:30.800><c> nên</c><00:05:31.000><c> là</c><00:05:31.120><c> nếu</c><00:05:31.280><c> có</c><00:05:31.440><c> lỗi</c><00:05:31.720><c> ấ</c><00:05:31.919><c> nó</c><00:05:32.039><c> sẽ</c>
+
+00:05:32.189 --> 00:05:32.199 align:start position:0%
+của chúng ta nên là nếu có lỗi ấ nó sẽ
+ 
+
+00:05:32.199 --> 00:05:34.110 align:start position:0%
+của chúng ta nên là nếu có lỗi ấ nó sẽ
+báo<00:05:32.479><c> ngay</c><00:05:32.720><c> lập</c><00:05:32.840><c> tức</c><00:05:32.960><c> thnh</c><00:05:33.479><c> ng</c><00:05:33.680><c> rằng</c><00:05:33.840><c> ấy</c><00:05:34.000><c> chúng</c>
+
+00:05:34.110 --> 00:05:34.120 align:start position:0%
+báo ngay lập tức thnh ng rằng ấy chúng
+ 
+
+00:05:34.120 --> 00:05:35.670 align:start position:0%
+báo ngay lập tức thnh ng rằng ấy chúng
+ta<00:05:34.199><c> dùng</c><00:05:34.360><c> thằng</c><00:05:34.520><c> generic</c><00:05:35.160><c> sẽ</c><00:05:35.280><c> giúp</c><00:05:35.479><c> các</c><00:05:35.560><c> bạn</c>
+
+00:05:35.670 --> 00:05:35.680 align:start position:0%
+ta dùng thằng generic sẽ giúp các bạn
+ 
+
+00:05:35.680 --> 00:05:37.150 align:start position:0%
+ta dùng thằng generic sẽ giúp các bạn
+hạn<00:05:35.880><c> chế</c><00:05:36.039><c> được</c><00:05:36.240><c> bấc</c><00:05:36.520><c> trong</c><00:05:36.680><c> quá</c><00:05:36.800><c> trình</c><00:05:36.960><c> các</c><00:05:37.080><c> bạn</c>
+
+00:05:37.150 --> 00:05:37.160 align:start position:0%
+hạn chế được bấc trong quá trình các bạn
+ 
+
+00:05:37.160 --> 00:05:39.029 align:start position:0%
+hạn chế được bấc trong quá trình các bạn
+code<00:05:37.520><c> thì</c><00:05:37.639><c> đấy</c><00:05:37.800><c> chính</c><00:05:37.960><c> là</c><00:05:38.080><c> tác</c><00:05:38.240><c> dụng</c><00:05:38.400><c> đầu</c><00:05:38.560><c> tiên</c>
+
+00:05:39.029 --> 00:05:39.039 align:start position:0%
+code thì đấy chính là tác dụng đầu tiên
+ 
+
+00:05:39.039 --> 00:05:41.110 align:start position:0%
+code thì đấy chính là tác dụng đầu tiên
+tác<00:05:39.280><c> dụng</c><00:05:39.479><c> thứ</c><00:05:39.600><c> hai</c><00:05:39.840><c> rằng</c><00:05:40.039><c> là</c><00:05:40.160><c> thằng</c><00:05:40.479><c> generic</c>
+
+00:05:41.110 --> 00:05:41.120 align:start position:0%
+tác dụng thứ hai rằng là thằng generic
+ 
+
+00:05:41.120 --> 00:05:43.230 align:start position:0%
+tác dụng thứ hai rằng là thằng generic
+giúp<00:05:41.400><c> chúng</c><00:05:41.560><c> ta</c><00:05:41.639><c> có</c><00:05:41.720><c> thể</c><00:05:41.880><c> tái</c><00:05:42.240><c> sử</c><00:05:42.360><c> dụng</c><00:05:42.479><c> code</c><00:05:42.759><c> ấy</c>
+
+00:05:43.230 --> 00:05:43.240 align:start position:0%
+giúp chúng ta có thể tái sử dụng code ấy
+ 
+
+00:05:43.240 --> 00:05:44.749 align:start position:0%
+giúp chúng ta có thể tái sử dụng code ấy
+Các<00:05:43.360><c> bạn</c><00:05:43.520><c> nhìn</c><00:05:43.680><c> thấy</c><00:05:43.880><c> rằng</c><00:05:44.039><c> là</c><00:05:44.199><c> trong</c><00:05:44.360><c> cái</c><00:05:44.600><c> phần</c>
+
+00:05:44.749 --> 00:05:44.759 align:start position:0%
+Các bạn nhìn thấy rằng là trong cái phần
+ 
+
+00:05:44.759 --> 00:05:46.790 align:start position:0%
+Các bạn nhìn thấy rằng là trong cái phần
+tổng<00:05:45.000><c> quát</c><00:05:45.240><c> này</c><00:05:45.440><c> này</c><00:05:45.600><c> nó</c><00:05:45.720><c> ghi</c><00:05:45.880><c> là</c><00:05:45.960><c> E</c><00:05:46.400><c> như</c><00:05:46.520><c> thế</c>
+
+00:05:46.790 --> 00:05:46.800 align:start position:0%
+tổng quát này này nó ghi là E như thế
+ 
+
+00:05:46.800 --> 00:05:48.830 align:start position:0%
+tổng quát này này nó ghi là E như thế
+này<00:05:47.120><c> bởi</c><00:05:47.360><c> vì</c><00:05:47.520><c> nó</c><00:05:47.639><c> không</c><00:05:47.759><c> hề</c><00:05:48.039><c> biết</c><00:05:48.160><c> được</c><00:05:48.280><c> rằng</c><00:05:48.479><c> ấy</c>
+
+00:05:48.830 --> 00:05:48.840 align:start position:0%
+này bởi vì nó không hề biết được rằng ấy
+ 
+
+00:05:48.840 --> 00:05:50.870 align:start position:0%
+này bởi vì nó không hề biết được rằng ấy
+chúng<00:05:48.960><c> ta</c><00:05:49.080><c> sẽ</c><00:05:49.240><c> truyền</c><00:05:49.560><c> kiểu</c><00:05:49.840><c> dữ</c><00:05:49.960><c> liệu</c><00:05:50.160><c> là</c><00:05:50.360><c> gì</c><00:05:50.720><c> Ví</c>
+
+00:05:50.870 --> 00:05:50.880 align:start position:0%
+chúng ta sẽ truyền kiểu dữ liệu là gì Ví
+ 
+
+00:05:50.880 --> 00:05:52.430 align:start position:0%
+chúng ta sẽ truyền kiểu dữ liệu là gì Ví
+dụ<00:05:51.000><c> như</c><00:05:51.120><c> rằng</c><00:05:51.280><c> ở</c><00:05:51.520><c> đây</c><00:05:51.639><c> thì</c><00:05:51.720><c> mình</c><00:05:51.800><c> truyền</c><00:05:52.120><c> string</c>
+
+00:05:52.430 --> 00:05:52.440 align:start position:0%
+dụ như rằng ở đây thì mình truyền string
+ 
+
+00:05:52.440 --> 00:05:53.790 align:start position:0%
+dụ như rằng ở đây thì mình truyền string
+này<00:05:52.560><c> ở</c><00:05:52.759><c> đây</c><00:05:52.919><c> thì</c><00:05:53.000><c> mình</c><00:05:53.160><c> truyền</c><00:05:53.520><c> cái</c><00:05:53.639><c> thằng</c>
+
+00:05:53.790 --> 00:05:53.800 align:start position:0%
+này ở đây thì mình truyền cái thằng
+ 
+
+00:05:53.800 --> 00:05:55.990 align:start position:0%
+này ở đây thì mình truyền cái thằng
+student<00:05:54.360><c> này</c><00:05:54.680><c> và</c><00:05:54.800><c> cái</c><00:05:54.960><c> thằng</c><00:05:55.160><c> student</c><00:05:55.720><c> này</c><00:05:55.840><c> thì</c>
+
+00:05:55.990 --> 00:05:56.000 align:start position:0%
+student này và cái thằng student này thì
+ 
+
+00:05:56.000 --> 00:05:58.110 align:start position:0%
+student này và cái thằng student này thì
+do<00:05:56.240><c> tự</c><00:05:56.400><c> mình</c><00:05:56.560><c> định</c><00:05:56.800><c> nghĩa</c><00:05:57.240><c> nên</c><00:05:57.440><c> là</c><00:05:57.560><c> nó</c><00:05:57.759><c> viết</c><00:05:58.000><c> như</c>
+
+00:05:58.110 --> 00:05:58.120 align:start position:0%
+do tự mình định nghĩa nên là nó viết như
+ 
+
+00:05:58.120 --> 00:06:00.029 align:start position:0%
+do tự mình định nghĩa nên là nó viết như
+vậy<00:05:58.280><c> thì</c><00:05:58.400><c> tính</c><00:05:58.639><c> tổng</c><00:05:58.880><c> quát</c><00:05:59.160><c> của</c><00:05:59.240><c> nó</c><00:05:59.560><c> rất</c><00:05:59.720><c> chi</c><00:05:59.880><c> là</c>
+
+00:06:00.029 --> 00:06:00.039 align:start position:0%
+vậy thì tính tổng quát của nó rất chi là
+ 
+
+00:06:00.039 --> 00:06:02.390 align:start position:0%
+vậy thì tính tổng quát của nó rất chi là
+cao<00:06:00.680><c> bây</c><00:06:00.880><c> giờ</c><00:06:01.039><c> thì</c><00:06:01.160><c> mình</c><00:06:01.280><c> sẽ</c><00:06:01.560><c> bonus</c><00:06:02.080><c> thêm</c><00:06:02.280><c> cho</c>
+
+00:06:02.390 --> 00:06:02.400 align:start position:0%
+cao bây giờ thì mình sẽ bonus thêm cho
+ 
+
+00:06:02.400 --> 00:06:03.990 align:start position:0%
+cao bây giờ thì mình sẽ bonus thêm cho
+các<00:06:02.479><c> bạn</c><00:06:02.639><c> một</c><00:06:02.759><c> cái</c><00:06:02.880><c> kiến</c><00:06:03.120><c> thức</c><00:06:03.280><c> cuối</c><00:06:03.440><c> cùng</c><00:06:03.600><c> này</c>
+
+00:06:03.990 --> 00:06:04.000 align:start position:0%
+các bạn một cái kiến thức cuối cùng này
+ 
+
+00:06:04.000 --> 00:06:05.950 align:start position:0%
+các bạn một cái kiến thức cuối cùng này
+từ<00:06:04.160><c> cái</c><00:06:04.400><c> Java</c><00:06:04.720><c> version</c><00:06:05.120><c> 7</c><00:06:05.479><c> chúng</c><00:06:05.600><c> ta</c><00:06:05.720><c> có</c><00:06:05.840><c> một</c>
+
+00:06:05.950 --> 00:06:05.960 align:start position:0%
+từ cái Java version 7 chúng ta có một
+ 
+
+00:06:05.960 --> 00:06:08.309 align:start position:0%
+từ cái Java version 7 chúng ta có một
+khái<00:06:06.199><c> niệm</c><00:06:06.400><c> là</c><00:06:06.720><c> Java</c><00:06:07.120><c> Diamond</c><00:06:07.800><c> nghe</c><00:06:08.000><c> nó</c><00:06:08.160><c> rất</c>
+
+00:06:08.309 --> 00:06:08.319 align:start position:0%
+khái niệm là Java Diamond nghe nó rất
+ 
+
+00:06:08.319 --> 00:06:10.309 align:start position:0%
+khái niệm là Java Diamond nghe nó rất
+chi<00:06:08.560><c> là</c><00:06:08.680><c> kêu</c><00:06:08.960><c> các</c><00:06:09.039><c> bạn</c><00:06:09.120><c> nhá</c><00:06:09.360><c> Diamond</c><00:06:10.080><c> nếu</c><00:06:10.240><c> mà</c>
+
+00:06:10.309 --> 00:06:10.319 align:start position:0%
+chi là kêu các bạn nhá Diamond nếu mà
+ 
+
+00:06:10.319 --> 00:06:11.749 align:start position:0%
+chi là kêu các bạn nhá Diamond nếu mà
+các<00:06:10.400><c> bạn</c><00:06:10.479><c> muốn</c><00:06:10.720><c> dịch</c><00:06:10.919><c> từ</c><00:06:11.080><c> tiếng</c><00:06:11.280><c> Anh</c><00:06:11.400><c> qua</c><00:06:11.560><c> tiếng</c>
+
+00:06:11.749 --> 00:06:11.759 align:start position:0%
+các bạn muốn dịch từ tiếng Anh qua tiếng
+ 
+
+00:06:11.759 --> 00:06:13.670 align:start position:0%
+các bạn muốn dịch từ tiếng Anh qua tiếng
+Việt<00:06:11.919><c> ấy</c><00:06:12.120><c> nó</c><00:06:12.280><c> có</c><00:06:12.360><c> nghĩa</c><00:06:12.599><c> là</c><00:06:12.720><c> Kim</c><00:06:12.960><c> Cương</c><00:06:13.520><c> nhưng</c>
+
+00:06:13.670 --> 00:06:13.680 align:start position:0%
+Việt ấy nó có nghĩa là Kim Cương nhưng
+ 
+
+00:06:13.680 --> 00:06:15.430 align:start position:0%
+Việt ấy nó có nghĩa là Kim Cương nhưng
+mà<00:06:13.759><c> cá</c><00:06:14.080><c> nhân</c><00:06:14.280><c> mình</c><00:06:14.400><c> ấy</c><00:06:14.680><c> thì</c><00:06:14.800><c> mình</c><00:06:14.880><c> cũng</c><00:06:15.039><c> méo</c>
+
+00:06:15.430 --> 00:06:15.440 align:start position:0%
+mà cá nhân mình ấy thì mình cũng méo
+ 
+
+00:06:15.440 --> 00:06:16.990 align:start position:0%
+mà cá nhân mình ấy thì mình cũng méo
+biết<00:06:15.599><c> rằng</c><00:06:15.720><c> là</c><00:06:15.800><c> nên</c><00:06:16.080><c> dịch</c><00:06:16.240><c> cái</c><00:06:16.400><c> từ</c><00:06:16.560><c> này</c><00:06:16.720><c> là</c><00:06:16.840><c> cái</c>
+
+00:06:16.990 --> 00:06:17.000 align:start position:0%
+biết rằng là nên dịch cái từ này là cái
+ 
+
+00:06:17.000 --> 00:06:19.230 align:start position:0%
+biết rằng là nên dịch cái từ này là cái
+gì<00:06:17.520><c> bởi</c><00:06:17.759><c> vì</c><00:06:17.880><c> đấy</c><00:06:18.240><c> mình</c><00:06:18.319><c> chỉ</c><00:06:18.479><c> hiểu</c><00:06:18.840><c> một</c><00:06:18.919><c> cách</c><00:06:19.080><c> đơn</c>
+
+00:06:19.230 --> 00:06:19.240 align:start position:0%
+gì bởi vì đấy mình chỉ hiểu một cách đơn
+ 
+
+00:06:19.240 --> 00:06:21.550 align:start position:0%
+gì bởi vì đấy mình chỉ hiểu một cách đơn
+giản<00:06:19.479><c> thằng</c><00:06:19.680><c> Java</c><00:06:20.160><c> nó</c><00:06:20.319><c> sẽ</c><00:06:20.479><c> tự</c><00:06:20.639><c> động</c><00:06:20.880><c> đoán</c><00:06:21.160><c> tai</c>
+
+00:06:21.550 --> 00:06:21.560 align:start position:0%
+giản thằng Java nó sẽ tự động đoán tai
+ 
+
+00:06:21.560 --> 00:06:24.110 align:start position:0%
+giản thằng Java nó sẽ tự động đoán tai
+cho<00:06:21.720><c> các</c><00:06:21.800><c> bạn</c><00:06:22.440><c> nếu</c><00:06:22.680><c> như</c><00:06:22.800><c> rằng</c><00:06:23.000><c> là</c><00:06:23.240><c> mình</c><00:06:23.800><c> nhếu</c>
+
+00:06:24.110 --> 00:06:24.120 align:start position:0%
+cho các bạn nếu như rằng là mình nhếu
+ 
+
+00:06:24.120 --> 00:06:26.029 align:start position:0%
+cho các bạn nếu như rằng là mình nhếu
+không<00:06:24.240><c> nhầm</c><00:06:24.400><c> thì</c><00:06:24.479><c> bên</c><00:06:24.599><c> t</c><00:06:25.080><c> Script</c><00:06:25.400><c> ấy</c><00:06:25.639><c> nó</c><00:06:25.800><c> gọi</c>
+
+00:06:26.029 --> 00:06:26.039 align:start position:0%
+không nhầm thì bên t Script ấy nó gọi
+ 
+
+00:06:26.039 --> 00:06:28.270 align:start position:0%
+không nhầm thì bên t Script ấy nó gọi
+rằng<00:06:26.199><c> là</c><00:06:26.319><c> tai</c><00:06:26.840><c> inference</c><00:06:27.479><c> ấy</c><00:06:27.680><c> tức</c><00:06:27.840><c> rằng</c><00:06:28.039><c> là</c><00:06:28.120><c> tự</c>
+
+00:06:28.270 --> 00:06:28.280 align:start position:0%
+rằng là tai inference ấy tức rằng là tự
+ 
+
+00:06:28.280 --> 00:06:30.629 align:start position:0%
+rằng là tai inference ấy tức rằng là tự
+động<00:06:28.520><c> đoán</c><00:06:28.800><c> kiểu</c><00:06:29.080><c> tai</c><00:06:29.520><c> cho</c><00:06:29.680><c> chúng</c><00:06:29.800><c> ta</c><00:06:30.280><c> ví</c><00:06:30.479><c> dụ</c>
+
+00:06:30.629 --> 00:06:30.639 align:start position:0%
+động đoán kiểu tai cho chúng ta ví dụ
+ 
+
+00:06:30.639 --> 00:06:32.150 align:start position:0%
+động đoán kiểu tai cho chúng ta ví dụ
+như<00:06:30.759><c> rằng</c><00:06:30.960><c> là</c><00:06:31.039><c> bên</c><00:06:31.199><c> tay</c><00:06:31.400><c> trái</c><00:06:31.680><c> này</c><00:06:31.840><c> này</c><00:06:32.000><c> Các</c><00:06:32.080><c> bạn</c>
+
+00:06:32.150 --> 00:06:32.160 align:start position:0%
+như rằng là bên tay trái này này Các bạn
+ 
+
+00:06:32.160 --> 00:06:33.629 align:start position:0%
+như rằng là bên tay trái này này Các bạn
+nhìn<00:06:32.360><c> thấy</c><00:06:32.520><c> rằng</c><00:06:32.639><c> là</c><00:06:32.720><c> chúng</c><00:06:32.880><c> ta</c><00:06:33.000><c> ghi</c><00:06:33.360><c> string</c>
+
+00:06:33.629 --> 00:06:33.639 align:start position:0%
+nhìn thấy rằng là chúng ta ghi string
+ 
+
+00:06:33.639 --> 00:06:35.350 align:start position:0%
+nhìn thấy rằng là chúng ta ghi string
+như<00:06:33.759><c> thế</c><00:06:33.919><c> này</c><00:06:34.240><c> thì</c><00:06:34.360><c> bên</c><00:06:34.520><c> tay</c><00:06:34.680><c> phải</c><00:06:34.880><c> đấy</c><00:06:35.160><c> các</c><00:06:35.240><c> bạn</c>
+
+00:06:35.350 --> 00:06:35.360 align:start position:0%
+như thế này thì bên tay phải đấy các bạn
+ 
+
+00:06:35.360 --> 00:06:36.670 align:start position:0%
+như thế này thì bên tay phải đấy các bạn
+không<00:06:35.479><c> cần</c><00:06:35.639><c> phải</c><00:06:35.800><c> ghi</c><00:06:36.000><c> được</c><00:06:36.199><c> string</c><00:06:36.440><c> như</c><00:06:36.560><c> thế</c>
+
+00:06:36.670 --> 00:06:36.680 align:start position:0%
+không cần phải ghi được string như thế
+ 
+
+00:06:36.680 --> 00:06:38.350 align:start position:0%
+không cần phải ghi được string như thế
+này<00:06:36.800><c> đâu</c><00:06:36.960><c> nó</c><00:06:37.080><c> cũng</c><00:06:37.240><c> tự</c><00:06:37.520><c> hiểu</c><00:06:37.759><c> cho</c><00:06:37.880><c> các</c><00:06:37.960><c> bạn</c>
+
+00:06:38.350 --> 00:06:38.360 align:start position:0%
+này đâu nó cũng tự hiểu cho các bạn
+ 
+
+00:06:38.360 --> 00:06:39.710 align:start position:0%
+này đâu nó cũng tự hiểu cho các bạn
+nhưng<00:06:38.520><c> mà</c><00:06:38.639><c> các</c><00:06:38.759><c> bạn</c><00:06:38.880><c> cần</c><00:06:39.080><c> phải</c><00:06:39.240><c> có</c><00:06:39.440><c> cái</c><00:06:39.560><c> dấu</c>
+
+00:06:39.710 --> 00:06:39.720 align:start position:0%
+nhưng mà các bạn cần phải có cái dấu
+ 
+
+00:06:39.720 --> 00:06:41.150 align:start position:0%
+nhưng mà các bạn cần phải có cái dấu
+đóng<00:06:39.919><c> màu</c><00:06:40.199><c> ngoặc</c><00:06:40.440><c> như</c><00:06:40.520><c> thế</c><00:06:40.639><c> này</c><00:06:40.759><c> các</c><00:06:40.840><c> bạn</c><00:06:40.919><c> này</c>
+
+00:06:41.150 --> 00:06:41.160 align:start position:0%
+đóng màu ngoặc như thế này các bạn này
+ 
+
+00:06:41.160 --> 00:06:42.510 align:start position:0%
+đóng màu ngoặc như thế này các bạn này
+nếu<00:06:41.360><c> như</c><00:06:41.440><c> rằng</c><00:06:41.639><c> là</c><00:06:41.720><c> mình</c><00:06:41.800><c> nhớ</c><00:06:42.080><c> không</c><00:06:42.199><c> nhầm</c><00:06:42.400><c> là</c>
+
+00:06:42.510 --> 00:06:42.520 align:start position:0%
+nếu như rằng là mình nhớ không nhầm là
+ 
+
+00:06:42.520 --> 00:06:43.950 align:start position:0%
+nếu như rằng là mình nhớ không nhầm là
+các<00:06:42.599><c> bạn</c><00:06:42.720><c> cần</c><00:06:42.880><c> phải</c><00:06:43.039><c> có</c><00:06:43.160><c> dấu</c><00:06:43.319><c> đóng</c><00:06:43.479><c> màu</c><00:06:43.720><c> ngoặc</c>
+
+00:06:43.950 --> 00:06:43.960 align:start position:0%
+các bạn cần phải có dấu đóng màu ngoặc
+ 
+
+00:06:43.960 --> 00:06:45.390 align:start position:0%
+các bạn cần phải có dấu đóng màu ngoặc
+như<00:06:44.039><c> thế</c><00:06:44.199><c> này</c><00:06:44.400><c> để</c><00:06:44.680><c> biết</c><00:06:44.840><c> được</c><00:06:44.960><c> rằng</c><00:06:45.120><c> là</c><00:06:45.199><c> chúng</c>
+
+00:06:45.390 --> 00:06:45.400 align:start position:0%
+như thế này để biết được rằng là chúng
+ 
+
+00:06:45.400 --> 00:06:47.390 align:start position:0%
+như thế này để biết được rằng là chúng
+ta<00:06:45.520><c> đang</c><00:06:45.639><c> dùng</c><00:06:45.759><c> generic</c><00:06:46.520><c> cụ</c><00:06:46.840><c> thể</c><00:06:47.080><c> hơn</c><00:06:47.240><c> thì</c><00:06:47.319><c> mình</c>
+
+00:06:47.390 --> 00:06:47.400 align:start position:0%
+ta đang dùng generic cụ thể hơn thì mình
+ 
+
+00:06:47.400 --> 00:06:49.110 align:start position:0%
+ta đang dùng generic cụ thể hơn thì mình
+sẽ<00:06:47.520><c> đi</c><00:06:47.800><c> test</c><00:06:48.000><c> Xem</c><00:06:48.199><c> xem</c><00:06:48.360><c> rằng</c><00:06:48.560><c> là</c><00:06:48.639><c> nó</c><00:06:48.720><c> có</c><00:06:48.800><c> lỗi</c>
+
+00:06:49.110 --> 00:06:49.120 align:start position:0%
+sẽ đi test Xem xem rằng là nó có lỗi
+ 
+
+00:06:49.120 --> 00:06:50.350 align:start position:0%
+sẽ đi test Xem xem rằng là nó có lỗi
+không<00:06:49.199><c> các</c><00:06:49.280><c> bạn</c><00:06:49.400><c> nhá</c><00:06:49.560><c> Đây</c><00:06:49.759><c> này</c><00:06:49.919><c> mình</c><00:06:50.000><c> xóa</c><00:06:50.240><c> đi</c>
+
+00:06:50.350 --> 00:06:50.360 align:start position:0%
+không các bạn nhá Đây này mình xóa đi
+ 
+
+00:06:50.360 --> 00:06:52.909 align:start position:0%
+không các bạn nhá Đây này mình xóa đi
+các<00:06:50.440><c> bạn</c><00:06:50.599><c> này</c><00:06:51.599><c> mình</c><00:06:51.880><c> xóa</c><00:06:52.120><c> đi</c><00:06:52.240><c> thì</c><00:06:52.599><c> nó</c><00:06:52.680><c> không</c><00:06:52.800><c> có</c>
+
+00:06:52.909 --> 00:06:52.919 align:start position:0%
+các bạn này mình xóa đi thì nó không có
+ 
+
+00:06:52.919 --> 00:06:54.870 align:start position:0%
+các bạn này mình xóa đi thì nó không có
+vấn<00:06:53.120><c> đề</c><00:06:53.240><c> gì</c><00:06:53.440><c> à</c><00:06:53.840><c> ở</c><00:06:54.120><c> đây</c><00:06:54.240><c> thì</c><00:06:54.319><c> các</c><00:06:54.440><c> bạn</c><00:06:54.520><c> nhìn</c><00:06:54.720><c> thấy</c>
+
+00:06:54.870 --> 00:06:54.880 align:start position:0%
+vấn đề gì à ở đây thì các bạn nhìn thấy
+ 
+
+00:06:54.880 --> 00:06:55.990 align:start position:0%
+vấn đề gì à ở đây thì các bạn nhìn thấy
+rằng<00:06:55.000><c> là</c><00:06:55.039><c> nó</c><00:06:55.160><c> vẫn</c><00:06:55.319><c> Thêm</c><00:06:55.560><c> bình</c><00:06:55.720><c> thường</c><00:06:55.879><c> các</c><00:06:55.919><c> bạn</c>
+
+00:06:55.990 --> 00:06:56.000 align:start position:0%
+rằng là nó vẫn Thêm bình thường các bạn
+ 
+
+00:06:56.000 --> 00:06:57.990 align:start position:0%
+rằng là nó vẫn Thêm bình thường các bạn
+này<00:06:56.199><c> đây</c><00:06:56.400><c> mình</c><00:06:56.639><c> thêm</c><00:06:56.960><c> bình</c><00:06:57.080><c> thường</c><00:06:57.240><c> nha</c><00:06:57.759><c> và</c>
+
+00:06:57.990 --> 00:06:58.000 align:start position:0%
+này đây mình thêm bình thường nha và
+ 
+
+00:06:58.000 --> 00:06:59.790 align:start position:0%
+này đây mình thêm bình thường nha và
+mình<00:06:58.120><c> sẽ</c><00:06:58.319><c> chạy</c><00:06:58.560><c> lại</c><00:06:58.720><c> cái</c><00:06:58.840><c> thằng</c><00:06:59.000><c> A1</c><00:06:59.440><c> Xem</c><00:06:59.639><c> xem</c>
+
+00:06:59.790 --> 00:06:59.800 align:start position:0%
+mình sẽ chạy lại cái thằng A1 Xem xem
+ 
+
+00:06:59.800 --> 00:07:01.230 align:start position:0%
+mình sẽ chạy lại cái thằng A1 Xem xem
+nào<00:06:59.919><c> đâyy</c><00:07:00.039><c> này</c><00:07:00.400><c> như</c><00:07:00.520><c> vậy</c><00:07:00.680><c> rằng</c><00:07:00.840><c> là</c><00:07:00.960><c> đối</c><00:07:01.120><c> với</c>
+
+00:07:01.230 --> 00:07:01.240 align:start position:0%
+nào đâyy này như vậy rằng là đối với
+ 
+
+00:07:01.240 --> 00:07:03.189 align:start position:0%
+nào đâyy này như vậy rằng là đối với
+phần<00:07:01.400><c> bên</c><00:07:01.720><c> tay</c><00:07:01.919><c> phải</c><00:07:02.120><c> của</c><00:07:02.240><c> chúng</c><00:07:02.360><c> ta</c><00:07:02.479><c> đấy</c><00:07:02.879><c> mình</c>
+
+00:07:03.189 --> 00:07:03.199 align:start position:0%
+phần bên tay phải của chúng ta đấy mình
+ 
+
+00:07:03.199 --> 00:07:06.070 align:start position:0%
+phần bên tay phải của chúng ta đấy mình
+thử<00:07:03.479><c> nha</c><00:07:03.720><c> mình</c><00:07:03.840><c> thử</c><00:07:04.000><c> A1</c><00:07:04.479><c> này</c><00:07:04.639><c> a1s</c><00:07:05.319><c> add</c><00:07:05.759><c> lại</c><00:07:05.879><c> nha</c>
+
+00:07:06.070 --> 00:07:06.080 align:start position:0%
+thử nha mình thử A1 này a1s add lại nha
+ 
+
+00:07:06.080 --> 00:07:08.189 align:start position:0%
+thử nha mình thử A1 này a1s add lại nha
+mình<00:07:06.160><c> add</c><00:07:06.400><c> số</c><00:07:06.520><c> 2</c><00:07:06.759><c> một</c><00:07:06.879><c> cái</c><00:07:07.000><c> này</c><00:07:07.360><c> đây</c><00:07:07.879><c> như</c><00:07:08.039><c> vậy</c>
+
+00:07:08.189 --> 00:07:08.199 align:start position:0%
+mình add số 2 một cái này đây như vậy
+ 
+
+00:07:08.199 --> 00:07:10.270 align:start position:0%
+mình add số 2 một cái này đây như vậy
+rằng<00:07:08.319><c> ấy</c><00:07:08.680><c> đối</c><00:07:08.879><c> với</c><00:07:09.080><c> cái</c><00:07:09.199><c> thằng</c><00:07:09.440><c> Java</c><00:07:09.879><c> Diamond</c>
+
+00:07:10.270 --> 00:07:10.280 align:start position:0%
+rằng ấy đối với cái thằng Java Diamond
+ 
+
+00:07:10.280 --> 00:07:12.270 align:start position:0%
+rằng ấy đối với cái thằng Java Diamond
+ấy<00:07:10.680><c> các</c><00:07:10.759><c> bạn</c><00:07:11.160><c> không</c><00:07:11.280><c> nhất</c><00:07:11.520><c> thiết</c><00:07:11.800><c> rằng</c><00:07:11.960><c> là</c><00:07:12.199><c> các</c>
+
+00:07:12.270 --> 00:07:12.280 align:start position:0%
+ấy các bạn không nhất thiết rằng là các
+ 
+
+00:07:12.280 --> 00:07:14.270 align:start position:0%
+ấy các bạn không nhất thiết rằng là các
+bạn<00:07:12.400><c> cần</c><00:07:12.560><c> phải</c><00:07:12.759><c> dùng</c><00:07:13.000><c> generic</c><00:07:13.680><c> bên</c><00:07:13.879><c> phần</c><00:07:14.120><c> bên</c>
+
+00:07:14.270 --> 00:07:14.280 align:start position:0%
+bạn cần phải dùng generic bên phần bên
+ 
+
+00:07:14.280 --> 00:07:16.110 align:start position:0%
+bạn cần phải dùng generic bên phần bên
+phía<00:07:14.479><c> tay</c><00:07:14.639><c> phải</c><00:07:14.840><c> của</c><00:07:14.960><c> chúng</c><00:07:15.120><c> ta</c><00:07:15.639><c> chúng</c><00:07:15.800><c> ta</c><00:07:15.919><c> chỉ</c>
+
+00:07:16.110 --> 00:07:16.120 align:start position:0%
+phía tay phải của chúng ta chúng ta chỉ
+ 
+
+00:07:16.120 --> 00:07:18.070 align:start position:0%
+phía tay phải của chúng ta chúng ta chỉ
+cần<00:07:16.280><c> khai</c><00:07:16.520><c> báo</c><00:07:16.639><c> generic</c><00:07:17.280><c> bên</c><00:07:17.479><c> phần</c><00:07:17.639><c> bên</c><00:07:17.879><c> phía</c>
+
+00:07:18.070 --> 00:07:18.080 align:start position:0%
+cần khai báo generic bên phần bên phía
+ 
+
+00:07:18.080 --> 00:07:20.390 align:start position:0%
+cần khai báo generic bên phần bên phía
+tay<00:07:18.240><c> trái</c><00:07:18.520><c> thôi</c><00:07:19.039><c> phần</c><00:07:19.280><c> bên</c><00:07:19.440><c> phía</c><00:07:19.680><c> tay</c><00:07:19.879><c> phải</c><00:07:20.120><c> này</c>
+
+00:07:20.390 --> 00:07:20.400 align:start position:0%
+tay trái thôi phần bên phía tay phải này
+ 
+
+00:07:20.400 --> 00:07:22.869 align:start position:0%
+tay trái thôi phần bên phía tay phải này
+nó<00:07:20.520><c> sẽ</c><00:07:20.720><c> tự</c><00:07:20.879><c> động</c><00:07:21.080><c> đoán</c><00:07:21.440><c> tai</c><00:07:22.080><c> dựa</c><00:07:22.280><c> vào</c><00:07:22.400><c> phần</c><00:07:22.639><c> bên</c>
+
+00:07:22.869 --> 00:07:22.879 align:start position:0%
+nó sẽ tự động đoán tai dựa vào phần bên
+ 
+
+00:07:22.879 --> 00:07:24.469 align:start position:0%
+nó sẽ tự động đoán tai dựa vào phần bên
+tay<00:07:23.000><c> trái</c><00:07:23.199><c> này</c><00:07:23.520><c> thì</c><00:07:23.599><c> đây</c><00:07:23.759><c> gọi</c><00:07:23.960><c> là</c><00:07:24.039><c> tính</c><00:07:24.240><c> chất</c>
+
+00:07:24.469 --> 00:07:24.479 align:start position:0%
+tay trái này thì đây gọi là tính chất
+ 
+
+00:07:24.479 --> 00:07:26.469 align:start position:0%
+tay trái này thì đây gọi là tính chất
+Java<00:07:24.840><c> Diamond</c><00:07:25.440><c> Ừ</c><00:07:25.759><c> Các</c><00:07:25.840><c> bạn</c><00:07:25.919><c> có</c><00:07:26.000><c> thể</c><00:07:26.160><c> search</c>
+
+00:07:26.469 --> 00:07:26.479 align:start position:0%
+Java Diamond Ừ Các bạn có thể search
+ 
+
+00:07:26.479 --> 00:07:28.029 align:start position:0%
+Java Diamond Ừ Các bạn có thể search
+Keyword<00:07:26.840><c> này</c><00:07:26.960><c> này</c><00:07:27.080><c> Đây</c><00:07:27.280><c> này</c><00:07:27.400><c> cái</c><00:07:27.479><c> Keyword</c><00:07:27.919><c> mình</c>
+
+00:07:28.029 --> 00:07:28.039 align:start position:0%
+Keyword này này Đây này cái Keyword mình
+ 
+
+00:07:28.039 --> 00:07:29.990 align:start position:0%
+Keyword này này Đây này cái Keyword mình
+cho<00:07:28.120><c> các</c><00:07:28.199><c> bạn</c><00:07:28.280><c> ấy</c><00:07:28.599><c> Java</c><00:07:28.919><c> Diamond</c><00:07:29.479><c> từ</c><00:07:29.680><c> Java</c>
+
+00:07:29.990 --> 00:07:30.000 align:start position:0%
+cho các bạn ấy Java Diamond từ Java
+ 
+
+00:07:30.000 --> 00:07:31.830 align:start position:0%
+cho các bạn ấy Java Diamond từ Java
+version<00:07:30.400><c> 7</c><00:07:30.840><c> là</c><00:07:30.960><c> chúng</c><00:07:31.080><c> ta</c><00:07:31.199><c> có</c><00:07:31.319><c> thể</c><00:07:31.520><c> sử</c><00:07:31.680><c> dụng</c>
+
+00:07:31.830 --> 00:07:31.840 align:start position:0%
+version 7 là chúng ta có thể sử dụng
+ 
+
+00:07:31.840 --> 00:07:34.070 align:start position:0%
+version 7 là chúng ta có thể sử dụng
+được<00:07:31.960><c> cái</c><00:07:32.199><c> này</c><00:07:32.560><c> còn</c><00:07:32.759><c> trước</c><00:07:33.120><c> Java</c><00:07:33.479><c> version</c><00:07:33.840><c> 7</c>
+
+00:07:34.070 --> 00:07:34.080 align:start position:0%
+được cái này còn trước Java version 7
+ 
+
+00:07:34.080 --> 00:07:35.629 align:start position:0%
+được cái này còn trước Java version 7
+đấy<00:07:34.280><c> nó</c><00:07:34.360><c> không</c><00:07:34.440><c> hề</c><00:07:34.680><c> có</c><00:07:34.800><c> điều</c><00:07:35.000><c> này</c><00:07:35.120><c> đâu</c><00:07:35.400><c> và</c><00:07:35.520><c> mình</c>
+
+00:07:35.629 --> 00:07:35.639 align:start position:0%
+đấy nó không hề có điều này đâu và mình
+ 
+
+00:07:35.639 --> 00:07:37.510 align:start position:0%
+đấy nó không hề có điều này đâu và mình
+cũng<00:07:35.840><c> lấy</c><00:07:36.039><c> luôn</c><00:07:36.199><c> Ví</c><00:07:36.319><c> dụ</c><00:07:36.440><c> các</c><00:07:36.560><c> bạn</c><00:07:36.720><c> này</c><00:07:36.919><c> Đây</c><00:07:37.080><c> này</c>
+
+00:07:37.510 --> 00:07:37.520 align:start position:0%
+cũng lấy luôn Ví dụ các bạn này Đây này
+ 
+
+00:07:37.520 --> 00:07:39.390 align:start position:0%
+cũng lấy luôn Ví dụ các bạn này Đây này
+ví<00:07:37.680><c> dụ</c><00:07:37.840><c> như</c><00:07:38.000><c> rằng</c><00:07:38.199><c> là</c><00:07:38.520><c> chúng</c><00:07:38.639><c> ta</c><00:07:38.759><c> sẽ</c><00:07:39.039><c> gọi</c><00:07:39.319><c> là</c>
+
+00:07:39.390 --> 00:07:39.400 align:start position:0%
+ví dụ như rằng là chúng ta sẽ gọi là
+ 
+
+00:07:39.400 --> 00:07:40.670 align:start position:0%
+ví dụ như rằng là chúng ta sẽ gọi là
+chúng<00:07:39.520><c> ta</c><00:07:39.599><c> khai</c><00:07:39.879><c> báo</c><00:07:40.000><c> như</c><00:07:40.120><c> thế</c><00:07:40.240><c> này</c><00:07:40.360><c> thay</c><00:07:40.560><c> vì</c>
+
+00:07:40.670 --> 00:07:40.680 align:start position:0%
+chúng ta khai báo như thế này thay vì
+ 
+
+00:07:40.680 --> 00:07:42.350 align:start position:0%
+chúng ta khai báo như thế này thay vì
+việc<00:07:40.879><c> các</c><00:07:40.960><c> bạn</c><00:07:41.039><c> khai</c><00:07:41.240><c> báo</c><00:07:41.440><c> đầy</c><00:07:41.599><c> đủ</c><00:07:42.000><c> thì</c><00:07:42.160><c> đây</c>
+
+00:07:42.350 --> 00:07:42.360 align:start position:0%
+việc các bạn khai báo đầy đủ thì đây
+ 
+
+00:07:42.360 --> 00:07:43.790 align:start position:0%
+việc các bạn khai báo đầy đủ thì đây
+chính<00:07:42.560><c> là</c><00:07:42.639><c> một</c><00:07:42.759><c> cái</c><00:07:42.879><c> tính</c><00:07:43.080><c> năng</c><00:07:43.240><c> khá</c><00:07:43.440><c> chi</c><00:07:43.639><c> là</c>
+
+00:07:43.790 --> 00:07:43.800 align:start position:0%
+chính là một cái tính năng khá chi là
+ 
+
+00:07:43.800 --> 00:07:45.589 align:start position:0%
+chính là một cái tính năng khá chi là
+hay<00:07:44.199><c> tuy</c><00:07:44.440><c> nhiên</c><00:07:44.639><c> rằng</c><00:07:44.800><c> là</c><00:07:44.879><c> cá</c><00:07:45.080><c> nhân</c><00:07:45.360><c> mình</c><00:07:45.520><c> thì</c>
+
+00:07:45.589 --> 00:07:45.599 align:start position:0%
+hay tuy nhiên rằng là cá nhân mình thì
+ 
+
+00:07:45.599 --> 00:07:47.270 align:start position:0%
+hay tuy nhiên rằng là cá nhân mình thì
+không<00:07:45.720><c> khuyến</c><00:07:46.080><c> khích</c><00:07:46.280><c> các</c><00:07:46.360><c> bạn</c><00:07:46.520><c> viết</c><00:07:46.720><c> như</c><00:07:46.879><c> vậy</c>
+
+00:07:47.270 --> 00:07:47.280 align:start position:0%
+không khuyến khích các bạn viết như vậy
+ 
+
+00:07:47.280 --> 00:07:49.110 align:start position:0%
+không khuyến khích các bạn viết như vậy
+cá<00:07:47.479><c> nhân</c><00:07:47.639><c> mình</c><00:07:47.759><c> ấy</c><00:07:48.039><c> thì</c><00:07:48.280><c> mình</c><00:07:48.400><c> viết</c><00:07:48.599><c> đến</c><00:07:48.960><c> đâu</c>
+
+00:07:49.110 --> 00:07:49.120 align:start position:0%
+cá nhân mình ấy thì mình viết đến đâu
+ 
+
+00:07:49.120 --> 00:07:50.990 align:start position:0%
+cá nhân mình ấy thì mình viết đến đâu
+thì<00:07:49.319><c> mình</c><00:07:49.520><c> thường</c><00:07:49.720><c> gọi</c><00:07:49.960><c> là</c><00:07:50.039><c> chắc</c><00:07:50.319><c> ăn</c><00:07:50.479><c> tới</c><00:07:50.720><c> đấy</c>
+
+00:07:50.990 --> 00:07:51.000 align:start position:0%
+thì mình thường gọi là chắc ăn tới đấy
+ 
+
+00:07:51.000 --> 00:07:53.350 align:start position:0%
+thì mình thường gọi là chắc ăn tới đấy
+thằng<00:07:51.319><c> Java</c><00:07:51.759><c> thì</c><00:07:51.879><c> nó</c><00:07:52.000><c> codt</c><00:07:52.440><c> hơi</c><00:07:52.680><c> dài</c><00:07:52.879><c> một</c><00:07:53.039><c> xíu</c>
+
+00:07:53.350 --> 00:07:53.360 align:start position:0%
+thằng Java thì nó codt hơi dài một xíu
+ 
+
+00:07:53.360 --> 00:07:54.830 align:start position:0%
+thằng Java thì nó codt hơi dài một xíu
+tương<00:07:53.599><c> tự</c><00:07:53.720><c> như</c><00:07:53.840><c> việc</c><00:07:54.000><c> các</c><00:07:54.039><c> bạn</c><00:07:54.159><c> code</c><00:07:54.400><c> Thằng</c><00:07:54.560><c> t</c>
+
+00:07:54.830 --> 00:07:54.840 align:start position:0%
+tương tự như việc các bạn code Thằng t
+ 
+
+00:07:54.840 --> 00:07:56.869 align:start position:0%
+tương tự như việc các bạn code Thằng t
+Script<00:07:55.080><c> ấy</c><00:07:55.360><c> đổi</c><00:07:55.800><c> lại</c><00:07:56.000><c> thì</c><00:07:56.199><c> mình</c><00:07:56.319><c> hay</c><00:07:56.560><c> viết</c><00:07:56.759><c> như</c>
+
+00:07:56.869 --> 00:07:56.879 align:start position:0%
+Script ấy đổi lại thì mình hay viết như
+ 
+
+00:07:56.879 --> 00:07:58.430 align:start position:0%
+Script ấy đổi lại thì mình hay viết như
+thế<00:07:57.080><c> này</c><00:07:57.240><c> thì</c><00:07:57.360><c> khiến</c><00:07:57.520><c> code</c><00:07:57.840><c> của</c><00:07:57.960><c> các</c><00:07:58.039><c> bạn</c><00:07:58.159><c> nó</c>
+
+00:07:58.430 --> 00:07:58.440 align:start position:0%
+thế này thì khiến code của các bạn nó
+ 
+
+00:07:58.440 --> 00:07:59.950 align:start position:0%
+thế này thì khiến code của các bạn nó
+tường<00:07:58.759><c> minh</c><00:07:58.919><c> hơn</c><00:07:59.080><c> rất</c><00:07:59.280><c> rất</c><00:07:59.440><c> chi</c><00:07:59.599><c> là</c><00:07:59.680><c> nhiều</c>
+
+00:07:59.950 --> 00:07:59.960 align:start position:0%
+tường minh hơn rất rất chi là nhiều
+ 
+
+00:07:59.960 --> 00:08:02.270 align:start position:0%
+tường minh hơn rất rất chi là nhiều
+chúng<00:08:00.080><c> ta</c><00:08:00.280><c> gọi</c><00:08:00.479><c> là</c><00:08:00.720><c> level</c><00:08:01.080><c> beginner</c><00:08:01.800><c> hay</c><00:08:02.080><c> rằng</c>
+
+00:08:02.270 --> 00:08:02.280 align:start position:0%
+chúng ta gọi là level beginner hay rằng
+ 
+
+00:08:02.280 --> 00:08:04.270 align:start position:0%
+chúng ta gọi là level beginner hay rằng
+là<00:08:02.360><c> level</c><00:08:02.639><c> ca</c><00:08:02.960><c> siê</c><00:08:03.240><c> các</c><00:08:03.319><c> bạn</c><00:08:03.440><c> đọc</c><00:08:03.599><c> đều</c><00:08:03.800><c> hiểu</c><00:08:04.039><c> hết</c>
+
+00:08:04.270 --> 00:08:04.280 align:start position:0%
+là level ca siê các bạn đọc đều hiểu hết
+ 
+
+00:08:04.280 --> 00:08:05.950 align:start position:0%
+là level ca siê các bạn đọc đều hiểu hết
+thì<00:08:04.599><c> mình</c><00:08:04.759><c> vẫn</c><00:08:04.960><c> muốn</c><00:08:05.159><c> giới</c><00:08:05.319><c> thiệu</c><00:08:05.479><c> thêm</c><00:08:05.720><c> kiến</c>
+
+00:08:05.950 --> 00:08:05.960 align:start position:0%
+thì mình vẫn muốn giới thiệu thêm kiến
+ 
+
+00:08:05.960 --> 00:08:08.070 align:start position:0%
+thì mình vẫn muốn giới thiệu thêm kiến
+thức<00:08:06.120><c> mới</c><00:08:06.479><c> nhưng</c><00:08:06.639><c> mà</c><00:08:06.759><c> Đấy</c><00:08:07.440><c> thì</c><00:08:07.599><c> mình</c><00:08:07.680><c> khuyến</c>
+
+00:08:08.070 --> 00:08:08.080 align:start position:0%
+thức mới nhưng mà Đấy thì mình khuyến
+ 
+
+00:08:08.080 --> 00:08:09.230 align:start position:0%
+thức mới nhưng mà Đấy thì mình khuyến
+khích<00:08:08.280><c> các</c><00:08:08.360><c> bạn</c><00:08:08.440><c> viết</c><00:08:08.599><c> như</c><00:08:08.720><c> thế</c><00:08:08.879><c> này</c><00:08:09.000><c> cho</c><00:08:09.120><c> nó</c>
+
+00:08:09.230 --> 00:08:09.240 align:start position:0%
+khích các bạn viết như thế này cho nó
+ 
+
+00:08:09.240 --> 00:08:11.309 align:start position:0%
+khích các bạn viết như thế này cho nó
+đầy<00:08:09.479><c> đủ</c><00:08:09.960><c> như</c><00:08:10.159><c> vậy</c><00:08:10.319><c> rằng</c><00:08:10.520><c> là</c><00:08:10.680><c> thông</c><00:08:10.879><c> qua</c><00:08:11.039><c> video</c>
+
+00:08:11.309 --> 00:08:11.319 align:start position:0%
+đầy đủ như vậy rằng là thông qua video
+ 
+
+00:08:11.319 --> 00:08:13.189 align:start position:0%
+đầy đủ như vậy rằng là thông qua video
+này<00:08:11.479><c> Mình</c><00:08:11.639><c> hy</c><00:08:11.800><c> vọng</c><00:08:12.000><c> các</c><00:08:12.080><c> bạn</c><00:08:12.199><c> đã</c><00:08:12.440><c> hiểu</c><00:08:12.720><c> tại</c><00:08:12.919><c> sao</c>
+
+00:08:13.189 --> 00:08:13.199 align:start position:0%
+này Mình hy vọng các bạn đã hiểu tại sao
+ 
+
+00:08:13.199 --> 00:08:15.149 align:start position:0%
+này Mình hy vọng các bạn đã hiểu tại sao
+chúng<00:08:13.360><c> ta</c><00:08:13.520><c> lại</c><00:08:13.800><c> viết</c><00:08:14.000><c> theo</c><00:08:14.199><c> kiểu</c><00:08:14.479><c> như</c><00:08:14.599><c> thế</c><00:08:14.800><c> này</c>
+
+00:08:15.149 --> 00:08:15.159 align:start position:0%
+chúng ta lại viết theo kiểu như thế này
+ 
+
+00:08:15.159 --> 00:08:16.749 align:start position:0%
+chúng ta lại viết theo kiểu như thế này
+mục<00:08:15.400><c> đích</c><00:08:15.520><c> chúng</c><00:08:15.639><c> ta</c><00:08:15.720><c> viết</c><00:08:15.919><c> như</c><00:08:16.039><c> thế</c><00:08:16.240><c> này</c><00:08:16.360><c> đấy</c>
+
+00:08:16.749 --> 00:08:16.759 align:start position:0%
+mục đích chúng ta viết như thế này đấy
+ 
+
+00:08:16.759 --> 00:08:18.510 align:start position:0%
+mục đích chúng ta viết như thế này đấy
+để<00:08:17.039><c> chính</c><00:08:17.280><c> làm</c><00:08:17.440><c> điều</c><00:08:17.639><c> này</c><00:08:17.759><c> các</c><00:08:17.879><c> bạn</c><00:08:17.960><c> này</c><00:08:18.280><c> nếu</c><00:08:18.440><c> mà</c>
+
+00:08:18.510 --> 00:08:18.520 align:start position:0%
+để chính làm điều này các bạn này nếu mà
+ 
+
+00:08:18.520 --> 00:08:20.029 align:start position:0%
+để chính làm điều này các bạn này nếu mà
+các<00:08:18.560><c> bạn</c><00:08:18.720><c> code</c><00:08:19.159><c> chúng</c><00:08:19.319><c> ta</c><00:08:19.440><c> không</c><00:08:19.599><c> thêm</c><00:08:19.840><c> đúng</c>
+
+00:08:20.029 --> 00:08:20.039 align:start position:0%
+các bạn code chúng ta không thêm đúng
+ 
+
+00:08:20.039 --> 00:08:21.869 align:start position:0%
+các bạn code chúng ta không thêm đúng
+kiểu<00:08:20.360><c> dữ</c><00:08:20.479><c> liệu</c><00:08:20.639><c> ấy</c><00:08:20.840><c> nó</c><00:08:20.919><c> bao</c><00:08:21.120><c> lỗi</c><00:08:21.479><c> thì</c><00:08:21.560><c> đây</c><00:08:21.680><c> chính</c>
+
+00:08:21.869 --> 00:08:21.879 align:start position:0%
+kiểu dữ liệu ấy nó bao lỗi thì đây chính
+ 
+
+00:08:21.879 --> 00:08:23.749 align:start position:0%
+kiểu dữ liệu ấy nó bao lỗi thì đây chính
+là<00:08:22.000><c> tác</c><00:08:22.159><c> dụng</c><00:08:22.400><c> hay</c><00:08:22.680><c> dùng</c><00:08:22.919><c> nhất</c><00:08:23.440><c> của</c><00:08:23.599><c> thằng</c>
+
+00:08:23.749 --> 00:08:23.759 align:start position:0%
+là tác dụng hay dùng nhất của thằng
+ 
+
+00:08:23.759 --> 00:08:26.270 align:start position:0%
+là tác dụng hay dùng nhất của thằng
+zoric<00:08:24.680><c> và</c><00:08:24.840><c> đối</c><00:08:25.039><c> với</c><00:08:25.240><c> beginner</c><00:08:25.720><c> đấy</c><00:08:26.000><c> mình</c><00:08:26.120><c> chỉ</c>
+
+00:08:26.270 --> 00:08:26.280 align:start position:0%
+zoric và đối với beginner đấy mình chỉ
+ 
+
+00:08:26.280 --> 00:08:27.950 align:start position:0%
+zoric và đối với beginner đấy mình chỉ
+hy<00:08:26.400><c> vọng</c><00:08:26.599><c> các</c><00:08:26.720><c> bạn</c><00:08:26.879><c> nhớ</c><00:08:27.080><c> được</c><00:08:27.159><c> vậy</c><00:08:27.360><c> thôi</c><00:08:27.720><c> trong</c>
+
+00:08:27.950 --> 00:08:27.960 align:start position:0%
+hy vọng các bạn nhớ được vậy thôi trong
+ 
+
+00:08:27.960 --> 00:08:29.469 align:start position:0%
+hy vọng các bạn nhớ được vậy thôi trong
+video<00:08:28.360><c> tiếp</c><00:08:28.520><c> theo</c><00:08:28.680><c> chúng</c><00:08:28.800><c> ta</c><00:08:28.879><c> sẽ</c><00:08:29.039><c> cùng</c><00:08:29.280><c> cùng</c>
+
+00:08:29.469 --> 00:08:29.479 align:start position:0%
+video tiếp theo chúng ta sẽ cùng cùng
+ 
+
+00:08:29.479 --> 00:08:31.909 align:start position:0%
+video tiếp theo chúng ta sẽ cùng cùng
+nhau<00:08:29.720><c> đi</c><00:08:29.960><c> làm</c><00:08:30.120><c> bài</c><00:08:30.400><c> tập</c><00:08:30.599><c> về</c><00:08:30.759><c> cái</c><00:08:30.879><c> thằng</c><00:08:31.080><c> oris</c>
+
+00:08:31.909 --> 00:08:31.919 align:start position:0%
+nhau đi làm bài tập về cái thằng oris
+ 
+
+00:08:31.919 --> 00:08:33.670 align:start position:0%
+nhau đi làm bài tập về cái thằng oris
+này<00:08:32.159><c> để</c><00:08:32.360><c> chúng</c><00:08:32.519><c> ta</c><00:08:32.599><c> có</c><00:08:32.719><c> thể</c><00:08:32.880><c> hiểu</c><00:08:33.120><c> rõ</c><00:08:33.320><c> hơn</c><00:08:33.519><c> về</c>
+
+00:08:33.670 --> 00:08:33.680 align:start position:0%
+này để chúng ta có thể hiểu rõ hơn về
+ 
+
+00:08:33.680 --> 00:08:36.919 align:start position:0%
+này để chúng ta có thể hiểu rõ hơn về
+công<00:08:33.839><c> cụ</c><00:08:34.039><c> chúng</c><00:08:34.200><c> ta</c><00:08:34.320><c> đã</c><00:08:34.479><c> học</c>
+

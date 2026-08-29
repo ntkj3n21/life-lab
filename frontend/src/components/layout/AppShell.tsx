@@ -53,10 +53,10 @@ export function AppShell() {
   return (
     <div className="flex h-full w-full overflow-hidden bg-(--app-bg) text-(--text-primary)">
       <div
-        className={`contents [&>aside]:transition-[opacity,visibility] [&>aside]:duration-200 [&>aside]:ease-out motion-reduce:[&>aside]:transition-none ${
+        className={`contents ${
           showFocusPresentation
-            ? "[&>aside]:invisible [&>aside]:opacity-0"
-            : "[&>aside]:visible [&>aside]:opacity-100"
+            ? "xl:[&>aside]:hidden"
+            : ""
         }`}
       >
         <Sidebar />
@@ -64,10 +64,10 @@ export function AppShell() {
 
       <div className="flex min-w-0 flex-1 flex-col">
         <div
-          className={`contents xl:[&>header]:transition-[opacity,visibility] xl:[&>header]:duration-200 xl:[&>header]:ease-out motion-reduce:xl:[&>header]:transition-none ${
+          className={`contents ${
             showFocusPresentation
-              ? "xl:[&>header]:invisible xl:[&>header]:opacity-0"
-              : "xl:[&>header]:visible xl:[&>header]:opacity-100"
+              ? "xl:[&>header]:hidden"
+              : ""
           }`}
         >
           <Topbar />
@@ -87,7 +87,11 @@ export function AppShell() {
           />
 
           {isLibraryWorkspace && (
-            <RightPanel />
+            <RightPanel
+              isFocusMode={
+                showFocusPresentation
+              }
+            />
           )}
         </section>
       </div>

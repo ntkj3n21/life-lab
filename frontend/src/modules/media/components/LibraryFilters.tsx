@@ -4,6 +4,11 @@ import {
   SlidersHorizontal,
   X,
 } from "lucide-react";
+import {
+  useEffect,
+  useId,
+  useRef,
+} from "react";
 
 import type { LibraryQuery } from "../services/libraryApi";
 import type { Tag } from "../services/tagApi";
@@ -58,6 +63,7 @@ interface LibraryFiltersProps {
   validationMessage?:
     | string
     | null;
+  errorMessage?: string | null;
 
   appliedFilters:
     AppliedLibraryFilterItem[];
@@ -65,6 +71,7 @@ interface LibraryFiltersProps {
   onSearchTextChange: (
     value: string,
   ) => void;
+  onApplySearch: () => Promise<void>;
 
   onToggleTag: (
     tagId: number,
@@ -111,11 +118,14 @@ interface LibraryFiltersProps {
       LibrarySortDirection,
   ) => void;
 
-  onToggleAdvancedFilters:
+  onOpenAdvancedFilters:
+    () => void;
+  onDismissAdvancedFilters:
     () => void;
 
   onApply: () => Promise<void>;
-  onReset: () => Promise<void>;
+  onResetDraft: () => void;
+  onClearAll: () => Promise<void>;
   onRemoveAppliedFilter: (
     filterId: string,
   ) => Promise<void>;
@@ -123,6 +133,14 @@ interface LibraryFiltersProps {
 
 const inputClassName =
   "w-full rounded-xl border border-(--border) bg-(--surface) px-3 py-2 text-xs text-(--text-secondary) outline-none focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50";
+
+const FOCUSABLE_SELECTOR = [
+  "button:not([disabled])",
+  "input:not([disabled])",
+  "select:not([disabled])",
+  "textarea:not([disabled])",
+  '[tabindex]:not([tabindex="-1"])',
+].join(",");
 
 export function LibraryFilters({
   tags,
@@ -142,8 +160,10 @@ export function LibraryFilters({
   isLoading,
   watchAndSortLocked,
   validationMessage,
+  errorMessage,
   appliedFilters,
   onSearchTextChange,
+  onApplySearch,
   onToggleTag,
   onMinDurationSecondsChange,
   onMaxDurationSecondsChange,
@@ -155,11 +175,134 @@ export function LibraryFilters({
   onNotesFilterChange,
   onSortByChange,
   onSortDirectionChange,
-  onToggleAdvancedFilters,
+  onOpenAdvancedFilters,
+  onDismissAdvancedFilters,
   onApply,
-  onReset,
+  onResetDraft,
+  onClearAll,
   onRemoveAppliedFilter,
 }: LibraryFiltersProps) {
+  const dialogRef =
+    useRef<HTMLDivElement | null>(null);
+  const closeButtonRef =
+    useRef<HTMLButtonElement | null>(null);
+  const previousFocusRef =
+    useRef<HTMLElement | null>(null);
+  const dismissRef = useRef(
+    onDismissAdvancedFilters,
+  );
+  const isLoadingRef =
+    useRef(isLoading);
+  const titleId = useId();
+  const descriptionId = useId();
+  const dialogId = useId();
+
+  useEffect(() => {
+    dismissRef.current =
+      onDismissAdvancedFilters;
+    isLoadingRef.current = isLoading;
+  }, [
+    isLoading,
+    onDismissAdvancedFilters,
+  ]);
+
+  useEffect(() => {
+    if (!showAdvancedFilters) {
+      return;
+    }
+
+    previousFocusRef.current =
+      document.activeElement instanceof HTMLElement
+        ? document.activeElement
+        : null;
+
+    const focusFrame =
+      window.requestAnimationFrame(() => {
+        closeButtonRef.current?.focus();
+      });
+
+    function handleKeyDown(
+      event: KeyboardEvent,
+    ) {
+      if (
+        event.key === "Escape" &&
+        !isLoadingRef.current
+      ) {
+        event.preventDefault();
+        dismissRef.current();
+        return;
+      }
+
+      if (event.key !== "Tab") {
+        return;
+      }
+
+      const dialog = dialogRef.current;
+
+      if (!dialog) {
+        return;
+      }
+
+      const focusable = Array.from(
+        dialog.querySelectorAll<HTMLElement>(
+          FOCUSABLE_SELECTOR,
+        ),
+      );
+
+      if (focusable.length === 0) {
+        event.preventDefault();
+        dialog.focus();
+        return;
+      }
+
+      const first = focusable[0];
+      const last =
+        focusable[focusable.length - 1];
+
+      if (
+        !(document.activeElement instanceof Node) ||
+        !dialog.contains(document.activeElement)
+      ) {
+        event.preventDefault();
+        (event.shiftKey ? last : first).focus();
+      } else if (
+        event.shiftKey &&
+        document.activeElement === first
+      ) {
+        event.preventDefault();
+        last.focus();
+      } else if (
+        !event.shiftKey &&
+        document.activeElement === last
+      ) {
+        event.preventDefault();
+        first.focus();
+      }
+    }
+
+    window.addEventListener(
+      "keydown",
+      handleKeyDown,
+    );
+
+    return () => {
+      window.cancelAnimationFrame(
+        focusFrame,
+      );
+      window.removeEventListener(
+        "keydown",
+        handleKeyDown,
+      );
+
+      const previousFocus =
+        previousFocusRef.current;
+
+      if (previousFocus?.isConnected) {
+        previousFocus.focus();
+      }
+    };
+  }, [showAdvancedFilters]);
+
   return (
     <div
       aria-busy={isLoading}
@@ -191,7 +334,7 @@ export function LibraryFilters({
             }
             onKeyDown={(event) => {
               if (event.key === "Enter") {
-                void onApply();
+                void onApplySearch();
               }
             }}
             placeholder="Search library..."
@@ -209,8 +352,10 @@ export function LibraryFilters({
 
         <button
           type="button"
-          onClick={onToggleAdvancedFilters}
+          onClick={onOpenAdvancedFilters}
+          aria-haspopup="dialog"
           aria-expanded={showAdvancedFilters}
+          aria-controls={dialogId}
           className={`flex h-10 shrink-0 items-center justify-center gap-1.5 rounded-lg px-2.5 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) ${
             showAdvancedFilters
               ? "bg-(--surface-active) text-(--text-primary)"
@@ -261,7 +406,7 @@ export function LibraryFilters({
           <button
             type="button"
             onClick={() =>
-              void onReset()
+              void onClearAll()
             }
             disabled={isLoading}
             className="min-h-10 rounded-lg px-2.5 text-xs font-medium text-(--text-muted) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50 sm:min-h-8"
@@ -271,17 +416,79 @@ export function LibraryFilters({
         </div>
       )}
 
-      {validationMessage && (
-        <p
-          role="alert"
-          className="mt-3 rounded-xl border border-(--warning-border) bg-(--warning-surface) px-3 py-2 text-xs text-(--warning-text)"
-        >
-          {validationMessage}
-        </p>
-      )}
-
       {showAdvancedFilters && (
-        <div className="mt-4 space-y-3">
+        <div
+          role="presentation"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-(--overlay-backdrop) p-3 sm:p-4"
+          onMouseDown={(event) => {
+            if (
+              event.target === event.currentTarget &&
+              !isLoading
+            ) {
+              onDismissAdvancedFilters();
+            }
+          }}
+        >
+          <div
+            id={dialogId}
+            ref={dialogRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby={titleId}
+            aria-describedby={descriptionId}
+            aria-busy={isLoading}
+            tabIndex={-1}
+            className="flex max-h-[calc(100dvh-1.5rem)] w-full max-w-3xl flex-col overflow-hidden rounded-2xl border border-(--border) bg-(--panel-bg) shadow-[var(--elevated-shadow)] sm:max-h-[calc(100dvh-2rem)]"
+          >
+            <div className="flex shrink-0 items-start justify-between gap-4 border-b border-(--border) px-4 py-3 sm:px-5 sm:py-4">
+              <div className="min-w-0">
+                <h2
+                  id={titleId}
+                  className="text-base font-semibold text-(--text-primary)"
+                >
+                  Library filters
+                </h2>
+                <p
+                  id={descriptionId}
+                  className="mt-1 text-xs leading-5 text-(--text-muted)"
+                >
+                  Refine the current Library results. Changes apply only when you confirm them.
+                </p>
+              </div>
+
+              <button
+                ref={closeButtonRef}
+                type="button"
+                onClick={onDismissAdvancedFilters}
+                disabled={isLoading}
+                aria-label="Close Library filters"
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-(--text-muted) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                <X
+                  size={17}
+                  aria-hidden="true"
+                />
+              </button>
+            </div>
+
+            <div className="min-h-0 flex-1 space-y-3 overflow-y-auto overscroll-contain px-4 py-4 sm:px-5">
+          {validationMessage && (
+            <p
+              role="alert"
+              className="rounded-xl border border-(--warning-border) bg-(--warning-surface) px-3 py-2 text-xs text-(--warning-text)"
+            >
+              {validationMessage}
+            </p>
+          )}
+
+          {errorMessage && (
+            <p
+              role="alert"
+              className="rounded-xl border border-(--danger-border) bg-(--danger-surface) px-3 py-2 text-xs text-(--danger-text)"
+            >
+              {errorMessage}
+            </p>
+          )}
           {watchAndSortLocked && (
             <p
               role="status"
@@ -743,27 +950,50 @@ export function LibraryFilters({
             </div>
           </fieldset>
 
-          <div className="flex justify-end border-t border-(--border) pt-3">
+            </div>
+
+          <div className="flex shrink-0 flex-wrap items-center justify-between gap-2 border-t border-(--border) bg-(--panel-bg) px-4 py-3 sm:px-5">
             <button
               type="button"
-              onClick={() =>
-                void onApply()
-              }
+              onClick={onResetDraft}
               disabled={isLoading}
-              className="flex min-h-11 w-full items-center justify-center gap-2 rounded-lg bg-(--primary-bg) px-4 py-2 text-sm font-medium text-(--primary-text) transition hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto sm:min-w-32"
+              className="min-h-10 rounded-lg px-3 py-2 text-sm text-(--text-muted) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {isLoading && (
-                <LoaderCircle
-                  size={15}
-                  className="animate-spin"
-                  aria-hidden="true"
-                />
-              )}
-
-              {isLoading
-                ? "Applying..."
-                : "Apply filters"}
+              Reset
             </button>
+
+            <div className="flex min-w-0 flex-1 justify-end gap-2">
+              <button
+                type="button"
+                onClick={onDismissAdvancedFilters}
+                disabled={isLoading}
+                className="min-h-10 rounded-lg border border-(--border) px-3 py-2 text-sm text-(--text-secondary) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                Cancel
+              </button>
+
+              <button
+                type="button"
+                onClick={() =>
+                  void onApply()
+                }
+                disabled={isLoading}
+                className="flex min-h-10 min-w-32 items-center justify-center gap-2 rounded-lg bg-(--primary-bg) px-4 py-2 text-sm font-medium text-(--primary-text) transition hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {isLoading && (
+                  <LoaderCircle
+                    size={15}
+                    className="animate-spin"
+                    aria-hidden="true"
+                  />
+                )}
+
+                {isLoading
+                  ? "Applying..."
+                  : "Apply filters"}
+              </button>
+            </div>
+          </div>
           </div>
         </div>
       )}

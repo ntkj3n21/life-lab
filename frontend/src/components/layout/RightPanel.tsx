@@ -4,6 +4,7 @@ import {
   X,
 } from "lucide-react";
 import {
+  type CSSProperties,
   type MouseEvent,
   useEffect,
   useId,
@@ -11,8 +12,13 @@ import {
   useSyncExternalStore,
 } from "react";
 
-import { useLayoutStore } from "../../stores/layoutStore";
+import {
+  RIGHT_PANEL_MAX_WIDTH,
+  RIGHT_PANEL_MIN_WIDTH,
+  useLayoutStore,
+} from "../../stores/layoutStore";
 import { RightDock } from "./RightDock";
+import { useHorizontalResize } from "./useHorizontalResize";
 
 const DRAWER_MEDIA_QUERY =
   "(max-width: 1279px)";
@@ -52,7 +58,13 @@ function isDrawerViewport() {
   ).matches;
 }
 
-export function RightPanel() {
+interface RightPanelProps {
+  isFocusMode: boolean;
+}
+
+export function RightPanel({
+  isFocusMode,
+}: RightPanelProps) {
   const drawerRef =
     useRef<HTMLElement | null>(null);
   const closeButtonRef =
@@ -81,6 +93,30 @@ export function RightPanel() {
       (state) =>
         state.closeRightPanel,
     );
+
+  const rightPanelWidth =
+    useLayoutStore(
+      (state) =>
+        state.rightPanelWidth,
+    );
+
+  const setRightPanelWidth =
+    useLayoutStore(
+      (state) =>
+        state.setRightPanelWidth,
+    );
+
+  const {
+    isResizing,
+    handlePointerDown,
+    handleKeyDown,
+  } = useHorizontalResize({
+    width: rightPanelWidth,
+    minWidth: RIGHT_PANEL_MIN_WIDTH,
+    maxWidth: RIGHT_PANEL_MAX_WIDTH,
+    resizeFrom: "right",
+    onWidthChange: setRightPanelWidth,
+  });
 
   const isOpen =
     activeRightPanel === "tools";
@@ -218,7 +254,11 @@ export function RightPanel() {
       <>
         <aside
           aria-label="Workspace tools"
-          className="hidden w-9 shrink-0 items-start justify-center border-l border-(--border) bg-(--panel-bg) pt-3 xl:flex"
+          className={`hidden w-9 shrink-0 items-start justify-center border-l border-(--border) bg-(--panel-bg) pt-3 ${
+            isFocusMode
+              ? "xl:hidden"
+              : "xl:flex"
+          }`}
         >
           <button
             type="button"
@@ -236,6 +276,24 @@ export function RightPanel() {
             />
           </button>
         </aside>
+
+        {isFocusMode && (
+          <button
+            type="button"
+            data-workspace-trigger="desktop"
+            onClick={(event) =>
+              handleOpen(event)
+            }
+            aria-label="Open workspace"
+            title="Open workspace"
+            className="absolute bottom-4 right-4 z-20 hidden h-9 w-9 items-center justify-center rounded-lg border border-(--border) bg-(--panel-bg) text-(--text-muted) shadow-sm transition-colors hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) xl:flex"
+          >
+            <PanelRight
+              size={16}
+              aria-hidden="true"
+            />
+          </button>
+        )}
 
         <button
           type="button"
@@ -282,8 +340,41 @@ export function RightPanel() {
             : undefined
         }
         tabIndex={isDrawer ? -1 : undefined}
-        className="absolute inset-y-0 right-0 z-50 flex w-[min(92vw,360px)] flex-col border-l border-(--border) bg-(--panel-bg) shadow-[var(--elevated-shadow)] xl:static xl:w-[clamp(280px,25vw,352px)] xl:shrink-0 xl:border-l xl:shadow-none"
+        style={
+          {
+            "--right-panel-width": `${rightPanelWidth}px`,
+          } as CSSProperties
+        }
+        className="absolute inset-y-0 right-0 z-50 flex w-[min(92vw,360px)] flex-col border-l border-(--border) bg-(--panel-bg) shadow-[var(--elevated-shadow)] xl:relative xl:w-(--right-panel-width) xl:shrink-0 xl:border-l xl:shadow-none"
       >
+        <div
+          role="separator"
+          aria-label="Resize workspace"
+          aria-orientation="vertical"
+          aria-valuemin={
+            RIGHT_PANEL_MIN_WIDTH
+          }
+          aria-valuemax={
+            RIGHT_PANEL_MAX_WIDTH
+          }
+          aria-valuenow={rightPanelWidth}
+          tabIndex={0}
+          onPointerDown={
+            handlePointerDown
+          }
+          onKeyDown={handleKeyDown}
+          className="group absolute inset-y-0 -left-1 z-20 hidden w-2 cursor-col-resize touch-none outline-none xl:block"
+        >
+          <span
+            aria-hidden="true"
+            className={`absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-transparent transition-colors group-hover:bg-(--border-strong) group-focus-visible:bg-(--focus) ${
+              isResizing
+                ? "bg-(--border-strong)"
+                : ""
+            }`}
+          />
+        </div>
+
         <div className="flex h-11 shrink-0 items-center gap-2 border-b border-(--border) px-3">
           <PanelRight
             size={16}

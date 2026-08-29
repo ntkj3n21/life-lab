@@ -157,15 +157,15 @@ function PlanSection({
             {title}
           </h2>
 
-            {tasks.length > 0 && (
-              <p className="mt-1 text-xs leading-5 text-(--text-muted)">
-                {description}
-              </p>
-            )}
+          {tasks.length > 0 && (
+            <p className="mt-1 text-xs leading-5 text-(--text-muted)">
+              {description}
+            </p>
+          )}
         </div>
 
         <div className="flex shrink-0 items-center gap-2">
-          <span className="rounded-full bg-(--surface) px-2 py-1 text-[10px] text-(--text-muted)">
+          <span className="rounded-full border border-(--border) bg-(--surface) px-2 py-1 text-[10px] font-medium tabular-nums text-(--text-secondary)">
             {tasks.length}
           </span>
         </div>
@@ -174,7 +174,7 @@ function PlanSection({
       {tasks.length === 0 ? (
         <p
           role="status"
-          className="mt-4 rounded-xl border border-dashed border-(--border) p-4 text-xs text-(--text-muted)"
+          className="mt-4 flex min-h-20 items-center justify-center rounded-lg border border-dashed border-(--border) bg-(--surface) px-4 text-center text-xs leading-5 text-(--text-muted)"
         >
           {emptyText}
         </p>
@@ -641,7 +641,7 @@ export function DailyPlanPage() {
   return (
     <main className="min-w-0 flex-1 overflow-y-auto p-4 sm:p-6">
       <div className="mx-auto max-w-6xl">
-        <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <header className="flex flex-col gap-4 border-b border-(--border) pb-5 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <h1 className="text-2xl font-semibold">
               Daily Plan
@@ -652,41 +652,48 @@ export function DailyPlanPage() {
             </p>
           </div>
 
-          <button
-            type="button"
-            onClick={() => {
-              setActionErrorMessage(null);
-              setNotice(null);
-              void reloadPlan();
-            }}
-            disabled={
-              isLoading ||
-              isMutating
-            }
-            className="flex shrink-0 items-center justify-center gap-2 rounded-xl border border-(--border) px-3 py-2 text-sm text-(--text-secondary) transition hover:bg-(--surface) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            <RefreshCw
-              size={14}
-              className={
-                isLoading
-                  ? "animate-spin"
-                  : ""
+          <div className="flex flex-wrap items-center gap-2 sm:justify-end">
+            {dailyPlan && (
+              <p className="rounded-full border border-(--border) bg-(--surface) px-3 py-1.5 text-xs font-medium text-(--text-secondary)">
+                {totalTasks} task{totalTasks === 1 ? "" : "s"}
+              </p>
+            )}
+
+            <button
+              type="button"
+              onClick={() => {
+                setActionErrorMessage(null);
+                setNotice(null);
+                void reloadPlan();
+              }}
+              disabled={
+                isLoading ||
+                isMutating
               }
-              aria-hidden="true"
-            />
-            Refresh
-          </button>
+              className="flex shrink-0 items-center justify-center gap-2 rounded-xl border border-(--border) px-3 py-2 text-sm text-(--text-secondary) transition hover:bg-(--surface) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <RefreshCw
+                size={14}
+                className={
+                  isLoading
+                    ? "animate-spin"
+                    : ""
+                }
+                aria-hidden="true"
+              />
+              Refresh
+            </button>
+          </div>
         </header>
 
         {dailyPlan && (
-          <section className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-1 rounded-xl border border-(--border) bg-(--surface) px-4 py-3 text-sm text-(--text-muted)">
+          <section className="mt-5 flex flex-wrap items-center justify-between gap-x-4 gap-y-1 rounded-xl border border-(--border) bg-(--surface) px-4 py-3 text-sm text-(--text-muted)">
             <span className="flex items-center gap-2 font-medium text-(--text-primary)">
               <CalendarDays size={15} aria-hidden="true" />
               {formatPlannerDate(
                 dailyPlan.currentDate,
               )}
             </span>
-            <span>{totalTasks} task{totalTasks === 1 ? "" : "s"}</span>
             <span className="text-(--text-muted)">{dailyPlan.timeZone}</span>
           </section>
         )}
@@ -872,7 +879,7 @@ export function DailyPlanPage() {
           </div>
         ) : (
           <div className="mt-6 space-y-4">
-            <div className="grid gap-4 lg:grid-cols-2">
+            <div className="grid items-start gap-4 lg:grid-cols-2">
               <PlanSection
                 id="plan-today"
                 title="Today"
@@ -943,7 +950,7 @@ export function DailyPlanPage() {
                 id="secondary-planner-title"
                 className="text-sm font-medium text-(--text-secondary)"
               >
-                Later and completed
+                Other tasks
               </h2>
 
               <div

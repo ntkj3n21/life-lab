@@ -1,0 +1,101 @@
+﻿fixture_key	role	category	video_id	title	has_vtt	note_count	timestamped_note_count	null_timestamp_note_count
+A2_LIB_001	CURRENT_LIBRARY	Java Core	AkhPDT0VIeM	#5. Variables | Java Programming Course for Beginners from A to Z	True	2	2	0
+A2_LIB_002	CURRENT_LIBRARY	Java Core	UVHlHN5Ky7I	#10. Java Data Types (Kiểu dữ liệu) | Khóa Học Java Cơ Bản Từ A tới Z cho Beginner	True	2	2	0
+A2_LIB_003	CURRENT_LIBRARY	Java Core	6AWG5AXWCzg	#16. Loops | Java Basic Course From A to Z for Beginners	True	2	2	0
+A2_LIB_004	CURRENT_LIBRARY	Java Core	xzbF3XpiHlo	#17. Array Java | Khóa Học Java Cơ Bản Từ A tới Z cho Beginner	True	2	2	0
+A2_LIB_005	CURRENT_LIBRARY	Java Core	wO4oDe-hEKo	#21. What is Object-Oriented Programming (OOP)? | Java Basics A-Z Course for Beginners	True	0	0	0
+A2_LIB_006	CURRENT_LIBRARY	Java Core	PaOJlKbwiX0	#22. Concepts of Class and Object | Java Basics Course From A to Z for Beginners	True	2	2	0
+A2_LIB_007	CURRENT_LIBRARY	Java Core	tmKzNlHXmR0	#26. Defining a Constructor | Basic Java Course from A to Z for Beginners	True	2	2	0
+A2_LIB_008	CURRENT_LIBRARY	Java Core	YyMOnvkhXLU	#27. Access Modifier (private/public/protected) | Khóa Học Java Cơ Bản Từ A tới Z cho Beginner	True	2	2	0
+A2_LIB_009	CURRENT_LIBRARY	Java Core	teQ5QZ2lUkE	#28. Encapsulation Java | Basic Java Course From A to Z for Beginners	True	2	2	0
+A2_LIB_010	CURRENT_LIBRARY	Java Core	LykA5UTyrMs	#33. What is an ArrayList? | Java Fundamentals Course From A to Z for Beginners	True	2	2	0
+A2_LIB_011	CURRENT_LIBRARY	Java Core	IhnwAcrBRTs	#34. Java Generics (Basic) | Java Programming Course from A to Z for Beginners	True	3	2	1
+A2_LIB_012	CURRENT_LIBRARY	Java Core	pXzRhD4Vu2s	#41. Java Inheritance - Kế Thừa | Khóa Học Java Cơ Bản Từ A tới Z cho Beginner	True	0	0	0
+A2_LIB_013	CURRENT_LIBRARY	Java Core	yMRSXK9dfp8	#43. Abstract Class (Basic) | Khóa Học Java Cơ Bản Từ A tới Z cho Beginner	True	3	2	1
+A2_LIB_014	CURRENT_LIBRARY	Java Core	vIob6cVNufw	#44. Java Polymorphism | Java Basic Course from A to Z for Beginners	True	3	2	1
+A2_LIB_015	CURRENT_LIBRARY	Java Core	eRj_XQawcBg	#47. Interface Trong Java | Khóa Học Java Cơ Bản Từ A tới Z cho Beginner	True	3	2	1
+A2_LIB_016	CURRENT_LIBRARY	Java Core	xN_DF0FRx7A	#52. Try...Catch Xử Lý Exception | Khóa Học Java Cơ Bản Từ A tới Z cho Beginner	True	3	2	1
+A2_LIB_017	CURRENT_LIBRARY	Java Core	GgAsaNcxdwY	#59. Example of Read/Write File with Java | Basic Java Course From A to Z for Beginners	True	3	2	1
+A2_LIB_018	CURRENT_LIBRARY	Java Core	9M0UjGVZaDY	#61. Processes and Threads | Khóa Học Java Cơ Bản Từ A tới Z cho Beginner	True	3	2	1
+A2_LIB_019	CURRENT_LIBRARY	Java Core	pV45eVVcuYc	[FULL] Chia Sẻ Lộ Trình Tự Học Java Spring - Spring Boot Từ Số 0 Dành Cho Người Mới Bắt Đầu	True	3	2	1
+A2_LIB_020	CURRENT_LIBRARY	DSA	ZEJ6MKuUZds	[CTDL & GT]. Buổi 1. Vector, Iterator, Pair, Set Trong C++	True	0	0	0
+A2_LIB_021	CURRENT_LIBRARY	DSA	Pju2Y69Q6ew	[CTDL & GT]. Buổi 2. Hàm sort, binary_search, lower_bound, upper_bound	True	3	2	1
+A2_LIB_022	CURRENT_LIBRARY	DSA	0_4s88NLOmw	[CTDL & GT]. Buổi 3. String Và Các Dạng Bài Tập Xử Lý Xâu Thường Gặp	True	3	2	1
+A2_LIB_023	CURRENT_LIBRARY	DSA	sdosjI25u5c	[CTDL & GT]. Buổi 4. Mảng Cộng Dồn, Mảng Hiệu, Kỹ Thuật Loang Trên Mảng 2 Chiều	True	3	2	1
+A2_LIB_024	CURRENT_LIBRARY	DSA	DRcAJNhtwbY	#34 [C++]. Cấu Trúc Dữ Liệu Hàng Đợi Ưu Tiên | Priority_queue trong C++	True	3	2	1
+A2_LIB_025	CURRENT_LIBRARY	DSA	MQZ1TH0l7sk	#31 [C++]. Cấu Trúc Dữ Liệu Ngăn Xếp Ngôn Ngữ Lập Trình C++ | Cách Hoạt Động của CTDL Ngăn Xếp	True	3	2	1
+A2_LIB_026	CURRENT_LIBRARY	DSA	XUx3iJVPdxA	#35 [C++]. Kỹ Thuật Cửa Sổ Trượt | Sliding Window	True	3	2	1
+A2_LIB_027	CURRENT_LIBRARY	DSA	PPyw2vp6SIU	#36 [C++]. Kỹ thuật Hai Con Trỏ | Two Pointers Trong C++	True	0	0	0
+A2_LIB_028	CURRENT_LIBRARY	DSA	mdG5TEiJTx8	#46. [C++]. Danh Sách Liên Kết Đơn Ngôn Ngữ Lập Trình C++| Quản Lý Sinh Viên Bằng Danh Sách Liên Kết	False	2	0	2
+A2_LIB_029	CURRENT_LIBRARY	DSA	efpaZznImN4	#47 [C++]. Thuật Toán Quay Lui | Bài Toán N Quân Hậu Ngôn Ngữ Lập Trình C++	True	3	2	1
+A2_LIB_030	CURRENT_LIBRARY	DSA	pGa4PfLLHx8	[CTDL & GT]. Một Số Dạng Bài Về Sắp Xếp Và Tìm Kiếm - Tìm Kiếm Nhị Phân Kết Quả	True	3	2	1
+A2_LIB_031	CURRENT_LIBRARY	DSA	DMrd-RnLeJI	#23 [Lý thuyết đồ thị | Toán rời rạc]. Thuật toán Bellman-Ford - Tìm đường đi ngắn nhất trên đồ thị	True	3	2	1
+A2_LIB_032	CURRENT_LIBRARY	DSA	KXsfp8YiucE	[DSA]. The Count Islands problem and the Flood Fill algorithm.	True	3	2	1
+A2_LIB_033	CURRENT_LIBRARY	JavaScript	W8vJ-yOtSbE	Hiểu về Javascript Callback Functions | Callback Trong Javascript | Javascript Callback	True	3	2	1
+A2_LIB_034	CURRENT_LIBRARY	JavaScript	TsTr-tKCREc	What is HTML DOM? | JavaScript HTML DOM	True	3	2	1
+A2_LIB_035	CURRENT_LIBRARY	JavaScript	AA3WWZAMv_0	DOM events	True	0	0	0
+A2_LIB_036	CURRENT_LIBRARY	JavaScript	U624VLOxiTo	Event listener | add & removeEventListener	True	3	2	1
+A2_LIB_037	CURRENT_LIBRARY	JavaScript	Uph14HYkgEQ	JSON là gì? JSON được sử dụng như thế nào trong JavaScript?	True	3	2	1
+A2_LIB_038	CURRENT_LIBRARY	JavaScript	QJmNEqy0zV0	Promise (sync async) trong JavaScript | Khái niệm promise	True	3	2	1
+A2_LIB_039	CURRENT_LIBRARY	JavaScript	_4F8ihblZFU	Promise trong Javascript | Cách sử dụng Promise | JavaScript Promise	True	3	2	1
+A2_LIB_040	CURRENT_LIBRARY	JavaScript	9QeNLypIiZs	Arrow function in JavaScript ES6 | Arrow function concept	True	3	2	1
+A2_LIB_041	CURRENT_LIBRARY	JavaScript	J1m4vLDUhEI	Destructuring trong JavaScript ES6	True	3	2	1
+A2_LIB_042	CURRENT_LIBRARY	JavaScript	08lWi4T2Bfg	Module trong JavaScript ES6	True	0	0	0
+A2_LIB_043	CURRENT_LIBRARY	JavaScript	8KkM6JFjJZA	Fetch | Fetch Concept in JavaScript	True	3	2	1
+A2_LIB_044	CURRENT_LIBRARY	JavaScript	TRjVXmk8q8I	Add/edit/delete courses with Fetch and REST API	True	3	1	2
+A2_LIB_045	CURRENT_LIBRARY	JavaScript	vAecGPWxzFE	Code Music Player Xịn Xò Từ A-Z | Thực hành JavaScript | Code trình phát nhạc	True	3	1	2
+A2_LIB_046	CURRENT_LIBRARY	React Hooks	unFHsn0qSMA	React hooks - Giới thiệu tổng quát về hooks (2020)	True	3	1	2
+A2_LIB_047	CURRENT_LIBRARY	React Hooks	_D16z1kL0wo	React hooks: 02 - useState() and what you need to know 😊 (2020)	True	3	1	2
+A2_LIB_048	CURRENT_LIBRARY	React Hooks	zjUC_W7IOIc	React hooks: 06 - Những điều cần biết về useEffect hooks 🎉	True	3	1	2
+A2_LIB_049	CURRENT_LIBRARY	React Hooks	4a1_is2OdLY	React hooks: 07 - Calling APIs with useEffect hooks (2020) 🎉	True	3	1	2
+A2_LIB_050	CURRENT_LIBRARY	React Hooks	WF3pUtvC01M	React hooks: 09 - useEffect search có debounce 😍 (2020)	True	0	0	0
+A2_LIB_051	CURRENT_LIBRARY	React Hooks	QbC4LwsD1rw	React hooks: 10 - useEffect cleanup with clock code (2020)	True	3	1	2
+A2_LIB_052	CURRENT_LIBRARY	React Hooks	8Ee__cUapdg	React Hooks: 11 - Introduction to Custom Hooks (2020) 🚀	True	3	1	2
+A2_LIB_053	CURRENT_LIBRARY	React Hooks	EGVhrE6VuNM	React hooks: 14 - Introduction to Memoization and React.memo (2020) 🎉	True	3	1	2
+A2_LIB_054	CURRENT_LIBRARY	React Hooks	quS95gJdxsc	React hooks: 15 - So sánh useCallback và useMemo 😎 (2020)	True	3	1	2
+A2_LIB_055	CURRENT_LIBRARY	React Hooks	kp4fuB-0TBw	useRef hook: Get the previous value of the state 🎉	True	3	1	2
+A2_LIB_056	CURRENT_LIBRARY	Fullstack/SERN	Hfb76A34mBc	#15 Tại Sao Lại Là Node.JS - Những Điều Bạn Phải Biết Trước Khi Sử Dụng Platform Này.	True	3	1	2
+A2_LIB_057	CURRENT_LIBRARY	Fullstack/SERN	5Pb-z9DQjDw	#17.2 Bắt đầu với Express Framework - Viết Chương Trình Hello world với Node.js	True	0	0	0
+A2_LIB_058	CURRENT_LIBRARY	Fullstack/SERN	Tw8Vyz7dVgc	#18 Áp Dụng Mô Hình MVC vào Dự Án Node.JS	True	3	1	2
+A2_LIB_059	CURRENT_LIBRARY	Fullstack/SERN	B4sy3DL4IX0	#21 Kết Nối Tới MySQL Database với Sequelize - Render Dữ Liệu Ra View | Cấu hình cho Node.JS phần 3	True	3	1	2
+A2_LIB_060	CURRENT_LIBRARY	Fullstack/SERN	L3Z4KfyCZOI	#29 Concepts Cover - APIs, JSON, Object Javascript Là Gì ? Hướng Dẫn Cài Đặt Postman Để Test APIs	True	3	1	2
+A2_LIB_061	CURRENT_LIBRARY	Fullstack/SERN	AAAKXp2wa-0	#32 Explaining React.JS Project Structure | Things You Need to Know Before Following This Course	True	3	1	2
+A2_LIB_062	CURRENT_LIBRARY	Fullstack/SERN	rgSgSe1QUqU	#34 Using State and How to Handle Events OnClick, OnChange with React | React.JS for Beginners	True	3	1	2
+A2_LIB_063	CURRENT_LIBRARY	Fullstack/SERN	YqAU7T-BoDE	"#35  Viết APIs ""Chuẩn MEN"" với Node.js | Cách viết REST APIs cho Người Mới Bắt Đầu"	True	3	1	2
+A2_LIB_064	CURRENT_LIBRARY	Fullstack/SERN	PLY0jr90DmI	#36 Hoàn Thiện Chức Năng Đăng Nhập Kết Hợp React.Js Và Node.js | React Cho Người Mới Bắt Đầu	True	0	0	0
+A2_LIB_065	CURRENT_LIBRARY	Fullstack/SERN	pgZev-Y15EM	#37 CRUD với ReactJS Phần 1 - Viết API Lấy Tất Cả Thông Tin Người Dùng | React Cho Người Mới Bắt Đầu	True	3	1	2
+A2_LIB_066	CURRENT_LIBRARY	Fullstack/SERN	t_cedTldfjs	#68 Sequelize Relationship - Tìm Hiểu Quan Hệ Giữa Các Model & Database |React Cho Người Mới Bắt Đầu	True	3	1	2
+A2_LIB_067	CURRENT_LIBRARY	Fullstack/SERN	-cg9dq-Jq2M	INTRODUCING FULLSTACK JWT SERIES - React & Node.JS | Learn Fullstack Javascript with Ask IT People	True	3	1	2
+A2_LIB_068	CURRENT_LIBRARY	Fullstack/SERN	w946spjx_z0	Docker Practice 01 - Preparing Production Environment | Fullstack Course SERN clone Bookingcare	True	3	1	2
+A2_LIB_069	CURRENT_LIBRARY	Fullstack/SERN	L-Tzu2jT3Dw	Thực Hành Docker 04 - Build Backend Node.JS/MySQL với Docker Compose | Khóa Học Fullstack SERN	True	3	1	2
+A2_LIB_070	CURRENT_LIBRARY	Fullstack/SERN	wcQz4gSbSms	Docker Practice 08 - Nginx/React/Node.JS/MySQL with Docker Compose | SERN Fullstack Course	True	3	1	2
+A2_LIB_071	CURRENT_LIBRARY	Fullstack/SERN	WvAznEDhCdE	Cài Đặt Database Postgres với pgAdmin Tại môi trường Local	True	0	0	0
+A2_LIB_072	CURRENT_LIBRARY	Fullstack/SERN	NkulG9hH2LI	#105 [NEW] - Deploy app Node.JS với Render | Khóa Học SERN - SQL, Express, React & Node.js	True	3	1	2
+A2_LIB_073	CURRENT_LIBRARY	Fullstack/SERN	ncV0OEa9GoQ	#106 [NEW] - Deploy App React.JS với Vercel | Khóa Học SERN - SQL, Express, React & Node.js	True	3	1	2
+A2_LIB_074	CURRENT_LIBRARY	Node/Express	SdcdneSdoV4	HTTP protocol | Giao thức HTTP | Giao thức truyền tải siêu văn bản	True	3	1	2
+A2_LIB_075	CURRENT_LIBRARY	Node/Express	Wz6WghmEmFk	Basic Routing | Routing Techniques in Node.js	True	3	1	2
+A2_LIB_076	CURRENT_LIBRARY	Node/Express	LlfdqnK28Cg	POST method | POST method | HTTP protocol	True	3	1	2
+A2_LIB_077	CURRENT_LIBRARY	Node/Express	N8GhaR7K3tI	MVC model | MVC model	True	3	1	2
+A2_LIB_078	CURRENT_LIBRARY	Node/Express	Pd_ZIpCVZPc	MVC Routes & Controllers | Mô hình MVC	True	3	1	2
+A2_LIB_079	CURRENT_LIBRARY	Node/Express	nqLXmpEgU2w	[CRUD] Read from DB | Đọc Database | Xây dựng phần trang chủ	True	3	1	2
+A2_LIB_080	CURRENT_LIBRARY	Node/Express	dstdrBsf7ag	Soft delete | Kĩ thuật xóa mềm | Thực hành NodeJS	True	3	1	2
+A2_HIST_01	HISTORICAL	Java Core	7L0RLrfrBHE	[FULL] Khóa Học Java Cơ Bản Từ A tới Z cho Beginner | Học Java Từ Số 0 với Hỏi Dân IT	True	2	1	1
+A2_HIST_02	HISTORICAL	DSA	MoD_cqJ9s6g	#33 [C++]. Double-Ended Queue Data Structure | Deque In C++	True	2	1	1
+A2_HIST_03	HISTORICAL	DSA	gYG70ULXbW4	#32 [C++]. Queue Data Structures in C++ | How Queues Work	True	2	1	1
+A2_HIST_04	HISTORICAL	JavaScript	CLbx37dqYEI	Khai báo biến | Làm quen với cú pháp trong JavaScript	False	2	0	2
+A2_HIST_05	HISTORICAL	JavaScript	P-fMQ3elxSE	Kiểu dữ liệu trong JavaScript | Các kiểu dữ liệu JS	False	2	0	2
+A2_HIST_06	HISTORICAL	JavaScript	YzO65uOJNMg	Mảng trong JavaScript | JavaScript array	False	2	0	2
+A2_HIST_07	HISTORICAL	JavaScript	4g9ENVc2KLA	Hàm trong JavaScript | JavaScript function	False	2	0	2
+A2_HIST_08	HISTORICAL	JavaScript	orIXdOPFWeM	Object trong JavaScript | Khái niệm object	False	2	0	2
+A2_HIST_09	HISTORICAL	React Hooks	SIAGpAaLSaI	React hooks: 03 - Dùng useState() qua ví dụ đơn giản (2020)	True	2	1	1
+A2_HIST_10	HISTORICAL	React Hooks	G27sfcWlMzc	React hooks: 04 - useState() via TodoList example (2020)	True	2	1	1
+A2_HIST_11	HISTORICAL	React Hooks	jwfjgRBcUgE	React hooks: 08 - Pagination with useEffect hooks (2020) 😍	True	2	1	1
+A2_HIST_12	HISTORICAL	Fullstack/SERN	mAMrnCFRH-Y	#14 Bắt Đầu Với Git Siêu Căn Bản Cho Beginners - Đẩy Project Lên Github - Bài 03	True	2	1	1
+A2_HIST_13	HISTORICAL	Fullstack/SERN	Wtt5uC4HWAA	#20 Tạo tables, thêm dữ liệu database với Sequelize CLI - Cấu hình database cho Node.JS phần 2	True	2	1	1
+A2_HIST_14	HISTORICAL	Fullstack/SERN	Lzu2Weq8edE	#22 Database Analysis of Medical Appointment Backend Project | Node.JS Configuration Part 4	True	2	1	1
+A2_HIST_15	HISTORICAL	Fullstack/SERN	_YEKpvabzCQ	#23 Creating All Models, Migrations, and Seeders for the Medical Appointment Booking Project - Pa...	True	2	1	1
+A2_HIST_16	HISTORICAL	Fullstack/SERN	ExIXyILeOyc	#25 CRUD với Node.js và Sequelize - Sử Dụng ORM Để Tạo Dữ Liệu Mới Vào Database (Create) - Phần 1	True	2	1	1
+A2_HIST_17	HISTORICAL	Fullstack/SERN	aBKOMmItvpQ	#26 CRUD with Node.js and Sequelize - Using ORM to Display Data (Read) - Part 2	True	2	1	1
+A2_HIST_18	HISTORICAL	Node/Express	HLEu57iLrRo	SSR & CSR | Sever side rendering | Client side rendering	True	2	1	1
+A2_HIST_19	HISTORICAL	Node/Express	6LdwSrTCmo4	Query parameters | Chuỗi truy vấn	True	2	1	1
+A2_HIST_20	HISTORICAL	Node/Express	bvZ1_P9eCpw	[CRUD] Create new course | Create new course page | NodeJS practice	True	2	1	1

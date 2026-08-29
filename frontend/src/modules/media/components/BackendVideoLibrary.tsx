@@ -611,6 +611,10 @@ export function BackendVideoLibrary({
 
   const [isAddFormOpen, setIsAddFormOpen] = useState(false);
   const [youtubeSearchText, setYoutubeSearchText] = useState("");
+  const [
+    activeMenuVideoId,
+    setActiveMenuVideoId,
+  ] = useState<number | null>(null);
   useEffect(() => {
     void loadLibrary().catch(() => {
       // libraryStore keeps error.
@@ -732,8 +736,7 @@ export function BackendVideoLibrary({
       error: null,
       query: {
         q:
-          searchText.trim() ||
-          undefined,
+          appliedQuery.q,
 
         minDurationSeconds:
           parsedMin.value,
@@ -782,6 +785,7 @@ export function BackendVideoLibrary({
   }
 
   async function applyFilters() {
+    setActiveMenuVideoId(null);
     clearError();
     setValidationMessage(
       null,
@@ -810,12 +814,116 @@ export function BackendVideoLibrary({
       setAppliedQuery(
         draft.query,
       );
+      setShowAdvancedFilters(false);
     } catch {
       // libraryStore keeps error.
     }
   }
 
+  async function applySearch() {
+    setActiveMenuVideoId(null);
+    clearError();
+    setValidationMessage(null);
+
+    const nextQuery = {
+      ...appliedQuery,
+      q:
+        searchText.trim() ||
+        undefined,
+    };
+
+    try {
+      await loadLibrary({
+        page: 0,
+        size,
+        ...applyViewMode(
+          nextQuery,
+          viewMode,
+        ),
+      });
+
+      setAppliedQuery(nextQuery);
+    } catch {
+      // libraryStore keeps error.
+    }
+  }
+
+  function initializeFilterDraft(
+    query: AppliedLibraryQuery,
+  ) {
+    setSelectedTagIds(
+      query.tagIds ?? [],
+    );
+    setMinDurationSeconds(
+      query.minDurationSeconds?.toString() ??
+        "",
+    );
+    setMaxDurationSeconds(
+      query.maxDurationSeconds?.toString() ??
+        "",
+    );
+    setPublishedFrom(
+      query.publishedFrom ?? "",
+    );
+    setPublishedTo(
+      query.publishedTo ?? "",
+    );
+    setAddedFrom(
+      query.addedFrom ?? "",
+    );
+    setAddedTo(
+      query.addedTo ?? "",
+    );
+    setWatchedFilter(
+      query.watched === undefined
+        ? ""
+        : query.watched
+          ? "true"
+          : "false",
+    );
+    setNotesFilter(
+      query.hasNotes === undefined
+        ? ""
+        : query.hasNotes
+          ? "true"
+          : "false",
+    );
+    setSortBy(
+      query.sortBy ?? "addedAt",
+    );
+    setSortDirection(
+      query.sortDirection ?? "desc",
+    );
+  }
+
+  function openAdvancedFilters() {
+    initializeFilterDraft(
+      appliedQuery,
+    );
+    setValidationMessage(null);
+    clearError();
+    setActiveMenuVideoId(null);
+    setShowAdvancedFilters(true);
+  }
+
+  function dismissAdvancedFilters() {
+    if (isLoading) {
+      return;
+    }
+
+    setValidationMessage(null);
+    setShowAdvancedFilters(false);
+  }
+
+  function resetFilterDraft() {
+    initializeFilterDraft(
+      DEFAULT_APPLIED_QUERY,
+    );
+    setValidationMessage(null);
+  }
+
   async function resetFilters() {
+    setActiveMenuVideoId(null);
     setSearchText("");
     setSelectedTagIds([]);
     setMinDurationSeconds("");
@@ -855,6 +963,7 @@ export function BackendVideoLibrary({
   async function removeAppliedFilter(
     filterId: string,
   ) {
+    setActiveMenuVideoId(null);
     let nextQuery = {
       ...appliedQuery,
     };
@@ -1000,6 +1109,7 @@ export function BackendVideoLibrary({
       return;
     }
 
+    setActiveMenuVideoId(null);
     clearError();
     setValidationMessage(
       null,
@@ -1128,6 +1238,7 @@ export function BackendVideoLibrary({
       return;
     }
 
+    setActiveMenuVideoId(null);
     try {
       await loadLibrary(
         buildAppliedQuery(
@@ -1140,6 +1251,7 @@ export function BackendVideoLibrary({
   }
 
   async function handleRefresh() {
+    setActiveMenuVideoId(null);
     try {
       await Promise.all([
         loadLibrary(
@@ -1381,6 +1493,7 @@ export function BackendVideoLibrary({
           <div className="mt-3 border-t border-(--border) pt-3">
             <LibraryAddVideoForm
               onVideoAdded={(video) => {
+                setActiveMenuVideoId(null);
                 setIsAddFormOpen(false);
                 onOpenVideo(video);
                 void loadLibrary(buildAppliedQuery(0)).catch(() => {});
@@ -1444,12 +1557,18 @@ export function BackendVideoLibrary({
         validationMessage={
           validationMessage
         }
+        errorMessage={
+          showAdvancedFilters
+            ? error?.message
+            : null
+        }
         appliedFilters={
           appliedFilterItems
         }
         onSearchTextChange={
           setSearchText
         }
+        onApplySearch={applySearch}
         onToggleTag={toggleTag}
         onMinDurationSecondsChange={
           setMinDurationSeconds
@@ -1481,13 +1600,17 @@ export function BackendVideoLibrary({
         onSortDirectionChange={
           setSortDirection
         }
-        onToggleAdvancedFilters={() =>
-          setShowAdvancedFilters(
-            (value) => !value,
-          )
+        onOpenAdvancedFilters={
+          openAdvancedFilters
+        }
+        onDismissAdvancedFilters={
+          dismissAdvancedFilters
         }
         onApply={applyFilters}
-        onReset={resetFilters}
+        onResetDraft={
+          resetFilterDraft
+        }
+        onClearAll={resetFilters}
         onRemoveAppliedFilter={
           removeAppliedFilter
         }
@@ -1609,9 +1732,14 @@ export function BackendVideoLibrary({
                   isPreparingDelete
                 }
                 viewMode={viewMode}
-                onOpen={
-                  onOpenVideo
+                isActionsOpen={
+                  activeMenuVideoId ===
+                  video.id
                 }
+                onOpen={(targetVideo) => {
+                  setActiveMenuVideoId(null);
+                  onOpenVideo(targetVideo);
+                }}
                 onUpdate={
                   handleUpdateVideo
                 }
@@ -1620,6 +1748,22 @@ export function BackendVideoLibrary({
                 ) =>
                   void handleDeleteVideo(
                     targetVideo,
+                    )
+                }
+                onToggleActions={() =>
+                  setActiveMenuVideoId(
+                    (current) =>
+                      current === video.id
+                        ? null
+                        : video.id,
+                  )
+                }
+                onCloseActions={() =>
+                  setActiveMenuVideoId(
+                    (current) =>
+                      current === video.id
+                        ? null
+                        : current,
                   )
                 }
               />

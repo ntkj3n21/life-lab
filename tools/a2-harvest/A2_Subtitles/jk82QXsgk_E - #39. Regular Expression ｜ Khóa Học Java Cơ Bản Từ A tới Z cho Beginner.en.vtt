@@ -1,0 +1,2080 @@
+WEBVTT
+Kind: captions
+Language: en
+
+00:00:06.919 --> 00:00:08.790 align:start position:0%
+ 
+Hello <00:00:07.255><c>everyone, </c><00:00:07.591><c>today </c><00:00:07.927><c>in </c><00:00:08.263><c>this </c><00:00:08.599><c>video</c>
+
+00:00:08.790 --> 00:00:08.800 align:start position:0%
+Hello everyone, today in this video
+ 
+
+00:00:08.800 --> 00:00:10.430 align:start position:0%
+Hello everyone, today in this video
+we <00:00:09.180><c>will </c><00:00:09.560><c>learn </c><00:00:09.940><c>about </c><00:00:10.320><c>a</c>
+
+00:00:10.430 --> 00:00:10.440 align:start position:0%
+we will learn about a
+ 
+
+00:00:10.440 --> 00:00:12.310 align:start position:0%
+we will learn about a
+topic <00:00:11.119><c>called </c><00:00:11.798><c>"regular</c>
+
+00:00:12.310 --> 00:00:12.320 align:start position:0%
+topic called "regular
+ 
+
+00:00:12.320 --> 00:00:14.509 align:start position:0%
+topic called "regular
+expression." <00:00:13.000><c>If </c><00:00:13.680><c>you </c><00:00:14.360><c>translate</c>
+
+00:00:14.509 --> 00:00:14.519 align:start position:0%
+expression." If you translate
+ 
+
+00:00:14.519 --> 00:00:16.230 align:start position:0%
+expression." If you translate
+this <00:00:15.319><c>term </c><00:00:16.119><c>into</c>
+
+00:00:16.230 --> 00:00:16.240 align:start position:0%
+this term into
+ 
+
+00:00:16.240 --> 00:00:17.950 align:start position:0%
+this term into
+Vietnamese,
+
+00:00:17.950 --> 00:00:17.960 align:start position:0%
+Vietnamese,
+ 
+
+00:00:17.960 --> 00:00:19.710 align:start position:0%
+Vietnamese,
+we <00:00:18.179><c>usually </c><00:00:18.398><c>call </c><00:00:18.617><c>it </c><00:00:18.836><c>a </c><00:00:19.055><c>regular </c><00:00:19.274><c>expression,</c>
+
+00:00:19.710 --> 00:00:19.720 align:start position:0%
+we usually call it a regular expression,
+ 
+
+00:00:19.720 --> 00:00:21.230 align:start position:0%
+we usually call it a regular expression,
+but <00:00:19.920><c>I </c><00:00:20.120><c>don't </c><00:00:20.320><c>recommend </c><00:00:20.520><c>translating </c><00:00:20.720><c>it. </c><00:00:20.920><c>It's</c>
+
+00:00:21.230 --> 00:00:23.070 align:start position:0%
+but I don't recommend translating it. It's
+ 
+
+00:00:23.070 --> 00:00:23.080 align:start position:0%
+ 
+ 
+
+00:00:23.080 --> 00:00:25.310 align:start position:0%
+ 
+like <00:00:23.680><c>saying </c><00:00:24.280><c>you </c><00:00:24.880><c>drink</c>
+
+00:00:25.310 --> 00:00:25.320 align:start position:0%
+like saying you drink
+ 
+
+00:00:25.320 --> 00:00:26.950 align:start position:0%
+like saying you drink
+Coca-Cola <00:00:26.040><c>or </c><00:00:26.760><c>drink</c>
+
+00:00:26.950 --> 00:00:26.960 align:start position:0%
+Coca-Cola or drink
+ 
+
+00:00:26.960 --> 00:00:28.830 align:start position:0%
+Coca-Cola or drink
+coffee <00:00:27.410><c>twice </c><00:00:27.860><c>– </c><00:00:28.310><c>we </c><00:00:28.760><c>never</c>
+
+00:00:28.830 --> 00:00:28.840 align:start position:0%
+coffee twice – we never
+ 
+
+00:00:28.840 --> 00:00:30.910 align:start position:0%
+coffee twice – we never
+translate <00:00:29.780><c>those </c><00:00:30.720><c>words.</c>
+
+00:00:30.910 --> 00:00:30.920 align:start position:0%
+translate those words.
+ 
+
+00:00:30.920 --> 00:00:32.670 align:start position:0%
+translate those words.
+Similarly,
+
+00:00:32.670 --> 00:00:32.680 align:start position:0%
+Similarly,
+ 
+
+00:00:32.680 --> 00:00:34.069 align:start position:0%
+Similarly,
+we <00:00:33.053><c>don't </c><00:00:33.426><c>translate </c><00:00:33.799><c>the</c>
+
+00:00:34.069 --> 00:00:34.079 align:start position:0%
+we don't translate the
+ 
+
+00:00:34.079 --> 00:00:36.270 align:start position:0%
+we don't translate the
+meaning <00:00:34.487><c>of </c><00:00:34.895><c>"regular </c><00:00:35.303><c>expression" </c><00:00:35.711><c>first. </c><00:00:36.119><c>Have</c>
+
+00:00:36.270 --> 00:00:36.280 align:start position:0%
+meaning of "regular expression" first. Have
+ 
+
+00:00:36.280 --> 00:00:38.069 align:start position:0%
+meaning of "regular expression" first. Have
+you <00:00:36.616><c>ever </c><00:00:36.952><c>wondered </c><00:00:37.288><c>why, </c><00:00:37.624><c>when </c><00:00:37.960><c>you</c>
+
+00:00:38.069 --> 00:00:38.079 align:start position:0%
+you ever wondered why, when you
+ 
+
+00:00:38.079 --> 00:00:40.430 align:start position:0%
+you ever wondered why, when you
+register <00:00:38.519><c>for </c><00:00:38.959><c>a </c><00:00:39.399><c>Gmail </c><00:00:39.839><c>account, </c><00:00:40.279><c>if</c>
+
+00:00:40.430 --> 00:00:40.440 align:start position:0%
+register for a Gmail account, if
+ 
+
+00:00:40.440 --> 00:00:41.750 align:start position:0%
+register for a Gmail account, if
+you <00:00:40.680><c>enter </c><00:00:40.920><c>an </c><00:00:41.160><c>address </c><00:00:41.400><c>like </c><00:00:41.640><c>this,</c>
+
+00:00:41.750 --> 00:00:41.760 align:start position:0%
+you enter an address like this,
+ 
+
+00:00:41.760 --> 00:00:43.389 align:start position:0%
+you enter an address like this,
+it <00:00:42.499><c>shows </c><00:00:43.238><c>a</c>
+
+00:00:43.389 --> 00:00:43.399 align:start position:0%
+it shows a
+ 
+
+00:00:43.399 --> 00:00:45.470 align:start position:0%
+it shows a
+valid <00:00:43.899><c>email </c><00:00:44.399><c>address, </c><00:00:44.899><c>but </c><00:00:45.399><c>if</c>
+
+00:00:45.470 --> 00:00:45.480 align:start position:0%
+valid email address, but if
+ 
+
+00:00:45.480 --> 00:00:47.150 align:start position:0%
+valid email address, but if
+you <00:00:45.679><c>enter </c><00:00:45.878><c>something </c><00:00:46.077><c>like </c><00:00:46.276><c>this </c><00:00:46.475><c>(a </c><00:00:46.674><c>random </c><00:00:46.873><c>entry),</c>
+
+00:00:47.150 --> 00:00:47.160 align:start position:0%
+you enter something like this (a random entry),
+ 
+
+00:00:47.160 --> 00:00:48.910 align:start position:0%
+you enter something like this (a random entry),
+it <00:00:47.440><c>checks </c><00:00:47.720><c>and </c><00:00:48.000><c>says </c><00:00:48.280><c>it's </c><00:00:48.560><c>not </c><00:00:48.840><c>a</c>
+
+00:00:48.910 --> 00:00:48.920 align:start position:0%
+it checks and says it's not a
+ 
+
+00:00:48.920 --> 00:00:51.110 align:start position:0%
+it checks and says it's not a
+valid <00:00:49.600><c>email </c><00:00:50.280><c>address? </c><00:00:50.960><c>The</c>
+
+00:00:51.110 --> 00:00:53.029 align:start position:0%
+valid email address? The
+ 
+
+00:00:53.029 --> 00:00:53.039 align:start position:0%
+ 
+ 
+
+00:00:53.039 --> 00:00:54.630 align:start position:0%
+ 
+reality <00:00:53.519><c>is </c><00:00:53.999><c>that </c><00:00:54.479><c>the</c>
+
+00:00:54.630 --> 00:00:54.640 align:start position:0%
+reality is that the
+ 
+
+00:00:54.640 --> 00:00:57.150 align:start position:0%
+reality is that the
+computer <00:00:57.000><c>needs</c>
+
+00:00:57.150 --> 00:00:57.160 align:start position:0%
+computer needs
+ 
+
+00:00:57.160 --> 00:00:58.990 align:start position:0%
+computer needs
+to <00:00:57.720><c>process </c><00:00:58.280><c>strings.  </c><00:00:58.840><c>Right,</c>
+
+00:00:58.990 --> 00:00:59.000 align:start position:0%
+to process strings.  Right,
+ 
+
+00:00:59.000 --> 00:01:00.750 align:start position:0%
+to process strings.  Right,
+Thanh? <00:00:59.400><c>I </c><00:00:59.800><c>think </c><00:01:00.200><c>the </c><00:01:00.600><c>tool</c>
+
+00:01:00.750 --> 00:01:00.760 align:start position:0%
+Thanh? I think the tool
+ 
+
+00:01:00.760 --> 00:01:02.430 align:start position:0%
+Thanh? I think the tool
+we're <00:01:01.064><c>learning </c><00:01:01.368><c>today </c><00:01:01.672><c>will </c><00:01:01.976><c>help </c><00:01:02.280><c>you</c>
+
+00:01:02.430 --> 00:01:02.440 align:start position:0%
+we're learning today will help you
+ 
+
+00:01:02.440 --> 00:01:04.270 align:start position:0%
+we're learning today will help you
+solve <00:01:02.768><c>the </c><00:01:03.096><c>problems </c><00:01:03.424><c>above </c><00:01:03.752><c>and </c><00:01:04.080><c>also</c>
+
+00:01:04.270 --> 00:01:04.280 align:start position:0%
+solve the problems above and also
+ 
+
+00:01:04.280 --> 00:01:06.030 align:start position:0%
+solve the problems above and also
+solve <00:01:04.600><c>many </c><00:01:04.920><c>other </c><00:01:05.240><c>problems </c><00:01:05.560><c>we </c><00:01:05.880><c>encounter</c>
+
+00:01:06.030 --> 00:01:06.040 align:start position:0%
+solve many other problems we encounter
+ 
+
+00:01:06.040 --> 00:01:08.070 align:start position:0%
+solve many other problems we encounter
+in <00:01:06.960><c>our </c><00:01:07.880><c>lives.</c>
+
+00:01:08.070 --> 00:01:08.080 align:start position:0%
+in our lives.
+ 
+
+00:01:08.080 --> 00:01:09.830 align:start position:0%
+in our lives.
+First, <00:01:08.359><c>regarding </c><00:01:08.638><c>the </c><00:01:08.917><c>material </c><00:01:09.196><c>for </c><00:01:09.475><c>this </c><00:01:09.754><c>video,</c>
+
+00:01:09.830 --> 00:01:09.840 align:start position:0%
+First, regarding the material for this video,
+ 
+
+00:01:09.840 --> 00:01:11.390 align:start position:0%
+First, regarding the material for this video,
+you <00:01:10.293><c>can </c><00:01:10.746><c>refer </c><00:01:11.199><c>to</c>
+
+00:01:11.390 --> 00:01:11.400 align:start position:0%
+you can refer to
+ 
+
+00:01:11.400 --> 00:01:13.190 align:start position:0%
+you can refer to
+this <00:01:11.743><c>link; </c><00:01:12.086><c>it's </c><00:01:12.429><c>quite </c><00:01:12.772><c>detailed. </c><00:01:13.115><c>You</c>
+
+00:01:13.190 --> 00:01:13.200 align:start position:0%
+this link; it's quite detailed. You
+ 
+
+00:01:13.200 --> 00:01:14.510 align:start position:0%
+this link; it's quite detailed. You
+can <00:01:13.400><c>refer </c><00:01:13.600><c>to </c><00:01:13.800><c>it </c><00:01:14.000><c>here; </c><00:01:14.200><c>I've </c><00:01:14.400><c>already</c>
+
+00:01:14.510 --> 00:01:14.520 align:start position:0%
+can refer to it here; I've already
+ 
+
+00:01:14.520 --> 00:01:16.670 align:start position:0%
+can refer to it here; I've already
+provided <00:01:14.920><c>it. </c><00:01:15.320><c>The </c><00:01:15.720><c>first </c><00:01:16.120><c>thing </c><00:01:16.520><c>you'll</c>
+
+00:01:16.670 --> 00:01:16.680 align:start position:0%
+provided it. The first thing you'll
+ 
+
+00:01:16.680 --> 00:01:18.270 align:start position:0%
+provided it. The first thing you'll
+ask <00:01:16.897><c>me </c><00:01:17.114><c>is, </c><00:01:17.331><c>what </c><00:01:17.548><c>does </c><00:01:17.765><c>this </c><00:01:17.982><c>word </c><00:01:18.199><c>mean?</c>
+
+00:01:18.270 --> 00:01:18.280 align:start position:0%
+ask me is, what does this word mean?
+ 
+
+00:01:18.280 --> 00:01:21.030 align:start position:0%
+ask me is, what does this word mean?
+The <00:01:18.783><c>term </c><00:01:19.286><c>"regular </c><00:01:19.789><c>expression" </c><00:01:20.292><c>is </c><00:01:20.795><c>an</c>
+
+00:01:21.030 --> 00:01:21.040 align:start position:0%
+The term "regular expression" is an
+ 
+
+00:01:21.040 --> 00:01:22.550 align:start position:0%
+The term "regular expression" is an
+abbreviation.
+
+00:01:22.550 --> 00:01:22.560 align:start position:0%
+abbreviation.
+ 
+
+00:01:22.560 --> 00:01:25.109 align:start position:0%
+abbreviation.
+It's <00:01:22.834><c>an </c><00:01:23.108><c>abbreviation </c><00:01:23.382><c>of </c><00:01:23.656><c>"re" </c><00:01:23.930><c>and </c><00:01:24.204><c>"ex" </c><00:01:24.478><c>like </c><00:01:24.752><c>this.</c>
+
+00:01:25.109 --> 00:01:25.119 align:start position:0%
+It's an abbreviation of "re" and "ex" like this.
+ 
+
+00:01:25.119 --> 00:01:27.350 align:start position:0%
+It's an abbreviation of "re" and "ex" like this.
+You <00:01:25.432><c>can </c><00:01:25.745><c>just </c><00:01:26.058><c>write </c><00:01:26.371><c>"re" </c><00:01:26.684><c>and </c><00:01:26.997><c>"e",</c>
+
+00:01:27.350 --> 00:01:27.360 align:start position:0%
+You can just write "re" and "e",
+ 
+
+00:01:27.360 --> 00:01:29.350 align:start position:0%
+You can just write "re" and "e",
+but <00:01:27.519><c>to </c><00:01:27.678><c>use </c><00:01:27.837><c>the </c><00:01:27.996><c>full </c><00:01:28.155><c>abbreviation, </c><00:01:28.314><c>you </c><00:01:28.473><c>take </c><00:01:28.632><c>the </c><00:01:28.791><c>first </c><00:01:28.950><c>three </c><00:01:29.109><c>letters</c>
+
+00:01:29.350 --> 00:01:29.360 align:start position:0%
+but to use the full abbreviation, you take the first three letters
+ 
+
+00:01:29.360 --> 00:01:31.390 align:start position:0%
+but to use the full abbreviation, you take the first three letters
+and <00:01:30.013><c>the </c><00:01:30.666><c>next </c><00:01:31.319><c>two.</c>
+
+00:01:31.390 --> 00:01:31.400 align:start position:0%
+and the next two.
+ 
+
+00:01:31.400 --> 00:01:33.270 align:start position:0%
+and the next two.
+This <00:01:31.693><c>is </c><00:01:31.986><c>the </c><00:01:32.279><c>abbreviation. </c><00:01:32.572><c>This </c><00:01:32.865><c>is </c><00:01:33.158><c>an</c>
+
+00:01:33.270 --> 00:01:33.280 align:start position:0%
+This is the abbreviation. This is an
+ 
+
+00:01:33.280 --> 00:01:34.789 align:start position:0%
+This is the abbreviation. This is an
+abbreviation <00:01:33.640><c>in </c><00:01:34.000><c>English; </c><00:01:34.360><c>it </c><00:01:34.720><c>has</c>
+
+00:01:34.789 --> 00:01:34.799 align:start position:0%
+abbreviation in English; it has
+ 
+
+00:01:34.799 --> 00:01:36.350 align:start position:0%
+abbreviation in English; it has
+meaning. <00:01:35.292><c>Later, </c><00:01:35.785><c>when </c><00:01:36.278><c>you</c>
+
+00:01:36.350 --> 00:01:36.360 align:start position:0%
+meaning. Later, when you
+ 
+
+00:01:36.360 --> 00:01:38.109 align:start position:0%
+meaning. Later, when you
+search <00:01:36.577><c>on </c><00:01:36.794><c>Google, </c><00:01:37.011><c>you </c><00:01:37.228><c>just </c><00:01:37.445><c>need </c><00:01:37.662><c>to </c><00:01:37.879><c>search</c>
+
+00:01:38.109 --> 00:01:38.119 align:start position:0%
+search on Google, you just need to search
+ 
+
+00:01:38.119 --> 00:01:39.429 align:start position:0%
+search on Google, you just need to search
+like <00:01:38.335><c>this; </c><00:01:38.551><c>you </c><00:01:38.767><c>don't </c><00:01:38.983><c>need </c><00:01:39.199><c>to</c>
+
+00:01:39.429 --> 00:01:39.439 align:start position:0%
+like this; you don't need to
+ 
+
+00:01:39.439 --> 00:01:41.789 align:start position:0%
+like this; you don't need to
+write <00:01:39.847><c>out </c><00:01:40.255><c>"regular </c><00:01:40.663><c>expression" </c><00:01:41.071><c>in </c><00:01:41.479><c>full.</c>
+
+00:01:41.789 --> 00:01:41.799 align:start position:0%
+write out "regular expression" in full.
+ 
+
+00:01:41.799 --> 00:01:43.230 align:start position:0%
+write out "regular expression" in full.
+If <00:01:42.129><c>you </c><00:01:42.459><c>search </c><00:01:42.789><c>for </c><00:01:43.119><c>"</c>
+
+00:01:43.230 --> 00:01:43.240 align:start position:0%
+If you search for "
+ 
+
+00:01:43.240 --> 00:01:44.469 align:start position:0%
+If you search for "
+regular <00:01:43.600><c>expression," </c><00:01:43.960><c>it </c><00:01:44.320><c>won't</c>
+
+00:01:44.469 --> 00:01:44.479 align:start position:0%
+regular expression," it won't
+ 
+
+00:01:44.479 --> 00:01:45.950 align:start position:0%
+regular expression," it won't
+solve <00:01:44.946><c>your </c><00:01:45.413><c>problem.  </c><00:01:45.880><c>But</c>
+
+00:01:45.950 --> 00:01:45.960 align:start position:0%
+solve your problem.  But
+ 
+
+00:01:45.960 --> 00:01:47.350 align:start position:0%
+solve your problem.  But
+you'll <00:01:46.270><c>see, </c><00:01:46.580><c>if </c><00:01:46.890><c>you </c><00:01:47.200><c>use</c>
+
+00:01:47.350 --> 00:01:47.360 align:start position:0%
+you'll see, if you use
+ 
+
+00:01:47.360 --> 00:01:49.550 align:start position:0%
+you'll see, if you use
+English <00:01:47.610><c>words, </c><00:01:47.860><c>it </c><00:01:48.110><c>will </c><00:01:48.360><c>create </c><00:01:48.610><c>a </c><00:01:48.860><c>problem. </c><00:01:49.110><c>This </c><00:01:49.360><c>is</c>
+
+00:01:49.550 --> 00:01:49.560 align:start position:0%
+English words, it will create a problem. This is
+ 
+
+00:01:49.560 --> 00:01:51.190 align:start position:0%
+English words, it will create a problem. This is
+why <00:01:51.119><c>I</c>
+
+00:01:51.190 --> 00:01:51.200 align:start position:0%
+why I
+ 
+
+00:01:51.200 --> 00:01:52.870 align:start position:0%
+why I
+told <00:01:51.360><c>you </c><00:01:51.520><c>from </c><00:01:51.680><c>the </c><00:01:51.840><c>beginning </c><00:01:52.000><c>not </c><00:01:52.160><c>to </c><00:01:52.320><c>translate </c><00:01:52.480><c>the </c><00:01:52.640><c>meaning,</c>
+
+00:01:52.870 --> 00:01:52.880 align:start position:0%
+told you from the beginning not to translate the meaning,
+ 
+
+00:01:52.880 --> 00:01:54.870 align:start position:0%
+told you from the beginning not to translate the meaning,
+because <00:01:54.680><c>if</c>
+
+00:01:54.870 --> 00:01:54.880 align:start position:0%
+because if
+ 
+
+00:01:54.880 --> 00:01:56.230 align:start position:0%
+because if
+you <00:01:55.057><c>search </c><00:01:55.234><c>and </c><00:01:55.411><c>don't </c><00:01:55.588><c>find </c><00:01:55.765><c>any </c><00:01:55.942><c>results, </c><00:01:56.119><c>it</c>
+
+00:01:56.230 --> 00:01:56.240 align:start position:0%
+you search and don't find any results, it
+ 
+
+00:01:56.240 --> 00:01:58.350 align:start position:0%
+you search and don't find any results, it
+won't <00:01:56.813><c>solve </c><00:01:57.386><c>the </c><00:01:57.959><c>problem.</c>
+
+00:01:58.350 --> 00:01:58.360 align:start position:0%
+won't solve the problem.
+ 
+
+00:01:58.360 --> 00:02:00.109 align:start position:0%
+won't solve the problem.
+The <00:01:58.893><c>purpose </c><00:01:59.426><c>of </c><00:01:59.959><c>using</c>
+
+00:02:00.109 --> 00:02:00.119 align:start position:0%
+The purpose of using
+ 
+
+00:02:00.119 --> 00:02:01.870 align:start position:0%
+The purpose of using
+regular <00:02:00.665><c>expressions </c><00:02:01.211><c>is </c><00:02:01.757><c>twofold:</c>
+
+00:02:01.870 --> 00:02:01.880 align:start position:0%
+regular expressions is twofold:
+ 
+
+00:02:01.880 --> 00:02:04.190 align:start position:0%
+regular expressions is twofold:
+firstly, <00:02:02.586><c>to </c><00:02:03.292><c>search, </c><00:02:03.998><c>and</c>
+
+00:02:04.190 --> 00:02:04.200 align:start position:0%
+firstly, to search, and
+ 
+
+00:02:04.200 --> 00:02:06.310 align:start position:0%
+firstly, to search, and
+secondly, <00:02:04.526><c>to </c><00:02:04.852><c>replace. </c><00:02:05.178><c>More </c><00:02:05.504><c>specifically, </c><00:02:05.830><c>imagine </c><00:02:06.156><c>you</c>
+
+00:02:06.310 --> 00:02:06.320 align:start position:0%
+secondly, to replace. More specifically, imagine you
+ 
+
+00:02:06.320 --> 00:02:08.270 align:start position:0%
+secondly, to replace. More specifically, imagine you
+have <00:02:06.696><c>a </c><00:02:07.072><c>string </c><00:02:07.448><c>of </c><00:02:07.824><c>characters </c><00:02:08.200><c>and</c>
+
+00:02:08.270 --> 00:02:08.280 align:start position:0%
+have a string of characters and
+ 
+
+00:02:08.280 --> 00:02:10.430 align:start position:0%
+have a string of characters and
+you <00:02:08.613><c>want </c><00:02:08.946><c>to </c><00:02:09.279><c>replace </c><00:02:09.612><c>a </c><00:02:09.945><c>few </c><00:02:10.278><c>characters</c>
+
+00:02:10.430 --> 00:02:10.440 align:start position:0%
+you want to replace a few characters
+ 
+
+00:02:10.440 --> 00:02:12.510 align:start position:0%
+you want to replace a few characters
+within <00:02:10.819><c>it. </c><00:02:11.198><c>Would </c><00:02:11.577><c>you </c><00:02:11.956><c>really</c>
+
+00:02:12.510 --> 00:02:12.520 align:start position:0%
+within it. Would you really
+ 
+
+00:02:12.520 --> 00:02:14.750 align:start position:0%
+within it. Would you really
+split <00:02:12.866><c>the </c><00:02:13.212><c>string </c><00:02:13.558><c>into </c><00:02:13.904><c>smaller </c><00:02:14.250><c>parts </c><00:02:14.596><c>and</c>
+
+00:02:14.750 --> 00:02:14.760 align:start position:0%
+split the string into smaller parts and
+ 
+
+00:02:14.760 --> 00:02:16.750 align:start position:0%
+split the string into smaller parts and
+use <00:02:15.230><c>`l` </c><00:02:15.700><c>for </c><00:02:16.170><c>loops? </c><00:02:16.640><c>No</c>
+
+00:02:16.750 --> 00:02:16.760 align:start position:0%
+use `l` for loops? No
+ 
+
+00:02:16.760 --> 00:02:18.750 align:start position:0%
+use `l` for loops? No
+one <00:02:17.120><c>does </c><00:02:17.480><c>that. </c><00:02:17.840><c>This </c><00:02:18.200><c>tool </c><00:02:18.560><c>was</c>
+
+00:02:18.750 --> 00:02:18.760 align:start position:0%
+one does that. This tool was
+ 
+
+00:02:18.760 --> 00:02:20.350 align:start position:0%
+one does that. This tool was
+created <00:02:19.129><c>to </c><00:02:19.498><c>make </c><00:02:19.867><c>our </c><00:02:20.236><c>lives</c>
+
+00:02:20.350 --> 00:02:20.360 align:start position:0%
+created to make our lives
+ 
+
+00:02:20.360 --> 00:02:22.350 align:start position:0%
+created to make our lives
+simpler. <00:02:20.829><c>Let </c><00:02:21.298><c>me </c><00:02:21.767><c>give </c><00:02:22.236><c>you</c>
+
+00:02:22.350 --> 00:02:22.360 align:start position:0%
+simpler. Let me give you
+ 
+
+00:02:22.360 --> 00:02:24.030 align:start position:0%
+simpler. Let me give you
+another <00:02:22.672><c>example. </c><00:02:22.984><c>For </c><00:02:23.296><c>instance, </c><00:02:23.608><c>you </c><00:02:23.920><c>have</c>
+
+00:02:24.030 --> 00:02:24.040 align:start position:0%
+another example. For instance, you have
+ 
+
+00:02:24.040 --> 00:02:25.990 align:start position:0%
+another example. For instance, you have
+a <00:02:24.409><c>document </c><00:02:24.778><c>like </c><00:02:25.147><c>this, </c><00:02:25.516><c>and</c>
+
+00:02:25.990 --> 00:02:26.000 align:start position:0%
+a document like this, and
+ 
+
+00:02:26.000 --> 00:02:28.350 align:start position:0%
+a document like this, and
+you <00:02:26.333><c>want </c><00:02:26.666><c>all </c><00:02:26.999><c>the </c><00:02:27.332><c>words </c><00:02:27.665><c>to </c><00:02:27.998><c>be</c>
+
+00:02:28.350 --> 00:02:30.190 align:start position:0%
+you want all the words to be
+ 
+
+00:02:30.190 --> 00:02:30.200 align:start position:0%
+ 
+ 
+
+00:02:30.200 --> 00:02:31.670 align:start position:0%
+ 
+italicized, <00:02:30.880><c>right? </c><00:02:31.560><c>This</c>
+
+00:02:31.670 --> 00:02:31.680 align:start position:0%
+italicized, right? This
+ 
+
+00:02:31.680 --> 00:02:33.070 align:start position:0%
+italicized, right? This
+is <00:02:31.919><c>the </c><00:02:32.158><c>problem </c><00:02:32.397><c>you </c><00:02:32.636><c>need </c><00:02:32.875><c>to</c>
+
+00:02:33.070 --> 00:02:33.080 align:start position:0%
+is the problem you need to
+ 
+
+00:02:33.080 --> 00:02:34.910 align:start position:0%
+is the problem you need to
+solve. <00:02:33.392><c>After...  </c><00:02:33.704><c>We're </c><00:02:34.016><c>looking </c><00:02:34.328><c>for </c><00:02:34.640><c>something</c>
+
+00:02:34.910 --> 00:02:34.920 align:start position:0%
+solve. After...  We're looking for something
+ 
+
+00:02:34.920 --> 00:02:36.710 align:start position:0%
+solve. After...  We're looking for something
+we'll <00:02:35.186><c>need </c><00:02:35.452><c>to </c><00:02:35.718><c>change, </c><00:02:35.984><c>and </c><00:02:36.250><c>that's </c><00:02:36.516><c>why</c>
+
+00:02:36.710 --> 00:02:36.720 align:start position:0%
+we'll need to change, and that's why
+ 
+
+00:02:36.720 --> 00:02:38.750 align:start position:0%
+we'll need to change, and that's why
+regular <00:02:37.210><c>expressions </c><00:02:37.700><c>were </c><00:02:38.190><c>created. </c><00:02:38.680><c>Here</c>
+
+00:02:38.750 --> 00:02:38.760 align:start position:0%
+regular expressions were created. Here
+ 
+
+00:02:38.760 --> 00:02:41.070 align:start position:0%
+regular expressions were created. Here
+they <00:02:40.519><c>are.</c>
+
+00:02:41.070 --> 00:02:41.080 align:start position:0%
+they are.
+ 
+
+00:02:41.080 --> 00:02:43.110 align:start position:0%
+they are.
+In <00:02:41.560><c>reality, </c><00:02:42.040><c>when </c><00:02:42.520><c>you </c><00:02:43.000><c>work,</c>
+
+00:02:43.110 --> 00:02:43.120 align:start position:0%
+In reality, when you work,
+ 
+
+00:02:43.120 --> 00:02:45.110 align:start position:0%
+In reality, when you work,
+you'll <00:02:45.000><c>see</c>
+
+00:02:45.110 --> 00:02:45.120 align:start position:0%
+you'll see
+ 
+
+00:02:45.120 --> 00:02:47.309 align:start position:0%
+you'll see
+some <00:02:45.620><c>rather </c><00:02:46.120><c>strange </c><00:02:46.620><c>characters </c><00:02:47.120><c>like</c>
+
+00:02:47.309 --> 00:02:47.319 align:start position:0%
+some rather strange characters like
+ 
+
+00:02:47.319 --> 00:02:48.869 align:start position:0%
+some rather strange characters like
+this <00:02:47.524><c>– </c><00:02:47.729><c>and </c><00:02:47.934><c>that's </c><00:02:48.139><c>what </c><00:02:48.344><c>we're </c><00:02:48.549><c>going </c><00:02:48.754><c>to</c>
+
+00:02:48.869 --> 00:02:48.879 align:start position:0%
+this – and that's what we're going to
+ 
+
+00:02:48.879 --> 00:02:50.830 align:start position:0%
+this – and that's what we're going to
+learn. <00:02:49.239><c>Of </c><00:02:49.599><c>course, </c><00:02:49.959><c>at </c><00:02:50.319><c>this </c><00:02:50.679><c>point,</c>
+
+00:02:50.830 --> 00:02:50.840 align:start position:0%
+learn. Of course, at this point,
+ 
+
+00:02:50.840 --> 00:02:51.949 align:start position:0%
+learn. Of course, at this point,
+I <00:02:51.090><c>don't </c><00:02:51.340><c>recommend </c><00:02:51.590><c>memorizing </c><00:02:51.840><c>every</c>
+
+00:02:51.949 --> 00:02:51.959 align:start position:0%
+I don't recommend memorizing every
+ 
+
+00:02:51.959 --> 00:02:53.630 align:start position:0%
+I don't recommend memorizing every
+single <00:02:52.154><c>one </c><00:02:52.349><c>of </c><00:02:52.544><c>these, </c><00:02:52.739><c>and </c><00:02:52.934><c>I </c><00:02:53.129><c>personally </c><00:02:53.324><c>don't </c><00:02:53.519><c>either.</c>
+
+00:02:53.630 --> 00:02:53.640 align:start position:0%
+single one of these, and I personally don't either.
+ 
+
+00:02:53.640 --> 00:02:55.149 align:start position:0%
+single one of these, and I personally don't either.
+I <00:02:53.969><c>only </c><00:02:54.298><c>know </c><00:02:54.627><c>a </c><00:02:54.956><c>little</c>
+
+00:02:55.149 --> 00:02:55.159 align:start position:0%
+I only know a little
+ 
+
+00:02:55.159 --> 00:02:56.470 align:start position:0%
+I only know a little
+about <00:02:55.479><c>this; </c><00:02:55.799><c>I'm </c><00:02:56.119><c>not </c><00:02:56.439><c>an</c>
+
+00:02:56.470 --> 00:02:56.480 align:start position:0%
+about this; I'm not an
+ 
+
+00:02:56.480 --> 00:02:58.750 align:start position:0%
+about this; I'm not an
+expert. <00:02:57.146><c>I'll </c><00:02:57.812><c>share </c><00:02:58.478><c>that</c>
+
+00:02:58.750 --> 00:02:58.760 align:start position:0%
+expert. I'll share that
+ 
+
+00:02:58.760 --> 00:03:00.750 align:start position:0%
+expert. I'll share that
+Java <00:03:00.560><c>provides</c>
+
+00:03:00.750 --> 00:03:00.760 align:start position:0%
+Java provides
+ 
+
+00:03:00.760 --> 00:03:02.390 align:start position:0%
+Java provides
+a <00:03:01.480><c>package </c><00:03:02.200><c>within</c>
+
+00:03:02.390 --> 00:03:02.400 align:start position:0%
+a package within
+ 
+
+00:03:02.400 --> 00:03:04.390 align:start position:0%
+a package within
+YouTube
+
+00:03:04.390 --> 00:03:04.400 align:start position:0%
+YouTube
+ 
+
+00:03:04.400 --> 00:03:05.990 align:start position:0%
+YouTube
+to <00:03:04.980><c>handle </c><00:03:05.560><c>regular</c>
+
+00:03:05.990 --> 00:03:06.000 align:start position:0%
+to handle regular
+ 
+
+00:03:06.000 --> 00:03:08.430 align:start position:0%
+to handle regular
+expressions. <00:03:06.319><c>It </c><00:03:06.638><c>has </c><00:03:06.957><c>three </c><00:03:07.276><c>main </c><00:03:07.595><c>classes: </c><00:03:07.914><c>first, </c><00:03:08.233><c>the</c>
+
+00:03:08.430 --> 00:03:08.440 align:start position:0%
+expressions. It has three main classes: first, the
+ 
+
+00:03:08.440 --> 00:03:10.070 align:start position:0%
+expressions. It has three main classes: first, the
+pattern <00:03:09.440><c>class;</c>
+
+00:03:10.070 --> 00:03:10.080 align:start position:0%
+pattern class;
+ 
+
+00:03:10.080 --> 00:03:12.309 align:start position:0%
+pattern class;
+second, <00:03:10.706><c>the </c><00:03:11.332><c>master </c><00:03:11.958><c>class;</c>
+
+00:03:12.309 --> 00:03:12.319 align:start position:0%
+second, the master class;
+ 
+
+00:03:12.319 --> 00:03:14.750 align:start position:0%
+second, the master class;
+and <00:03:12.889><c>third, </c><00:03:13.459><c>the </c><00:03:14.029><c>class </c><00:03:14.599><c>to</c>
+
+00:03:14.750 --> 00:03:14.760 align:start position:0%
+and third, the class to
+ 
+
+00:03:14.760 --> 00:03:16.750 align:start position:0%
+and third, the class to
+handle <00:03:14.940><c>exceptions. </c><00:03:15.120><c>I'll </c><00:03:15.300><c>explain </c><00:03:15.480><c>the </c><00:03:15.660><c>exception </c><00:03:15.840><c>class </c><00:03:16.020><c>in </c><00:03:16.200><c>more </c><00:03:16.380><c>detail </c><00:03:16.560><c>later.</c>
+
+00:03:16.750 --> 00:03:18.949 align:start position:0%
+handle exceptions. I'll explain the exception class in more detail later.
+ 
+
+00:03:18.949 --> 00:03:18.959 align:start position:0%
+ 
+ 
+
+00:03:18.959 --> 00:03:20.789 align:start position:0%
+ 
+For <00:03:19.164><c>now, </c><00:03:19.369><c>you </c><00:03:19.574><c>just </c><00:03:19.779><c>need </c><00:03:19.984><c>to </c><00:03:20.189><c>look </c><00:03:20.394><c>at </c><00:03:20.599><c>the</c>
+
+00:03:20.789 --> 00:03:20.799 align:start position:0%
+For now, you just need to look at the
+ 
+
+00:03:20.799 --> 00:03:22.390 align:start position:0%
+For now, you just need to look at the
+literal <00:03:21.039><c>meaning; </c><00:03:21.279><c>we </c><00:03:21.519><c>don't </c><00:03:21.759><c>need </c><00:03:21.999><c>to </c><00:03:22.239><c>start</c>
+
+00:03:22.390 --> 00:03:22.400 align:start position:0%
+literal meaning; we don't need to start
+ 
+
+00:03:22.400 --> 00:03:24.430 align:start position:0%
+literal meaning; we don't need to start
+working <00:03:22.776><c>on </c><00:03:23.152><c>this </c><00:03:23.528><c>problem </c><00:03:23.904><c>yet. </c><00:03:24.280><c>First,</c>
+
+00:03:24.430 --> 00:03:24.440 align:start position:0%
+working on this problem yet. First,
+ 
+
+00:03:24.440 --> 00:03:25.949 align:start position:0%
+working on this problem yet. First,
+I'll...  <00:03:24.653><c>Let's </c><00:03:24.866><c>go </c><00:03:25.079><c>back </c><00:03:25.292><c>to </c><00:03:25.505><c>the </c><00:03:25.718><c>documentation,</c>
+
+00:03:25.949 --> 00:03:25.959 align:start position:0%
+I'll...  Let's go back to the documentation,
+ 
+
+00:03:25.959 --> 00:03:27.670 align:start position:0%
+I'll...  Let's go back to the documentation,
+guys. <00:03:26.271><c>This </c><00:03:26.583><c>part </c><00:03:26.895><c>I </c><00:03:27.207><c>just </c><00:03:27.519><c>talked</c>
+
+00:03:27.670 --> 00:03:27.680 align:start position:0%
+guys. This part I just talked
+ 
+
+00:03:27.680 --> 00:03:28.949 align:start position:0%
+guys. This part I just talked
+to <00:03:27.903><c>you </c><00:03:28.126><c>about </c><00:03:28.349><c>is </c><00:03:28.572><c>just </c><00:03:28.795><c>the</c>
+
+00:03:28.949 --> 00:03:28.959 align:start position:0%
+to you about is just the
+ 
+
+00:03:28.959 --> 00:03:30.750 align:start position:0%
+to you about is just the
+definition. <00:03:29.799><c>Now </c><00:03:30.639><c>let's</c>
+
+00:03:30.750 --> 00:03:30.760 align:start position:0%
+definition. Now let's
+ 
+
+00:03:30.760 --> 00:03:32.470 align:start position:0%
+definition. Now let's
+look <00:03:31.129><c>at </c><00:03:31.498><c>an </c><00:03:31.867><c>example. </c><00:03:32.236><c>Personally,</c>
+
+00:03:32.470 --> 00:03:32.480 align:start position:0%
+look at an example. Personally,
+ 
+
+00:03:32.480 --> 00:03:34.149 align:start position:0%
+look at an example. Personally,
+I <00:03:32.790><c>quite </c><00:03:33.100><c>like </c><00:03:33.410><c>this </c><00:03:33.720><c>page</c>
+
+00:03:34.149 --> 00:03:34.159 align:start position:0%
+I quite like this page
+ 
+
+00:03:34.159 --> 00:03:35.949 align:start position:0%
+I quite like this page
+because <00:03:34.999><c>we </c><00:03:35.839><c>can</c>
+
+00:03:35.949 --> 00:03:35.959 align:start position:0%
+because we can
+ 
+
+00:03:35.959 --> 00:03:37.429 align:start position:0%
+because we can
+always <00:03:36.159><c>try </c><00:03:36.359><c>it </c><00:03:36.559><c>out. </c><00:03:36.759><c>Let's </c><00:03:36.959><c>click </c><00:03:37.159><c>on </c><00:03:37.359><c>the</c>
+
+00:03:37.429 --> 00:03:37.439 align:start position:0%
+always try it out. Let's click on the
+ 
+
+00:03:37.439 --> 00:03:39.550 align:start position:0%
+always try it out. Let's click on the
+example. <00:03:38.379><c>First, </c><00:03:39.319><c>let's</c>
+
+00:03:39.550 --> 00:03:39.560 align:start position:0%
+example. First, let's
+ 
+
+00:03:39.560 --> 00:03:41.270 align:start position:0%
+example. First, let's
+create <00:03:40.280><c>a </c><00:03:41.000><c>pattern.</c>
+
+00:03:41.270 --> 00:03:41.280 align:start position:0%
+create a pattern.
+ 
+
+00:03:41.280 --> 00:03:43.309 align:start position:0%
+create a pattern.
+What <00:03:41.548><c>is </c><00:03:41.816><c>a </c><00:03:42.084><c>pattern </c><00:03:42.352><c>used </c><00:03:42.620><c>for? </c><00:03:42.888><c>Imagine </c><00:03:43.156><c>it</c>
+
+00:03:43.309 --> 00:03:43.319 align:start position:0%
+What is a pattern used for? Imagine it
+ 
+
+00:03:43.319 --> 00:03:45.149 align:start position:0%
+What is a pattern used for? Imagine it
+'s <00:03:43.852><c>like </c><00:03:44.385><c>on </c><00:03:44.918><c>your</c>
+
+00:03:45.149 --> 00:03:45.159 align:start position:0%
+'s like on your
+ 
+
+00:03:45.159 --> 00:03:46.789 align:start position:0%
+'s like on your
+smartphone;
+
+00:03:46.789 --> 00:03:46.799 align:start position:0%
+smartphone;
+ 
+
+00:03:46.799 --> 00:03:48.190 align:start position:0%
+smartphone;
+you <00:03:46.999><c>need </c><00:03:47.199><c>to </c><00:03:47.399><c>draw </c><00:03:47.599><c>a </c><00:03:47.799><c>password, </c><00:03:47.999><c>right?</c>
+
+00:03:48.190 --> 00:03:48.200 align:start position:0%
+you need to draw a password, right?
+ 
+
+00:03:48.200 --> 00:03:49.949 align:start position:0%
+you need to draw a password, right?
+This <00:03:48.720><c>pattern </c><00:03:49.240><c>is </c><00:03:49.760><c>like</c>
+
+00:03:49.949 --> 00:03:49.959 align:start position:0%
+This pattern is like
+ 
+
+00:03:49.959 --> 00:03:52.069 align:start position:0%
+This pattern is like
+the <00:03:50.586><c>input </c><00:03:51.213><c>for </c><00:03:51.840><c>you.</c>
+
+00:03:52.069 --> 00:03:52.079 align:start position:0%
+the input for you.
+ 
+
+00:03:52.079 --> 00:03:53.910 align:start position:0%
+the input for you.
+More <00:03:52.407><c>specifically, </c><00:03:52.735><c>we </c><00:03:53.063><c>need </c><00:03:53.391><c>to </c><00:03:53.719><c>tell</c>
+
+00:03:53.910 --> 00:03:53.920 align:start position:0%
+More specifically, we need to tell
+ 
+
+00:03:53.920 --> 00:03:56.229 align:start position:0%
+More specifically, we need to tell
+Java <00:03:54.450><c>what </c><00:03:54.980><c>we </c><00:03:55.510><c>want </c><00:03:56.040><c>to</c>
+
+00:03:56.229 --> 00:03:56.239 align:start position:0%
+Java what we want to
+ 
+
+00:03:56.239 --> 00:03:57.910 align:start position:0%
+Java what we want to
+search <00:03:56.479><c>for </c><00:03:56.719><c>or </c><00:03:56.959><c>what </c><00:03:57.199><c>we </c><00:03:57.439><c>want </c><00:03:57.679><c>to</c>
+
+00:03:57.910 --> 00:03:57.920 align:start position:0%
+search for or what we want to
+ 
+
+00:03:57.920 --> 00:03:59.949 align:start position:0%
+search for or what we want to
+replace. <00:03:59.799><c>First,</c>
+
+00:03:59.949 --> 00:03:59.959 align:start position:0%
+replace. First,
+ 
+
+00:03:59.959 --> 00:04:01.429 align:start position:0%
+replace. First,
+we'll <00:04:00.619><c>declare </c><00:04:01.279><c>a</c>
+
+00:04:01.429 --> 00:04:01.439 align:start position:0%
+we'll declare a
+ 
+
+00:04:01.439 --> 00:04:04.030 align:start position:0%
+we'll declare a
+keyword: <00:04:02.039><c>`wb </c><00:04:02.639><c>school`. </c><00:04:03.239><c>We </c><00:04:03.839><c>use</c>
+
+00:04:04.030 --> 00:04:04.040 align:start position:0%
+keyword: `wb school`. We use
+ 
+
+00:04:04.040 --> 00:04:06.710 align:start position:0%
+keyword: `wb school`. We use
+the <00:04:04.853><c>pattern </c><00:04:05.666><c>`chk </c><00:04:06.479><c>intensive`,</c>
+
+00:04:06.710 --> 00:04:06.720 align:start position:0%
+the pattern `chk intensive`,
+ 
+
+00:04:06.720 --> 00:04:08.149 align:start position:0%
+the pattern `chk intensive`,
+meaning <00:04:07.146><c>it's </c><00:04:07.572><c>not </c><00:04:07.998><c>case-sensitive.</c>
+
+00:04:08.149 --> 00:04:08.159 align:start position:0%
+meaning it's not case-sensitive.
+ 
+
+00:04:08.159 --> 00:04:10.149 align:start position:0%
+meaning it's not case-sensitive.
+Next,
+
+00:04:10.149 --> 00:04:10.159 align:start position:0%
+Next,
+ 
+
+00:04:10.159 --> 00:04:11.350 align:start position:0%
+Next,
+we <00:04:10.439><c>need </c><00:04:10.719><c>to </c><00:04:10.999><c>define </c><00:04:11.279><c>a</c>
+
+00:04:11.350 --> 00:04:11.360 align:start position:0%
+we need to define a
+ 
+
+00:04:11.360 --> 00:04:13.509 align:start position:0%
+we need to define a
+Master. <00:04:11.860><c>The </c><00:04:12.360><c>Master </c><00:04:12.860><c>is </c><00:04:13.360><c>the</c>
+
+00:04:13.509 --> 00:04:13.519 align:start position:0%
+Master. The Master is the
+ 
+
+00:04:13.519 --> 00:04:16.270 align:start position:0%
+Master. The Master is the
+input <00:04:13.952><c>of...  </c><00:04:14.385><c>You </c><00:04:14.818><c>guys </c><00:04:15.251><c>and </c><00:04:15.684><c>this </c><00:04:16.117><c>p,</c>
+
+00:04:16.270 --> 00:04:16.280 align:start position:0%
+input of...  You guys and this p,
+ 
+
+00:04:16.280 --> 00:04:18.110 align:start position:0%
+input of...  You guys and this p,
+you <00:04:16.536><c>guys </c><00:04:16.792><c>and </c><00:04:17.048><c>this </c><00:04:17.304><c>pattern </c><00:04:17.560><c>and</c>
+
+00:04:18.110 --> 00:04:18.120 align:start position:0%
+you guys and this pattern and
+ 
+
+00:04:18.120 --> 00:04:19.990 align:start position:0%
+you guys and this pattern and
+this <00:04:18.371><c>Master, </c><00:04:18.622><c>they </c><00:04:18.873><c>need </c><00:04:19.124><c>to </c><00:04:19.375><c>match </c><00:04:19.626><c>each </c><00:04:19.877><c>other.</c>
+
+00:04:19.990 --> 00:04:20.000 align:start position:0%
+this Master, they need to match each other.
+ 
+
+00:04:20.000 --> 00:04:21.229 align:start position:0%
+this Master, they need to match each other.
+You <00:04:20.224><c>can </c><00:04:20.448><c>see </c><00:04:20.672><c>that </c><00:04:20.896><c>we </c><00:04:21.120><c>will</c>
+
+00:04:21.229 --> 00:04:21.239 align:start position:0%
+You can see that we will
+ 
+
+00:04:21.239 --> 00:04:23.150 align:start position:0%
+You can see that we will
+use <00:04:21.532><c>this </c><00:04:21.825><c>p, </c><00:04:22.118><c>you </c><00:04:22.411><c>declare </c><00:04:22.704><c>it </c><00:04:22.997><c>above.</c>
+
+00:04:23.150 --> 00:04:23.160 align:start position:0%
+use this p, you declare it above.
+ 
+
+00:04:23.160 --> 00:04:25.110 align:start position:0%
+use this p, you declare it above.
+After <00:04:23.840><c>you </c><00:04:24.520><c>use</c>
+
+00:04:25.110 --> 00:04:25.120 align:start position:0%
+After you use
+ 
+
+00:04:25.120 --> 00:04:26.790 align:start position:0%
+After you use
+this <00:04:25.337><c>powder, </c><00:04:25.554><c>we </c><00:04:25.771><c>will </c><00:04:25.988><c>need </c><00:04:26.205><c>to </c><00:04:26.422><c>search </c><00:04:26.639><c>within</c>
+
+00:04:26.790 --> 00:04:26.800 align:start position:0%
+this powder, we will need to search within
+ 
+
+00:04:26.800 --> 00:04:28.909 align:start position:0%
+this powder, we will need to search within
+an <00:04:27.176><c>input. </c><00:04:27.552><c>Here, </c><00:04:27.928><c>it </c><00:04:28.304><c>does </c><00:04:28.680><c>this:</c>
+
+00:04:28.909 --> 00:04:28.919 align:start position:0%
+an input. Here, it does this:
+ 
+
+00:04:28.919 --> 00:04:30.990 align:start position:0%
+an input. Here, it does this:
+It <00:04:30.880><c>searches</c>
+
+00:04:30.990 --> 00:04:31.000 align:start position:0%
+It searches
+ 
+
+00:04:31.000 --> 00:04:33.510 align:start position:0%
+It searches
+inside <00:04:31.280><c>this </c><00:04:31.560><c>string </c><00:04:31.840><c>to </c><00:04:32.120><c>see </c><00:04:32.400><c>if </c><00:04:32.680><c>it </c><00:04:32.960><c>contains </c><00:04:33.240><c>the</c>
+
+00:04:33.510 --> 00:04:33.520 align:start position:0%
+inside this string to see if it contains the
+ 
+
+00:04:33.520 --> 00:04:36.070 align:start position:0%
+inside this string to see if it contains the
+keyword <00:04:34.306><c>above. </c><00:04:35.092><c>It </c><00:04:35.878><c>will</c>
+
+00:04:36.070 --> 00:04:36.080 align:start position:0%
+keyword above. It will
+ 
+
+00:04:36.080 --> 00:04:37.590 align:start position:0%
+keyword above. It will
+return <00:04:36.320><c>the </c><00:04:36.560><c>result </c><00:04:36.800><c>to </c><00:04:37.040><c>you </c><00:04:37.280><c>through</c>
+
+00:04:37.590 --> 00:04:37.600 align:start position:0%
+return the result to you through
+ 
+
+00:04:37.600 --> 00:04:39.310 align:start position:0%
+return the result to you through
+this <00:04:37.928><c>function </c><00:04:38.256><c>file. </c><00:04:38.584><c>This </c><00:04:38.912><c>function </c><00:04:39.240><c>file</c>
+
+00:04:39.310 --> 00:04:39.320 align:start position:0%
+this function file. This function file
+ 
+
+00:04:39.320 --> 00:04:41.390 align:start position:0%
+this function file. This function file
+returns <00:04:39.720><c>tr4, </c><00:04:40.120><c>you </c><00:04:40.520><c>can </c><00:04:40.920><c>see </c><00:04:41.320><c>that</c>
+
+00:04:41.390 --> 00:04:41.400 align:start position:0%
+returns tr4, you can see that
+ 
+
+00:04:41.400 --> 00:04:43.070 align:start position:0%
+returns tr4, you can see that
+it <00:04:41.640><c>will </c><00:04:41.880><c>print </c><00:04:42.120><c>this </c><00:04:42.360><c>for </c><00:04:42.600><c>you.</c>
+
+00:04:43.070 --> 00:04:43.080 align:start position:0%
+it will print this for you.
+ 
+
+00:04:43.080 --> 00:04:44.830 align:start position:0%
+it will print this for you.
+Now <00:04:43.391><c>let's </c><00:04:43.702><c>test </c><00:04:44.013><c>it. </c><00:04:44.324><c>It </c><00:04:44.635><c>says</c>
+
+00:04:44.830 --> 00:04:44.840 align:start position:0%
+Now let's test it. It says
+ 
+
+00:04:44.840 --> 00:04:47.070 align:start position:0%
+Now let's test it. It says
+that <00:04:45.193><c>m </c><00:04:45.546><c>file. </c><00:04:45.899><c>For </c><00:04:46.252><c>example, </c><00:04:46.605><c>here </c><00:04:46.958><c>I</c>
+
+00:04:47.070 --> 00:04:47.080 align:start position:0%
+that m file. For example, here I
+ 
+
+00:04:47.080 --> 00:04:48.830 align:start position:0%
+that m file. For example, here I
+will <00:04:47.353><c>write </c><00:04:47.626><c>"ask </c><00:04:47.899><c>IT </c><00:04:48.172><c>people". </c><00:04:48.445><c>I </c><00:04:48.718><c>will</c>
+
+00:04:48.830 --> 00:04:48.840 align:start position:0%
+will write "ask IT people". I will
+ 
+
+00:04:48.840 --> 00:04:51.150 align:start position:0%
+will write "ask IT people". I will
+change <00:04:49.279><c>this </c><00:04:49.718><c>string. </c><00:04:50.157><c>The </c><00:04:50.596><c>part </c><00:04:51.035><c>below</c>
+
+00:04:51.150 --> 00:04:51.160 align:start position:0%
+change this string. The part below
+ 
+
+00:04:51.160 --> 00:04:55.270 align:start position:0%
+change this string. The part below
+asks <00:04:51.944><c>IT </c><00:04:52.728><c>people </c><00:04:53.512><c>with </c><00:04:54.296><c>Eric. </c><00:04:55.080><c>Now</c>
+
+00:04:55.270 --> 00:04:55.280 align:start position:0%
+asks IT people with Eric. Now
+ 
+
+00:04:55.280 --> 00:04:57.430 align:start position:0%
+asks IT people with Eric. Now
+I <00:04:55.613><c>will </c><00:04:55.946><c>check </c><00:04:56.279><c>if </c><00:04:56.612><c>there </c><00:04:56.945><c>is </c><00:04:57.278><c>the</c>
+
+00:04:57.430 --> 00:04:57.440 align:start position:0%
+I will check if there is the
+ 
+
+00:04:57.440 --> 00:04:59.189 align:start position:0%
+I will check if there is the
+word <00:04:57.986><c>Eric. </c><00:04:58.532><c>I </c><00:04:59.078><c>will</c>
+
+00:04:59.189 --> 00:04:59.199 align:start position:0%
+word Eric. I will
+ 
+
+00:04:59.199 --> 00:05:01.550 align:start position:0%
+word Eric. I will
+replace <00:04:59.525><c>the </c><00:04:59.851><c>above </c><00:05:00.177><c>with </c><00:05:00.503><c>the </c><00:05:00.829><c>word </c><00:05:01.155><c>Eric.</c>
+
+00:05:01.550 --> 00:05:01.560 align:start position:0%
+replace the above with the word Eric.
+ 
+
+00:05:01.560 --> 00:05:03.430 align:start position:0%
+replace the above with the word Eric.
+And <00:05:01.840><c>this </c><00:05:02.120><c>is </c><00:05:02.400><c>what </c><00:05:02.680><c>we </c><00:05:02.960><c>call </c><00:05:03.240><c>input.</c>
+
+00:05:03.430 --> 00:05:03.440 align:start position:0%
+And this is what we call input.
+ 
+
+00:05:03.440 --> 00:05:05.189 align:start position:0%
+And this is what we call input.
+We <00:05:04.220><c>want </c><00:05:05.000><c>to</c>
+
+00:05:05.189 --> 00:05:05.199 align:start position:0%
+We want to
+ 
+
+00:05:05.199 --> 00:05:07.270 align:start position:0%
+We want to
+check <00:05:05.473><c>if </c><00:05:05.747><c>there </c><00:05:06.021><c>is </c><00:05:06.295><c>something </c><00:05:06.569><c>inside </c><00:05:06.843><c>this.  </c><00:05:07.117><c>Does</c>
+
+00:05:07.270 --> 00:05:07.280 align:start position:0%
+check if there is something inside this.  Does
+ 
+
+00:05:07.280 --> 00:05:08.830 align:start position:0%
+check if there is something inside this.  Does
+this <00:05:07.570><c>string </c><00:05:07.860><c>contain </c><00:05:08.150><c>the </c><00:05:08.440><c>keyword</c>
+
+00:05:08.830 --> 00:05:08.840 align:start position:0%
+this string contain the keyword
+ 
+
+00:05:08.840 --> 00:05:10.510 align:start position:0%
+this string contain the keyword
+Eric? <00:05:09.152><c>When </c><00:05:09.464><c>I </c><00:05:09.776><c>run </c><00:05:10.088><c>it, </c><00:05:10.400><c>it</c>
+
+00:05:10.510 --> 00:05:10.520 align:start position:0%
+Eric? When I run it, it
+ 
+
+00:05:10.520 --> 00:05:12.870 align:start position:0%
+Eric? When I run it, it
+still <00:05:10.976><c>says </c><00:05:11.432><c>"m </c><00:05:11.888><c>file". </c><00:05:12.344><c>Yes, </c><00:05:12.800><c>you</c>
+
+00:05:12.870 --> 00:05:12.880 align:start position:0%
+still says "m file". Yes, you
+ 
+
+00:05:12.880 --> 00:05:14.550 align:start position:0%
+still says "m file". Yes, you
+can <00:05:13.168><c>see </c><00:05:13.456><c>that </c><00:05:13.744><c>the </c><00:05:14.032><c>'e' </c><00:05:14.320><c>is</c>
+
+00:05:14.550 --> 00:05:14.560 align:start position:0%
+can see that the 'e' is
+ 
+
+00:05:14.560 --> 00:05:17.029 align:start position:0%
+can see that the 'e' is
+lowercase <00:05:15.031><c>because </c><00:05:15.502><c>the </c><00:05:15.973><c>'ke' </c><00:05:16.444><c>is </c><00:05:16.915><c>insensitive.</c>
+
+00:05:17.029 --> 00:05:17.039 align:start position:0%
+lowercase because the 'ke' is insensitive.
+ 
+
+00:05:17.039 --> 00:05:18.710 align:start position:0%
+lowercase because the 'ke' is insensitive.
+Now,
+
+00:05:18.710 --> 00:05:18.720 align:start position:0%
+Now,
+ 
+
+00:05:18.720 --> 00:05:20.390 align:start position:0%
+Now,
+let's <00:05:19.240><c>change </c><00:05:19.760><c>it. </c><00:05:20.280><c>For</c>
+
+00:05:20.390 --> 00:05:20.400 align:start position:0%
+let's change it. For
+ 
+
+00:05:20.400 --> 00:05:23.629 align:start position:0%
+let's change it. For
+example,
+
+00:05:23.629 --> 00:05:23.639 align:start position:0%
+example,
+ 
+
+00:05:23.639 --> 00:05:25.830 align:start position:0%
+example,
+here <00:05:23.965><c>we'll </c><00:05:24.291><c>write </c><00:05:24.617><c>something </c><00:05:24.943><c>like </c><00:05:25.269><c>bla </c><00:05:25.595><c>bla.</c>
+
+00:05:25.830 --> 00:05:25.840 align:start position:0%
+here we'll write something like bla bla.
+ 
+
+00:05:25.840 --> 00:05:27.990 align:start position:0%
+here we'll write something like bla bla.
+Look, <00:05:26.520><c>bla </c><00:05:27.200><c>bla. </c><00:05:27.880><c>Now,</c>
+
+00:05:27.990 --> 00:05:28.000 align:start position:0%
+Look, bla bla. Now,
+ 
+
+00:05:28.000 --> 00:05:30.029 align:start position:0%
+Look, bla bla. Now,
+when <00:05:28.368><c>I </c><00:05:28.736><c>run </c><00:05:29.104><c>this, </c><00:05:29.472><c>it </c><00:05:29.840><c>will</c>
+
+00:05:30.029 --> 00:05:30.039 align:start position:0%
+when I run this, it will
+ 
+
+00:05:30.039 --> 00:05:31.790 align:start position:0%
+when I run this, it will
+say <00:05:30.312><c>"Mask </c><00:05:30.585><c>not </c><00:05:30.858><c>file" </c><00:05:31.131><c>because </c><00:05:31.404><c>it </c><00:05:31.677><c>doesn't</c>
+
+00:05:31.790 --> 00:05:31.800 align:start position:0%
+say "Mask not file" because it doesn't
+ 
+
+00:05:31.800 --> 00:05:33.510 align:start position:0%
+say "Mask not file" because it doesn't
+exist. <00:05:32.266><c>Look, </c><00:05:32.732><c>this </c><00:05:33.198><c>is</c>
+
+00:05:33.510 --> 00:05:33.520 align:start position:0%
+exist. Look, this is
+ 
+
+00:05:33.520 --> 00:05:35.670 align:start position:0%
+exist. Look, this is
+Mask <00:05:34.020><c>not </c><00:05:34.520><c>file. </c><00:05:35.020><c>This </c><00:05:35.520><c>is</c>
+
+00:05:35.670 --> 00:05:35.680 align:start position:0%
+Mask not file. This is
+ 
+
+00:05:35.680 --> 00:05:37.430 align:start position:0%
+Mask not file. This is
+the <00:05:36.480><c>first </c><00:05:37.280><c>example,</c>
+
+00:05:37.430 --> 00:05:37.440 align:start position:0%
+the first example,
+ 
+
+00:05:37.440 --> 00:05:39.790 align:start position:0%
+the first example,
+the <00:05:37.872><c>example </c><00:05:38.304><c>we're </c><00:05:38.736><c>looking </c><00:05:39.168><c>for </c><00:05:39.600><c>if</c>
+
+00:05:39.790 --> 00:05:39.800 align:start position:0%
+the example we're looking for if
+ 
+
+00:05:39.800 --> 00:05:41.150 align:start position:0%
+the example we're looking for if
+we <00:05:40.050><c>don't </c><00:05:40.300><c>use </c><00:05:40.550><c>the </c><00:05:40.800><c>regular</c>
+
+00:05:41.150 --> 00:05:41.160 align:start position:0%
+we don't use the regular
+ 
+
+00:05:41.160 --> 00:05:42.629 align:start position:0%
+we don't use the regular
+expression. <00:05:42.560><c>Honestly,</c>
+
+00:05:42.629 --> 00:05:42.639 align:start position:0%
+expression. Honestly,
+ 
+
+00:05:42.639 --> 00:05:44.070 align:start position:0%
+expression. Honestly,
+we <00:05:43.065><c>don't </c><00:05:43.491><c>even </c><00:05:43.917><c>know</c>
+
+00:05:44.070 --> 00:05:44.080 align:start position:0%
+we don't even know
+ 
+
+00:05:44.080 --> 00:05:45.950 align:start position:0%
+we don't even know
+what <00:05:44.424><c>function </c><00:05:44.768><c>to </c><00:05:45.112><c>use. </c><00:05:45.456><c>Should </c><00:05:45.800><c>we</c>
+
+00:05:45.950 --> 00:05:45.960 align:start position:0%
+what function to use. Should we
+ 
+
+00:05:45.960 --> 00:05:47.629 align:start position:0%
+what function to use. Should we
+use <00:05:46.360><c>some </c><00:05:46.760><c>function? </c><00:05:47.160><c>For </c><00:05:47.560><c>example,</c>
+
+00:05:47.629 --> 00:05:47.639 align:start position:0%
+use some function? For example,
+ 
+
+00:05:47.639 --> 00:05:50.670 align:start position:0%
+use some function? For example,
+string <00:05:48.599><c>`ch </c><00:05:49.559><c>include`? </c><00:05:50.519><c>We</c>
+
+00:05:50.670 --> 00:05:50.680 align:start position:0%
+string `ch include`? We
+ 
+
+00:05:50.680 --> 00:05:53.150 align:start position:0%
+string `ch include`? We
+can <00:05:51.260><c>use </c><00:05:51.840><c>the </c><00:05:52.420><c>`include` </c><00:05:53.000><c>function.</c>
+
+00:05:53.150 --> 00:05:53.160 align:start position:0%
+can use the `include` function.
+ 
+
+00:05:53.160 --> 00:05:55.350 align:start position:0%
+can use the `include` function.
+We <00:05:53.400><c>can </c><00:05:53.640><c>use </c><00:05:53.880><c>the </c><00:05:54.120><c>`string </c><00:05:54.360><c>ch </c><00:05:54.600><c>include` </c><00:05:54.840><c>function</c>
+
+00:05:55.350 --> 00:05:55.360 align:start position:0%
+We can use the `string ch include` function
+ 
+
+00:05:55.360 --> 00:05:56.950 align:start position:0%
+We can use the `string ch include` function
+to <00:05:55.632><c>check </c><00:05:55.904><c>if </c><00:05:56.176><c>it </c><00:05:56.448><c>includes </c><00:05:56.720><c>the</c>
+
+00:05:56.950 --> 00:05:56.960 align:start position:0%
+to check if it includes the
+ 
+
+00:05:56.960 --> 00:05:58.870 align:start position:0%
+to check if it includes the
+`.`  <00:05:57.180><c>Whether </c><00:05:57.400><c>that </c><00:05:57.620><c>character </c><00:05:57.840><c>is </c><00:05:58.060><c>correct </c><00:05:58.280><c>or </c><00:05:58.500><c>not, </c><00:05:58.720><c>however,</c>
+
+00:05:58.870 --> 00:05:58.880 align:start position:0%
+`.`  Whether that character is correct or not, however,
+ 
+
+00:05:58.880 --> 00:06:01.110 align:start position:0%
+`.`  Whether that character is correct or not, however,
+later <00:05:59.165><c>there </c><00:05:59.450><c>will </c><00:05:59.735><c>be </c><00:06:00.020><c>a </c><00:06:00.305><c>problem, </c><00:06:00.590><c>for </c><00:06:00.875><c>example,</c>
+
+00:06:01.110 --> 00:06:01.120 align:start position:0%
+later there will be a problem, for example,
+ 
+
+00:06:01.120 --> 00:06:04.390 align:start position:0%
+later there will be a problem, for example,
+you <00:06:01.870><c>guys. </c><00:06:02.620><c>You </c><00:06:03.370><c>find </c><00:06:04.120><c>a</c>
+
+00:06:04.390 --> 00:06:04.400 align:start position:0%
+you guys. You find a
+ 
+
+00:06:04.400 --> 00:06:06.589 align:start position:0%
+you guys. You find a
+word <00:06:04.808><c>like </c><00:06:05.216><c>this. </c><00:06:05.624><c>You </c><00:06:06.032><c>have </c><00:06:06.440><c>a</c>
+
+00:06:06.589 --> 00:06:06.599 align:start position:0%
+word like this. You have a
+ 
+
+00:06:06.599 --> 00:06:08.189 align:start position:0%
+word like this. You have a
+string <00:06:06.959><c>like </c><00:06:07.319><c>this. </c><00:06:07.679><c>You </c><00:06:08.039><c>see</c>
+
+00:06:08.189 --> 00:06:08.199 align:start position:0%
+string like this. You see
+ 
+
+00:06:08.199 --> 00:06:09.950 align:start position:0%
+string like this. You see
+that <00:06:08.381><c>we </c><00:06:08.563><c>have </c><00:06:08.745><c>two </c><00:06:08.927><c>instances </c><00:06:09.109><c>of </c><00:06:09.291><c>the </c><00:06:09.473><c>word </c><00:06:09.655><c>Eric </c><00:06:09.837><c>like</c>
+
+00:06:09.950 --> 00:06:09.960 align:start position:0%
+that we have two instances of the word Eric like
+ 
+
+00:06:09.960 --> 00:06:11.950 align:start position:0%
+that we have two instances of the word Eric like
+this. <00:06:10.400><c>We </c><00:06:10.840><c>want </c><00:06:11.280><c>to </c><00:06:11.720><c>replace</c>
+
+00:06:11.950 --> 00:06:11.960 align:start position:0%
+this. We want to replace
+ 
+
+00:06:11.960 --> 00:06:13.870 align:start position:0%
+this. We want to replace
+all <00:06:12.390><c>the </c><00:06:12.820><c>keywords </c><00:06:13.250><c>Eric. </c><00:06:13.680><c>You</c>
+
+00:06:13.870 --> 00:06:13.880 align:start position:0%
+all the keywords Eric. You
+ 
+
+00:06:13.880 --> 00:06:15.589 align:start position:0%
+all the keywords Eric. You
+see <00:06:15.479><c>inside</c>
+
+00:06:15.589 --> 00:06:15.599 align:start position:0%
+see inside
+ 
+
+00:06:15.599 --> 00:06:17.270 align:start position:0%
+see inside
+this <00:06:15.816><c>string. </c><00:06:16.033><c>We </c><00:06:16.250><c>want </c><00:06:16.467><c>to </c><00:06:16.684><c>replace </c><00:06:16.901><c>it </c><00:06:17.118><c>with</c>
+
+00:06:17.270 --> 00:06:17.280 align:start position:0%
+this string. We want to replace it with
+ 
+
+00:06:17.280 --> 00:06:19.309 align:start position:0%
+this string. We want to replace it with
+this <00:06:17.490><c>word. </c><00:06:17.700><c>We </c><00:06:17.910><c>want </c><00:06:18.120><c>to </c><00:06:18.330><c>replace </c><00:06:18.540><c>it </c><00:06:18.750><c>with </c><00:06:18.960><c>lowercase</c>
+
+00:06:19.309 --> 00:06:19.319 align:start position:0%
+this word. We want to replace it with lowercase
+ 
+
+00:06:19.319 --> 00:06:20.909 align:start position:0%
+this word. We want to replace it with lowercase
+like <00:06:19.669><c>this, </c><00:06:20.019><c>for </c><00:06:20.369><c>example. </c><00:06:20.719><c>Now,</c>
+
+00:06:20.909 --> 00:06:20.919 align:start position:0%
+like this, for example. Now,
+ 
+
+00:06:20.919 --> 00:06:22.830 align:start position:0%
+like this, for example. Now,
+there <00:06:21.287><c>is </c><00:06:21.655><c>no </c><00:06:22.023><c>function, </c><00:06:22.391><c>no </c><00:06:22.759><c>built-in</c>
+
+00:06:22.830 --> 00:06:22.840 align:start position:0%
+there is no function, no built-in
+ 
+
+00:06:22.840 --> 00:06:24.909 align:start position:0%
+there is no function, no built-in
+method <00:06:23.400><c>in </c><00:06:23.960><c>string </c><00:06:24.520><c>that</c>
+
+00:06:24.909 --> 00:06:24.919 align:start position:0%
+method in string that
+ 
+
+00:06:24.919 --> 00:06:26.710 align:start position:0%
+method in string that
+supports <00:06:26.440><c>this.</c>
+
+00:06:26.710 --> 00:06:26.720 align:start position:0%
+supports this.
+ 
+
+00:06:26.720 --> 00:06:28.390 align:start position:0%
+supports this.
+We <00:06:26.944><c>are </c><00:06:27.168><c>forced </c><00:06:27.392><c>to </c><00:06:27.616><c>use </c><00:06:27.840><c>regular</c>
+
+00:06:28.390 --> 00:06:28.400 align:start position:0%
+We are forced to use regular
+ 
+
+00:06:28.400 --> 00:06:30.550 align:start position:0%
+We are forced to use regular
+expressions. <00:06:28.808><c>Okay, </c><00:06:29.216><c>later </c><00:06:29.624><c>there </c><00:06:30.032><c>are </c><00:06:30.440><c>some</c>
+
+00:06:30.550 --> 00:06:30.560 align:start position:0%
+expressions. Okay, later there are some
+ 
+
+00:06:30.560 --> 00:06:32.550 align:start position:0%
+expressions. Okay, later there are some
+practical <00:06:30.853><c>examples. </c><00:06:31.146><c>For </c><00:06:31.439><c>example, </c><00:06:31.732><c>you </c><00:06:32.025><c>want </c><00:06:32.318><c>to</c>
+
+00:06:32.550 --> 00:06:32.560 align:start position:0%
+practical examples. For example, you want to
+ 
+
+00:06:32.560 --> 00:06:34.390 align:start position:0%
+practical examples. For example, you want to
+check <00:06:32.793><c>the </c><00:06:33.026><c>validity </c><00:06:33.259><c>of </c><00:06:33.492><c>an </c><00:06:33.725><c>email </c><00:06:33.958><c>or</c>
+
+00:06:34.390 --> 00:06:34.400 align:start position:0%
+check the validity of an email or
+ 
+
+00:06:34.400 --> 00:06:36.070 align:start position:0%
+check the validity of an email or
+you <00:06:34.800><c>want </c><00:06:35.200><c>to </c><00:06:35.600><c>check </c><00:06:36.000><c>the</c>
+
+00:06:36.070 --> 00:06:36.080 align:start position:0%
+you want to check the
+ 
+
+00:06:36.080 --> 00:06:37.629 align:start position:0%
+you want to check the
+validity <00:06:36.359><c>of </c><00:06:36.638><c>a </c><00:06:36.917><c>citizen's </c><00:06:37.196><c>ID. </c><00:06:37.475><c>A</c>
+
+00:06:37.629 --> 00:06:37.639 align:start position:0%
+validity of a citizen's ID. A
+ 
+
+00:06:37.639 --> 00:06:39.749 align:start position:0%
+validity of a citizen's ID. A
+citizen's <00:06:38.099><c>ID </c><00:06:38.559><c>has </c><00:06:39.019><c>12 </c><00:06:39.479><c>digits,</c>
+
+00:06:39.749 --> 00:06:39.759 align:start position:0%
+citizen's ID has 12 digits,
+ 
+
+00:06:39.759 --> 00:06:41.430 align:start position:0%
+citizen's ID has 12 digits,
+right? <00:06:40.055><c>If </c><00:06:40.351><c>we </c><00:06:40.647><c>enter </c><00:06:40.943><c>fewer </c><00:06:41.239><c>than</c>
+
+00:06:41.430 --> 00:06:41.440 align:start position:0%
+right? If we enter fewer than
+ 
+
+00:06:41.440 --> 00:06:43.550 align:start position:0%
+right? If we enter fewer than
+12 <00:06:41.800><c>digits, </c><00:06:42.160><c>it </c><00:06:42.520><c>will </c><00:06:42.880><c>be </c><00:06:43.240><c>invalid.</c>
+
+00:06:43.550 --> 00:06:43.560 align:start position:0%
+12 digits, it will be invalid.
+ 
+
+00:06:43.560 --> 00:06:45.550 align:start position:0%
+12 digits, it will be invalid.
+You <00:06:43.785><c>guys, </c><00:06:44.010><c>we </c><00:06:44.235><c>have </c><00:06:44.460><c>to </c><00:06:44.685><c>start </c><00:06:44.910><c>with </c><00:06:45.135><c>zero, </c><00:06:45.360><c>for</c>
+
+00:06:45.550 --> 00:06:45.560 align:start position:0%
+You guys, we have to start with zero, for
+ 
+
+00:06:45.560 --> 00:06:47.110 align:start position:0%
+You guys, we have to start with zero, for
+example. <00:06:45.773><c>This </c><00:06:45.986><c>is </c><00:06:46.199><c>called  </c><00:06:46.412><c>These </c><00:06:46.625><c>are </c><00:06:46.838><c>some</c>
+
+00:06:47.110 --> 00:06:47.120 align:start position:0%
+example. This is called  These are some
+ 
+
+00:06:47.120 --> 00:06:48.870 align:start position:0%
+example. This is called  These are some
+rules, <00:06:47.529><c>or </c><00:06:47.938><c>rather, </c><00:06:48.347><c>if </c><00:06:48.756><c>you</c>
+
+00:06:48.870 --> 00:06:48.880 align:start position:0%
+rules, or rather, if you
+ 
+
+00:06:48.880 --> 00:06:50.550 align:start position:0%
+rules, or rather, if you
+want <00:06:49.044><c>to </c><00:06:49.208><c>check </c><00:06:49.372><c>the </c><00:06:49.536><c>accuracy </c><00:06:49.700><c>of </c><00:06:49.864><c>a </c><00:06:50.028><c>phone </c><00:06:50.192><c>number </c><00:06:50.356><c>later,</c>
+
+00:06:50.550 --> 00:06:52.110 align:start position:0%
+want to check the accuracy of a phone number later,
+ 
+
+00:06:52.110 --> 00:06:52.120 align:start position:0%
+ 
+ 
+
+00:06:52.120 --> 00:06:53.749 align:start position:0%
+ 
+you <00:06:52.297><c>will </c><00:06:52.474><c>definitely </c><00:06:52.651><c>need </c><00:06:52.828><c>to </c><00:06:53.005><c>use </c><00:06:53.182><c>this </c><00:06:53.359><c>tool.</c>
+
+00:06:53.749 --> 00:06:53.759 align:start position:0%
+you will definitely need to use this tool.
+ 
+
+00:06:53.759 --> 00:06:55.150 align:start position:0%
+you will definitely need to use this tool.
+We <00:06:54.089><c>can't </c><00:06:54.419><c>just </c><00:06:54.749><c>use </c><00:06:55.079><c>pre-</c>
+
+00:06:55.150 --> 00:06:55.160 align:start position:0%
+We can't just use pre-
+ 
+
+00:06:55.160 --> 00:06:56.990 align:start position:0%
+We can't just use pre-
+written <00:06:56.039><c>methods. </c><00:06:56.918><c>Next,</c>
+
+00:06:56.990 --> 00:06:57.000 align:start position:0%
+written methods. Next,
+ 
+
+00:06:57.000 --> 00:06:58.230 align:start position:0%
+written methods. Next,
+you <00:06:57.270><c>can </c><00:06:57.540><c>read </c><00:06:57.810><c>the </c><00:06:58.080><c>explanation.</c>
+
+00:06:58.230 --> 00:06:58.240 align:start position:0%
+you can read the explanation.
+ 
+
+00:06:58.240 --> 00:06:59.710 align:start position:0%
+you can read the explanation.
+I've <00:06:59.599><c>already</c>
+
+00:06:59.710 --> 00:06:59.720 align:start position:0%
+I've already
+ 
+
+00:06:59.720 --> 00:07:01.510 align:start position:0%
+I've already
+explained <00:06:59.954><c>it </c><00:07:00.188><c>to </c><00:07:00.422><c>you. </c><00:07:00.656><c>Besides </c><00:07:00.890><c>that, </c><00:07:01.124><c>there's </c><00:07:01.358><c>this</c>
+
+00:07:01.510 --> 00:07:01.520 align:start position:0%
+explained it to you. Besides that, there's this
+ 
+
+00:07:01.520 --> 00:07:03.150 align:start position:0%
+explained it to you. Besides that, there's this
+part:
+
+00:07:03.150 --> 00:07:03.160 align:start position:0%
+part:
+ 
+
+00:07:03.160 --> 00:07:05.110 align:start position:0%
+part:
+the <00:07:03.760><c>key </c><00:07:04.360><c>instant. </c><00:07:04.960><c>It</c>
+
+00:07:05.110 --> 00:07:05.120 align:start position:0%
+the key instant. It
+ 
+
+00:07:05.120 --> 00:07:06.469 align:start position:0%
+the key instant. It
+says <00:07:05.274><c>we </c><00:07:05.428><c>don't </c><00:07:05.582><c>care </c><00:07:05.736><c>about </c><00:07:05.890><c>uppercase </c><00:07:06.044><c>or </c><00:07:06.198><c>lowercase</c>
+
+00:07:06.469 --> 00:07:06.479 align:start position:0%
+says we don't care about uppercase or lowercase
+ 
+
+00:07:06.479 --> 00:07:07.990 align:start position:0%
+says we don't care about uppercase or lowercase
+letters. <00:07:07.139><c>You </c><00:07:07.799><c>can</c>
+
+00:07:07.990 --> 00:07:08.000 align:start position:0%
+letters. You can
+ 
+
+00:07:08.000 --> 00:07:09.510 align:start position:0%
+letters. You can
+read <00:07:08.188><c>more </c><00:07:08.376><c>about </c><00:07:08.564><c>it </c><00:07:08.752><c>here. </c><00:07:08.940><c>Personally, </c><00:07:09.128><c>I </c><00:07:09.316><c>rarely</c>
+
+00:07:09.510 --> 00:07:09.520 align:start position:0%
+read more about it here. Personally, I rarely
+ 
+
+00:07:09.520 --> 00:07:11.029 align:start position:0%
+read more about it here. Personally, I rarely
+use <00:07:10.199><c>these. </c><00:07:10.878><c>When</c>
+
+00:07:11.029 --> 00:07:11.039 align:start position:0%
+use these. When
+ 
+
+00:07:11.039 --> 00:07:12.629 align:start position:0%
+use these. When
+we <00:07:11.250><c>do </c><00:07:11.461><c>use </c><00:07:11.672><c>them, </c><00:07:11.883><c>we'll </c><00:07:12.094><c>test </c><00:07:12.305><c>them </c><00:07:12.516><c>and</c>
+
+00:07:12.629 --> 00:07:12.639 align:start position:0%
+we do use them, we'll test them and
+ 
+
+00:07:12.639 --> 00:07:15.390 align:start position:0%
+we do use them, we'll test them and
+know. <00:07:13.479><c>Okay, </c><00:07:14.319><c>now </c><00:07:15.159><c>let</c>
+
+00:07:15.390 --> 00:07:15.400 align:start position:0%
+know. Okay, now let
+ 
+
+00:07:15.400 --> 00:07:17.350 align:start position:0%
+know. Okay, now let
+'s <00:07:15.849><c>talk </c><00:07:16.298><c>a </c><00:07:16.747><c>little </c><00:07:17.196><c>about</c>
+
+00:07:17.350 --> 00:07:17.360 align:start position:0%
+'s talk a little about
+ 
+
+00:07:17.360 --> 00:07:19.430 align:start position:0%
+'s talk a little about
+regular <00:07:18.360><c>expression </c><00:07:19.360><c>patterns.</c>
+
+00:07:19.430 --> 00:07:19.440 align:start position:0%
+regular expression patterns.
+ 
+
+00:07:19.440 --> 00:07:21.469 align:start position:0%
+regular expression patterns.
+These <00:07:19.909><c>are </c><00:07:20.378><c>the </c><00:07:20.847><c>methods </c><00:07:21.316><c>that</c>
+
+00:07:21.469 --> 00:07:21.479 align:start position:0%
+These are the methods that
+ 
+
+00:07:21.479 --> 00:07:23.430 align:start position:0%
+These are the methods that
+support <00:07:21.807><c>you. </c><00:07:22.135><c>We </c><00:07:22.463><c>need </c><00:07:22.791><c>to </c><00:07:23.119><c>write</c>
+
+00:07:23.430 --> 00:07:23.440 align:start position:0%
+support you. We need to write
+ 
+
+00:07:23.440 --> 00:07:25.270 align:start position:0%
+support you. We need to write
+down <00:07:23.870><c>the </c><00:07:24.300><c>rules, </c><00:07:24.730><c>right? </c><00:07:25.160><c>For</c>
+
+00:07:25.270 --> 00:07:25.280 align:start position:0%
+down the rules, right? For
+ 
+
+00:07:25.280 --> 00:07:27.309 align:start position:0%
+down the rules, right? For
+example, <00:07:25.573><c>you </c><00:07:25.866><c>have </c><00:07:26.159><c>these </c><00:07:26.452><c>opening </c><00:07:26.745><c>and </c><00:07:27.038><c>closing</c>
+
+00:07:27.309 --> 00:07:27.319 align:start position:0%
+example, you have these opening and closing
+ 
+
+00:07:27.319 --> 00:07:28.869 align:start position:0%
+example, you have these opening and closing
+square <00:07:27.552><c>brackets </c><00:07:27.785><c>like </c><00:07:28.018><c>this. </c><00:07:28.251><c>That's </c><00:07:28.484><c>called </c><00:07:28.717><c>a</c>
+
+00:07:28.869 --> 00:07:28.879 align:start position:0%
+square brackets like this. That's called a
+ 
+
+00:07:28.879 --> 00:07:30.749 align:start position:0%
+square brackets like this. That's called a
+Range, <00:07:29.659><c>a </c><00:07:30.439><c>range.</c>
+
+00:07:30.749 --> 00:07:30.759 align:start position:0%
+Range, a range.
+ 
+
+00:07:30.759 --> 00:07:32.309 align:start position:0%
+Range, a range.
+For <00:07:30.999><c>example, </c><00:07:31.239><c>if </c><00:07:31.479><c>you </c><00:07:31.719><c>write </c><00:07:31.959><c>it </c><00:07:32.199><c>like</c>
+
+00:07:32.309 --> 00:07:32.319 align:start position:0%
+For example, if you write it like
+ 
+
+00:07:32.319 --> 00:07:33.749 align:start position:0%
+For example, if you write it like
+this, <00:07:32.649><c>it </c><00:07:32.979><c>means...  </c><00:07:33.309><c>For </c><00:07:33.639><c>example,</c>
+
+00:07:33.749 --> 00:07:33.759 align:start position:0%
+this, it means...  For example,
+ 
+
+00:07:33.759 --> 00:07:35.990 align:start position:0%
+this, it means...  For example,
+we'll <00:07:33.967><c>look </c><00:07:34.175><c>for </c><00:07:34.383><c>the </c><00:07:34.591><c>character </c><00:07:34.799><c>'a', </c><00:07:35.007><c>the </c><00:07:35.215><c>character </c><00:07:35.423><c>'b', </c><00:07:35.631><c>the</c>
+
+00:07:35.990 --> 00:07:36.000 align:start position:0%
+we'll look for the character 'a', the character 'b', the
+ 
+
+00:07:36.000 --> 00:07:37.950 align:start position:0%
+we'll look for the character 'a', the character 'b', the
+character <00:07:36.626><c>'c'. </c><00:07:37.252><c>And </c><00:07:37.878><c>if</c>
+
+00:07:37.950 --> 00:07:37.960 align:start position:0%
+character 'c'. And if
+ 
+
+00:07:37.960 --> 00:07:39.510 align:start position:0%
+character 'c'. And if
+you <00:07:38.165><c>use </c><00:07:38.370><c>the </c><00:07:38.575><c>circumflex </c><00:07:38.780><c>accent </c><00:07:38.985><c>like </c><00:07:39.190><c>this, </c><00:07:39.395><c>that's</c>
+
+00:07:39.510 --> 00:07:39.520 align:start position:0%
+you use the circumflex accent like this, that's
+ 
+
+00:07:39.520 --> 00:07:41.790 align:start position:0%
+you use the circumflex accent like this, that's
+how <00:07:40.226><c>we </c><00:07:40.932><c>negate </c><00:07:41.638><c>it.</c>
+
+00:07:41.790 --> 00:07:43.510 align:start position:0%
+how we negate it.
+ 
+
+00:07:43.510 --> 00:07:43.520 align:start position:0%
+ 
+ 
+
+00:07:43.520 --> 00:07:45.189 align:start position:0%
+ 
+There <00:07:43.766><c>are </c><00:07:44.012><c>many </c><00:07:44.258><c>characters </c><00:07:44.504><c>here, </c><00:07:44.750><c>you </c><00:07:44.996><c>can</c>
+
+00:07:45.189 --> 00:07:45.199 align:start position:0%
+There are many characters here, you can
+ 
+
+00:07:45.199 --> 00:07:47.510 align:start position:0%
+There are many characters here, you can
+see <00:07:45.749><c>many </c><00:07:46.299><c>characters </c><00:07:46.849><c>here. </c><00:07:47.399><c>However,</c>
+
+00:07:47.510 --> 00:07:47.520 align:start position:0%
+see many characters here. However,
+ 
+
+00:07:47.520 --> 00:07:50.149 align:start position:0%
+see many characters here. However,
+personally,
+
+00:07:50.149 --> 00:07:50.159 align:start position:0%
+personally,
+ 
+
+00:07:50.159 --> 00:07:51.589 align:start position:0%
+personally,
+based <00:07:50.532><c>on </c><00:07:50.905><c>my </c><00:07:51.278><c>experience,</c>
+
+00:07:51.589 --> 00:07:51.599 align:start position:0%
+based on my experience,
+ 
+
+00:07:51.599 --> 00:07:53.469 align:start position:0%
+based on my experience,
+I'm <00:07:52.039><c>not </c><00:07:52.479><c>an </c><00:07:52.919><c>expert </c><00:07:53.359><c>at</c>
+
+00:07:53.469 --> 00:07:53.479 align:start position:0%
+I'm not an expert at
+ 
+
+00:07:53.479 --> 00:07:55.149 align:start position:0%
+I'm not an expert at
+memorizing <00:07:53.972><c>these </c><00:07:54.465><c>things. </c><00:07:54.958><c>Usually,</c>
+
+00:07:55.149 --> 00:07:55.159 align:start position:0%
+memorizing these things. Usually,
+ 
+
+00:07:55.159 --> 00:07:57.909 align:start position:0%
+memorizing these things. Usually,
+this <00:07:55.809><c>is </c><00:07:56.459><c>my </c><00:07:57.109><c>learning </c><00:07:57.759><c>method.</c>
+
+00:07:57.909 --> 00:07:57.919 align:start position:0%
+this is my learning method.
+ 
+
+00:07:57.919 --> 00:07:59.670 align:start position:0%
+this is my learning method.
+If <00:07:58.479><c>you </c><00:07:59.039><c>can </c><00:07:59.599><c>remember</c>
+
+00:07:59.670 --> 00:07:59.680 align:start position:0%
+If you can remember
+ 
+
+00:07:59.680 --> 00:08:01.189 align:start position:0%
+If you can remember
+these, <00:08:00.146><c>it's </c><00:08:00.612><c>very </c><00:08:01.078><c>good.</c>
+
+00:08:01.189 --> 00:08:01.199 align:start position:0%
+these, it's very good.
+ 
+
+00:08:01.199 --> 00:08:02.350 align:start position:0%
+these, it's very good.
+Personally, <00:08:02.120><c>I</c>
+
+00:08:02.350 --> 00:08:02.360 align:start position:0%
+Personally, I
+ 
+
+00:08:02.360 --> 00:08:03.710 align:start position:0%
+Personally, I
+just <00:08:02.786><c>search, </c><00:08:03.212><c>meaning </c><00:08:03.638><c>I</c>
+
+00:08:03.710 --> 00:08:03.720 align:start position:0%
+just search, meaning I
+ 
+
+00:08:03.720 --> 00:08:05.149 align:start position:0%
+just search, meaning I
+search <00:08:03.946><c>and </c><00:08:04.172><c>look </c><00:08:04.398><c>at </c><00:08:04.624><c>other </c><00:08:04.850><c>people's </c><00:08:05.076><c>solutions.</c>
+
+00:08:05.149 --> 00:08:05.159 align:start position:0%
+search and look at other people's solutions.
+ 
+
+00:08:05.159 --> 00:08:07.350 align:start position:0%
+search and look at other people's solutions.
+You <00:08:05.629><c>can </c><00:08:06.099><c>learn </c><00:08:06.569><c>more </c><00:08:07.039><c>about</c>
+
+00:08:07.350 --> 00:08:07.360 align:start position:0%
+You can learn more about
+ 
+
+00:08:07.360 --> 00:08:09.110 align:start position:0%
+You can learn more about
+these <00:08:07.770><c>parts. </c><00:08:08.180><c>Of </c><00:08:08.590><c>course, </c><00:08:09.000><c>I</c>
+
+00:08:09.110 --> 00:08:09.120 align:start position:0%
+these parts. Of course, I
+ 
+
+00:08:09.120 --> 00:08:11.110 align:start position:0%
+these parts. Of course, I
+know <00:08:09.471><c>this </c><00:08:09.822><c>video </c><00:08:10.173><c>is </c><00:08:10.524><c>just </c><00:08:10.875><c>an</c>
+
+00:08:11.110 --> 00:08:11.120 align:start position:0%
+know this video is just an
+ 
+
+00:08:11.120 --> 00:08:12.909 align:start position:0%
+know this video is just an
+overview. <00:08:11.447><c>Anyway, </c><00:08:11.774><c>in </c><00:08:12.101><c>the </c><00:08:12.428><c>next </c><00:08:12.755><c>video,</c>
+
+00:08:12.909 --> 00:08:12.919 align:start position:0%
+overview. Anyway, in the next video,
+ 
+
+00:08:12.919 --> 00:08:14.469 align:start position:0%
+overview. Anyway, in the next video,
+I <00:08:13.399><c>will </c><00:08:13.879><c>guide </c><00:08:14.359><c>you.</c>
+
+00:08:14.469 --> 00:08:14.479 align:start position:0%
+I will guide you.
+ 
+
+00:08:14.479 --> 00:08:16.589 align:start position:0%
+I will guide you.
+We <00:08:14.805><c>will </c><00:08:15.131><c>do </c><00:08:15.457><c>some </c><00:08:15.783><c>exercises </c><00:08:16.109><c>together, </c><00:08:16.435><c>and</c>
+
+00:08:16.589 --> 00:08:16.599 align:start position:0%
+We will do some exercises together, and
+ 
+
+00:08:16.599 --> 00:08:18.070 align:start position:0%
+We will do some exercises together, and
+I <00:08:16.863><c>hope </c><00:08:17.127><c>that </c><00:08:17.391><c>through </c><00:08:17.655><c>these </c><00:08:17.919><c>exercises,</c>
+
+00:08:18.070 --> 00:08:18.080 align:start position:0%
+I hope that through these exercises,
+ 
+
+00:08:18.080 --> 00:08:19.909 align:start position:0%
+I hope that through these exercises,
+we <00:08:18.302><c>will </c><00:08:18.524><c>understand </c><00:08:18.746><c>more </c><00:08:18.968><c>clearly. </c><00:08:19.190><c>See </c><00:08:19.412><c>you </c><00:08:19.634><c>then.</c>
+
+00:08:19.909 --> 00:08:19.919 align:start position:0%
+we will understand more clearly. See you then.
+ 
+
+00:08:19.919 --> 00:08:23.800 align:start position:0%
+we will understand more clearly. See you then.
+See <00:08:20.207><c>you </c><00:08:20.495><c>in </c><00:08:20.783><c>the </c><00:08:21.071><c>next </c><00:08:21.359><c>video!</c>
+

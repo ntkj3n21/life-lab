@@ -16,7 +16,12 @@ import { NavLink } from "react-router-dom";
 
 import { useAppearanceStore } from "../../stores/appearanceStore";
 import { useAuthStore } from "../../stores/authStore";
-import { useLayoutStore } from "../../stores/layoutStore";
+import {
+  SIDEBAR_MAX_WIDTH,
+  SIDEBAR_MIN_WIDTH,
+  useLayoutStore,
+} from "../../stores/layoutStore";
+import { useHorizontalResize } from "./useHorizontalResize";
 
 const navItems = [
   {
@@ -57,6 +62,29 @@ export function Sidebar() {
         state.toggleSidebar,
     );
 
+  const sidebarWidth =
+    useLayoutStore(
+      (state) => state.sidebarWidth,
+    );
+
+  const setSidebarWidth =
+    useLayoutStore(
+      (state) =>
+        state.setSidebarWidth,
+    );
+
+  const {
+    isResizing,
+    handlePointerDown,
+    handleKeyDown,
+  } = useHorizontalResize({
+    width: sidebarWidth,
+    minWidth: SIDEBAR_MIN_WIDTH,
+    maxWidth: SIDEBAR_MAX_WIDTH,
+    resizeFrom: "left",
+    onWidthChange: setSidebarWidth,
+  });
+
   const appearance =
     useAppearanceStore(
       (state) => state.appearance,
@@ -95,12 +123,53 @@ export function Sidebar() {
   return (
     <aside
       aria-label="Primary navigation"
-      className={`hidden shrink-0 flex-col border-r border-(--border) bg-(--panel-bg) transition-[width] duration-200 xl:flex ${
+      style={
+        isSidebarCollapsed
+          ? undefined
+          : {
+              width: sidebarWidth,
+            }
+      }
+      className={`relative hidden shrink-0 flex-col border-r border-(--border) bg-(--panel-bg) xl:flex ${
+        isResizing
+          ? "transition-none"
+          : "transition-[width] duration-200 motion-reduce:transition-none"
+      } ${
         isSidebarCollapsed
           ? "w-16"
-          : "w-60"
+          : ""
       }`}
     >
+      {!isSidebarCollapsed && (
+        <div
+          role="separator"
+          aria-label="Resize sidebar"
+          aria-orientation="vertical"
+          aria-valuemin={
+            SIDEBAR_MIN_WIDTH
+          }
+          aria-valuemax={
+            SIDEBAR_MAX_WIDTH
+          }
+          aria-valuenow={sidebarWidth}
+          tabIndex={0}
+          onPointerDown={
+            handlePointerDown
+          }
+          onKeyDown={handleKeyDown}
+          className="group absolute inset-y-0 -right-1 z-20 hidden w-2 cursor-col-resize touch-none outline-none xl:block"
+        >
+          <span
+            aria-hidden="true"
+            className={`absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-transparent transition-colors group-hover:bg-(--border-strong) group-focus-visible:bg-(--focus) ${
+              isResizing
+                ? "bg-(--border-strong)"
+                : ""
+            }`}
+          />
+        </div>
+      )}
+
       <div className="flex h-16 items-center gap-2 px-3">
         {!isSidebarCollapsed && (
           <div className="min-w-0 flex-1 px-1">

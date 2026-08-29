@@ -1,0 +1,876 @@
+WEBVTT
+Kind: captions
+Language: en
+
+00:00:06.919 --> 00:00:09.110 align:start position:0%
+ 
+Hello <00:00:07.327><c>everyone, </c><00:00:07.735><c>it's </c><00:00:08.143><c>me, </c><00:00:08.551><c>Eric, </c><00:00:08.959><c>again.</c>
+
+00:00:09.110 --> 00:00:09.120 align:start position:0%
+Hello everyone, it's me, Eric, again.
+ 
+
+00:00:09.120 --> 00:00:10.629 align:start position:0%
+Hello everyone, it's me, Eric, again.
+Today <00:00:09.384><c>in </c><00:00:09.648><c>this </c><00:00:09.912><c>video, </c><00:00:10.176><c>we'll </c><00:00:10.440><c>be</c>
+
+00:00:10.629 --> 00:00:10.639 align:start position:0%
+Today in this video, we'll be
+ 
+
+00:00:10.639 --> 00:00:12.709 align:start position:0%
+Today in this video, we'll be
+exploring <00:00:10.999><c>the </c><00:00:11.359><c>concept </c><00:00:11.719><c>of </c><00:00:12.079><c>abstract</c>
+
+00:00:12.709 --> 00:00:12.719 align:start position:0%
+exploring the concept of abstract
+ 
+
+00:00:12.719 --> 00:00:15.110 align:start position:0%
+exploring the concept of abstract
+classes. <00:00:13.819><c>Specifically, </c><00:00:14.919><c>sometimes</c>
+
+00:00:15.110 --> 00:00:15.120 align:start position:0%
+classes. Specifically, sometimes
+ 
+
+00:00:15.120 --> 00:00:17.029 align:start position:0%
+classes. Specifically, sometimes
+we <00:00:15.490><c>want </c><00:00:15.860><c>the </c><00:00:16.230><c>children </c><00:00:16.600><c>to</c>
+
+00:00:17.029 --> 00:00:17.039 align:start position:0%
+we want the children to
+ 
+
+00:00:17.039 --> 00:00:19.429 align:start position:0%
+we want the children to
+inherit <00:00:17.255><c>from </c><00:00:17.471><c>the </c><00:00:17.687><c>parent </c><00:00:17.903><c>class, </c><00:00:18.119><c>and </c><00:00:18.335><c>there </c><00:00:18.551><c>will </c><00:00:18.767><c>be </c><00:00:18.983><c>certain </c><00:00:19.199><c>constraints.</c>
+
+00:00:19.429 --> 00:00:19.439 align:start position:0%
+inherit from the parent class, and there will be certain constraints.
+ 
+
+00:00:19.439 --> 00:00:21.310 align:start position:0%
+inherit from the parent class, and there will be certain constraints.
+For <00:00:20.299><c>example, </c><00:00:21.159><c>we</c>
+
+00:00:21.310 --> 00:00:21.320 align:start position:0%
+For example, we
+ 
+
+00:00:21.320 --> 00:00:23.509 align:start position:0%
+For example, we
+define <00:00:21.570><c>a </c><00:00:21.820><c>parent </c><00:00:22.070><c>class </c><00:00:22.320><c>and </c><00:00:22.570><c>we </c><00:00:22.820><c>want </c><00:00:23.070><c>all </c><00:00:23.320><c>the</c>
+
+00:00:23.509 --> 00:00:23.519 align:start position:0%
+define a parent class and we want all the
+ 
+
+00:00:23.519 --> 00:00:26.230 align:start position:0%
+define a parent class and we want all the
+children <00:00:24.332><c>to </c><00:00:25.145><c>have </c><00:00:25.958><c>a</c>
+
+00:00:26.230 --> 00:00:26.240 align:start position:0%
+children to have a
+ 
+
+00:00:26.240 --> 00:00:28.189 align:start position:0%
+children to have a
+specific <00:00:26.853><c>method. </c><00:00:27.466><c>This </c><00:00:28.079><c>is</c>
+
+00:00:28.189 --> 00:00:28.199 align:start position:0%
+specific method. This is
+ 
+
+00:00:28.199 --> 00:00:30.790 align:start position:0%
+specific method. This is
+where <00:00:28.552><c>the </c><00:00:28.905><c>abstract </c><00:00:29.258><c>class </c><00:00:29.611><c>comes </c><00:00:29.964><c>into </c><00:00:30.317><c>play.</c>
+
+00:00:30.790 --> 00:00:30.800 align:start position:0%
+where the abstract class comes into play.
+ 
+
+00:00:30.800 --> 00:00:32.790 align:start position:0%
+where the abstract class comes into play.
+For <00:00:31.640><c>example, </c><00:00:32.480><c>in</c>
+
+00:00:32.790 --> 00:00:32.800 align:start position:0%
+For example, in
+ 
+
+00:00:32.800 --> 00:00:34.869 align:start position:0%
+For example, in
+previous <00:00:33.057><c>videos, </c><00:00:33.314><c>we </c><00:00:33.571><c>did </c><00:00:33.828><c>an </c><00:00:34.085><c>exercise </c><00:00:34.342><c>where </c><00:00:34.599><c>an</c>
+
+00:00:34.869 --> 00:00:34.879 align:start position:0%
+previous videos, we did an exercise where an
+ 
+
+00:00:34.879 --> 00:00:36.790 align:start position:0%
+previous videos, we did an exercise where an
+IT <00:00:35.165><c>student </c><00:00:35.451><c>and </c><00:00:35.737><c>a </c><00:00:36.023><c>mechanical </c><00:00:36.309><c>engineering </c><00:00:36.595><c>student</c>
+
+00:00:36.790 --> 00:00:36.800 align:start position:0%
+IT student and a mechanical engineering student
+ 
+
+00:00:36.800 --> 00:00:39.549 align:start position:0%
+IT student and a mechanical engineering student
+inherited <00:00:37.440><c>from </c><00:00:38.080><c>the </c><00:00:38.720><c>student, </c><00:00:39.360><c>right?</c>
+
+00:00:39.549 --> 00:00:39.559 align:start position:0%
+inherited from the student, right?
+ 
+
+00:00:39.559 --> 00:00:41.630 align:start position:0%
+inherited from the student, right?
+Now, <00:00:41.520><c>we</c>
+
+00:00:41.630 --> 00:00:41.640 align:start position:0%
+Now, we
+ 
+
+00:00:41.640 --> 00:00:43.869 align:start position:0%
+Now, we
+want <00:00:41.931><c>to </c><00:00:42.222><c>force </c><00:00:42.513><c>the </c><00:00:42.804><c>IT </c><00:00:43.095><c>student </c><00:00:43.386><c>and </c><00:00:43.677><c>the</c>
+
+00:00:43.869 --> 00:00:43.879 align:start position:0%
+want to force the IT student and the
+ 
+
+00:00:43.879 --> 00:00:46.510 align:start position:0%
+want to force the IT student and the
+mechanical <00:00:44.272><c>engineering </c><00:00:44.665><c>student </c><00:00:45.058><c>to </c><00:00:45.451><c>both </c><00:00:45.844><c>have </c><00:00:46.237><c>a</c>
+
+00:00:46.510 --> 00:00:46.520 align:start position:0%
+mechanical engineering student to both have a
+ 
+
+00:00:46.520 --> 00:00:48.510 align:start position:0%
+mechanical engineering student to both have a
+method <00:00:47.146><c>that </c><00:00:47.772><c>overrides </c><00:00:48.398><c>a</c>
+
+00:00:48.510 --> 00:00:48.520 align:start position:0%
+method that overrides a
+ 
+
+00:00:48.520 --> 00:00:51.029 align:start position:0%
+method that overrides a
+method <00:00:49.100><c>called </c><00:00:49.680><c>"score </c><00:00:50.260><c>calculation." </c><00:00:50.840><c>How</c>
+
+00:00:51.029 --> 00:00:51.039 align:start position:0%
+method called "score calculation." How
+ 
+
+00:00:51.039 --> 00:00:53.229 align:start position:0%
+method called "score calculation." How
+can <00:00:51.559><c>we </c><00:00:52.079><c>do </c><00:00:52.599><c>this? </c><00:00:53.119><c>Now,</c>
+
+00:00:53.229 --> 00:00:53.239 align:start position:0%
+can we do this? Now,
+ 
+
+00:00:53.239 --> 00:00:55.069 align:start position:0%
+can we do this? Now,
+you <00:00:53.669><c>can </c><00:00:54.099><c>reopen </c><00:00:54.529><c>our </c><00:00:54.959><c>project.</c>
+
+00:00:55.069 --> 00:00:55.079 align:start position:0%
+you can reopen our project.
+ 
+
+00:00:55.079 --> 00:00:56.910 align:start position:0%
+you can reopen our project.
+Let's <00:00:56.760><c>open</c>
+
+00:00:56.910 --> 00:00:56.920 align:start position:0%
+Let's open
+ 
+
+00:00:56.920 --> 00:00:59.229 align:start position:0%
+Let's open
+this <00:00:57.234><c>part. </c><00:00:57.548><c>Why </c><00:00:57.862><c>is </c><00:00:58.176><c>it </c><00:00:58.490><c>showing </c><00:00:58.804><c>this </c><00:00:59.118><c>error?</c>
+
+00:00:59.229 --> 00:00:59.239 align:start position:0%
+this part. Why is it showing this error?
+ 
+
+00:00:59.239 --> 00:01:03.709 align:start position:0%
+this part. Why is it showing this error?
+This <00:00:59.739><c>side </c><00:01:00.239><c>is </c><00:01:00.739><c>the </c><00:01:01.239><c>IT </c><00:01:01.739><c>student. </c><00:01:02.239><c>Ah, </c><00:01:02.739><c>this </c><00:01:03.239><c>is</c>
+
+00:01:03.709 --> 00:01:03.719 align:start position:0%
+This side is the IT student. Ah, this is
+ 
+
+00:01:03.719 --> 00:01:06.390 align:start position:0%
+This side is the IT student. Ah, this is
+my <00:01:04.167><c>student. </c><00:01:04.615><c>And </c><00:01:05.063><c>then, </c><00:01:05.511><c>I </c><00:01:05.959><c>don't</c>
+
+00:01:06.390 --> 00:01:06.400 align:start position:0%
+my student. And then, I don't
+ 
+
+00:01:06.400 --> 00:01:08.590 align:start position:0%
+my student. And then, I don't
+understand <00:01:08.479><c>why...</c>
+
+00:01:08.590 --> 00:01:08.600 align:start position:0%
+understand why...
+ 
+
+00:01:08.600 --> 00:01:10.190 align:start position:0%
+understand why...
+This <00:01:08.896><c>guy </c><00:01:09.192><c>is </c><00:01:09.488><c>giving </c><00:01:09.784><c>me </c><00:01:10.080><c>an</c>
+
+00:01:10.190 --> 00:01:10.200 align:start position:0%
+This guy is giving me an
+ 
+
+00:01:10.200 --> 00:01:11.789 align:start position:0%
+This guy is giving me an
+error, <00:01:10.488><c>guys. </c><00:01:10.776><c>I'll </c><00:01:11.064><c>refresh </c><00:01:11.352><c>it. </c><00:01:11.640><c>Uh,</c>
+
+00:01:11.789 --> 00:01:11.799 align:start position:0%
+error, guys. I'll refresh it. Uh,
+ 
+
+00:01:11.799 --> 00:01:12.830 align:start position:0%
+error, guys. I'll refresh it. Uh,
+
+
+00:01:12.830 --> 00:01:12.840 align:start position:0%
+ 
+ 
+
+00:01:12.840 --> 00:01:15.429 align:start position:0%
+ 
+I <00:01:13.328><c>refreshed </c><00:01:13.816><c>it, </c><00:01:14.304><c>but </c><00:01:14.792><c>why </c><00:01:15.280><c>is</c>
+
+00:01:15.429 --> 00:01:15.439 align:start position:0%
+I refreshed it, but why is
+ 
+
+00:01:15.439 --> 00:01:17.870 align:start position:0%
+I refreshed it, but why is
+this <00:01:15.599><c>guy </c><00:01:15.759><c>giving </c><00:01:15.919><c>me </c><00:01:16.079><c>an </c><00:01:16.239><c>error? </c><00:01:16.399><c>Oh </c><00:01:16.559><c>well, </c><00:01:16.719><c>never </c><00:01:16.879><c>mind.</c>
+
+00:01:17.870 --> 00:01:17.880 align:start position:0%
+this guy giving me an error? Oh well, never mind.
+ 
+
+00:01:17.880 --> 00:01:20.710 align:start position:0%
+this guy giving me an error? Oh well, never mind.
+Now,
+
+00:01:20.710 --> 00:01:20.720 align:start position:0%
+Now,
+ 
+
+00:01:20.720 --> 00:01:22.789 align:start position:0%
+Now,
+pay <00:01:21.210><c>attention. </c><00:01:21.700><c>Our </c><00:01:22.190><c>student </c><00:01:22.680><c>class</c>
+
+00:01:22.789 --> 00:01:22.799 align:start position:0%
+pay attention. Our student class
+ 
+
+00:01:22.799 --> 00:01:24.590 align:start position:0%
+pay attention. Our student class
+is <00:01:23.345><c>a </c><00:01:23.891><c>normal </c><00:01:24.437><c>class.</c>
+
+00:01:24.590 --> 00:01:24.600 align:start position:0%
+is a normal class.
+ 
+
+00:01:24.600 --> 00:01:26.870 align:start position:0%
+is a normal class.
+However, <00:01:26.520><c>after</c>
+
+00:01:26.870 --> 00:01:26.880 align:start position:0%
+However, after
+ 
+
+00:01:26.880 --> 00:01:28.910 align:start position:0%
+However, after
+you <00:01:27.370><c>add </c><00:01:27.860><c>the </c><00:01:28.350><c>`public` </c><00:01:28.840><c>attribute,</c>
+
+00:01:28.910 --> 00:01:28.920 align:start position:0%
+you add the `public` attribute,
+ 
+
+00:01:28.920 --> 00:01:30.870 align:start position:0%
+you add the `public` attribute,
+you <00:01:29.137><c>need </c><00:01:29.354><c>to </c><00:01:29.571><c>add </c><00:01:29.788><c>the </c><00:01:30.005><c>word </c><00:01:30.222><c>`abt`. </c><00:01:30.439><c>`abt`</c>
+
+00:01:30.870 --> 00:01:30.880 align:start position:0%
+you need to add the word `abt`. `abt`
+ 
+
+00:01:30.880 --> 00:01:32.389 align:start position:0%
+you need to add the word `abt`. `abt`
+means <00:01:31.960><c>abstract.</c>
+
+00:01:32.389 --> 00:01:32.399 align:start position:0%
+means abstract.
+ 
+
+00:01:32.399 --> 00:01:34.190 align:start position:0%
+means abstract.
+You <00:01:32.625><c>need </c><00:01:32.851><c>to </c><00:01:33.077><c>add </c><00:01:33.303><c>the </c><00:01:33.529><c>keyword </c><00:01:33.755><c>`ABS`.</c>
+
+00:01:34.190 --> 00:01:34.200 align:start position:0%
+You need to add the keyword `ABS`.
+ 
+
+00:01:34.200 --> 00:01:36.030 align:start position:0%
+You need to add the keyword `ABS`.
+However, <00:01:35.060><c>if </c><00:01:35.920><c>you</c>
+
+00:01:36.030 --> 00:01:36.040 align:start position:0%
+However, if you
+ 
+
+00:01:36.040 --> 00:01:37.670 align:start position:0%
+However, if you
+add <00:01:36.336><c>it </c><00:01:36.632><c>like </c><00:01:36.928><c>this, </c><00:01:37.224><c>there's </c><00:01:37.520><c>no</c>
+
+00:01:37.670 --> 00:01:37.680 align:start position:0%
+add it like this, there's no
+ 
+
+00:01:37.680 --> 00:01:39.789 align:start position:0%
+add it like this, there's no
+difference. <00:01:38.160><c>The </c><00:01:38.640><c>difference </c><00:01:39.120><c>is </c><00:01:39.600><c>that</c>
+
+00:01:39.789 --> 00:01:39.799 align:start position:0%
+difference. The difference is that
+ 
+
+00:01:39.799 --> 00:01:41.550 align:start position:0%
+difference. The difference is that
+you'll <00:01:41.360><c>define</c>
+
+00:01:41.550 --> 00:01:41.560 align:start position:0%
+you'll define
+ 
+
+00:01:41.560 --> 00:01:43.990 align:start position:0%
+you'll define
+methods <00:01:42.016><c>called </c><00:01:42.472><c>`abstract`. </c><00:01:42.928><c>For </c><00:01:43.384><c>an </c><00:01:43.840><c>`abstract`</c>
+
+00:01:43.990 --> 00:01:44.000 align:start position:0%
+methods called `abstract`. For an `abstract`
+ 
+
+00:01:44.000 --> 00:01:45.709 align:start position:0%
+methods called `abstract`. For an `abstract`
+method, <00:01:45.520><c>you</c>
+
+00:01:45.709 --> 00:01:45.719 align:start position:0%
+method, you
+ 
+
+00:01:45.719 --> 00:01:47.270 align:start position:0%
+method, you
+define <00:01:46.459><c>a </c><00:01:47.199><c>function</c>
+
+00:01:47.270 --> 00:01:47.280 align:start position:0%
+define a function
+ 
+
+00:01:47.280 --> 00:01:49.109 align:start position:0%
+define a function
+without <00:01:47.700><c>a </c><00:01:48.120><c>body. </c><00:01:48.540><c>Now, </c><00:01:48.960><c>you'll</c>
+
+00:01:49.109 --> 00:01:49.119 align:start position:0%
+without a body. Now, you'll
+ 
+
+00:01:49.119 --> 00:01:51.350 align:start position:0%
+without a body. Now, you'll
+use <00:01:49.572><c>the </c><00:01:50.025><c>word </c><00:01:50.478><c>`abstract`.</c>
+
+00:01:51.350 --> 00:01:51.360 align:start position:0%
+use the word `abstract`.
+ 
+
+00:01:51.360 --> 00:01:53.230 align:start position:0%
+use the word `abstract`.
+Essentially, <00:01:53.159><c>when</c>
+
+00:01:53.230 --> 00:01:53.240 align:start position:0%
+Essentially, when
+ 
+
+00:01:53.240 --> 00:01:55.230 align:start position:0%
+Essentially, when
+you <00:01:53.600><c>write </c><00:01:53.960><c>a </c><00:01:54.320><c>method </c><00:01:54.680><c>as </c><00:01:55.040><c>`abstract`,</c>
+
+00:01:55.230 --> 00:01:55.240 align:start position:0%
+you write a method as `abstract`,
+ 
+
+00:01:55.240 --> 00:01:56.789 align:start position:0%
+you write a method as `abstract`,
+it <00:01:55.480><c>automatically </c><00:01:55.720><c>adds </c><00:01:55.960><c>the </c><00:01:56.200><c>prefix </c><00:01:56.440><c>`public` </c><00:01:56.680><c>for</c>
+
+00:01:56.789 --> 00:01:56.799 align:start position:0%
+it automatically adds the prefix `public` for
+ 
+
+00:01:56.799 --> 00:01:57.950 align:start position:0%
+it automatically adds the prefix `public` for
+you. <00:01:56.965><c>You </c><00:01:57.131><c>don't </c><00:01:57.297><c>need </c><00:01:57.463><c>to </c><00:01:57.629><c>write </c><00:01:57.795><c>`</c>
+
+00:01:57.950 --> 00:01:57.960 align:start position:0%
+you. You don't need to write `
+ 
+
+00:01:57.960 --> 00:02:00.550 align:start position:0%
+you. You don't need to write `
+public <00:01:58.366><c>abstract`. </c><00:01:58.772><c>Okay, </c><00:01:59.178><c>here </c><00:01:59.584><c>it </c><00:01:59.990><c>is...  </c><00:02:00.396><c>Let's</c>
+
+00:02:00.550 --> 00:02:00.560 align:start position:0%
+public abstract`. Okay, here it is...  Let's
+ 
+
+00:02:00.560 --> 00:02:02.789 align:start position:0%
+public abstract`. Okay, here it is...  Let's
+call <00:02:01.060><c>it </c><00:02:01.560><c>a </c><00:02:02.060><c>scoring </c><00:02:02.560><c>method,</c>
+
+00:02:02.789 --> 00:02:02.799 align:start position:0%
+call it a scoring method,
+ 
+
+00:02:02.799 --> 00:02:04.590 align:start position:0%
+call it a scoring method,
+for <00:02:03.027><c>example, </c><00:02:03.255><c>right? </c><00:02:03.483><c>What </c><00:02:03.711><c>do </c><00:02:03.939><c>we </c><00:02:04.167><c>define </c><00:02:04.395><c>it</c>
+
+00:02:04.590 --> 00:02:04.600 align:start position:0%
+for example, right? What do we define it
+ 
+
+00:02:04.600 --> 00:02:06.429 align:start position:0%
+for example, right? What do we define it
+as? <00:02:04.840><c>Let's </c><00:02:05.080><c>define </c><00:02:05.320><c>it </c><00:02:05.560><c>as </c><00:02:05.800><c>a </c><00:02:06.040><c>scoring </c><00:02:06.280><c>method.</c>
+
+00:02:06.429 --> 00:02:06.439 align:start position:0%
+as? Let's define it as a scoring method.
+ 
+
+00:02:06.439 --> 00:02:07.990 align:start position:0%
+as? Let's define it as a scoring method.
+We'll <00:02:06.906><c>give </c><00:02:07.373><c>it </c><00:02:07.840><c>this</c>
+
+00:02:07.990 --> 00:02:08.000 align:start position:0%
+We'll give it this
+ 
+
+00:02:08.000 --> 00:02:09.830 align:start position:0%
+We'll give it this
+scoring <00:02:08.239><c>method. </c><00:02:08.478><c>We'll </c><00:02:08.717><c>give </c><00:02:08.956><c>it </c><00:02:09.195><c>a </c><00:02:09.434><c>return </c><00:02:09.673><c>type,</c>
+
+00:02:09.830 --> 00:02:09.840 align:start position:0%
+scoring method. We'll give it a return type,
+ 
+
+00:02:09.840 --> 00:02:11.550 align:start position:0%
+scoring method. We'll give it a return type,
+right? <00:02:09.984><c>Let's </c><00:02:10.128><c>use </c><00:02:10.272><c>'vo' </c><00:02:10.416><c>for </c><00:02:10.560><c>the </c><00:02:10.704><c>return </c><00:02:10.848><c>type. </c><00:02:10.992><c>This </c><00:02:11.136><c>is </c><00:02:11.280><c>how</c>
+
+00:02:11.550 --> 00:02:13.470 align:start position:0%
+right? Let's use 'vo' for the return type. This is how
+ 
+
+00:02:13.470 --> 00:02:13.480 align:start position:0%
+ 
+ 
+
+00:02:13.480 --> 00:02:15.110 align:start position:0%
+ 
+we've <00:02:14.179><c>defined </c><00:02:14.878><c>an</c>
+
+00:02:15.110 --> 00:02:15.120 align:start position:0%
+we've defined an
+ 
+
+00:02:15.120 --> 00:02:17.229 align:start position:0%
+we've defined an
+abstract <00:02:15.496><c>method. </c><00:02:15.872><c>If </c><00:02:16.248><c>we </c><00:02:16.624><c>didn't </c><00:02:17.000><c>have</c>
+
+00:02:17.229 --> 00:02:17.239 align:start position:0%
+abstract method. If we didn't have
+ 
+
+00:02:17.239 --> 00:02:19.070 align:start position:0%
+abstract method. If we didn't have
+this <00:02:17.669><c>keyword... </c><00:02:18.099><c>Look, </c><00:02:18.529><c>if </c><00:02:18.959><c>we</c>
+
+00:02:19.070 --> 00:02:19.080 align:start position:0%
+this keyword... Look, if we
+ 
+
+00:02:19.080 --> 00:02:21.229 align:start position:0%
+this keyword... Look, if we
+didn't <00:02:19.365><c>have </c><00:02:19.650><c>this </c><00:02:19.935><c>keyword... </c><00:02:20.220><c>It </c><00:02:20.505><c>would </c><00:02:20.790><c>understand </c><00:02:21.075><c>that</c>
+
+00:02:21.229 --> 00:02:21.239 align:start position:0%
+didn't have this keyword... It would understand that
+ 
+
+00:02:21.239 --> 00:02:23.030 align:start position:0%
+didn't have this keyword... It would understand that
+this <00:02:21.551><c>is </c><00:02:21.863><c>just </c><00:02:22.175><c>a </c><00:02:22.487><c>normal </c><00:02:22.799><c>function.</c>
+
+00:02:23.030 --> 00:02:23.040 align:start position:0%
+this is just a normal function.
+ 
+
+00:02:23.040 --> 00:02:24.750 align:start position:0%
+this is just a normal function.
+For <00:02:23.559><c>a </c><00:02:24.078><c>normal </c><00:02:24.597><c>function,</c>
+
+00:02:24.750 --> 00:02:24.760 align:start position:0%
+For a normal function,
+ 
+
+00:02:24.760 --> 00:02:26.790 align:start position:0%
+For a normal function,
+you <00:02:25.070><c>absolutely </c><00:02:25.380><c>need </c><00:02:25.690><c>a </c><00:02:26.000><c>body,</c>
+
+00:02:26.790 --> 00:02:26.800 align:start position:0%
+you absolutely need a body,
+ 
+
+00:02:26.800 --> 00:02:28.030 align:start position:0%
+you absolutely need a body,
+but <00:02:27.050><c>when </c><00:02:27.300><c>you </c><00:02:27.550><c>add </c><00:02:27.800><c>the</c>
+
+00:02:28.030 --> 00:02:28.040 align:start position:0%
+but when you add the
+ 
+
+00:02:28.040 --> 00:02:30.030 align:start position:0%
+but when you add the
+keyword <00:02:28.519><c>'abstract,' </c><00:02:28.998><c>it </c><00:02:29.477><c>understands </c><00:02:29.956><c>that</c>
+
+00:02:30.030 --> 00:02:30.040 align:start position:0%
+keyword 'abstract,' it understands that
+ 
+
+00:02:30.040 --> 00:02:31.509 align:start position:0%
+keyword 'abstract,' it understands that
+this <00:02:30.288><c>is </c><00:02:30.536><c>just </c><00:02:30.784><c>an </c><00:02:31.032><c>abstract </c><00:02:31.280><c>method.</c>
+
+00:02:31.509 --> 00:02:31.519 align:start position:0%
+this is just an abstract method.
+ 
+
+00:02:31.519 --> 00:02:33.470 align:start position:0%
+this is just an abstract method.
+It <00:02:31.959><c>doesn't </c><00:02:32.399><c>write </c><00:02:32.839><c>it </c><00:02:33.279><c>here;</c>
+
+00:02:33.470 --> 00:02:33.480 align:start position:0%
+It doesn't write it here;
+ 
+
+00:02:33.480 --> 00:02:36.030 align:start position:0%
+It doesn't write it here;
+any <00:02:33.853><c>children </c><00:02:34.226><c>inheriting </c><00:02:34.599><c>it </c><00:02:34.972><c>will </c><00:02:35.345><c>need </c><00:02:35.718><c>to</c>
+
+00:02:36.030 --> 00:02:36.040 align:start position:0%
+any children inheriting it will need to
+ 
+
+00:02:36.040 --> 00:02:38.229 align:start position:0%
+any children inheriting it will need to
+override <00:02:36.733><c>this </c><00:02:37.426><c>method. </c><00:02:38.119><c>Listen,</c>
+
+00:02:38.229 --> 00:02:38.239 align:start position:0%
+override this method. Listen,
+ 
+
+00:02:38.239 --> 00:02:39.670 align:start position:0%
+override this method. Listen,
+after <00:02:38.495><c>we </c><00:02:38.751><c>add </c><00:02:39.007><c>this... </c><00:02:39.263><c>Our </c><00:02:39.519><c>two</c>
+
+00:02:39.670 --> 00:02:39.680 align:start position:0%
+after we add this... Our two
+ 
+
+00:02:39.680 --> 00:02:41.430 align:start position:0%
+after we add this... Our two
+classes, <00:02:40.199><c>IT </c><00:02:40.718><c>student </c><00:02:41.237><c>and</c>
+
+00:02:41.430 --> 00:02:41.440 align:start position:0%
+classes, IT student and
+ 
+
+00:02:41.440 --> 00:02:43.309 align:start position:0%
+classes, IT student and
+mechanical <00:02:41.850><c>student, </c><00:02:42.260><c>are </c><00:02:42.670><c>showing </c><00:02:43.080><c>errors</c>
+
+00:02:43.309 --> 00:02:43.319 align:start position:0%
+mechanical student, are showing errors
+ 
+
+00:02:43.319 --> 00:02:45.229 align:start position:0%
+mechanical student, are showing errors
+because <00:02:43.572><c>now </c><00:02:43.825><c>we </c><00:02:44.078><c>need </c><00:02:44.331><c>to </c><00:02:44.584><c>write </c><00:02:44.837><c>the</c>
+
+00:02:45.229 --> 00:02:45.239 align:start position:0%
+because now we need to write the
+ 
+
+00:02:45.239 --> 00:02:47.110 align:start position:0%
+because now we need to write the
+scoring <00:02:45.826><c>class. </c><00:02:46.413><c>Move </c><00:02:47.000><c>the</c>
+
+00:02:47.110 --> 00:02:47.120 align:start position:0%
+scoring class. Move the
+ 
+
+00:02:47.120 --> 00:02:48.630 align:start position:0%
+scoring class. Move the
+mouse <00:02:47.233><c>cursor </c><00:02:47.346><c>to </c><00:02:47.459><c>this </c><00:02:47.572><c>class... </c><00:02:47.685><c>Hover </c><00:02:47.798><c>your </c><00:02:47.911><c>mouse </c><00:02:48.024><c>over </c><00:02:48.137><c>it </c><00:02:48.250><c>and </c><00:02:48.363><c>it </c><00:02:48.476><c>will</c>
+
+00:02:48.630 --> 00:02:48.640 align:start position:0%
+mouse cursor to this class... Hover your mouse over it and it will
+ 
+
+00:02:48.640 --> 00:02:50.589 align:start position:0%
+mouse cursor to this class... Hover your mouse over it and it will
+say... <00:02:49.000><c>now </c><00:02:49.360><c>we...  </c><00:02:49.720><c>We'll </c><00:02:50.080><c>need </c><00:02:50.440><c>to</c>
+
+00:02:50.589 --> 00:02:50.599 align:start position:0%
+say... now we...  We'll need to
+ 
+
+00:02:50.599 --> 00:02:52.830 align:start position:0%
+say... now we...  We'll need to
+inherit <00:02:51.069><c>the </c><00:02:51.539><c>abct </c><00:02:52.009><c>method </c><00:02:52.479><c>to</c>
+
+00:02:52.830 --> 00:02:52.840 align:start position:0%
+inherit the abct method to
+ 
+
+00:02:52.840 --> 00:02:55.309 align:start position:0%
+inherit the abct method to
+calculate <00:02:53.272><c>the </c><00:02:53.704><c>score, </c><00:02:54.136><c>as </c><00:02:54.568><c>they </c><00:02:55.000><c>say.</c>
+
+00:02:55.309 --> 00:02:55.319 align:start position:0%
+calculate the score, as they say.
+ 
+
+00:02:55.319 --> 00:02:58.790 align:start position:0%
+calculate the score, as they say.
+Here, <00:02:55.673><c>we </c><00:02:56.027><c>can </c><00:02:56.381><c>click </c><00:02:56.735><c>on </c><00:02:57.089><c>the </c><00:02:57.443><c>section, </c><00:02:57.797><c>then</c>
+
+00:02:58.790 --> 00:02:58.800 align:start position:0%
+Here, we can click on the section, then
+ 
+
+00:02:58.800 --> 00:03:00.790 align:start position:0%
+Here, we can click on the section, then
+click <00:02:59.066><c>on </c><00:02:59.332><c>what's </c><00:02:59.598><c>called </c><00:02:59.864><c>adding </c><00:03:00.130><c>the </c><00:03:00.396><c>method</c>
+
+00:03:00.790 --> 00:03:00.800 align:start position:0%
+click on what's called adding the method
+ 
+
+00:03:00.800 --> 00:03:02.190 align:start position:0%
+click on what's called adding the method
+that <00:03:01.040><c>we </c><00:03:01.280><c>haven't </c><00:03:01.520><c>inherited </c><00:03:01.760><c>yet. </c><00:03:02.000><c>Click</c>
+
+00:03:02.190 --> 00:03:02.200 align:start position:0%
+that we haven't inherited yet. Click
+ 
+
+00:03:02.200 --> 00:03:03.750 align:start position:0%
+that we haven't inherited yet. Click
+on <00:03:02.479><c>this </c><00:03:02.758><c>immediately, </c><00:03:03.037><c>and </c><00:03:03.316><c>it </c><00:03:03.595><c>will</c>
+
+00:03:03.750 --> 00:03:03.760 align:start position:0%
+on this immediately, and it will
+ 
+
+00:03:03.760 --> 00:03:05.470 align:start position:0%
+on this immediately, and it will
+override <00:03:04.064><c>it </c><00:03:04.368><c>for </c><00:03:04.672><c>you. </c><00:03:04.976><c>It </c><00:03:05.280><c>adds</c>
+
+00:03:05.470 --> 00:03:05.480 align:start position:0%
+override it for you. It adds
+ 
+
+00:03:05.480 --> 00:03:07.070 align:start position:0%
+override it for you. It adds
+annotations <00:03:06.160><c>like </c><00:03:06.840><c>this,</c>
+
+00:03:07.070 --> 00:03:07.080 align:start position:0%
+annotations like this,
+ 
+
+00:03:07.080 --> 00:03:08.710 align:start position:0%
+annotations like this,
+comments <00:03:07.450><c>like </c><00:03:07.820><c>this, </c><00:03:08.190><c>very </c><00:03:08.560><c>convenient,</c>
+
+00:03:08.710 --> 00:03:08.720 align:start position:0%
+comments like this, very convenient,
+ 
+
+00:03:08.720 --> 00:03:09.910 align:start position:0%
+comments like this, very convenient,
+right? <00:03:08.944><c>Now, </c><00:03:09.168><c>click </c><00:03:09.392><c>the </c><00:03:09.616><c>save </c><00:03:09.840><c>button.</c>
+
+00:03:09.910 --> 00:03:09.920 align:start position:0%
+right? Now, click the save button.
+ 
+
+00:03:09.920 --> 00:03:11.869 align:start position:0%
+right? Now, click the save button.
+Clicking <00:03:10.213><c>the </c><00:03:10.506><c>save </c><00:03:10.799><c>button </c><00:03:11.092><c>will </c><00:03:11.385><c>fix </c><00:03:11.678><c>all</c>
+
+00:03:11.869 --> 00:03:11.879 align:start position:0%
+Clicking the save button will fix all
+ 
+
+00:03:11.879 --> 00:03:13.750 align:start position:0%
+Clicking the save button will fix all
+these <00:03:12.439><c>errors. </c><00:03:12.999><c>Similarly, </c><00:03:13.559><c>for</c>
+
+00:03:13.750 --> 00:03:13.760 align:start position:0%
+these errors. Similarly, for
+ 
+
+00:03:13.760 --> 00:03:15.430 align:start position:0%
+these errors. Similarly, for
+IT <00:03:14.019><c>students, </c><00:03:14.278><c>we </c><00:03:14.537><c>can </c><00:03:14.796><c>do </c><00:03:15.055><c>the </c><00:03:15.314><c>same.</c>
+
+00:03:15.430 --> 00:03:15.440 align:start position:0%
+IT students, we can do the same.
+ 
+
+00:03:15.440 --> 00:03:17.470 align:start position:0%
+IT students, we can do the same.
+Here, <00:03:15.702><c>we </c><00:03:15.964><c>can </c><00:03:16.226><c>call </c><00:03:16.488><c>it </c><00:03:16.750><c>adding </c><00:03:17.012><c>the </c><00:03:17.274><c>section,</c>
+
+00:03:17.470 --> 00:03:17.480 align:start position:0%
+Here, we can call it adding the section,
+ 
+
+00:03:17.480 --> 00:03:19.750 align:start position:0%
+Here, we can call it adding the section,
+adding <00:03:18.173><c>this </c><00:03:18.866><c>section </c><00:03:19.559><c>below.</c>
+
+00:03:19.750 --> 00:03:19.760 align:start position:0%
+adding this section below.
+ 
+
+00:03:19.760 --> 00:03:21.869 align:start position:0%
+adding this section below.
+Okay, <00:03:20.144><c>the </c><00:03:20.528><c>D, </c><00:03:20.912><c>right? </c><00:03:21.296><c>And </c><00:03:21.680><c>if</c>
+
+00:03:21.869 --> 00:03:21.879 align:start position:0%
+Okay, the D, right? And if
+ 
+
+00:03:21.879 --> 00:03:23.350 align:start position:0%
+Okay, the D, right? And if
+we <00:03:22.229><c>save </c><00:03:22.579><c>it, </c><00:03:22.929><c>everything </c><00:03:23.279><c>is</c>
+
+00:03:23.350 --> 00:03:23.360 align:start position:0%
+we save it, everything is
+ 
+
+00:03:23.360 --> 00:03:25.309 align:start position:0%
+we save it, everything is
+okay, <00:03:23.666><c>then </c><00:03:23.972><c>this </c><00:03:24.278><c>is </c><00:03:24.584><c>the </c><00:03:24.890><c>effect </c><00:03:25.196><c>of</c>
+
+00:03:25.309 --> 00:03:25.319 align:start position:0%
+okay, then this is the effect of
+ 
+
+00:03:25.319 --> 00:03:27.350 align:start position:0%
+okay, then this is the effect of
+the <00:03:25.769><c>object. </c><00:03:26.219><c>Of </c><00:03:26.669><c>course, </c><00:03:27.119><c>up</c>
+
+00:03:27.350 --> 00:03:27.360 align:start position:0%
+the object. Of course, up
+ 
+
+00:03:27.360 --> 00:03:28.869 align:start position:0%
+the object. Of course, up
+until <00:03:27.632><c>now, </c><00:03:27.904><c>we've </c><00:03:28.176><c>only </c><00:03:28.448><c>grasped </c><00:03:28.720><c>the</c>
+
+00:03:28.869 --> 00:03:28.879 align:start position:0%
+until now, we've only grasped the
+ 
+
+00:03:28.879 --> 00:03:31.350 align:start position:0%
+until now, we've only grasped the
+method.
+
+00:03:31.350 --> 00:03:31.360 align:start position:0%
+method.
+ 
+
+00:03:31.360 --> 00:03:33.509 align:start position:0%
+method.
+How <00:03:31.594><c>we </c><00:03:31.828><c>use </c><00:03:32.062><c>it </c><00:03:32.296><c>later </c><00:03:32.530><c>will </c><00:03:32.764><c>need </c><00:03:32.998><c>to </c><00:03:33.232><c>be</c>
+
+00:03:33.509 --> 00:03:33.519 align:start position:0%
+How we use it later will need to be
+ 
+
+00:03:33.519 --> 00:03:35.229 align:start position:0%
+How we use it later will need to be
+demonstrated <00:03:34.039><c>through </c><00:03:34.559><c>real-world </c><00:03:35.079><c>projects,</c>
+
+00:03:35.229 --> 00:03:35.239 align:start position:0%
+demonstrated through real-world projects,
+ 
+
+00:03:35.239 --> 00:03:36.910 align:start position:0%
+demonstrated through real-world projects,
+right? <00:03:35.456><c>In </c><00:03:35.673><c>this </c><00:03:35.890><c>video, </c><00:03:36.107><c>I </c><00:03:36.324><c>just </c><00:03:36.541><c>want </c><00:03:36.758><c>to</c>
+
+00:03:36.910 --> 00:03:36.920 align:start position:0%
+right? In this video, I just want to
+ 
+
+00:03:36.920 --> 00:03:38.589 align:start position:0%
+right? In this video, I just want to
+provide <00:03:37.137><c>you </c><00:03:37.354><c>with </c><00:03:37.571><c>the </c><00:03:37.788><c>concept </c><00:03:38.005><c>of </c><00:03:38.222><c>objects </c><00:03:38.439><c>and</c>
+
+00:03:38.589 --> 00:03:38.599 align:start position:0%
+provide you with the concept of objects and
+ 
+
+00:03:38.599 --> 00:03:40.550 align:start position:0%
+provide you with the concept of objects and
+classes. <00:03:38.794><c>See </c><00:03:38.989><c>you </c><00:03:39.184><c>again </c><00:03:39.379><c>in </c><00:03:39.574><c>the </c><00:03:39.769><c>next </c><00:03:39.964><c>video.  </c><00:03:40.159><c>In </c><00:03:40.354><c>the</c>
+
+00:03:40.550 --> 00:03:40.560 align:start position:0%
+classes. See you again in the next video.  In the
+ 
+
+00:03:40.560 --> 00:03:41.910 align:start position:0%
+classes. See you again in the next video.  In the
+next <00:03:41.140><c>video, </c><00:03:41.720><c>we'll</c>
+
+00:03:41.910 --> 00:03:41.920 align:start position:0%
+next video, we'll
+ 
+
+00:03:41.920 --> 00:03:43.830 align:start position:0%
+next video, we'll
+explore <00:03:42.350><c>the </c><00:03:42.780><c>dynamic </c><00:03:43.210><c>range </c><00:03:43.640><c>of</c>
+
+00:03:43.830 --> 00:03:43.840 align:start position:0%
+explore the dynamic range of
+ 
+
+00:03:43.840 --> 00:03:46.519 align:start position:0%
+explore the dynamic range of
+Java.
+

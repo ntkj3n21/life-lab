@@ -1,0 +1,16 @@
+﻿fixture_key	a3_order	category	video_id	title	url	channel	upload_date	duration_seconds	has_vtt	shared_with_a1	shared_with_a2
+A3_LIB_01	1	Java Core	7L0RLrfrBHE	[FULL] Khóa Học Java Cơ Bản Từ A tới Z cho Beginner | Học Java Từ Số 0 với Hỏi Dân IT	https://www.youtube.com/watch?v=7L0RLrfrBHE	Hỏi Dân IT	20240215	38238	True	True	True
+A3_LIB_02	2	Java Core	pV45eVVcuYc	[FULL] Chia Sẻ Lộ Trình Tự Học Java Spring - Spring Boot Từ Số 0 Dành Cho Người Mới Bắt Đầu	https://www.youtube.com/watch?v=pV45eVVcuYc	Hỏi Dân IT	20240713	3959	True	True	True
+A3_LIB_03	3	React Hooks	unFHsn0qSMA	React hooks - Giới thiệu tổng quát về hooks (2020)	https://www.youtube.com/watch?v=unFHsn0qSMA	Easy Frontend	20200329	510	True	True	True
+A3_LIB_04	4	React Hooks	SIAGpAaLSaI	React hooks: 03 - Dùng useState() qua ví dụ đơn giản (2020)	https://www.youtube.com/watch?v=SIAGpAaLSaI	Easy Frontend	20200402	1239	True	True	True
+A3_LIB_05	5	Java Core	wO4oDe-hEKo	#21. What is Object-Oriented Programming (OOP)? | Java Basics A-Z Course for Beginners	https://www.youtube.com/watch?v=wO4oDe-hEKo	Hỏi Dân IT	20240102	407	True	False	True
+A3_LIB_06	6	Java Core	LykA5UTyrMs	#33. What is an ArrayList? | Java Fundamentals Course From A to Z for Beginners	https://www.youtube.com/watch?v=LykA5UTyrMs	Hỏi Dân IT	20240114	687	True	False	True
+A3_LIB_07	7	DSA	Pju2Y69Q6ew	[CTDL & GT]. Buổi 2. Hàm sort, binary_search, lower_bound, upper_bound	https://www.youtube.com/watch?v=Pju2Y69Q6ew	28tech	20230804	6444	True	False	True
+A3_LIB_08	8	DSA	MQZ1TH0l7sk	#31 [C++]. Cấu Trúc Dữ Liệu Ngăn Xếp Ngôn Ngữ Lập Trình C++ | Cách Hoạt Động của CTDL Ngăn Xếp	https://www.youtube.com/watch?v=MQZ1TH0l7sk	28tech	20210904	3004	True	False	True
+A3_LIB_09	9	JavaScript	TsTr-tKCREc	What is HTML DOM? | JavaScript HTML DOM	https://www.youtube.com/watch?v=TsTr-tKCREc	F8 Official	20200430	976	True	False	True
+A3_LIB_10	10	JavaScript	QJmNEqy0zV0	Promise (sync async) trong JavaScript | Khái niệm promise	https://www.youtube.com/watch?v=QJmNEqy0zV0	F8 Official	20200920	816	True	False	True
+A3_LIB_11	11	React Hooks	zjUC_W7IOIc	React hooks: 06 - Những điều cần biết về useEffect hooks 🎉	https://www.youtube.com/watch?v=zjUC_W7IOIc	Easy Frontend	20200405	848	True	False	True
+A3_LIB_12	12	Fullstack/SERN	B4sy3DL4IX0	#21 Kết Nối Tới MySQL Database với Sequelize - Render Dữ Liệu Ra View | Cấu hình cho Node.JS phần 3	https://www.youtube.com/watch?v=B4sy3DL4IX0	Hỏi Dân IT	20210531	1658	True	False	True
+A3_LIB_13	13	Fullstack/SERN	L3Z4KfyCZOI	#29 Concepts Cover - APIs, JSON, Object Javascript Là Gì ? Hướng Dẫn Cài Đặt Postman Để Test APIs	https://www.youtube.com/watch?v=L3Z4KfyCZOI	Hỏi Dân IT	20210611	1321	True	False	True
+A3_LIB_14	14	Fullstack/SERN	YqAU7T-BoDE	"#35  Viết APIs ""Chuẩn MEN"" với Node.js | Cách viết REST APIs cho Người Mới Bắt Đầu"	https://www.youtube.com/watch?v=YqAU7T-BoDE	Hỏi Dân IT	20210617	3746	True	False	True
+A3_LIB_15	15	Node/Express	SdcdneSdoV4	HTTP protocol | Giao thức HTTP | Giao thức truyền tải siêu văn bản	https://www.youtube.com/watch?v=SdcdneSdoV4	F8 Official	20200721	937	True	False	True

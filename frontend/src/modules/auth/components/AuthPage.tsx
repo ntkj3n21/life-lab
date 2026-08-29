@@ -1,5 +1,14 @@
 import { useState, type FormEvent } from "react";
-import { FlaskConical, LogIn, UserPlus } from "lucide-react";
+import {
+  CalendarDays,
+  Clock3,
+  FlaskConical,
+  ListTodo,
+  LogIn,
+  Play,
+  StickyNote,
+  UserPlus,
+} from "lucide-react";
 
 import { useAuthStore } from "../../../stores/authStore";
 
@@ -62,26 +71,67 @@ export function AuthPage() {
   const displayNameError = error?.fieldErrors.displayName;
 
   return (
-    <main className="h-full overflow-y-auto overscroll-contain bg-(--app-bg) px-4 text-(--text-primary)">
-      <div className="mx-auto flex min-h-full w-full max-w-md flex-col justify-center py-10">
-        <div className="mb-8 flex flex-col items-center text-center">
-          <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-(--border) bg-(--surface)">
-            <FlaskConical
-              size={26}
-              aria-hidden="true"
-            />
+    <main className="h-full overflow-y-auto overscroll-contain bg-(--app-bg) px-4 text-(--text-primary) sm:px-6">
+      <div className="mx-auto grid min-h-full w-full max-w-5xl items-center gap-7 py-6 lg:grid-cols-[minmax(0,1fr)_minmax(22rem,28rem)] lg:gap-16 lg:py-12">
+        <section className="text-center lg:text-left">
+          <div className="inline-flex items-center gap-3 lg:flex">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-(--border) bg-(--surface) sm:h-14 sm:w-14">
+              <FlaskConical
+                size={26}
+                aria-hidden="true"
+              />
+            </div>
+
+            <div className="text-left">
+              <p className="text-xs font-medium text-(--text-muted)">
+                Personal learning workspace
+              </p>
+
+              <h1 className="mt-0.5 text-2xl font-semibold tracking-tight sm:text-3xl">
+                Life Lab
+              </h1>
+            </div>
           </div>
 
-          <h1 className="mt-4 text-2xl font-semibold">
-            Life Lab
-          </h1>
-
-          <p className="mt-2 text-sm text-(--text-muted)">
-            Your personal digital workspace.
+          <p className="mx-auto mt-4 max-w-lg text-sm leading-6 text-(--text-secondary) lg:mx-0 lg:text-base lg:leading-7">
+            Keep what you learn connected—from the exact moment in a video to the work you plan next.
           </p>
-        </div>
 
-        <div className="rounded-2xl border border-(--border) bg-(--surface) p-6 shadow-(--elevated-shadow)">
+          <div className="mt-8 hidden max-w-sm lg:block">
+            <p className="text-xs font-medium text-(--text-muted)">
+              From learning to action
+            </p>
+
+            <ol className="mt-4 grid gap-2" aria-label="Life Lab workflow">
+              {([
+                [Play, "Video"],
+                [Clock3, "Timestamp"],
+                [StickyNote, "Note"],
+                [ListTodo, "Task"],
+                [CalendarDays, "Daily Plan"],
+              ] as const).map(([Icon, label], index) => (
+                <li
+                  key={label}
+                  className="flex items-center gap-3 rounded-xl border border-(--border) bg-(--surface-subtle) px-3 py-2.5 text-sm text-(--text-secondary)"
+                >
+                  <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-(--surface) text-(--text-muted)">
+                    <Icon size={14} aria-hidden="true" />
+                  </span>
+
+                  <span className="font-medium">
+                    {label}
+                  </span>
+
+                  <span className="ml-auto text-[10px] tabular-nums text-(--text-muted)">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </section>
+
+        <div className="w-full rounded-2xl border border-(--border) bg-(--surface) p-5 shadow-(--elevated-shadow) sm:p-6">
           <div className="grid grid-cols-2 rounded-xl bg-(--app-bg) p-1">
             <button
               type="button"

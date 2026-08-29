@@ -1,0 +1,1440 @@
+WEBVTT
+Kind: captions
+Language: en
+
+00:00:06.960 --> 00:00:09.190 align:start position:0%
+ 
+Hello <00:00:07.480><c>everyone, </c><00:00:08.000><c>I'm </c><00:00:08.520><c>Eric. </c><00:00:09.040><c>Today</c>
+
+00:00:09.190 --> 00:00:09.200 align:start position:0%
+Hello everyone, I'm Eric. Today
+ 
+
+00:00:09.200 --> 00:00:11.110 align:start position:0%
+Hello everyone, I'm Eric. Today
+in <00:00:09.459><c>this </c><00:00:09.718><c>video, </c><00:00:09.977><c>I'll </c><00:00:10.236><c>give </c><00:00:10.495><c>you </c><00:00:10.754><c>an</c>
+
+00:00:11.110 --> 00:00:11.120 align:start position:0%
+in this video, I'll give you an
+ 
+
+00:00:11.120 --> 00:00:13.789 align:start position:0%
+in this video, I'll give you an
+overview <00:00:11.623><c>of </c><00:00:12.126><c>the </c><00:00:12.629><c>I/O </c><00:00:13.132><c>concept </c><00:00:13.635><c>in</c>
+
+00:00:13.789 --> 00:00:13.799 align:start position:0%
+overview of the I/O concept in
+ 
+
+00:00:13.799 --> 00:00:15.749 align:start position:0%
+overview of the I/O concept in
+Java. <00:00:15.639><c>Specifically,</c>
+
+00:00:15.749 --> 00:00:15.759 align:start position:0%
+Java. Specifically,
+ 
+
+00:00:15.759 --> 00:00:18.269 align:start position:0%
+Java. Specifically,
+I'll <00:00:16.072><c>be </c><00:00:16.385><c>discussing </c><00:00:16.698><c>the </c><00:00:17.011><c>concept </c><00:00:17.324><c>of </c><00:00:17.637><c>streams.</c>
+
+00:00:18.269 --> 00:00:19.910 align:start position:0%
+I'll be discussing the concept of streams.
+ 
+
+00:00:19.910 --> 00:00:19.920 align:start position:0%
+ 
+ 
+
+00:00:19.920 --> 00:00:21.950 align:start position:0%
+ 
+Before
+
+00:00:21.950 --> 00:00:21.960 align:start position:0%
+Before
+ 
+
+00:00:21.960 --> 00:00:24.870 align:start position:0%
+Before
+you <00:00:22.386><c>delve </c><00:00:22.812><c>into </c><00:00:23.238><c>I/O, </c><00:00:23.664><c>remember </c><00:00:24.090><c>this: </c><00:00:24.516><c>when</c>
+
+00:00:24.870 --> 00:00:24.880 align:start position:0%
+you delve into I/O, remember this: when
+ 
+
+00:00:24.880 --> 00:00:26.870 align:start position:0%
+you delve into I/O, remember this: when
+you <00:00:25.248><c>use </c><00:00:25.616><c>a </c><00:00:25.984><c>website, </c><00:00:26.352><c>for </c><00:00:26.720><c>example,</c>
+
+00:00:26.870 --> 00:00:26.880 align:start position:0%
+you use a website, for example,
+ 
+
+00:00:26.880 --> 00:00:29.150 align:start position:0%
+you use a website, for example,
+you <00:00:27.370><c>might </c><00:00:27.860><c>encounter </c><00:00:28.350><c>domain </c><00:00:28.840><c>names.</c>
+
+00:00:29.150 --> 00:00:29.160 align:start position:0%
+you might encounter domain names.
+ 
+
+00:00:29.160 --> 00:00:30.470 align:start position:0%
+you might encounter domain names.
+For <00:00:29.440><c>instance, </c><00:00:29.720><c>I/</c>
+
+00:00:30.470 --> 00:00:32.510 align:start position:0%
+For instance, I/
+ 
+
+00:00:32.510 --> 00:00:32.520 align:start position:0%
+ 
+ 
+
+00:00:32.520 --> 00:00:34.310 align:start position:0%
+ 
+O <00:00:32.920><c>domains. </c><00:00:33.320><c>These </c><00:00:33.720><c>are </c><00:00:34.120><c>generally</c>
+
+00:00:34.310 --> 00:00:34.320 align:start position:0%
+O domains. These are generally
+ 
+
+00:00:34.320 --> 00:00:35.950 align:start position:0%
+O domains. These are generally
+understood <00:00:34.800><c>as </c><00:00:35.280><c>input </c><00:00:35.760><c>and</c>
+
+00:00:35.950 --> 00:00:35.960 align:start position:0%
+understood as input and
+ 
+
+00:00:35.960 --> 00:00:38.549 align:start position:0%
+understood as input and
+output. <00:00:36.308><c>There's </c><00:00:36.656><c>nothing </c><00:00:37.004><c>complicated </c><00:00:37.352><c>about </c><00:00:37.700><c>them; </c><00:00:38.048><c>they're </c><00:00:38.396><c>simply</c>
+
+00:00:38.549 --> 00:00:40.190 align:start position:0%
+output. There's nothing complicated about them; they're simply
+ 
+
+00:00:40.190 --> 00:00:40.200 align:start position:0%
+ 
+ 
+
+00:00:40.200 --> 00:00:42.510 align:start position:0%
+ 
+abbreviations <00:00:40.690><c>for </c><00:00:41.180><c>input </c><00:00:41.670><c>and </c><00:00:42.160><c>output.</c>
+
+00:00:42.510 --> 00:00:42.520 align:start position:0%
+abbreviations for input and output.
+ 
+
+00:00:42.520 --> 00:00:44.950 align:start position:0%
+abbreviations for input and output.
+More <00:00:44.800><c>specifically,</c>
+
+00:00:44.950 --> 00:00:44.960 align:start position:0%
+More specifically,
+ 
+
+00:00:44.960 --> 00:00:46.590 align:start position:0%
+More specifically,
+remember <00:00:46.360><c>this</c>
+
+00:00:46.590 --> 00:00:46.600 align:start position:0%
+remember this
+ 
+
+00:00:46.600 --> 00:00:48.310 align:start position:0%
+remember this
+unchanging <00:00:48.160><c>principle:</c>
+
+00:00:48.310 --> 00:00:48.320 align:start position:0%
+unchanging principle:
+ 
+
+00:00:48.320 --> 00:00:50.270 align:start position:0%
+unchanging principle:
+your <00:00:48.688><c>computer </c><00:00:49.056><c>can </c><00:00:49.424><c>only </c><00:00:49.792><c>understand </c><00:00:50.160><c>the</c>
+
+00:00:50.270 --> 00:00:50.280 align:start position:0%
+your computer can only understand the
+ 
+
+00:00:50.280 --> 00:00:53.189 align:start position:0%
+your computer can only understand the
+characters <00:00:50.969><c>0 </c><00:00:51.658><c>and </c><00:00:52.347><c>1. </c><00:00:53.036><c>It</c>
+
+00:00:53.189 --> 00:00:53.199 align:start position:0%
+characters 0 and 1. It
+ 
+
+00:00:53.199 --> 00:00:55.150 align:start position:0%
+characters 0 and 1. It
+doesn't <00:00:53.812><c>have </c><00:00:54.425><c>other </c><00:00:55.038><c>concepts</c>
+
+00:00:55.150 --> 00:00:55.160 align:start position:0%
+doesn't have other concepts
+ 
+
+00:00:55.160 --> 00:00:56.830 align:start position:0%
+doesn't have other concepts
+like <00:00:56.640><c>image,</c>
+
+00:00:56.830 --> 00:00:56.840 align:start position:0%
+like image,
+ 
+
+00:00:56.840 --> 00:00:59.029 align:start position:0%
+like image,
+video, <00:00:58.680><c>audio,</c>
+
+00:00:59.029 --> 00:00:59.039 align:start position:0%
+video, audio,
+ 
+
+00:00:59.039 --> 00:01:00.509 align:start position:0%
+video, audio,
+or <00:00:59.439><c>other </c><00:00:59.839><c>non-conceptual </c><00:01:00.239><c>terms.</c>
+
+00:01:00.509 --> 00:01:00.519 align:start position:0%
+or other non-conceptual terms.
+ 
+
+00:01:00.519 --> 00:01:02.590 align:start position:0%
+or other non-conceptual terms.
+For <00:01:00.999><c>example, </c><00:01:01.479><c>the </c><00:01:01.959><c>concepts </c><00:01:02.439><c>you</c>
+
+00:01:02.590 --> 00:01:02.600 align:start position:0%
+For example, the concepts you
+ 
+
+00:01:02.600 --> 00:01:04.910 align:start position:0%
+For example, the concepts you
+see—images,
+
+00:01:04.910 --> 00:01:04.920 align:start position:0%
+see—images,
+ 
+
+00:01:04.920 --> 00:01:07.310 align:start position:0%
+see—images,
+videos, <00:01:05.940><c>music—are </c><00:01:06.960><c>just</c>
+
+00:01:07.310 --> 00:01:07.320 align:start position:0%
+videos, music—are just
+ 
+
+00:01:07.320 --> 00:01:09.149 align:start position:0%
+videos, music—are just
+our <00:01:07.710><c>files. </c><00:01:08.100><c>These </c><00:01:08.490><c>are </c><00:01:08.880><c>concepts</c>
+
+00:01:09.149 --> 00:01:09.159 align:start position:0%
+our files. These are concepts
+ 
+
+00:01:09.159 --> 00:01:11.030 align:start position:0%
+our files. These are concepts
+for <00:01:09.732><c>humans; </c><00:01:10.305><c>computers </c><00:01:10.878><c>can't</c>
+
+00:01:11.030 --> 00:01:11.040 align:start position:0%
+for humans; computers can't
+ 
+
+00:01:11.040 --> 00:01:13.190 align:start position:0%
+for humans; computers can't
+understand <00:01:12.680><c>them.</c>
+
+00:01:13.190 --> 00:01:13.200 align:start position:0%
+understand them.
+ 
+
+00:01:13.200 --> 00:01:15.030 align:start position:0%
+understand them.
+Now, <00:01:13.706><c>the </c><00:01:14.212><c>question </c><00:01:14.718><c>is,</c>
+
+00:01:15.030 --> 00:01:15.040 align:start position:0%
+Now, the question is,
+ 
+
+00:01:15.040 --> 00:01:17.630 align:start position:0%
+Now, the question is,
+how <00:01:15.639><c>can </c><00:01:16.238><c>computers </c><00:01:16.837><c>and </c><00:01:17.436><c>humans</c>
+
+00:01:17.630 --> 00:01:17.640 align:start position:0%
+how can computers and humans
+ 
+
+00:01:17.640 --> 00:01:19.670 align:start position:0%
+how can computers and humans
+communicate? <00:01:18.024><c>Let </c><00:01:18.408><c>me </c><00:01:18.792><c>give </c><00:01:19.176><c>you </c><00:01:19.560><c>an</c>
+
+00:01:19.670 --> 00:01:19.680 align:start position:0%
+communicate? Let me give you an
+ 
+
+00:01:19.680 --> 00:01:21.429 align:start position:0%
+communicate? Let me give you an
+example. <00:01:20.500><c>Right </c><00:01:21.320><c>now,</c>
+
+00:01:21.429 --> 00:01:21.439 align:start position:0%
+example. Right now,
+ 
+
+00:01:21.439 --> 00:01:23.030 align:start position:0%
+example. Right now,
+we <00:01:22.960><c>humans</c>
+
+00:01:23.030 --> 00:01:23.040 align:start position:0%
+we humans
+ 
+
+00:01:23.040 --> 00:01:25.109 align:start position:0%
+we humans
+provide <00:01:23.693><c>the </c><00:01:24.346><c>computer </c><00:01:24.999><c>with</c>
+
+00:01:25.109 --> 00:01:25.119 align:start position:0%
+provide the computer with
+ 
+
+00:01:25.119 --> 00:01:27.310 align:start position:0%
+provide the computer with
+a <00:01:26.059><c>file—a </c><00:01:26.999><c>file</c>
+
+00:01:27.310 --> 00:01:27.320 align:start position:0%
+a file—a file
+ 
+
+00:01:27.320 --> 00:01:29.149 align:start position:0%
+a file—a file
+we <00:01:27.750><c>call </c><00:01:28.180><c>input. </c><00:01:28.610><c>This </c><00:01:29.040><c>file</c>
+
+00:01:29.149 --> 00:01:29.159 align:start position:0%
+we call input. This file
+ 
+
+00:01:29.159 --> 00:01:30.670 align:start position:0%
+we call input. This file
+could <00:01:29.399><c>be </c><00:01:29.639><c>a </c><00:01:29.879><c>music </c><00:01:30.119><c>file </c><00:01:30.359><c>or </c><00:01:30.599><c>a</c>
+
+00:01:30.670 --> 00:01:30.680 align:start position:0%
+could be a music file or a
+ 
+
+00:01:30.680 --> 00:01:32.590 align:start position:0%
+could be a music file or a
+video <00:01:31.279><c>file. </c><00:01:31.878><c>The </c><00:01:32.477><c>computer's</c>
+
+00:01:32.590 --> 00:01:32.600 align:start position:0%
+video file. The computer's
+ 
+
+00:01:32.600 --> 00:01:35.350 align:start position:0%
+video file. The computer's
+task <00:01:33.088><c>is </c><00:01:33.576><c>to </c><00:01:34.064><c>run </c><00:01:34.552><c>and </c><00:01:35.040><c>display</c>
+
+00:01:35.350 --> 00:01:35.360 align:start position:0%
+task is to run and display
+ 
+
+00:01:35.360 --> 00:01:37.550 align:start position:0%
+task is to run and display
+that <00:01:35.783><c>file </c><00:01:36.206><c>for </c><00:01:36.629><c>us. </c><00:01:37.052><c>Right? </c><00:01:37.475><c>That</c>
+
+00:01:37.550 --> 00:01:37.560 align:start position:0%
+that file for us. Right? That
+ 
+
+00:01:37.560 --> 00:01:39.469 align:start position:0%
+that file for us. Right? That
+'s <00:01:38.440><c>the </c><00:01:39.320><c>output</c>
+
+00:01:39.469 --> 00:01:39.479 align:start position:0%
+'s the output
+ 
+
+00:01:39.479 --> 00:01:41.710 align:start position:0%
+'s the output
+we <00:01:39.895><c>want </c><00:01:40.311><c>to </c><00:01:40.727><c>see. </c><00:01:41.143><c>So, </c><00:01:41.559><c>in</c>
+
+00:01:41.710 --> 00:01:41.720 align:start position:0%
+we want to see. So, in
+ 
+
+00:01:41.720 --> 00:01:43.429 align:start position:0%
+we want to see. So, in
+this <00:01:41.980><c>first </c><00:01:42.240><c>step, </c><00:01:42.500><c>the </c><00:01:42.760><c>computer </c><00:01:43.020><c>processes </c><00:01:43.280><c>the</c>
+
+00:01:43.429 --> 00:01:43.439 align:start position:0%
+this first step, the computer processes the
+ 
+
+00:01:43.439 --> 00:01:45.270 align:start position:0%
+this first step, the computer processes the
+input.
+
+00:01:45.270 --> 00:01:45.280 align:start position:0%
+input.
+ 
+
+00:01:45.280 --> 00:01:47.270 align:start position:0%
+input.
+We
+
+00:01:47.270 --> 00:01:47.280 align:start position:0%
+We
+ 
+
+00:01:47.280 --> 00:01:49.109 align:start position:0%
+We
+haven't <00:01:47.490><c>touched </c><00:01:47.700><c>the </c><00:01:47.910><c>input </c><00:01:48.120><c>yet, </c><00:01:48.330><c>so </c><00:01:48.540><c>we </c><00:01:48.750><c>have </c><00:01:48.960><c>a</c>
+
+00:01:49.109 --> 00:01:49.119 align:start position:0%
+haven't touched the input yet, so we have a
+ 
+
+00:01:49.119 --> 00:01:51.069 align:start position:0%
+haven't touched the input yet, so we have a
+professional <00:01:49.652><c>term: </c><00:01:50.185><c>Raw. </c><00:01:50.718><c>Raw</c>
+
+00:01:51.069 --> 00:01:51.079 align:start position:0%
+professional term: Raw. Raw
+ 
+
+00:01:51.079 --> 00:01:52.950 align:start position:0%
+professional term: Raw. Raw
+means <00:01:51.919><c>raw, </c><00:01:52.759><c>unprocessed,</c>
+
+00:01:52.950 --> 00:01:52.960 align:start position:0%
+means raw, unprocessed,
+ 
+
+00:01:52.960 --> 00:01:55.190 align:start position:0%
+means raw, unprocessed,
+original.  <00:01:55.040><c>For</c>
+
+00:01:55.190 --> 00:01:55.200 align:start position:0%
+original.  For
+ 
+
+00:01:55.200 --> 00:01:57.069 align:start position:0%
+original.  For
+this <00:01:55.480><c>Raw </c><00:01:55.760><c>input, </c><00:01:56.040><c>it </c><00:01:56.320><c>needs </c><00:01:56.600><c>to </c><00:01:56.880><c>be</c>
+
+00:01:57.069 --> 00:01:57.079 align:start position:0%
+this Raw input, it needs to be
+ 
+
+00:01:57.079 --> 00:01:59.350 align:start position:0%
+this Raw input, it needs to be
+transformed <00:01:57.329><c>into </c><00:01:57.579><c>a </c><00:01:57.829><c>form </c><00:01:58.079><c>of </c><00:01:58.329><c>0 </c><00:01:58.579><c>and </c><00:01:58.829><c>1. </c><00:01:59.079><c>Let's</c>
+
+00:01:59.350 --> 00:01:59.360 align:start position:0%
+transformed into a form of 0 and 1. Let's
+ 
+
+00:01:59.360 --> 00:02:01.149 align:start position:0%
+transformed into a form of 0 and 1. Let's
+call <00:01:59.779><c>this </c><00:02:00.198><c>form </c><00:02:00.617><c>'a', </c><00:02:01.036><c>right?</c>
+
+00:02:01.149 --> 00:02:03.230 align:start position:0%
+call this form 'a', right?
+ 
+
+00:02:03.230 --> 00:02:03.240 align:start position:0%
+ 
+ 
+
+00:02:03.240 --> 00:02:05.469 align:start position:0%
+ 
+Our <00:02:03.573><c>computer </c><00:02:03.906><c>can </c><00:02:04.239><c>read </c><00:02:04.572><c>this </c><00:02:04.905><c>form. </c><00:02:05.238><c>After</c>
+
+00:02:05.469 --> 00:02:05.479 align:start position:0%
+Our computer can read this form. After
+ 
+
+00:02:05.479 --> 00:02:07.350 align:start position:0%
+Our computer can read this form. After
+the <00:02:05.823><c>computer </c><00:02:06.167><c>receives </c><00:02:06.511><c>this </c><00:02:06.855><c>form, </c><00:02:07.199><c>it</c>
+
+00:02:07.350 --> 00:02:07.360 align:start position:0%
+the computer receives this form, it
+ 
+
+00:02:07.360 --> 00:02:09.630 align:start position:0%
+the computer receives this form, it
+needs <00:02:07.686><c>to </c><00:02:08.012><c>transform </c><00:02:08.338><c>it </c><00:02:08.664><c>into </c><00:02:08.990><c>form </c><00:02:09.316><c>B.</c>
+
+00:02:09.630 --> 00:02:09.640 align:start position:0%
+needs to transform it into form B.
+ 
+
+00:02:09.640 --> 00:02:11.309 align:start position:0%
+needs to transform it into form B.
+You <00:02:09.835><c>can </c><00:02:10.030><c>imagine </c><00:02:10.225><c>that </c><00:02:10.420><c>form </c><00:02:10.615><c>B </c><00:02:10.810><c>is </c><00:02:11.005><c>like </c><00:02:11.200><c>an</c>
+
+00:02:11.309 --> 00:02:11.319 align:start position:0%
+You can imagine that form B is like an
+ 
+
+00:02:11.319 --> 00:02:13.309 align:start position:0%
+You can imagine that form B is like an
+image, <00:02:12.179><c>video, </c><00:02:13.039><c>or</c>
+
+00:02:13.309 --> 00:02:13.319 align:start position:0%
+image, video, or
+ 
+
+00:02:13.319 --> 00:02:15.030 align:start position:0%
+image, video, or
+audio, <00:02:14.139><c>or </c><00:02:14.959><c>any</c>
+
+00:02:15.030 --> 00:02:15.040 align:start position:0%
+audio, or any
+ 
+
+00:02:15.040 --> 00:02:16.990 align:start position:0%
+audio, or any
+file <00:02:15.940><c>that </c><00:02:16.840><c>humans</c>
+
+00:02:16.990 --> 00:02:17.000 align:start position:0%
+file that humans
+ 
+
+00:02:17.000 --> 00:02:19.229 align:start position:0%
+file that humans
+can <00:02:17.408><c>understand. </c><00:02:17.816><c>I </c><00:02:18.224><c>understand </c><00:02:18.632><c>that </c><00:02:19.040><c>step</c>
+
+00:02:19.229 --> 00:02:19.239 align:start position:0%
+can understand. I understand that step
+ 
+
+00:02:19.239 --> 00:02:21.030 align:start position:0%
+can understand. I understand that step
+one <00:02:19.759><c>is </c><00:02:20.279><c>called </c><00:02:20.799><c>the</c>
+
+00:02:21.030 --> 00:02:21.040 align:start position:0%
+one is called the
+ 
+
+00:02:21.040 --> 00:02:22.830 align:start position:0%
+one is called the
+reading <00:02:21.220><c>process; </c><00:02:21.400><c>the </c><00:02:21.580><c>computer </c><00:02:21.760><c>needs </c><00:02:21.940><c>to </c><00:02:22.120><c>read </c><00:02:22.300><c>the </c><00:02:22.480><c>file</c>
+
+00:02:22.830 --> 00:02:22.840 align:start position:0%
+reading process; the computer needs to read the file
+ 
+
+00:02:22.840 --> 00:02:24.990 align:start position:0%
+reading process; the computer needs to read the file
+you <00:02:23.240><c>provide. </c><00:02:23.640><c>Step </c><00:02:24.040><c>two </c><00:02:24.440><c>is </c><00:02:24.840><c>the</c>
+
+00:02:24.990 --> 00:02:25.000 align:start position:0%
+you provide. Step two is the
+ 
+
+00:02:25.000 --> 00:02:27.309 align:start position:0%
+you provide. Step two is the
+writing <00:02:25.257><c>process; </c><00:02:25.514><c>the </c><00:02:25.771><c>computer </c><00:02:26.028><c>needs </c><00:02:26.285><c>to </c><00:02:26.542><c>write </c><00:02:26.799><c>out</c>
+
+00:02:27.309 --> 00:02:27.319 align:start position:0%
+writing process; the computer needs to write out
+ 
+
+00:02:27.319 --> 00:02:29.309 align:start position:0%
+writing process; the computer needs to write out
+what <00:02:27.687><c>we </c><00:02:28.055><c>call </c><00:02:28.423><c>the </c><00:02:28.791><c>transformed </c><00:02:29.159><c>data,</c>
+
+00:02:29.309 --> 00:02:29.319 align:start position:0%
+what we call the transformed data,
+ 
+
+00:02:29.319 --> 00:02:31.150 align:start position:0%
+what we call the transformed data,
+right? <00:02:30.159><c>To </c><00:02:30.999><c>perform</c>
+
+00:02:31.150 --> 00:02:31.160 align:start position:0%
+right? To perform
+ 
+
+00:02:31.160 --> 00:02:32.630 align:start position:0%
+right? To perform
+this <00:02:31.380><c>process </c><00:02:31.600><c>in </c><00:02:31.820><c>practice, </c><00:02:32.040><c>we </c><00:02:32.260><c>need </c><00:02:32.480><c>to</c>
+
+00:02:32.630 --> 00:02:32.640 align:start position:0%
+this process in practice, we need to
+ 
+
+00:02:32.640 --> 00:02:34.630 align:start position:0%
+this process in practice, we need to
+understand <00:02:32.914><c>the </c><00:02:33.188><c>concept </c><00:02:33.462><c>of </c><00:02:33.736><c>a </c><00:02:34.010><c>stream. </c><00:02:34.284><c>More </c><00:02:34.558><c>specifically,</c>
+
+00:02:34.630 --> 00:02:34.640 align:start position:0%
+understand the concept of a stream. More specifically,
+ 
+
+00:02:34.640 --> 00:02:36.070 align:start position:0%
+understand the concept of a stream. More specifically,
+I <00:02:34.828><c>will </c><00:02:35.016><c>illustrate </c><00:02:35.204><c>this </c><00:02:35.392><c>with </c><00:02:35.580><c>this </c><00:02:35.768><c>image. </c><00:02:35.956><c>I</c>
+
+00:02:36.070 --> 00:02:36.080 align:start position:0%
+I will illustrate this with this image. I
+ 
+
+00:02:36.080 --> 00:02:37.550 align:start position:0%
+I will illustrate this with this image. I
+believe <00:02:36.410><c>that </c><00:02:36.740><c>now, </c><00:02:37.070><c>looking </c><00:02:37.400><c>at</c>
+
+00:02:37.550 --> 00:02:37.560 align:start position:0%
+believe that now, looking at
+ 
+
+00:02:37.560 --> 00:02:39.270 align:start position:0%
+believe that now, looking at
+this <00:02:37.765><c>image, </c><00:02:37.970><c>it </c><00:02:38.175><c>will </c><00:02:38.380><c>be </c><00:02:38.585><c>much </c><00:02:38.790><c>easier. </c><00:02:38.995><c>Pay </c><00:02:39.200><c>attention,</c>
+
+00:02:39.270 --> 00:02:41.229 align:start position:0%
+this image, it will be much easier. Pay attention,
+ 
+
+00:02:41.229 --> 00:02:41.239 align:start position:0%
+ 
+ 
+
+00:02:41.239 --> 00:02:42.670 align:start position:0%
+ 
+because <00:02:41.495><c>what </c><00:02:41.751><c>I </c><00:02:42.007><c>said </c><00:02:42.263><c>at </c><00:02:42.519><c>the</c>
+
+00:02:42.670 --> 00:02:42.680 align:start position:0%
+because what I said at the
+ 
+
+00:02:42.680 --> 00:02:44.910 align:start position:0%
+because what I said at the
+beginning <00:02:43.210><c>is </c><00:02:43.740><c>that </c><00:02:44.270><c>our </c><00:02:44.800><c>data...</c>
+
+00:02:44.910 --> 00:02:44.920 align:start position:0%
+beginning is that our data...
+ 
+
+00:02:44.920 --> 00:02:46.750 align:start position:0%
+beginning is that our data...
+Imagine <00:02:45.199><c>this: </c><00:02:45.478><c>for </c><00:02:45.757><c>example, </c><00:02:46.036><c>you </c><00:02:46.315><c>have </c><00:02:46.594><c>an</c>
+
+00:02:46.750 --> 00:02:46.760 align:start position:0%
+Imagine this: for example, you have an
+ 
+
+00:02:46.760 --> 00:02:49.670 align:start position:0%
+Imagine this: for example, you have an
+MB3 <00:02:47.125><c>file, </c><00:02:47.490><c>which </c><00:02:47.855><c>is </c><00:02:48.220><c>an </c><00:02:48.585><c>image </c><00:02:48.950><c>file, </c><00:02:49.315><c>right?</c>
+
+00:02:49.670 --> 00:02:49.680 align:start position:0%
+MB3 file, which is an image file, right?
+ 
+
+00:02:49.680 --> 00:02:51.949 align:start position:0%
+MB3 file, which is an image file, right?
+You <00:02:50.112><c>have </c><00:02:50.544><c>an </c><00:02:50.976><c>MB4 </c><00:02:51.408><c>file, </c><00:02:51.840><c>which</c>
+
+00:02:51.949 --> 00:02:51.959 align:start position:0%
+You have an MB4 file, which
+ 
+
+00:02:51.959 --> 00:02:53.990 align:start position:0%
+You have an MB4 file, which
+is <00:02:52.572><c>a </c><00:02:53.185><c>video </c><00:02:53.798><c>file.</c>
+
+00:02:53.990 --> 00:02:54.000 align:start position:0%
+is a video file.
+ 
+
+00:02:54.000 --> 00:02:55.790 align:start position:0%
+is a video file.
+This <00:02:54.344><c>is </c><00:02:54.688><c>our </c><00:02:55.032><c>original </c><00:02:55.376><c>data. </c><00:02:55.720><c>This</c>
+
+00:02:55.790 --> 00:02:55.800 align:start position:0%
+This is our original data. This
+ 
+
+00:02:55.800 --> 00:02:57.589 align:start position:0%
+This is our original data. This
+original <00:02:56.200><c>data </c><00:02:56.600><c>needs </c><00:02:57.000><c>to </c><00:02:57.400><c>be</c>
+
+00:02:57.589 --> 00:02:57.599 align:start position:0%
+original data needs to be
+ 
+
+00:02:57.599 --> 00:03:00.110 align:start position:0%
+original data needs to be
+transformed <00:02:58.005><c>into </c><00:02:58.411><c>a </c><00:02:58.817><c>.O.I. </c><00:02:59.223><c>format </c><00:02:59.629><c>so </c><00:03:00.035><c>that</c>
+
+00:03:00.110 --> 00:03:00.120 align:start position:0%
+transformed into a .O.I. format so that
+ 
+
+00:03:00.120 --> 00:03:01.589 align:start position:0%
+transformed into a .O.I. format so that
+our <00:03:00.780><c>program, </c><00:03:01.440><c>the</c>
+
+00:03:01.589 --> 00:03:01.599 align:start position:0%
+our program, the
+ 
+
+00:03:01.599 --> 00:03:03.710 align:start position:0%
+our program, the
+computer, <00:03:02.079><c>can </c><00:03:02.559><c>understand </c><00:03:03.039><c>it. </c><00:03:03.519><c>To</c>
+
+00:03:03.710 --> 00:03:03.720 align:start position:0%
+computer, can understand it. To
+ 
+
+00:03:03.720 --> 00:03:05.149 align:start position:0%
+computer, can understand it. To
+do <00:03:04.173><c>this, </c><00:03:04.626><c>we </c><00:03:05.079><c>need</c>
+
+00:03:05.149 --> 00:03:05.159 align:start position:0%
+do this, we need
+ 
+
+00:03:05.159 --> 00:03:07.110 align:start position:0%
+do this, we need
+a <00:03:05.579><c>concept </c><00:03:05.999><c>called </c><00:03:06.419><c>a </c><00:03:06.839><c>stream.</c>
+
+00:03:07.110 --> 00:03:07.120 align:start position:0%
+a concept called a stream.
+ 
+
+00:03:07.120 --> 00:03:09.030 align:start position:0%
+a concept called a stream.
+Imagine <00:03:07.920><c>our </c><00:03:08.720><c>data</c>
+
+00:03:09.030 --> 00:03:09.040 align:start position:0%
+Imagine our data
+ 
+
+00:03:09.040 --> 00:03:11.030 align:start position:0%
+Imagine our data
+as <00:03:09.499><c>a </c><00:03:09.958><c>large, </c><00:03:10.417><c>heavy </c><00:03:10.876><c>block.</c>
+
+00:03:11.030 --> 00:03:13.110 align:start position:0%
+as a large, heavy block.
+ 
+
+00:03:13.110 --> 00:03:13.120 align:start position:0%
+ 
+ 
+
+00:03:13.120 --> 00:03:14.670 align:start position:0%
+ 
+So <00:03:13.285><c>now </c><00:03:13.450><c>we </c><00:03:13.615><c>need </c><00:03:13.780><c>to </c><00:03:13.945><c>break </c><00:03:14.110><c>it </c><00:03:14.275><c>down. </c><00:03:14.440><c>We</c>
+
+00:03:14.670 --> 00:03:14.680 align:start position:0%
+So now we need to break it down. We
+ 
+
+00:03:14.680 --> 00:03:16.830 align:start position:0%
+So now we need to break it down. We
+want <00:03:15.170><c>to </c><00:03:15.660><c>divide </c><00:03:16.150><c>it </c><00:03:16.640><c>into</c>
+
+00:03:16.830 --> 00:03:16.840 align:start position:0%
+want to divide it into
+ 
+
+00:03:16.840 --> 00:03:18.630 align:start position:0%
+want to divide it into
+specific <00:03:17.679><c>blocks. </c><00:03:18.518><c>We</c>
+
+00:03:18.630 --> 00:03:18.640 align:start position:0%
+specific blocks. We
+ 
+
+00:03:18.640 --> 00:03:20.470 align:start position:0%
+specific blocks. We
+can't <00:03:18.919><c>process </c><00:03:19.198><c>it </c><00:03:19.477><c>all </c><00:03:19.756><c>at </c><00:03:20.035><c>once; </c><00:03:20.314><c>we</c>
+
+00:03:20.470 --> 00:03:20.480 align:start position:0%
+can't process it all at once; we
+ 
+
+00:03:20.480 --> 00:03:22.509 align:start position:0%
+can't process it all at once; we
+need <00:03:20.685><c>to </c><00:03:20.890><c>break </c><00:03:21.095><c>it </c><00:03:21.300><c>down </c><00:03:21.505><c>and </c><00:03:21.710><c>process </c><00:03:21.915><c>it </c><00:03:22.120><c>separately.</c>
+
+00:03:22.509 --> 00:03:22.519 align:start position:0%
+need to break it down and process it separately.
+ 
+
+00:03:22.519 --> 00:03:24.350 align:start position:0%
+need to break it down and process it separately.
+That <00:03:22.863><c>is, </c><00:03:23.207><c>we'll </c><00:03:23.551><c>divide </c><00:03:23.895><c>it </c><00:03:24.239><c>into</c>
+
+00:03:24.350 --> 00:03:24.360 align:start position:0%
+That is, we'll divide it into
+ 
+
+00:03:24.360 --> 00:03:26.670 align:start position:0%
+That is, we'll divide it into
+streams <00:03:24.719><c>like </c><00:03:25.078><c>this. </c><00:03:25.437><c>The </c><00:03:25.796><c>word </c><00:03:26.155><c>"stream," </c><00:03:26.514><c>if</c>
+
+00:03:26.670 --> 00:03:26.680 align:start position:0%
+streams like this. The word "stream," if
+ 
+
+00:03:26.680 --> 00:03:28.309 align:start position:0%
+streams like this. The word "stream," if
+you <00:03:26.975><c>translate </c><00:03:27.270><c>it </c><00:03:27.565><c>from </c><00:03:27.860><c>English </c><00:03:28.155><c>to</c>
+
+00:03:28.309 --> 00:03:28.319 align:start position:0%
+you translate it from English to
+ 
+
+00:03:28.319 --> 00:03:30.149 align:start position:0%
+you translate it from English to
+Vietnamese, <00:03:28.749><c>means </c><00:03:29.179><c>a </c><00:03:29.609><c>stream, </c><00:03:30.039><c>right?</c>
+
+00:03:30.149 --> 00:03:30.159 align:start position:0%
+Vietnamese, means a stream, right?
+ 
+
+00:03:30.159 --> 00:03:31.789 align:start position:0%
+Vietnamese, means a stream, right?
+But <00:03:30.939><c>I </c><00:03:31.719><c>advise</c>
+
+00:03:31.789 --> 00:03:31.799 align:start position:0%
+But I advise
+ 
+
+00:03:31.799 --> 00:03:33.270 align:start position:0%
+But I advise
+you <00:03:32.063><c>not </c><00:03:32.327><c>to </c><00:03:32.591><c>translate </c><00:03:32.855><c>it </c><00:03:33.119><c>at</c>
+
+00:03:33.270 --> 00:03:33.280 align:start position:0%
+you not to translate it at
+ 
+
+00:03:33.280 --> 00:03:35.190 align:start position:0%
+you not to translate it at
+all.  <00:03:33.480><c>Because </c><00:03:33.680><c>when </c><00:03:33.880><c>we </c><00:03:34.080><c>translate </c><00:03:34.280><c>the </c><00:03:34.480><c>meaning </c><00:03:34.680><c>of </c><00:03:34.880><c>"flow" </c><00:03:35.080><c>in</c>
+
+00:03:35.190 --> 00:03:35.200 align:start position:0%
+all.  Because when we translate the meaning of "flow" in
+ 
+
+00:03:35.200 --> 00:03:36.910 align:start position:0%
+all.  Because when we translate the meaning of "flow" in
+our <00:03:35.473><c>minds, </c><00:03:35.746><c>we </c><00:03:36.019><c>don't </c><00:03:36.292><c>understand </c><00:03:36.565><c>that </c><00:03:36.838><c>a</c>
+
+00:03:36.910 --> 00:03:36.920 align:start position:0%
+our minds, we don't understand that a
+ 
+
+00:03:36.920 --> 00:03:38.750 align:start position:0%
+our minds, we don't understand that a
+flow <00:03:37.199><c>has </c><00:03:37.478><c>nothing </c><00:03:37.757><c>to </c><00:03:38.036><c>do </c><00:03:38.315><c>with </c><00:03:38.594><c>computers,</c>
+
+00:03:38.750 --> 00:03:38.760 align:start position:0%
+flow has nothing to do with computers,
+ 
+
+00:03:38.760 --> 00:03:40.869 align:start position:0%
+flow has nothing to do with computers,
+right? <00:03:39.720><c>So, </c><00:03:40.680><c>when</c>
+
+00:03:40.869 --> 00:03:40.879 align:start position:0%
+right? So, when
+ 
+
+00:03:40.879 --> 00:03:43.110 align:start position:0%
+right? So, when
+you <00:03:41.114><c>think </c><00:03:41.349><c>of </c><00:03:41.584><c>a </c><00:03:41.819><c>stream, </c><00:03:42.054><c>just </c><00:03:42.289><c>feel </c><00:03:42.524><c>it; </c><00:03:42.759><c>it's </c><00:03:42.994><c>like</c>
+
+00:03:43.110 --> 00:03:43.120 align:start position:0%
+you think of a stream, just feel it; it's like
+ 
+
+00:03:43.120 --> 00:03:45.110 align:start position:0%
+you think of a stream, just feel it; it's like
+a <00:03:43.420><c>stream </c><00:03:43.720><c>of </c><00:03:44.020><c>data. </c><00:03:44.320><c>We're </c><00:03:44.620><c>using </c><00:03:44.920><c>a</c>
+
+00:03:45.110 --> 00:03:45.120 align:start position:0%
+a stream of data. We're using a
+ 
+
+00:03:45.120 --> 00:03:47.070 align:start position:0%
+a stream of data. We're using a
+figurative <00:03:45.471><c>meaning, </c><00:03:45.822><c>not </c><00:03:46.173><c>a </c><00:03:46.524><c>literal </c><00:03:46.875><c>translation.</c>
+
+00:03:47.070 --> 00:03:47.080 align:start position:0%
+figurative meaning, not a literal translation.
+ 
+
+00:03:47.080 --> 00:03:48.390 align:start position:0%
+figurative meaning, not a literal translation.
+We're <00:03:48.159><c>feeling</c>
+
+00:03:48.390 --> 00:03:48.400 align:start position:0%
+We're feeling
+ 
+
+00:03:48.400 --> 00:03:49.789 align:start position:0%
+We're feeling
+it <00:03:48.690><c>figuratively </c><00:03:48.980><c>– </c><00:03:49.270><c>it's </c><00:03:49.560><c>a</c>
+
+00:03:49.789 --> 00:03:49.799 align:start position:0%
+it figuratively – it's a
+ 
+
+00:03:49.799 --> 00:03:51.670 align:start position:0%
+it figuratively – it's a
+flow <00:03:50.044><c>of </c><00:03:50.289><c>data. </c><00:03:50.534><c>Don't </c><00:03:50.779><c>imagine </c><00:03:51.024><c>it </c><00:03:51.269><c>as </c><00:03:51.514><c>a</c>
+
+00:03:51.670 --> 00:03:51.680 align:start position:0%
+flow of data. Don't imagine it as a
+ 
+
+00:03:51.680 --> 00:03:53.710 align:start position:0%
+flow of data. Don't imagine it as a
+stream <00:03:52.040><c>of </c><00:03:52.400><c>water. </c><00:03:52.760><c>After </c><00:03:53.120><c>we </c><00:03:53.480><c>have</c>
+
+00:03:53.710 --> 00:03:53.720 align:start position:0%
+stream of water. After we have
+ 
+
+00:03:53.720 --> 00:03:55.270 align:start position:0%
+stream of water. After we have
+this <00:03:54.070><c>stream, </c><00:03:54.420><c>you </c><00:03:54.770><c>see </c><00:03:55.120><c>that</c>
+
+00:03:55.270 --> 00:03:55.280 align:start position:0%
+this stream, you see that
+ 
+
+00:03:55.280 --> 00:03:56.949 align:start position:0%
+this stream, you see that
+our <00:03:55.773><c>program </c><00:03:56.266><c>needs </c><00:03:56.759><c>to</c>
+
+00:03:56.949 --> 00:03:58.710 align:start position:0%
+our program needs to
+ 
+
+00:03:58.710 --> 00:03:58.720 align:start position:0%
+ 
+ 
+
+00:03:58.720 --> 00:04:00.509 align:start position:0%
+ 
+transform <00:03:58.891><c>this </c><00:03:59.062><c>string </c><00:03:59.233><c>of </c><00:03:59.404><c>0s </c><00:03:59.575><c>and </c><00:03:59.746><c>1s </c><00:03:59.917><c>into </c><00:04:00.088><c>a </c><00:04:00.259><c>format </c><00:04:00.430><c>you</c>
+
+00:04:00.509 --> 00:04:00.519 align:start position:0%
+transform this string of 0s and 1s into a format you
+ 
+
+00:04:00.519 --> 00:04:02.470 align:start position:0%
+transform this string of 0s and 1s into a format you
+can <00:04:00.887><c>understand. </c><00:04:01.255><c>For </c><00:04:01.623><c>example, </c><00:04:01.991><c>if </c><00:04:02.359><c>you</c>
+
+00:04:02.470 --> 00:04:02.480 align:start position:0%
+can understand. For example, if you
+ 
+
+00:04:02.480 --> 00:04:04.350 align:start position:0%
+can understand. For example, if you
+give <00:04:03.013><c>it </c><00:04:03.546><c>a </c><00:04:04.079><c>video,</c>
+
+00:04:04.350 --> 00:04:04.360 align:start position:0%
+give it a video,
+ 
+
+00:04:04.360 --> 00:04:06.190 align:start position:0%
+give it a video,
+it <00:04:04.600><c>will </c><00:04:04.840><c>need </c><00:04:05.080><c>to </c><00:04:05.320><c>open </c><00:04:05.560><c>that </c><00:04:05.800><c>video </c><00:04:06.040><c>and</c>
+
+00:04:06.190 --> 00:04:06.200 align:start position:0%
+it will need to open that video and
+ 
+
+00:04:06.200 --> 00:04:07.630 align:start position:0%
+it will need to open that video and
+display <00:04:06.393><c>the </c><00:04:06.586><c>images </c><00:04:06.779><c>for </c><00:04:06.972><c>you </c><00:04:07.165><c>to </c><00:04:07.358><c>see,</c>
+
+00:04:07.630 --> 00:04:07.640 align:start position:0%
+display the images for you to see,
+ 
+
+00:04:07.640 --> 00:04:09.350 align:start position:0%
+display the images for you to see,
+right? <00:04:07.893><c>These </c><00:04:08.146><c>are </c><00:04:08.399><c>the </c><00:04:08.652><c>two </c><00:04:08.905><c>steps </c><00:04:09.158><c>that</c>
+
+00:04:09.350 --> 00:04:09.360 align:start position:0%
+right? These are the two steps that
+ 
+
+00:04:09.360 --> 00:04:11.309 align:start position:0%
+right? These are the two steps that
+the <00:04:09.659><c>computer </c><00:04:09.958><c>does, </c><00:04:10.257><c>and </c><00:04:10.556><c>the </c><00:04:10.855><c>tool </c><00:04:11.154><c>we</c>
+
+00:04:11.309 --> 00:04:11.319 align:start position:0%
+the computer does, and the tool we
+ 
+
+00:04:11.319 --> 00:04:13.470 align:start position:0%
+the computer does, and the tool we
+use <00:04:11.719><c>here </c><00:04:12.119><c>is </c><00:04:12.519><c>the </c><00:04:12.919><c>stream </c><00:04:13.319><c>tool.</c>
+
+00:04:13.470 --> 00:04:13.480 align:start position:0%
+use here is the stream tool.
+ 
+
+00:04:13.480 --> 00:04:15.190 align:start position:0%
+use here is the stream tool.
+Regarding <00:04:13.740><c>the </c><00:04:14.000><c>concept </c><00:04:14.260><c>of </c><00:04:14.520><c>a </c><00:04:14.780><c>stream, </c><00:04:15.040><c>please</c>
+
+00:04:15.190 --> 00:04:15.200 align:start position:0%
+Regarding the concept of a stream, please
+ 
+
+00:04:15.200 --> 00:04:16.909 align:start position:0%
+Regarding the concept of a stream, please
+note <00:04:16.840><c>this:</c>
+
+00:04:16.909 --> 00:04:16.919 align:start position:0%
+note this:
+ 
+
+00:04:16.919 --> 00:04:19.069 align:start position:0%
+note this:
+why <00:04:17.199><c>do </c><00:04:17.479><c>we </c><00:04:17.759><c>use </c><00:04:18.039><c>it? </c><00:04:18.319><c>In </c><00:04:18.599><c>reality, </c><00:04:18.879><c>for</c>
+
+00:04:19.069 --> 00:04:19.079 align:start position:0%
+why do we use it? In reality, for
+ 
+
+00:04:19.079 --> 00:04:21.349 align:start position:0%
+why do we use it? In reality, for
+example, <00:04:19.339><c>you </c><00:04:19.599><c>can </c><00:04:19.859><c>go </c><00:04:20.119><c>to </c><00:04:20.379><c>YouTube </c><00:04:20.639><c>and </c><00:04:20.899><c>ask </c><00:04:21.159><c>D-</c>
+
+00:04:21.349 --> 00:04:21.359 align:start position:0%
+example, you can go to YouTube and ask D-
+ 
+
+00:04:21.359 --> 00:04:23.870 align:start position:0%
+example, you can go to YouTube and ask D-
+IT.  <00:04:21.630><c>You </c><00:04:21.901><c>can </c><00:04:22.172><c>ask </c><00:04:22.443><c>IT </c><00:04:22.714><c>people </c><00:04:22.985><c>on </c><00:04:23.256><c>YouTube. </c><00:04:23.527><c>You've </c><00:04:23.798><c>probably</c>
+
+00:04:23.870 --> 00:04:25.390 align:start position:0%
+IT.  You can ask IT people on YouTube. You've probably
+ 
+
+00:04:25.390 --> 00:04:25.400 align:start position:0%
+ 
+ 
+
+00:04:25.400 --> 00:04:28.230 align:start position:0%
+ 
+seen <00:04:26.029><c>me </c><00:04:26.658><c>livestreaming, </c><00:04:27.287><c>right? </c><00:04:27.916><c>So</c>
+
+00:04:28.230 --> 00:04:28.240 align:start position:0%
+seen me livestreaming, right? So
+ 
+
+00:04:28.240 --> 00:04:30.350 align:start position:0%
+seen me livestreaming, right? So
+why <00:04:28.689><c>is </c><00:04:29.138><c>the </c><00:04:29.587><c>word </c><00:04:30.036><c>"stream"</c>
+
+00:04:30.350 --> 00:04:30.360 align:start position:0%
+why is the word "stream"
+ 
+
+00:04:30.360 --> 00:04:32.189 align:start position:0%
+why is the word "stream"
+and <00:04:30.906><c>the </c><00:04:31.452><c>word </c><00:04:31.998><c>"</c>
+
+00:04:32.189 --> 00:04:32.199 align:start position:0%
+and the word "
+ 
+
+00:04:32.199 --> 00:04:34.310 align:start position:0%
+and the word "
+livestream" <00:04:32.485><c>related? </c><00:04:32.771><c>Actually, </c><00:04:33.057><c>they're </c><00:04:33.343><c>the </c><00:04:33.629><c>same </c><00:04:33.915><c>thing.</c>
+
+00:04:34.310 --> 00:04:36.670 align:start position:0%
+livestream" related? Actually, they're the same thing.
+ 
+
+00:04:36.670 --> 00:04:36.680 align:start position:0%
+ 
+ 
+
+00:04:36.680 --> 00:04:38.070 align:start position:0%
+ 
+This <00:04:37.066><c>is </c><00:04:37.452><c>a </c><00:04:37.838><c>technology</c>
+
+00:04:38.070 --> 00:04:38.080 align:start position:0%
+This is a technology
+ 
+
+00:04:38.080 --> 00:04:40.469 align:start position:0%
+This is a technology
+we <00:04:38.609><c>use </c><00:04:39.138><c>in </c><00:04:39.667><c>our </c><00:04:40.196><c>lives.</c>
+
+00:04:40.469 --> 00:04:40.479 align:start position:0%
+we use in our lives.
+ 
+
+00:04:40.479 --> 00:04:42.430 align:start position:0%
+we use in our lives.
+Using <00:04:41.092><c>this </c><00:04:41.705><c>streaming </c><00:04:42.318><c>technology</c>
+
+00:04:42.430 --> 00:04:42.440 align:start position:0%
+Using this streaming technology
+ 
+
+00:04:42.440 --> 00:04:44.150 align:start position:0%
+Using this streaming technology
+helps <00:04:43.239><c>you </c><00:04:44.038><c>save</c>
+
+00:04:44.150 --> 00:04:44.160 align:start position:0%
+helps you save
+ 
+
+00:04:44.160 --> 00:04:45.990 align:start position:0%
+helps you save
+resources.
+
+00:04:45.990 --> 00:04:47.710 align:start position:0%
+resources.
+ 
+
+00:04:47.710 --> 00:04:47.720 align:start position:0%
+ 
+ 
+
+00:04:47.720 --> 00:04:49.029 align:start position:0%
+ 
+Imagine
+
+00:04:49.029 --> 00:04:49.039 align:start position:0%
+Imagine
+ 
+
+00:04:49.039 --> 00:04:50.550 align:start position:0%
+Imagine
+your <00:04:49.190><c>initial </c><00:04:49.341><c>file. </c><00:04:49.492><c>It's </c><00:04:49.643><c>like </c><00:04:49.794><c>a </c><00:04:49.945><c>large </c><00:04:50.096><c>block </c><00:04:50.247><c>of </c><00:04:50.398><c>data.</c>
+
+00:04:50.550 --> 00:04:50.560 align:start position:0%
+your initial file. It's like a large block of data.
+ 
+
+00:04:50.560 --> 00:04:52.749 align:start position:0%
+your initial file. It's like a large block of data.
+You <00:04:51.133><c>divide </c><00:04:51.706><c>it </c><00:04:52.279><c>into</c>
+
+00:04:52.749 --> 00:04:52.759 align:start position:0%
+You divide it into
+ 
+
+00:04:52.759 --> 00:04:55.070 align:start position:0%
+You divide it into
+smaller <00:04:53.299><c>data </c><00:04:53.839><c>streams. </c><00:04:54.379><c>If </c><00:04:54.919><c>you</c>
+
+00:04:55.070 --> 00:04:55.080 align:start position:0%
+smaller data streams. If you
+ 
+
+00:04:55.080 --> 00:04:56.990 align:start position:0%
+smaller data streams. If you
+break <00:04:55.919><c>it </c><00:04:56.758><c>down,</c>
+
+00:04:56.990 --> 00:04:57.000 align:start position:0%
+break it down,
+ 
+
+00:04:57.000 --> 00:04:58.629 align:start position:0%
+break it down,
+you'll <00:04:58.440><c>save</c>
+
+00:04:58.629 --> 00:04:58.639 align:start position:0%
+you'll save
+ 
+
+00:04:58.639 --> 00:05:00.150 align:start position:0%
+you'll save
+resources. <00:04:59.259><c>For </c><00:04:59.879><c>example,</c>
+
+00:05:00.150 --> 00:05:00.160 align:start position:0%
+resources. For example,
+ 
+
+00:05:00.160 --> 00:05:02.189 align:start position:0%
+resources. For example,
+your <00:05:01.099><c>computer </c><00:05:02.038><c>will</c>
+
+00:05:02.189 --> 00:05:02.199 align:start position:0%
+your computer will
+ 
+
+00:05:02.199 --> 00:05:03.909 align:start position:0%
+your computer will
+save <00:05:02.679><c>CPU </c><00:05:03.159><c>and </c><00:05:03.639><c>RAM</c>
+
+00:05:03.909 --> 00:05:03.919 align:start position:0%
+save CPU and RAM
+ 
+
+00:05:03.919 --> 00:05:05.950 align:start position:0%
+save CPU and RAM
+for <00:05:04.699><c>processing </c><00:05:05.479><c>data.</c>
+
+00:05:05.950 --> 00:05:05.960 align:start position:0%
+for processing data.
+ 
+
+00:05:05.960 --> 00:05:08.110 align:start position:0%
+for processing data.
+The <00:05:06.180><c>larger </c><00:05:06.400><c>the </c><00:05:06.620><c>file, </c><00:05:06.840><c>the </c><00:05:07.060><c>more </c><00:05:07.280><c>resources </c><00:05:07.500><c>it </c><00:05:07.720><c>consumes;</c>
+
+00:05:08.110 --> 00:05:08.120 align:start position:0%
+The larger the file, the more resources it consumes;
+ 
+
+00:05:08.120 --> 00:05:10.430 align:start position:0%
+The larger the file, the more resources it consumes;
+conversely, <00:05:08.351><c>the </c><00:05:08.582><c>smaller </c><00:05:08.813><c>the </c><00:05:09.044><c>file, </c><00:05:09.275><c>the </c><00:05:09.506><c>less </c><00:05:09.737><c>resources </c><00:05:09.968><c>it </c><00:05:10.199><c>consumes.</c>
+
+00:05:10.430 --> 00:05:10.440 align:start position:0%
+conversely, the smaller the file, the less resources it consumes.
+ 
+
+00:05:10.440 --> 00:05:12.749 align:start position:0%
+conversely, the smaller the file, the less resources it consumes.
+And <00:05:10.879><c>secondly, </c><00:05:11.318><c>when </c><00:05:11.757><c>the </c><00:05:12.196><c>file </c><00:05:12.635><c>is</c>
+
+00:05:12.749 --> 00:05:12.759 align:start position:0%
+And secondly, when the file is
+ 
+
+00:05:12.759 --> 00:05:14.749 align:start position:0%
+And secondly, when the file is
+small, <00:05:13.143><c>the </c><00:05:13.527><c>loading </c><00:05:13.911><c>speed </c><00:05:14.295><c>is </c><00:05:14.679><c>faster.</c>
+
+00:05:14.749 --> 00:05:14.759 align:start position:0%
+small, the loading speed is faster.
+ 
+
+00:05:14.759 --> 00:05:16.629 align:start position:0%
+small, the loading speed is faster.
+Our <00:05:15.639><c>downloading </c><00:05:16.519><c>speed</c>
+
+00:05:16.629 --> 00:05:16.639 align:start position:0%
+Our downloading speed
+ 
+
+00:05:16.639 --> 00:05:18.510 align:start position:0%
+Our downloading speed
+will <00:05:16.939><c>decrease. </c><00:05:17.239><c>I've </c><00:05:17.539><c>heard </c><00:05:17.839><c>many </c><00:05:18.139><c>of </c><00:05:18.439><c>you,</c>
+
+00:05:18.510 --> 00:05:18.520 align:start position:0%
+will decrease. I've heard many of you,
+ 
+
+00:05:18.520 --> 00:05:20.870 align:start position:0%
+will decrease. I've heard many of you,
+when <00:05:19.133><c>watching </c><00:05:19.746><c>my </c><00:05:20.359><c>livestream,</c>
+
+00:05:20.870 --> 00:05:20.880 align:start position:0%
+when watching my livestream,
+ 
+
+00:05:20.880 --> 00:05:23.110 align:start position:0%
+when watching my livestream,
+say <00:05:21.389><c>things </c><00:05:21.898><c>like, </c><00:05:22.407><c>"Why </c><00:05:22.916><c>is</c>
+
+00:05:23.110 --> 00:05:23.120 align:start position:0%
+say things like, "Why is
+ 
+
+00:05:23.120 --> 00:05:25.510 align:start position:0%
+say things like, "Why is
+the <00:05:23.552><c>high-quality </c><00:05:23.984><c>image </c><00:05:24.416><c>still </c><00:05:24.848><c>a </c><00:05:25.280><c>bit</c>
+
+00:05:25.510 --> 00:05:25.520 align:start position:0%
+the high-quality image still a bit
+ 
+
+00:05:25.520 --> 00:05:27.749 align:start position:0%
+the high-quality image still a bit
+laggy?" <00:05:26.579><c>That's </c><00:05:27.638><c>because</c>
+
+00:05:27.749 --> 00:05:27.759 align:start position:0%
+laggy?" That's because
+ 
+
+00:05:27.759 --> 00:05:30.029 align:start position:0%
+laggy?" That's because
+when <00:05:28.452><c>you </c><00:05:29.145><c>watch </c><00:05:29.838><c>a</c>
+
+00:05:30.029 --> 00:05:30.039 align:start position:0%
+when you watch a
+ 
+
+00:05:30.039 --> 00:05:31.670 align:start position:0%
+when you watch a
+high-quality <00:05:30.252><c>image </c><00:05:30.465><c>source, </c><00:05:30.678><c>it </c><00:05:30.891><c>means </c><00:05:31.104><c>the </c><00:05:31.317><c>file</c>
+
+00:05:31.670 --> 00:05:31.680 align:start position:0%
+high-quality image source, it means the file
+ 
+
+00:05:31.680 --> 00:05:33.230 align:start position:0%
+high-quality image source, it means the file
+size
+
+00:05:33.230 --> 00:05:33.240 align:start position:0%
+size
+ 
+
+00:05:33.240 --> 00:05:35.469 align:start position:0%
+size
+is <00:05:33.428><c>large. </c><00:05:33.616><c>It </c><00:05:33.804><c>follows </c><00:05:33.992><c>the </c><00:05:34.180><c>principle </c><00:05:34.368><c>of </c><00:05:34.556><c>streaming: </c><00:05:34.744><c>the </c><00:05:34.932><c>larger </c><00:05:35.120><c>the</c>
+
+00:05:35.469 --> 00:05:35.479 align:start position:0%
+is large. It follows the principle of streaming: the larger the
+ 
+
+00:05:35.479 --> 00:05:37.110 align:start position:0%
+is large. It follows the principle of streaming: the larger the
+stream <00:05:36.219><c>volume, </c><00:05:36.959><c>the</c>
+
+00:05:37.110 --> 00:05:37.120 align:start position:0%
+stream volume, the
+ 
+
+00:05:37.120 --> 00:05:38.830 align:start position:0%
+stream volume, the
+slower <00:05:37.860><c>the </c><00:05:38.600><c>speed.</c>
+
+00:05:38.830 --> 00:05:38.840 align:start position:0%
+slower the speed.
+ 
+
+00:05:38.840 --> 00:05:41.189 align:start position:0%
+slower the speed.
+So, <00:05:39.820><c>the </c><00:05:40.800><c>technology</c>
+
+00:05:41.189 --> 00:05:41.199 align:start position:0%
+So, the technology
+ 
+
+00:05:41.199 --> 00:05:42.670 align:start position:0%
+So, the technology
+we're <00:05:41.666><c>using </c><00:05:42.133><c>here, </c><00:05:42.600><c>the</c>
+
+00:05:42.670 --> 00:05:42.680 align:start position:0%
+we're using here, the
+ 
+
+00:05:42.680 --> 00:05:44.230 align:start position:0%
+we're using here, the
+practical <00:05:43.040><c>application, </c><00:05:43.400><c>you </c><00:05:43.760><c>just </c><00:05:44.120><c>have</c>
+
+00:05:44.230 --> 00:05:44.240 align:start position:0%
+practical application, you just have
+ 
+
+00:05:44.240 --> 00:05:46.469 align:start position:0%
+practical application, you just have
+n't <00:05:45.279><c>noticed </c><00:05:46.318><c>it.</c>
+
+00:05:46.469 --> 00:05:46.479 align:start position:0%
+n't noticed it.
+ 
+
+00:05:46.479 --> 00:05:48.029 align:start position:0%
+n't noticed it.
+When <00:05:46.829><c>you </c><00:05:47.179><c>use </c><00:05:47.529><c>streaming, </c><00:05:47.879><c>there</c>
+
+00:05:48.029 --> 00:05:48.039 align:start position:0%
+When you use streaming, there
+ 
+
+00:05:48.039 --> 00:05:49.629 align:start position:0%
+When you use streaming, there
+'s <00:05:48.519><c>a </c><00:05:48.999><c>drawback: </c><00:05:49.479><c>it</c>
+
+00:05:49.629 --> 00:05:49.639 align:start position:0%
+'s a drawback: it
+ 
+
+00:05:49.639 --> 00:05:51.189 align:start position:0%
+'s a drawback: it
+requires <00:05:51.039><c>many</c>
+
+00:05:51.189 --> 00:05:51.199 align:start position:0%
+requires many
+ 
+
+00:05:51.199 --> 00:05:53.749 align:start position:0%
+requires many
+I/O <00:05:51.585><c>operations, </c><00:05:51.971><c>meaning </c><00:05:52.357><c>read </c><00:05:52.743><c>and </c><00:05:53.129><c>write </c><00:05:53.515><c>operations</c>
+
+00:05:53.749 --> 00:05:53.759 align:start position:0%
+I/O operations, meaning read and write operations
+ 
+
+00:05:53.759 --> 00:05:55.870 align:start position:0%
+I/O operations, meaning read and write operations
+with <00:05:54.119><c>the </c><00:05:54.479><c>computer. </c><00:05:54.839><c>Now, </c><00:05:55.199><c>you </c><00:05:55.559><c>might</c>
+
+00:05:55.870 --> 00:05:55.880 align:start position:0%
+with the computer. Now, you might
+ 
+
+00:05:55.880 --> 00:05:58.029 align:start position:0%
+with the computer. Now, you might
+ask <00:05:56.340><c>me, </c><00:05:56.800><c>"Okay, </c><00:05:57.260><c>I </c><00:05:57.720><c>understand</c>
+
+00:05:58.029 --> 00:05:58.039 align:start position:0%
+ask me, "Okay, I understand
+ 
+
+00:05:58.039 --> 00:06:00.029 align:start position:0%
+ask me, "Okay, I understand
+streaming, <00:05:58.509><c>right? </c><00:05:58.979><c>I </c><00:05:59.449><c>understand </c><00:05:59.919><c>that</c>
+
+00:06:00.029 --> 00:06:00.039 align:start position:0%
+streaming, right? I understand that
+ 
+
+00:06:00.039 --> 00:06:01.550 align:start position:0%
+streaming, right? I understand that
+it's <00:06:00.719><c>used </c><00:06:01.399><c>in</c>
+
+00:06:01.550 --> 00:06:01.560 align:start position:0%
+it's used in
+ 
+
+00:06:01.560 --> 00:06:03.189 align:start position:0%
+it's used in
+livestreaming, <00:06:02.340><c>right? </c><00:06:03.120><c>So,</c>
+
+00:06:03.189 --> 00:06:03.199 align:start position:0%
+livestreaming, right? So,
+ 
+
+00:06:03.199 --> 00:06:05.110 align:start position:0%
+livestreaming, right? So,
+what <00:06:04.079><c>is </c><00:06:04.959><c>I/O?</c>
+
+00:06:05.110 --> 00:06:05.120 align:start position:0%
+what is I/O?
+ 
+
+00:06:05.120 --> 00:06:06.749 align:start position:0%
+what is I/O?
+I'll <00:06:05.217><c>explain </c><00:06:05.314><c>that </c><00:06:05.411><c>in </c><00:06:05.508><c>the </c><00:06:05.605><c>next </c><00:06:05.702><c>video."  </c><00:06:05.799><c>Let </c><00:06:05.896><c>me </c><00:06:05.993><c>introduce </c><00:06:06.090><c>you </c><00:06:06.187><c>to </c><00:06:06.284><c>the </c><00:06:06.381><c>concept </c><00:06:06.478><c>of</c>
+
+00:06:06.749 --> 00:06:06.759 align:start position:0%
+I'll explain that in the next video."  Let me introduce you to the concept of
+ 
+
+00:06:06.759 --> 00:06:09.960 align:start position:0%
+I'll explain that in the next video."  Let me introduce you to the concept of
+IO.
+

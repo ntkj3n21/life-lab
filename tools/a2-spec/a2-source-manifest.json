@@ -1,0 +1,214 @@
+{
+  "schemaVersion": 1,
+  "account": {
+    "email": "scale@lifelab.local",
+    "displayName": "Long-term Learning"
+  },
+  "referenceDate": "2026-08-27",
+  "businessTimezone": "Asia/Ho_Chi_Minh",
+  "deterministicSeed": 20260827,
+  "currentLibrarySources": [
+    "AkhPDT0VIeM",
+    "UVHlHN5Ky7I",
+    "6AWG5AXWCzg",
+    "xzbF3XpiHlo",
+    "wO4oDe-hEKo",
+    "PaOJlKbwiX0",
+    "tmKzNlHXmR0",
+    "YyMOnvkhXLU",
+    "teQ5QZ2lUkE",
+    "LykA5UTyrMs",
+    "IhnwAcrBRTs",
+    "pXzRhD4Vu2s",
+    "yMRSXK9dfp8",
+    "vIob6cVNufw",
+    "eRj_XQawcBg",
+    "xN_DF0FRx7A",
+    "GgAsaNcxdwY",
+    "9M0UjGVZaDY",
+    "pV45eVVcuYc",
+    "ZEJ6MKuUZds",
+    "Pju2Y69Q6ew",
+    "0_4s88NLOmw",
+    "sdosjI25u5c",
+    "DRcAJNhtwbY",
+    "MQZ1TH0l7sk",
+    "XUx3iJVPdxA",
+    "PPyw2vp6SIU",
+    "mdG5TEiJTx8",
+    "efpaZznImN4",
+    "pGa4PfLLHx8",
+    "DMrd-RnLeJI",
+    "KXsfp8YiucE",
+    "W8vJ-yOtSbE",
+    "TsTr-tKCREc",
+    "AA3WWZAMv_0",
+    "U624VLOxiTo",
+    "Uph14HYkgEQ",
+    "QJmNEqy0zV0",
+    "_4F8ihblZFU",
+    "9QeNLypIiZs",
+    "J1m4vLDUhEI",
+    "08lWi4T2Bfg",
+    "8KkM6JFjJZA",
+    "TRjVXmk8q8I",
+    "vAecGPWxzFE",
+    "unFHsn0qSMA",
+    "_D16z1kL0wo",
+    "zjUC_W7IOIc",
+    "4a1_is2OdLY",
+    "WF3pUtvC01M",
+    "QbC4LwsD1rw",
+    "8Ee__cUapdg",
+    "EGVhrE6VuNM",
+    "quS95gJdxsc",
+    "kp4fuB-0TBw",
+    "Hfb76A34mBc",
+    "5Pb-z9DQjDw",
+    "Tw8Vyz7dVgc",
+    "B4sy3DL4IX0",
+    "L3Z4KfyCZOI",
+    "AAAKXp2wa-0",
+    "rgSgSe1QUqU",
+    "YqAU7T-BoDE",
+    "PLY0jr90DmI",
+    "pgZev-Y15EM",
+    "t_cedTldfjs",
+    "-cg9dq-Jq2M",
+    "w946spjx_z0",
+    "L-Tzu2jT3Dw",
+    "wcQz4gSbSms",
+    "WvAznEDhCdE",
+    "NkulG9hH2LI",
+    "ncV0OEa9GoQ",
+    "SdcdneSdoV4",
+    "Wz6WghmEmFk",
+    "LlfdqnK28Cg",
+    "N8GhaR7K3tI",
+    "Pd_ZIpCVZPc",
+    "nqLXmpEgU2w",
+    "dstdrBsf7ag"
+  ],
+  "historicalSources": [
+    {
+      "fixtureKey": "A2_HIST_01",
+      "youtubeVideoId": "7L0RLrfrBHE",
+      "expectedTitleContains": "[FULL] Khóa Học Java Cơ Bản Từ A tới Z cho Beginner | Học Java Từ Số 0 với Hỏi D",
+      "expectedChannelName": "Hỏi Dân IT"
+    },
+    {
+      "fixtureKey": "A2_HIST_02",
+      "youtubeVideoId": "MoD_cqJ9s6g",
+      "expectedTitleContains": "#33 [C++]. Double-Ended Queue Data Structure | Deque In C++",
+      "expectedChannelName": "28tech"
+    },
+    {
+      "fixtureKey": "A2_HIST_03",
+      "youtubeVideoId": "gYG70ULXbW4",
+      "expectedTitleContains": "#32 [C++]. Queue Data Structures in C++ | How Queues Work",
+      "expectedChannelName": "28tech"
+    },
+    {
+      "fixtureKey": "A2_HIST_04",
+      "youtubeVideoId": "CLbx37dqYEI",
+      "expectedTitleContains": "Khai báo biến | Làm quen với cú pháp trong JavaScript",
+      "expectedChannelName": "F8 Official"
+    },
+    {
+      "fixtureKey": "A2_HIST_05",
+      "youtubeVideoId": "P-fMQ3elxSE",
+      "expectedTitleContains": "Kiểu dữ liệu trong JavaScript | Các kiểu dữ liệu JS",
+      "expectedChannelName": "F8 Official"
+    },
+    {
+      "fixtureKey": "A2_HIST_06",
+      "youtubeVideoId": "YzO65uOJNMg",
+      "expectedTitleContains": "Mảng trong JavaScript | JavaScript array",
+      "expectedChannelName": "F8 Official"
+    },
+    {
+      "fixtureKey": "A2_HIST_07",
+      "youtubeVideoId": "4g9ENVc2KLA",
+      "expectedTitleContains": "Hàm trong JavaScript | JavaScript function",
+      "expectedChannelName": "F8 Official"
+    },
+    {
+      "fixtureKey": "A2_HIST_08",
+      "youtubeVideoId": "orIXdOPFWeM",
+      "expectedTitleContains": "Object trong JavaScript | Khái niệm object",
+      "expectedChannelName": "F8 Official"
+    },
+    {
+      "fixtureKey": "A2_HIST_09",
+      "youtubeVideoId": "SIAGpAaLSaI",
+      "expectedTitleContains": "React hooks: 03 - Dùng useState() qua ví dụ đơn giản (2020)",
+      "expectedChannelName": "Easy Frontend"
+    },
+    {
+      "fixtureKey": "A2_HIST_10",
+      "youtubeVideoId": "G27sfcWlMzc",
+      "expectedTitleContains": "React hooks: 04 - useState() via TodoList example (2020)",
+      "expectedChannelName": "Easy Frontend"
+    },
+    {
+      "fixtureKey": "A2_HIST_11",
+      "youtubeVideoId": "jwfjgRBcUgE",
+      "expectedTitleContains": "React hooks: 08 - Pagination with useEffect hooks (2020) 😍",
+      "expectedChannelName": "Easy Frontend"
+    },
+    {
+      "fixtureKey": "A2_HIST_12",
+      "youtubeVideoId": "mAMrnCFRH-Y",
+      "expectedTitleContains": "#14 Bắt Đầu Với Git Siêu Căn Bản Cho Beginners - Đẩy Project Lên Github - Bài 03",
+      "expectedChannelName": "Hỏi Dân IT"
+    },
+    {
+      "fixtureKey": "A2_HIST_13",
+      "youtubeVideoId": "Wtt5uC4HWAA",
+      "expectedTitleContains": "#20 Tạo tables, thêm dữ liệu database với Sequelize CLI - Cấu hình database cho ",
+      "expectedChannelName": "Hỏi Dân IT"
+    },
+    {
+      "fixtureKey": "A2_HIST_14",
+      "youtubeVideoId": "Lzu2Weq8edE",
+      "expectedTitleContains": "#22 Database Analysis of Medical Appointment Backend Project | Node.JS Configura",
+      "expectedChannelName": "Hỏi Dân IT"
+    },
+    {
+      "fixtureKey": "A2_HIST_15",
+      "youtubeVideoId": "_YEKpvabzCQ",
+      "expectedTitleContains": "#23 Creating All Models, Migrations, and Seeders for the Medical Appointment Boo",
+      "expectedChannelName": "Hỏi Dân IT"
+    },
+    {
+      "fixtureKey": "A2_HIST_16",
+      "youtubeVideoId": "ExIXyILeOyc",
+      "expectedTitleContains": "#25 CRUD với Node.js và Sequelize - Sử Dụng ORM Để Tạo Dữ Liệu Mới Vào Database ",
+      "expectedChannelName": "Hỏi Dân IT"
+    },
+    {
+      "fixtureKey": "A2_HIST_17",
+      "youtubeVideoId": "aBKOMmItvpQ",
+      "expectedTitleContains": "#26 CRUD with Node.js and Sequelize - Using ORM to Display Data (Read) - Part 2",
+      "expectedChannelName": "Hỏi Dân IT"
+    },
+    {
+      "fixtureKey": "A2_HIST_18",
+      "youtubeVideoId": "HLEu57iLrRo",
+      "expectedTitleContains": "SSR & CSR | Sever side rendering | Client side rendering",
+      "expectedChannelName": "F8 Official"
+    },
+    {
+      "fixtureKey": "A2_HIST_19",
+      "youtubeVideoId": "6LdwSrTCmo4",
+      "expectedTitleContains": "Query parameters | Chuỗi truy vấn",
+      "expectedChannelName": "F8 Official"
+    },
+    {
+      "fixtureKey": "A2_HIST_20",
+      "youtubeVideoId": "bvZ1_P9eCpw",
+      "expectedTitleContains": "[CRUD] Create new course | Create new course page | NodeJS practice",
+      "expectedChannelName": "F8 Official"
+    }
+  ]
+}

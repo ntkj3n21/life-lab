@@ -165,7 +165,7 @@ export function VideoStage({
             <button
               type="button"
               onClick={onExitFocus}
-              className="flex h-10 items-center gap-1.5 rounded-lg border border-(--border-strong) bg-(--surface) px-2.5 text-xs font-medium text-(--text-primary) transition hover:bg-(--surface-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) xl:h-8"
+              className="flex h-10 items-center gap-1.5 rounded-lg bg-(--primary-bg) px-2.5 text-xs font-medium text-(--primary-text) transition hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) xl:h-8"
             >
               <Minimize2
                 size={14}

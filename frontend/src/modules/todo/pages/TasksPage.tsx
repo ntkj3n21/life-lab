@@ -569,7 +569,7 @@ export function TasksPage() {
   return (
     <main className="min-w-0 flex-1 overflow-y-auto p-4 sm:p-6">
       <div className="mx-auto max-w-6xl">
-        <header>
+        <header className="border-b border-(--border) pb-5">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <h1 className="text-2xl font-semibold">
@@ -577,15 +577,15 @@ export function TasksPage() {
               </h1>
 
               <p className="mt-1 max-w-2xl text-sm leading-6 text-(--text-secondary)">
-                Keep the next action clear. Your source context stays attached when a task comes from a note.
+                Turn learning context into clear, actionable work.
               </p>
             </div>
 
-            <p className="text-sm text-(--text-muted)">
-              {totalElements} task
-              {totalElements === 1
-                ? ""
-                : "s"}
+            <p className="w-fit rounded-full border border-(--border) bg-(--surface) px-3 py-1.5 text-xs font-medium text-(--text-secondary)">
+              {totalElements}{" "}
+              {hasAppliedFilters
+                ? `result${totalElements === 1 ? "" : "s"}`
+                : `task${totalElements === 1 ? "" : "s"}`}
             </p>
           </div>
         </header>
@@ -910,6 +910,16 @@ export function TasksPage() {
                   ? "No Task matches the current search and filter conditions."
                   : "Create an independent Task here, or create one from a Note to preserve source context."}
               </p>
+
+              {hasAppliedFilters && (
+                <button
+                  type="button"
+                  onClick={handleClearFilters}
+                  className="mt-4 rounded-xl border border-(--border) bg-(--surface) px-3 py-2 text-xs font-medium text-(--text-secondary) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)"
+                >
+                  Clear filters
+                </button>
+              )}
             </div>
           </div>
         ) : (

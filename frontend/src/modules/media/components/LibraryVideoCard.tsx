@@ -1,4 +1,8 @@
-import { useState } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   Ellipsis,
   Film,
@@ -23,6 +27,7 @@ interface LibraryVideoCardProps {
     | "all"
     | "recent"
     | "most";
+  isActionsOpen: boolean;
 
   onOpen: (
     video: LibraryVideo,
@@ -37,6 +42,9 @@ interface LibraryVideoCardProps {
   onDelete: (
     video: LibraryVideo,
   ) => void;
+
+  onToggleActions: () => void;
+  onCloseActions: () => void;
 }
 
 function formatDuration(
@@ -80,10 +88,23 @@ export function LibraryVideoCard({
   isActive,
   isMutating,
   viewMode,
+  isActionsOpen,
   onOpen,
   onUpdate,
   onDelete,
+  onToggleActions,
+  onCloseActions,
 }: LibraryVideoCardProps) {
+  const actionsRef =
+    useRef<HTMLDivElement | null>(
+      null,
+    );
+
+  const actionsTriggerRef =
+    useRef<HTMLButtonElement | null>(
+      null,
+    );
+
   const [
     isEditing,
     setIsEditing,
@@ -113,7 +134,62 @@ export function LibraryVideoCard({
       video,
     );
 
+  useEffect(() => {
+    if (!isActionsOpen) {
+      return;
+    }
+
+    function handlePointerDown(
+      event: PointerEvent,
+    ) {
+      if (
+        event.target instanceof Node &&
+        !actionsRef.current?.contains(
+          event.target,
+        )
+      ) {
+        onCloseActions();
+      }
+    }
+
+    function handleKeyDown(
+      event: KeyboardEvent,
+    ) {
+      if (event.key !== "Escape") {
+        return;
+      }
+
+      onCloseActions();
+      actionsTriggerRef.current?.focus();
+    }
+
+    document.addEventListener(
+      "pointerdown",
+      handlePointerDown,
+    );
+    document.addEventListener(
+      "keydown",
+      handleKeyDown,
+    );
+
+    return () => {
+      document.removeEventListener(
+        "pointerdown",
+        handlePointerDown,
+      );
+      document.removeEventListener(
+        "keydown",
+        handleKeyDown,
+      );
+    };
+  }, [
+    isActionsOpen,
+    onCloseActions,
+  ]);
+
   function handleStartEdit() {
+    onCloseActions();
+
     setCustomTitle(
       video.customTitle ?? "",
     );
@@ -397,9 +473,17 @@ export function LibraryVideoCard({
                 </span>
               )}
 
-              <details className="group relative">
-                <summary
-                  className="flex h-7 w-7 cursor-pointer list-none items-center justify-center rounded-lg text-(--text-muted) transition-colors hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) [&::-webkit-details-marker]:hidden"
+              <div
+                ref={actionsRef}
+                className="relative"
+              >
+                <button
+                  ref={actionsTriggerRef}
+                  type="button"
+                  onClick={onToggleActions}
+                  aria-expanded={isActionsOpen}
+                  aria-controls={`library-video-actions-${video.id}`}
+                  className="flex h-7 w-7 items-center justify-center rounded-lg text-(--text-muted) transition-colors hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)"
                   aria-label={`More actions for ${displayTitle}`}
                   title="More actions"
                 >
@@ -407,9 +491,15 @@ export function LibraryVideoCard({
                     size={16}
                     aria-hidden="true"
                   />
-                </summary>
+                </button>
 
-                <div className="absolute bottom-9 right-0 z-10 w-64 rounded-xl border border-(--border-strong) bg-(--surface) p-2 shadow-lg">
+                {isActionsOpen && (
+                  <div
+                    id={`library-video-actions-${video.id}`}
+                    aria-label={`Actions for ${displayTitle}`}
+                    role="group"
+                    className="absolute bottom-9 right-0 z-10 w-64 rounded-xl border border-(--border-strong) bg-(--surface) p-2 shadow-lg"
+                  >
                   <div className="flex gap-1">
                     <button
                       type="button"
@@ -426,9 +516,10 @@ export function LibraryVideoCard({
 
                     <button
                       type="button"
-                      onClick={() =>
-                        onDelete(video)
-                      }
+                      onClick={() => {
+                        onCloseActions();
+                        onDelete(video);
+                      }}
                       disabled={isMutating}
                       className="flex flex-1 items-center justify-center gap-1.5 rounded-lg px-2 py-1.5 text-xs text-(--text-secondary) hover:bg-(--danger-surface) hover:text-(--danger-text) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
                     >
@@ -443,8 +534,9 @@ export function LibraryVideoCard({
                   <LibraryVideoTags
                     libraryVideoId={video.id}
                   />
-                </div>
-              </details>
+                  </div>
+                )}
+              </div>
             </div>
           </>
         )}
