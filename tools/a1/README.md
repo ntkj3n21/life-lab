@@ -76,3 +76,28 @@ Only a BCrypt hash is stored in PostgreSQL.
 
 This is A1-only development tooling. Do not turn it into an HTTP endpoint, startup
 initializer, Flyway data migration, or production reset mechanism.
+# Semantic rebuild
+
+`Build-A1SemanticFixtures.ps1` is the one-time offline authoring step. It reads the completed subtitle audit and downloaded preferred VTT files, validates cue timestamps against source durations, and writes the durable `a1-note-fixtures.json`, `a1-task-fixtures.json`, and `a1-semantic-review.tsv` artifacts.
+
+Normal reset is offline and consumes those JSON fixtures:
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File tools/a1/Build-A1SemanticFixtures.ps1
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File tools/a1/Reset-Seed-A1.ps1 -ReferenceDate 2026-09-05
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File tools/a1/Verify-A1.ps1 -ReferenceDate 2026-09-05
+```
+
+Reset does not parse VTT, call YouTube, or regenerate semantic text.
+
+`a1-semantic-overrides.json` records reviewed, source-ID-checked metadata fallbacks
+and linked Task wording by stable Note key. These overrides run before VTT cue
+selection; they do not change the subtitle harvest's technical availability audit.
+LIBRARY_09 has technically usable but semantically corrupted captions, so its two
+Notes use study intentions supported only by the source title. Their timestamps,
+VTT tracks and cue starts are NULL, and their evidence text is the snapshot title.
+The builder changes only linked Task titles/descriptions, not links, statuses or
+deadlines. Rebuild the durable artifacts after editing reviewed overrides.
+
+Evidence totals: 92 VTT_CUE/timestamped Notes and 4 SOURCE_METADATA/NULL-timestamp
+Notes (one each for LIBRARY_07 and LIBRARY_34, two for LIBRARY_09), 96 Notes total.

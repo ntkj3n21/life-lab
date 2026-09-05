@@ -45,6 +45,52 @@ foreach ($source in $sources) {
 }
 
 $prelude = [System.Text.StringBuilder]::new()
+$noteFixturesPath = Join-Path $PSScriptRoot 'a1-note-fixtures.json'
+$taskFixturesPath = Join-Path $PSScriptRoot 'a1-task-fixtures.json'
+if (-not (Test-Path -LiteralPath $noteFixturesPath) -or -not (Test-Path -LiteralPath $taskFixturesPath)) {
+    throw 'Durable semantic fixtures are missing. Run Build-A1SemanticFixtures.ps1 first.'
+}
+$noteFixtureJson = Get-Content -Raw -Encoding UTF8 -LiteralPath $noteFixturesPath
+$taskFixtureJson = Get-Content -Raw -Encoding UTF8 -LiteralPath $taskFixturesPath
+$noteFixtures = @((ConvertFrom-Json -InputObject $noteFixtureJson) | ForEach-Object { $_ })
+$taskFixtures = @((ConvertFrom-Json -InputObject $taskFixtureJson) | ForEach-Object { $_ })
+Write-Verbose "Semantic fixture counts: notes=$($noteFixtures.Count), tasks=$($taskFixtures.Count)"
+if ($noteFixtures.Count -ne 96 -or $taskFixtures.Count -ne 125) { throw 'A1 semantic fixture counts must be 96 notes and 125 tasks.' }
+[void]$prelude.AppendLine(@'
+CREATE TEMP TABLE a1_note_fixtures (
+    note_key TEXT PRIMARY KEY,
+    source_fixture_key TEXT NOT NULL,
+    note_no INTEGER NOT NULL,
+    content TEXT NOT NULL,
+    timestamp_seconds INTEGER,
+    evidence_type TEXT NOT NULL,
+    vtt_track TEXT,
+    cue_start_seconds INTEGER,
+    evidence_text TEXT,
+    note_sequence INTEGER NOT NULL
+);
+CREATE TEMP TABLE a1_task_fixtures (
+    task_key TEXT PRIMARY KEY,
+    source_status TEXT NOT NULL,
+    note_key TEXT,
+    title TEXT NOT NULL,
+    description TEXT,
+    status TEXT NOT NULL,
+    deadline_class TEXT,
+    sequence_no INTEGER NOT NULL
+);
+'@)
+for ($i = 0; $i -lt $noteFixtures.Count; $i++) {
+    $f = $noteFixtures[$i]
+    $values = @((ConvertTo-A1SqlLiteral $f.noteKey),(ConvertTo-A1SqlLiteral $f.sourceFixtureKey),[int]$f.noteNo,(ConvertTo-A1SqlLiteral $f.content),$(if ($null -eq $f.timestampSeconds) {'NULL'} else {[int]$f.timestampSeconds}),(ConvertTo-A1SqlLiteral $f.evidenceType),(ConvertTo-A1SqlLiteral $f.vttTrack),$(if ($null -eq $f.cueStartSeconds) {'NULL'} else {[int]$f.cueStartSeconds}),(ConvertTo-A1SqlLiteral $f.evidenceText),($i+1))
+    [void]$prelude.AppendLine("INSERT INTO a1_note_fixtures VALUES ($($values -join ', '));")
+}
+for ($i = 0; $i -lt $taskFixtures.Count; $i++) {
+    $f = $taskFixtures[$i]
+    $values = @((ConvertTo-A1SqlLiteral $f.taskKey),(ConvertTo-A1SqlLiteral $f.sourceStatus),(ConvertTo-A1SqlLiteral $f.noteKey),(ConvertTo-A1SqlLiteral $f.title),(ConvertTo-A1SqlLiteral $f.description),(ConvertTo-A1SqlLiteral $f.status),(ConvertTo-A1SqlLiteral $f.deadlineClass),($i+1))
+    [void]$prelude.AppendLine("INSERT INTO a1_task_fixtures VALUES ($($values -join ', '));")
+}
+
 [void]$prelude.AppendLine(@'
 CREATE TEMP TABLE a1_snapshot_sources (
     fixture_key TEXT PRIMARY KEY,
