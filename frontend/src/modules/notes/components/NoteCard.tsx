@@ -2,6 +2,7 @@ import {
   Ellipsis,
   Eye,
   ExternalLink,
+  ListTodo,
   Pencil,
   StickyNote,
   Trash2,
@@ -59,6 +60,9 @@ interface NoteCardProps {
   onSaveEdit: (noteId: number) => Promise<void>;
   onDelete: (note: Note) => Promise<void>;
   onViewSource: (noteId: number) => Promise<void>;
+  onCreateTask?: (note: Note) => void;
+  isCreatingTask?: boolean;
+  isCreateTaskDisabled?: boolean;
 
   onOpenDetail?: (noteId: number) => void;
 }
@@ -76,6 +80,9 @@ export function NoteCard({
   onSaveEdit,
   onDelete,
   onViewSource,
+  onCreateTask,
+  isCreatingTask = false,
+  isCreateTaskDisabled = false,
   onOpenDetail,
 }: NoteCardProps) {
   const contentId =
@@ -305,14 +312,12 @@ export function NoteCard({
                   title={
                     note.youtubeSource
                       .title ??
-                    note.youtubeSource
-                      .youtubeVideoId
+                    "YouTube video"
                   }
                 >
                   {note.youtubeSource
                     .title ??
-                    note.youtubeSource
-                      .youtubeVideoId}
+                    "YouTube video"}
                 </p>
               )}
 
@@ -418,6 +423,27 @@ export function NoteCard({
                         />
                       </button>
 
+                      {onCreateTask && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setWorkspaceActionsOpen(
+                              false,
+                            );
+                            onCreateTask(note);
+                          }}
+                          disabled={isMutating}
+                          aria-label={`Create Task from Note ${note.id}`}
+                          className="flex h-10 w-10 items-center justify-center rounded-lg text-(--text-muted) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40 xl:h-8 xl:w-8"
+                          title="Create task"
+                        >
+                          <ListTodo
+                            size={14}
+                            aria-hidden="true"
+                          />
+                        </button>
+                      )}
+
                       <button
                         type="button"
                         onClick={() => {
@@ -469,14 +495,12 @@ export function NoteCard({
                     title={
                       note.youtubeSource
                         .title ??
-                      note.youtubeSource
-                        .youtubeVideoId
+                      "YouTube video"
                     }
                   >
                     {note.youtubeSource
                       .title ??
-                      note.youtubeSource
-                        .youtubeVideoId}
+                      "YouTube video"}
                   </p>
                 )}
 
@@ -537,6 +561,32 @@ export function NoteCard({
                   >
                     View Source
                   </button>
+
+                  {onCreateTask && (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        onCreateTask(note)
+                      }
+                      disabled={
+                        isMutating ||
+                        isCreateTaskDisabled
+                      }
+                      aria-label="Create Task from this Note"
+                      aria-busy={
+                        isCreatingTask
+                      }
+                      className="flex items-center gap-1.5 rounded-lg border border-(--border) px-2 py-1 text-xs text-(--text-secondary) hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
+                    >
+                      <ListTodo
+                        size={12}
+                        aria-hidden="true"
+                      />
+                      {isCreatingTask
+                        ? "Opening..."
+                        : "Create Task"}
+                    </button>
+                  )}
 
                   <button
                     type="button"

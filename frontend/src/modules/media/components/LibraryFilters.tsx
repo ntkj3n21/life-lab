@@ -438,7 +438,7 @@ export function LibraryFilters({
             aria-describedby={descriptionId}
             aria-busy={isLoading}
             tabIndex={-1}
-            className="flex max-h-[calc(100dvh-1.5rem)] w-full max-w-3xl flex-col overflow-hidden rounded-2xl border border-(--border) bg-(--panel-bg) shadow-[var(--elevated-shadow)] sm:max-h-[calc(100dvh-2rem)]"
+            className="flex max-h-[calc(100dvh-1.5rem)] w-full max-w-4xl flex-col overflow-hidden rounded-2xl border border-(--border) bg-(--panel-bg) shadow-[var(--elevated-shadow)] sm:max-h-[calc(100dvh-2rem)]"
           >
             <div className="flex shrink-0 items-start justify-between gap-4 border-b border-(--border) px-4 py-3 sm:px-5 sm:py-4">
               <div className="min-w-0">

@@ -1,0 +1,1014 @@
+import {
+  ChevronLeft,
+  ChevronRight,
+  ListTodo,
+  LoaderCircle,
+  Plus,
+  Search,
+} from "lucide-react";
+import {
+  type FormEvent,
+  useEffect,
+  useState,
+} from "react";
+import { useNavigate } from "react-router-dom";
+
+import { ApiError } from "../../../lib/api";
+import {
+  createIndependentTask,
+  deleteTask,
+  getTasks,
+  updateTask,
+  updateTaskStatus,
+  type CreateTaskInput,
+  type Task,
+  type TaskQuery,
+  type TaskStatus,
+  type UpdateTaskInput,
+} from "../services/taskApi";
+import { TaskCard } from "../components/TaskCard";
+
+type StatusFilter =
+  | ""
+  | TaskStatus;
+
+interface AppliedFilters {
+  query: string;
+  status: StatusFilter;
+  deadlineFrom: string;
+  deadlineTo: string;
+}
+
+const PAGE_SIZE = 20;
+
+const EMPTY_FILTERS: AppliedFilters = {
+  query: "",
+  status: "",
+  deadlineFrom: "",
+  deadlineTo: "",
+};
+
+function getErrorMessage(error: unknown) {
+  if (error instanceof ApiError) {
+    return error.message;
+  }
+
+  return "Something went wrong.";
+}
+
+export function TasksPage() {
+  const navigate = useNavigate();
+
+  const [
+    tasks,
+    setTasks,
+  ] = useState<Task[]>([]);
+
+  const [
+    page,
+    setPage,
+  ] = useState(0);
+
+  const [
+    totalElements,
+    setTotalElements,
+  ] = useState(0);
+
+  const [
+    totalPages,
+    setTotalPages,
+  ] = useState(0);
+
+  const [
+    searchText,
+    setSearchText,
+  ] = useState("");
+
+  const [
+    statusFilter,
+    setStatusFilter,
+  ] =
+    useState<StatusFilter>("");
+
+  const [
+    deadlineFrom,
+    setDeadlineFrom,
+  ] = useState("");
+
+  const [
+    deadlineTo,
+    setDeadlineTo,
+  ] = useState("");
+
+  const [
+    appliedFilters,
+    setAppliedFilters,
+  ] =
+    useState<AppliedFilters>(
+      EMPTY_FILTERS,
+    );
+
+  const [
+    title,
+    setTitle,
+  ] = useState("");
+
+  const [
+    description,
+    setDescription,
+  ] = useState("");
+
+  const [
+    deadline,
+    setDeadline,
+  ] = useState("");
+
+  const [
+    isLoading,
+    setIsLoading,
+  ] = useState(true);
+
+  const [
+    isMutating,
+    setIsMutating,
+  ] = useState(false);
+
+  const [
+    loadErrorMessage,
+    setLoadErrorMessage,
+  ] = useState<string | null>(
+    null,
+  );
+
+  const [
+    actionErrorMessage,
+    setActionErrorMessage,
+  ] = useState<string | null>(
+    null,
+  );
+
+  const [
+    notice,
+    setNotice,
+  ] = useState<string | null>(
+    null,
+  );
+
+  function buildQuery(
+    targetPage: number,
+    filters = appliedFilters,
+  ): TaskQuery {
+    return {
+      page: targetPage,
+      size: PAGE_SIZE,
+      q:
+        filters.query ||
+        undefined,
+      status:
+        filters.status ||
+        undefined,
+      deadlineFrom:
+        filters.deadlineFrom ||
+        undefined,
+      deadlineTo:
+        filters.deadlineTo ||
+        undefined,
+    };
+  }
+
+  useEffect(() => {
+    let cancelled = false;
+
+    void getTasks({
+      page,
+      size: PAGE_SIZE,
+      q:
+        appliedFilters.query ||
+        undefined,
+      status:
+        appliedFilters.status ||
+        undefined,
+      deadlineFrom:
+        appliedFilters.deadlineFrom ||
+        undefined,
+      deadlineTo:
+        appliedFilters.deadlineTo ||
+        undefined,
+    })
+      .then((response) => {
+        if (cancelled) {
+          return;
+        }
+
+        setTasks(response.items);
+        setTotalElements(
+          response.totalElements,
+        );
+        setTotalPages(
+          response.totalPages,
+        );
+        setLoadErrorMessage(null);
+      })
+      .catch((error: unknown) => {
+        if (cancelled) {
+          return;
+        }
+
+        setLoadErrorMessage(
+          getErrorMessage(error),
+        );
+      })
+      .finally(() => {
+        if (!cancelled) {
+          setIsLoading(false);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [
+    page,
+    appliedFilters,
+  ]);
+
+  async function reloadPage(
+    preferredPage: number,
+  ) {
+    const targetPage =
+      Math.max(0, preferredPage);
+
+    setIsLoading(true);
+    setLoadErrorMessage(null);
+
+    try {
+      const response =
+        await getTasks(
+          buildQuery(targetPage),
+        );
+
+      const normalizedPage =
+        response.totalPages === 0
+          ? 0
+          : Math.min(
+              targetPage,
+              response.totalPages - 1,
+            );
+
+      /*
+       * A mutation can remove the final result from
+       * the current filtered page. If the requested
+       * page is no longer valid, load the new final
+       * page instead of leaving "Page 2 of 1".
+       */
+      if (
+        normalizedPage !==
+        targetPage
+      ) {
+        const normalizedResponse =
+          await getTasks(
+            buildQuery(
+              normalizedPage,
+            ),
+          );
+
+        setTasks(
+          normalizedResponse.items,
+        );
+        setPage(
+          normalizedResponse.page,
+        );
+        setTotalElements(
+          normalizedResponse.totalElements,
+        );
+        setTotalPages(
+          normalizedResponse.totalPages,
+        );
+        setLoadErrorMessage(null);
+        return;
+      }
+
+      setTasks(response.items);
+      setPage(response.page);
+      setTotalElements(
+        response.totalElements,
+      );
+      setTotalPages(
+        response.totalPages,
+      );
+      setLoadErrorMessage(null);
+    } catch (error) {
+      setLoadErrorMessage(
+        getErrorMessage(error),
+      );
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  function handleApplyFilters(
+    event:
+      FormEvent<HTMLFormElement>,
+  ) {
+    event.preventDefault();
+
+    if (
+      deadlineFrom &&
+      deadlineTo &&
+      deadlineFrom > deadlineTo
+    ) {
+      setActionErrorMessage(
+        "Deadline from must be on or before deadline to.",
+      );
+      return;
+    }
+
+    const nextFilters = {
+      query:
+        searchText.trim(),
+      status: statusFilter,
+      deadlineFrom,
+      deadlineTo,
+    };
+
+    setLoadErrorMessage(null);
+    setActionErrorMessage(null);
+    setNotice(null);
+    setIsLoading(true);
+    setPage(0);
+    setAppliedFilters(
+      nextFilters,
+    );
+  }
+
+  function handleClearFilters() {
+    setSearchText("");
+    setStatusFilter("");
+    setDeadlineFrom("");
+    setDeadlineTo("");
+    setLoadErrorMessage(null);
+    setActionErrorMessage(null);
+    setNotice(null);
+    setIsLoading(true);
+    setPage(0);
+    setAppliedFilters({
+      ...EMPTY_FILTERS,
+    });
+  }
+
+  function handlePageChange(
+    nextPage: number,
+  ) {
+    if (
+      isLoading ||
+      nextPage < 0 ||
+      nextPage >= totalPages ||
+      nextPage === page
+    ) {
+      return;
+    }
+
+    setLoadErrorMessage(null);
+    setActionErrorMessage(null);
+    setNotice(null);
+    setIsLoading(true);
+    setPage(nextPage);
+  }
+
+  async function handleCreateTask() {
+    const trimmedTitle =
+      title.trim();
+
+    if (
+      !trimmedTitle ||
+      isMutating
+    ) {
+      return;
+    }
+
+    const input:
+      CreateTaskInput = {
+        title: trimmedTitle,
+        description:
+          description.trim() ||
+          null,
+        deadline:
+          deadline || null,
+      };
+
+    setIsMutating(true);
+    setActionErrorMessage(null);
+    setNotice(null);
+
+    try {
+      await createIndependentTask(
+        input,
+      );
+    } catch (error) {
+      setActionErrorMessage(
+        getErrorMessage(error),
+      );
+      setIsMutating(false);
+      return;
+    }
+
+    setTitle("");
+    setDescription("");
+    setDeadline("");
+
+    try {
+      await reloadPage(0);
+      setNotice(
+        "Independent Task created.",
+      );
+    } catch {
+      setLoadErrorMessage(
+        "Task created, but the Task list could not be refreshed.",
+      );
+    } finally {
+      setIsMutating(false);
+    }
+  }
+
+  async function handleUpdate(
+    taskId: number,
+    input: UpdateTaskInput,
+  ) {
+    if (isMutating) {
+      return;
+    }
+
+    setIsMutating(true);
+    setActionErrorMessage(null);
+    setNotice(null);
+
+    try {
+      await updateTask(
+        taskId,
+        input,
+      );
+
+    } catch (error) {
+      setActionErrorMessage(
+        getErrorMessage(error),
+      );
+      setIsMutating(false);
+      throw error;
+    }
+
+    try {
+      /*
+       * Title, description, or deadline changes may
+       * make the Task enter or leave the active
+       * search/deadline filter. Reload from Backend.
+       */
+      await reloadPage(page);
+      setNotice(
+        "Task updated.",
+      );
+    } catch {
+      setLoadErrorMessage(
+        "Task updated, but the Task list could not be refreshed.",
+      );
+    } finally {
+      setIsMutating(false);
+    }
+  }
+
+  async function handleStatusChange(
+    taskId: number,
+    status: TaskStatus,
+  ) {
+    if (isMutating) {
+      return;
+    }
+
+    setIsMutating(true);
+    setActionErrorMessage(null);
+    setNotice(null);
+
+    try {
+      await updateTaskStatus(
+        taskId,
+        status,
+      );
+
+    } catch (error) {
+      setActionErrorMessage(
+        getErrorMessage(error),
+      );
+      setIsMutating(false);
+      return;
+    }
+
+    try {
+      /*
+       * Always reload from Backend. A status change
+       * can make the Task leave an active status
+       * filter, while other filters and pagination
+       * must remain authoritative as well.
+       */
+      await reloadPage(page);
+      setNotice(
+        "Task status updated.",
+      );
+    } catch {
+      setLoadErrorMessage(
+        "Task status updated, but the Task list could not be refreshed.",
+      );
+    } finally {
+      setIsMutating(false);
+    }
+  }
+
+  async function handleDelete(
+    taskId: number,
+  ) {
+    if (isMutating) {
+      return;
+    }
+
+    setIsMutating(true);
+    setActionErrorMessage(null);
+    setNotice(null);
+
+    try {
+      await deleteTask(taskId);
+    } catch (error) {
+      setActionErrorMessage(
+        getErrorMessage(error),
+      );
+      setIsMutating(false);
+      throw error;
+    }
+
+    try {
+      await reloadPage(page);
+      setNotice(
+        "Task deleted. Its source Note and YouTube source were not deleted.",
+      );
+    } catch {
+      setLoadErrorMessage(
+        "Task deleted, but the Task list could not be refreshed.",
+      );
+    } finally {
+      setIsMutating(false);
+    }
+  }
+
+  const hasAppliedFilters =
+    Boolean(
+      appliedFilters.query ||
+      appliedFilters.status ||
+      appliedFilters
+        .deadlineFrom ||
+      appliedFilters.deadlineTo,
+    );
+
+  return (
+    <main className="min-w-0 flex-1 overflow-y-auto p-4 sm:p-6">
+      <div className="mx-auto max-w-6xl">
+        <header className="border-b border-(--border) pb-5">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <h1 className="text-2xl font-semibold">
+                Tasks
+              </h1>
+
+              <p className="mt-1 max-w-2xl text-sm leading-6 text-(--text-secondary)">
+                Turn learning context into clear, actionable work.
+              </p>
+            </div>
+
+            <p className="w-fit rounded-full border border-(--border) bg-(--surface) px-3 py-1.5 text-xs font-medium text-(--text-secondary)">
+              {totalElements}{" "}
+              {hasAppliedFilters
+                ? `result${totalElements === 1 ? "" : "s"}`
+                : `task${totalElements === 1 ? "" : "s"}`}
+            </p>
+          </div>
+        </header>
+
+        <section className="mt-5 rounded-xl border border-(--border) bg-(--app-bg) p-4">
+          <div className="flex items-center gap-2">
+            <Plus
+              size={16}
+              className="text-(--text-muted)"
+              aria-hidden="true"
+            />
+
+            <div>
+              <h2 className="text-sm font-medium text-(--text-secondary)">
+                Create independent Task
+              </h2>
+
+            </div>
+          </div>
+
+          <div className="mt-4 grid gap-2 lg:grid-cols-[1fr_1.2fr_auto]">
+            <div>
+              <label
+                htmlFor="global-task-title"
+                className="sr-only"
+              >
+                Task title
+              </label>
+
+              <input
+                id="global-task-title"
+                value={title}
+                maxLength={255}
+                disabled={isMutating}
+                onChange={(event) =>
+                  setTitle(
+                    event.target.value,
+                  )
+                }
+                placeholder="Task title"
+                className="w-full rounded-xl border border-(--border) bg-(--surface) px-3 py-2.5 text-sm outline-none placeholder:text-(--text-faint) focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="global-task-description"
+                className="sr-only"
+              >
+                Task description
+              </label>
+
+              <input
+                id="global-task-description"
+                value={description}
+                disabled={isMutating}
+                onChange={(event) =>
+                  setDescription(
+                    event.target.value,
+                  )
+                }
+                placeholder="Description (optional)"
+                className="w-full rounded-xl border border-(--border) bg-(--surface) px-3 py-2.5 text-sm outline-none placeholder:text-(--text-faint) focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
+              />
+            </div>
+
+            <div className="flex gap-2">
+              <label
+                htmlFor="global-task-deadline"
+                className="sr-only"
+              >
+                Task deadline
+              </label>
+
+              <input
+                id="global-task-deadline"
+                type="date"
+                value={deadline}
+                disabled={isMutating}
+                onChange={(event) =>
+                  setDeadline(
+                    event.target.value,
+                  )
+                }
+                className="min-w-0 rounded-xl border border-(--border) bg-(--surface) px-3 py-2.5 text-sm text-(--text-secondary) outline-none focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
+              />
+
+              <button
+                type="button"
+                disabled={
+                  isMutating ||
+                  !title.trim()
+                }
+                onClick={() =>
+                  void handleCreateTask()
+                }
+                className="shrink-0 rounded-xl bg-(--primary-bg) px-4 py-2.5 text-sm font-medium text-(--primary-text) transition hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {isMutating
+                  ? "Saving..."
+                  : "Create"}
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <form
+          onSubmit={
+            handleApplyFilters
+          }
+          className="mt-4 rounded-xl border border-(--border) bg-(--app-bg) p-4"
+        >
+          <div className="grid gap-2 lg:grid-cols-[1.4fr_0.8fr_1fr_1fr_auto]">
+            <div className="flex min-w-0 items-center gap-2 rounded-xl border border-(--border) bg-(--surface) px-3 focus-within:border-(--border-strong) focus-within:ring-2 focus-within:ring-(--focus)">
+              <Search
+                size={15}
+                className="shrink-0 text-(--text-muted)"
+                aria-hidden="true"
+              />
+
+              <label
+                htmlFor="global-task-search"
+                className="sr-only"
+              >
+                Search Tasks
+              </label>
+
+              <input
+                id="global-task-search"
+                value={searchText}
+                disabled={isLoading}
+                onChange={(event) =>
+                  setSearchText(
+                    event.target.value,
+                  )
+                }
+                placeholder="Search title or description..."
+                className="min-w-0 flex-1 bg-transparent py-2.5 text-sm outline-none placeholder:text-(--text-faint) disabled:cursor-not-allowed disabled:opacity-50"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="global-task-status"
+                className="sr-only"
+              >
+                Filter by status
+              </label>
+
+              <select
+                id="global-task-status"
+                value={statusFilter}
+                disabled={isLoading}
+                onChange={(event) =>
+                  setStatusFilter(
+                    event.target
+                      .value as StatusFilter,
+                  )
+                }
+                className="w-full rounded-xl border border-(--border) bg-(--surface) px-3 py-2.5 text-sm text-(--text-secondary) outline-none focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                <option value="">
+                  All statuses
+                </option>
+                <option value="NOT_STARTED">
+                  Not started
+                </option>
+                <option value="IN_PROGRESS">
+                  In progress
+                </option>
+                <option value="COMPLETED">
+                  Completed
+                </option>
+              </select>
+            </div>
+
+            <div>
+              <label
+                htmlFor="global-task-deadline-from"
+                className="sr-only"
+              >
+                Deadline from
+              </label>
+
+              <input
+                id="global-task-deadline-from"
+                type="date"
+                value={deadlineFrom}
+                disabled={isLoading}
+                onChange={(event) =>
+                  setDeadlineFrom(
+                    event.target.value,
+                  )
+                }
+                title="Deadline from"
+                className="w-full rounded-xl border border-(--border) bg-(--surface) px-3 py-2.5 text-sm text-(--text-secondary) outline-none focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="global-task-deadline-to"
+                className="sr-only"
+              >
+                Deadline to
+              </label>
+
+              <input
+                id="global-task-deadline-to"
+                type="date"
+                value={deadlineTo}
+                disabled={isLoading}
+                onChange={(event) =>
+                  setDeadlineTo(
+                    event.target.value,
+                  )
+                }
+                title="Deadline to"
+                className="w-full rounded-xl border border-(--border) bg-(--surface) px-3 py-2.5 text-sm text-(--text-secondary) outline-none focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="flex items-center justify-center gap-2 rounded-xl bg-(--primary-bg) px-4 py-2.5 text-sm font-medium text-(--primary-text) transition hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {isLoading && (
+                <LoaderCircle
+                  size={14}
+                  className="animate-spin"
+                  aria-hidden="true"
+                />
+              )}
+
+              Apply
+            </button>
+          </div>
+
+          {(searchText ||
+            statusFilter ||
+            deadlineFrom ||
+            deadlineTo ||
+            hasAppliedFilters) && (
+            <div className="mt-3 flex justify-end">
+              <button
+                type="button"
+                disabled={isLoading}
+                onClick={
+                  handleClearFilters
+                }
+                className="rounded-lg px-3 py-1.5 text-xs text-(--text-muted) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                Clear filters
+              </button>
+            </div>
+          )}
+        </form>
+
+        {loadErrorMessage && (
+          <div
+            role="alert"
+            className="mt-4 rounded-xl border border-(--danger-border) bg-(--danger-surface) px-4 py-3 text-sm text-(--danger-text)"
+          >
+            {loadErrorMessage}
+          </div>
+        )}
+
+        {actionErrorMessage && (
+          <div
+            role="alert"
+            className="mt-4 rounded-xl border border-(--danger-border) bg-(--danger-surface) px-4 py-3 text-sm text-(--danger-text)"
+          >
+            {actionErrorMessage}
+          </div>
+        )}
+
+        {notice && (
+          <div
+            role="status"
+            className="mt-4 rounded-xl border border-(--border) bg-(--surface) px-4 py-3 text-sm text-(--text-secondary)"
+          >
+            {notice}
+          </div>
+        )}
+
+        {isLoading ? (
+          <div
+            role="status"
+            aria-live="polite"
+            className="mt-6 flex min-h-56 items-center justify-center rounded-2xl border border-(--border) bg-(--surface)"
+          >
+            <div className="text-center">
+              <LoaderCircle
+                size={24}
+                className="mx-auto animate-spin text-(--text-muted)"
+                aria-hidden="true"
+              />
+
+              <p className="mt-3 text-sm text-(--text-muted)">
+                Loading Tasks...
+              </p>
+            </div>
+          </div>
+        ) : loadErrorMessage ? null : tasks.length === 0 ? (
+          <div className="mt-6 flex min-h-56 items-center justify-center rounded-2xl border border-dashed border-(--border) bg-(--app-bg) p-6 text-center">
+            <div>
+              <ListTodo
+                size={28}
+                className="mx-auto text-(--text-faint)"
+                aria-hidden="true"
+              />
+
+              <h2 className="mt-3 text-sm font-medium text-(--text-secondary)">
+                {hasAppliedFilters
+                  ? "No matching Tasks"
+                  : "No Tasks yet"}
+              </h2>
+
+              <p className="mt-2 max-w-md text-xs leading-5 text-(--text-muted)">
+                {hasAppliedFilters
+                  ? "No Task matches the current search and filter conditions."
+                  : "Create an independent Task here, or create one from a Note to preserve source context."}
+              </p>
+
+              {hasAppliedFilters && (
+                <button
+                  type="button"
+                  onClick={handleClearFilters}
+                  className="mt-4 rounded-xl border border-(--border) bg-(--surface) px-3 py-2 text-xs font-medium text-(--text-secondary) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)"
+                >
+                  Clear filters
+                </button>
+              )}
+            </div>
+          </div>
+        ) : (
+          <div className="mt-6 space-y-3">
+            {tasks.map((task) => (
+              <TaskCard
+                key={task.id}
+                task={task}
+                isMutating={
+                  isMutating
+                }
+                onUpdate={
+                  handleUpdate
+                }
+                onStatusChange={
+                  handleStatusChange
+                }
+                onDelete={
+                  handleDelete
+                }
+                onOpenDetail={(
+                  taskId,
+                ) =>
+                  navigate(
+                    `/tasks/${taskId}`,
+                  )
+                }
+              />
+            ))}
+          </div>
+        )}
+
+        {!isLoading &&
+          !loadErrorMessage &&
+          totalPages > 1 && (
+            <nav
+              aria-label="Tasks pagination"
+              className="mt-6 flex items-center justify-between border-t border-(--border) pt-4"
+            >
+              <p className="text-xs text-(--text-muted)">
+                Page {page + 1} of{" "}
+                {totalPages}
+              </p>
+
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  disabled={
+                    page <= 0 ||
+                    isLoading
+                  }
+                  onClick={() =>
+                    handlePageChange(
+                      page - 1,
+                    )
+                  }
+                  aria-label="Previous Tasks page"
+                  className="flex h-9 w-9 items-center justify-center rounded-xl border border-(--border) text-(--text-secondary) transition hover:bg-(--surface) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  <ChevronLeft
+                    size={16}
+                    aria-hidden="true"
+                  />
+                </button>
+
+                <button
+                  type="button"
+                  disabled={
+                    page + 1 >=
+                      totalPages ||
+                    isLoading
+                  }
+                  onClick={() =>
+                    handlePageChange(
+                      page + 1,
+                    )
+                  }
+                  aria-label="Next Tasks page"
+                  className="flex h-9 w-9 items-center justify-center rounded-xl border border-(--border) text-(--text-secondary) transition hover:bg-(--surface) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  <ChevronRight
+                    size={16}
+                    aria-hidden="true"
+                  />
+                </button>
+              </div>
+            </nav>
+          )}
+      </div>
+    </main>
+  );
+}

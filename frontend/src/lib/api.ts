@@ -32,6 +32,30 @@ function isUnsafeMethod(method: string) {
   return !["GET", "HEAD", "OPTIONS"].includes(method.toUpperCase());
 }
 
+/*
+ * Keep CSRF acquisition and the corresponding unsafe request in one
+ * critical section.  A shared queue is required here because independent
+ * feature callers can otherwise refresh the cookie concurrently and send a
+ * stale header alongside the newer cookie.
+ */
+let unsafeRequestQueue: Promise<void> = Promise.resolve();
+
+function enqueueUnsafeRequest<T>(
+  request: () => Promise<T>,
+) {
+  const nextRequest = unsafeRequestQueue.then(
+    request,
+    request,
+  );
+
+  unsafeRequestQueue = nextRequest.then(
+    () => undefined,
+    () => undefined,
+  );
+
+  return nextRequest;
+}
+
 function getCookieValue(name: string): string | null {
   const prefix = `${name}=`;
 
@@ -96,20 +120,12 @@ async function createApiError(response: Response): Promise<ApiError> {
   }
 }
 
-export async function apiRequest<T>(
+async function executeApiRequest<T>(
   path: string,
-  options: ApiRequestOptions = {},
+  options: ApiRequestOptions,
+  method: string,
+  headers: Headers,
 ): Promise<T> {
-  const method = (options.method ?? "GET").toUpperCase();
-
-  const headers = new Headers(options.headers);
-
-  headers.set("Accept", "application/json");
-
-  if (options.body !== undefined) {
-    headers.set("Content-Type", "application/json");
-  }
-
   if (isUnsafeMethod(method)) {
     const csrf = await getCsrf();
     headers.set(csrf.headerName, csrf.token);
@@ -135,6 +151,32 @@ export async function apiRequest<T>(
   }
 
   return response.json() as Promise<T>;
+}
+
+export function apiRequest<T>(
+  path: string,
+  options: ApiRequestOptions = {},
+): Promise<T> {
+  const method = (options.method ?? "GET").toUpperCase();
+  const headers = new Headers(options.headers);
+
+  headers.set("Accept", "application/json");
+
+  if (options.body !== undefined) {
+    headers.set("Content-Type", "application/json");
+  }
+
+  const request = (): Promise<T> =>
+    executeApiRequest<T>(
+      path,
+      options,
+      method,
+      headers,
+    );
+
+  return isUnsafeMethod(method)
+    ? enqueueUnsafeRequest<T>(request)
+    : request();
 }
 
 export function apiGet<T>(path: string) {

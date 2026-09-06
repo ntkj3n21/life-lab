@@ -8,6 +8,7 @@ import {
 import {
   type FormEvent,
   useEffect,
+  useRef,
   useState,
 } from "react";
 import { useNavigate } from "react-router-dom";
@@ -16,6 +17,8 @@ import { ConfirmDialog } from "../../../components/ui/ConfirmDialog";
 import {
   ApiError,
 } from "../../../lib/api";
+import { useLayoutStore } from "../../../stores/layoutStore";
+import { useWorkspaceStore } from "../../../stores/workspaceStore";
 import {
   useReverseContextNavigation,
 } from "../../context/hooks/useReverseContextNavigation";
@@ -51,6 +54,21 @@ export function NotesPage() {
     openNoteContext,
   } =
     useReverseContextNavigation();
+
+  const openRightPanel =
+    useLayoutStore(
+      (state) =>
+        state.openRightPanel,
+    );
+
+  const beginTaskFromNote =
+    useWorkspaceStore(
+      (state) =>
+        state.beginTaskFromNote,
+    );
+
+  const createTaskResolutionInFlightRef =
+    useRef(false);
 
   const [
     notes,
@@ -91,6 +109,13 @@ export function NotesPage() {
     isMutating,
     setIsMutating,
   ] = useState(false);
+
+  const [
+    preparingTaskNoteId,
+    setPreparingTaskNoteId,
+  ] = useState<number | null>(
+    null,
+  );
 
   const [
     loadErrorMessage,
@@ -491,6 +516,46 @@ export function NotesPage() {
     }
   }
 
+  async function handleCreateTask(
+    note: Note,
+  ) {
+    if (
+      createTaskResolutionInFlightRef.current
+    ) {
+      return;
+    }
+
+    createTaskResolutionInFlightRef.current =
+      true;
+    setPreparingTaskNoteId(note.id);
+    setActionErrorMessage(null);
+
+    try {
+      const resolution =
+        await openNoteContext(
+          note.id,
+        );
+
+      if (
+        resolution.navigationMode !==
+        "WORKSPACE"
+      ) {
+        return;
+      }
+
+      beginTaskFromNote(note);
+      openRightPanel("tools");
+    } catch (error) {
+      setActionErrorMessage(
+        getErrorMessage(error),
+      );
+    } finally {
+      createTaskResolutionInFlightRef.current =
+        false;
+      setPreparingTaskNoteId(null);
+    }
+  }
+
   const hasSearch =
     Boolean(appliedQuery);
 
@@ -701,6 +766,19 @@ export function NotesPage() {
                 }
                 onViewSource={
                   handleViewSource
+                }
+                onCreateTask={(note) =>
+                  void handleCreateTask(
+                    note,
+                  )
+                }
+                isCreatingTask={
+                  preparingTaskNoteId ===
+                  note.id
+                }
+                isCreateTaskDisabled={
+                  preparingTaskNoteId !==
+                  null
                 }
                 onOpenDetail={(
                   noteId,

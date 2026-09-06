@@ -1,0 +1,562 @@
+{
+  "schemaVersion": 1,
+  "metadataFallbackSources": [
+    {
+      "sourceFixtureKey": "LIBRARY_07",
+      "youtubeVideoId": "L-ZrZwvNsuo",
+      "reason": "No subtitle track is available. Keep the Note as a review intention derived only from the source title.",
+      "notes": [
+        {
+          "noteKey": "a1-note-LIBRARY_07-1",
+          "noteNo": 1,
+          "content": "Xem lại bài Spring Boot về RESTful API và tự ghi chú những phần cần áp dụng.",
+          "linkedTask": {
+            "title": "Ôn lại bài Spring Boot về RESTful API",
+            "description": "Đọc lại bài và ghi chú những phần có thể áp dụng trong một ví dụ nhỏ."
+          }
+        }
+      ]
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_09",
+      "youtubeVideoId": "nm6qg6sinLU",
+      "reason": "Local semantic audit found incoherent captions despite technical VTT_USABLE status. Use source-title-only study intentions, not transcript claims.",
+      "notes": [
+        {
+          "noteKey": "a1-note-LIBRARY_09-1",
+          "noteNo": 1,
+          "content": "Cần xem lại bài về tạo khóa ngoại trong SQL Server và ghi lại các bước thực hiện.",
+          "linkedTask": {
+            "title": "Tóm tắt cách tạo khóa ngoại trong SQL Server",
+            "description": "Xem lại bài học và ghi lại các bước tạo khóa ngoại."
+          }
+        },
+        {
+          "noteKey": "a1-note-LIBRARY_09-2",
+          "noteNo": 2,
+          "content": "Sau khi xem lại phần khóa ngoại, cần thực hành tạo quan hệ giữa hai bảng trên một ví dụ nhỏ.",
+          "linkedTask": {
+            "title": "Thực hành tạo khóa ngoại trong SQL Server",
+            "description": "Dùng một ví dụ nhỏ để thực hành tạo quan hệ giữa hai bảng bằng khóa ngoại."
+          }
+        }
+      ]
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_11",
+      "youtubeVideoId": "SIAGpAaLSaI",
+      "reason": "The selected React hooks captions are not semantically reliable. Keep a review intention derived only from the exact source title.",
+      "notes": [
+        {
+          "noteKey": "a1-note-LIBRARY_11-1",
+          "noteNo": 1,
+          "content": "Cần xem lại bài về useState trong React và ghi lại ví dụ chính.",
+          "linkedTask": {
+            "title": "Ôn lại bài useState trong React",
+            "description": "Xem lại video và ghi lại ví dụ chính."
+          }
+        }
+      ]
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_34",
+      "youtubeVideoId": "kkeFE6iRfMM",
+      "reason": "No subtitle track is available. Keep the Note as a review intention derived only from the source title.",
+      "notes": [
+        {
+          "noteKey": "a1-note-LIBRARY_34-1",
+          "noteNo": 1,
+          "content": "Xem lại bài về cách lựa chọn cơ sở dữ liệu và ghi lại các tiêu chí được nêu trong bài.",
+          "linkedTask": {
+            "title": "Ôn các tiêu chí lựa chọn cơ sở dữ liệu",
+            "description": "Đọc lại bài và ghi chú các tiêu chí dùng để so sánh lựa chọn cơ sở dữ liệu."
+          }
+        }
+      ]
+    }
+  ],
+  "noteOverrides": [
+    {
+      "sourceFixtureKey": "LIBRARY_08", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_08-1", "noteNo": 1,
+      "content": "Khóa chính ghép từ nhiều trường vẫn chỉ là một khóa chính, dùng để định danh bản ghi.", "timestampSeconds": 236, "vttTrack": "vi-orig", "cueStartSeconds": 236,
+      "evidenceText": "là hai khóa chính cả nhưng hai khóa chính này kết hợp bởi hai trường đ OK",
+      "linkedTask": { "title": "Thực hành tạo khóa chính ghép", "description": "Tạo một bảng dùng hai trường làm khóa chính ghép và kiểm tra tính duy nhất." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_08", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_08-2", "noteNo": 2,
+      "content": "Trường dùng làm khóa cần được khai báo NOT NULL.", "timestampSeconds": 893, "vttTrack": "vi-orig", "cueStartSeconds": 893,
+      "evidenceText": "các bạn phải để thêm cái thuộc tính là not nun vào cho nó nha Cái này là lưu ý",
+      "linkedTask": { "title": "Kiểm tra ràng buộc NOT NULL cho khóa", "description": "Tạo một bảng thử nghiệm và kiểm tra trường dùng làm khóa không nhận giá trị rỗng." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_11", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_11-2", "noteNo": 2,
+      "content": "Sau khi điều chỉnh, đoạn xử lý chỉ chạy một lần thay vì lặp lại khi render.", "timestampSeconds": 945, "vttTrack": "vi-orig", "cueStartSeconds": 945,
+      "evidenceText": "nữa phải đảm bảo cái code này mình chỉ chảy đúng một lần thôi tại vì nó có ý",
+      "linkedTask": { "title": "Kiểm tra đoạn xử lý chỉ chạy một lần", "description": "Chạy lại ví dụ và kiểm tra đoạn xử lý không lặp lại khi render." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_12", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_12-1", "noteNo": 1,
+      "content": "Phần mở đầu giới thiệu các chủ đề TypeScript cơ bản trước khi đi sâu vào hệ thống kiểu dữ liệu.", "timestampSeconds": 303, "vttTrack": "vi-orig", "cueStartSeconds": 303,
+      "evidenceText": "nào đó mà Vương thì những cái topic nó rất là cơ bản khi bạn mà chuyển từ cao",
+      "linkedTask": { "title": "Ôn các chủ đề TypeScript cơ bản", "description": "Ghi lại các chủ đề mở đầu trước khi học sâu hơn về hệ thống kiểu dữ liệu." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_13", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_13-1", "noteNo": 1,
+      "content": "Trang SPA ban đầu có thể trống; sau đó script được tải và thực thi để tạo giao diện.", "timestampSeconds": 366, "vttTrack": "vi-orig", "cueStartSeconds": 366,
+      "evidenceText": "hiển thị cả thì lúc đó nó sẽ link mà sẽ tải file Script này về và nó thực thi",
+      "linkedTask": { "title": "Ôn cách SPA tạo giao diện sau khi tải script", "description": "Theo dõi quá trình trang tải script và tạo giao diện từ mã JavaScript." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_13", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_13-2", "noteNo": 2,
+      "content": "SPA tách phần giao diện và API, rồi gọi API để lấy dữ liệu; cách này hỗ trợ tái sử dụng cho ứng dụng khác.", "timestampSeconds": 1004, "vttTrack": "vi-orig", "cueStartSeconds": 1004,
+      "evidenceText": "Pascal thì viết api sau đó là Cola sẽ request api để lấy dữ liệu thì sau này",
+      "linkedTask": { "title": "Thực hành tách giao diện và API", "description": "Tạo một ví dụ nhỏ gọi API để lấy dữ liệu cho phần giao diện." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_14", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_14-1", "noteNo": 1,
+      "content": "Ví dụ minh họa cách tương tác của người dùng làm cập nhật nội dung trên trang web.", "timestampSeconds": 385, "vttTrack": "vi-orig", "cueStartSeconds": 385,
+      "evidenceText": "của trình duyệt trên các thực vật này để nó thay thế nội dung được đó thì mình sẽ",
+      "linkedTask": { "title": "Thực hành cập nhật giao diện theo tương tác", "description": "Tạo ví dụ input và quan sát nội dung trang thay đổi theo thao tác người dùng." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_14", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_14-2", "noteNo": 2,
+      "content": "Đoạn xử lý trong component có thể chạy lại mỗi khi component render; cần theo dõi những lần gọi lặp.", "timestampSeconds": 1098, "vttTrack": "vi-orig", "cueStartSeconds": 1098,
+      "evidenceText": "khi không nên nó freelander lại thì nó lại gọi lại cái key này rồi đúng không",
+      "linkedTask": { "title": "Theo dõi đoạn xử lý khi component render lại", "description": "Chạy ví dụ và ghi lại số lần đoạn xử lý được gọi khi component cập nhật." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_15", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_15-1", "noteNo": 1,
+      "content": "Việc thêm hooks không phá vỡ các phần code hiện có; các phần vẫn có thể hoạt động cùng nhau.", "timestampSeconds": 232, "vttTrack": "vi-orig", "cueStartSeconds": 232,
+      "evidenceText": "Hiện tại ha rồi đó biết đã có code chạy rồi thì bây giờ nó vẫn tiếp tục chạy",
+      "linkedTask": { "title": "Ôn cách thêm hooks mà không phá vỡ code cũ", "description": "Kiểm tra một ví dụ hiện có sau khi thêm hooks và bảo đảm các phần vẫn hoạt động cùng nhau." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_19", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_19-1", "noteNo": 1,
+      "content": "Cài Git phù hợp với hệ điều hành đang dùng.", "timestampSeconds": 354, "vttTrack": "vi-orig", "cueStartSeconds": 354,
+      "evidenceText": "nha Thì tùy thuộc vào hệ điều hành của",
+      "linkedTask": { "title": "Cài Git cho hệ điều hành đang dùng", "description": "Chọn đúng bộ cài Git cho hệ điều hành và hoàn tất cài đặt." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_19", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_19-2", "noteNo": 2,
+      "content": "Git cần cấu hình tên và email để ghi nhận người thực hiện thao tác.", "timestampSeconds": 975, "vttTrack": "vi-orig", "cueStartSeconds": 975,
+      "evidenceText": "lên thì kết nối như thế này chúng ta sẽ kết nối thông qua cái tên và cái email",
+      "linkedTask": { "title": "Kiểm tra cấu hình tên và email Git", "description": "Đặt tên và email để Git ghi nhận người thực hiện thao tác." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_21", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_21-1", "noteNo": 1,
+      "content": "Học từ vựng dễ nhớ hơn khi kết hợp từ mới với hình ảnh liên quan.", "timestampSeconds": 219, "vttTrack": "vi-orig", "cueStartSeconds": 219,
+      "evidenceText": "học từ vựng các bạn hãy cố gắng tìm kiếm trên Google English Google hình ảnh liên",
+      "linkedTask": { "title": "Học từ vựng bằng hình ảnh", "description": "Chọn một từ mới, tìm hình ảnh liên quan và ôn lại từ qua hình ảnh đó." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_24", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_24-1", "noteNo": 1,
+      "content": "Để học phát âm, cần chú ý âm thanh của từ và cách âm đó được biểu thị.", "timestampSeconds": 179, "vttTrack": "vi-orig", "cueStartSeconds": 179,
+      "evidenceText": "Tức là âm thanh tức là chữ cái này thì nó sẽ phát ra anh như thế nào và âm",
+      "linkedTask": { "title": "Ôn cách học phát âm qua âm thanh", "description": "Nghe cách phát âm của từ và ghi lại âm thanh tương ứng." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_24", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_24-2", "noteNo": 2,
+      "content": "Từ vựng theo chủ đề nên được chia thành các bài nhỏ, mỗi lần học khoảng 10–12 từ.", "timestampSeconds": 511, "vttTrack": "vi-orig", "cueStartSeconds": 511,
+      "evidenceText": "thành nhiều bài học một lần thì các bạn học từ 10 đến 12 từ thôi cái đó gọi là",
+      "linkedTask": { "title": "Chia nhỏ nhóm từ vựng theo chủ đề", "description": "Chọn một chủ đề và học khoảng 10–12 từ trong mỗi bài nhỏ." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_26", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_26-1", "noteNo": 1,
+      "content": "Vốn từ không nhất thiết phải phức tạp ngay từ đầu; việc học có thể bắt đầu từ cách truyền thống.", "timestampSeconds": 304, "vttTrack": "vi", "cueStartSeconds": 304,
+      "evidenceText": "Nhưng chỉ có vậy thôi. Tôi thực sự không có vốn từ vựng phức tạp cho đến khi",
+      "linkedTask": { "title": "Ôn vốn từ hiện có trước khi học thêm", "description": "Rà lại những từ đã biết và chọn phần cần ôn, chưa đặt nặng từ vựng phức tạp." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_26", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_26-2", "noteNo": 2,
+      "content": "Flashcard có thể nối cụm từ tiếng Anh với nghĩa tương ứng bằng tiếng Việt.", "timestampSeconds": 890, "vttTrack": "vi", "cueStartSeconds": 890,
+      "evidenceText": "Thẻ học tập. Ý tưởng của tôi là Nối các cụm từ tiếng Anh với các từ tương ứng.",
+      "linkedTask": { "title": "Tạo flashcard cho cụm từ tiếng Anh", "description": "Ghép cụm từ tiếng Anh với nghĩa tiếng Việt trên flashcard." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_31", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_31-1", "noteNo": 1,
+      "content": "Git giúp theo dõi thay đổi và đưa mã nguồn lên GitHub.", "timestampSeconds": 485, "vttTrack": "vi", "cueStartSeconds": 485,
+      "evidenceText": "và đó là do Git, đúng không? Vì vậy, tôi sẽ tải tất cả những thứ này lên GitHub để",
+      "linkedTask": { "title": "Kiểm tra thay đổi Git trước khi đẩy lên GitHub", "description": "Thực hiện một thay đổi nhỏ, kiểm tra trạng thái Git và đưa mã nguồn lên GitHub." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_31", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_31-2", "noteNo": 2,
+      "content": "Docker có thể được cài từ trang chính thức bằng Docker Desktop.", "timestampSeconds": 1532, "vttTrack": "vi", "cueStartSeconds": 1532,
+      "evidenceText": "Nhưng ở đây bạn cũng có thể thấy rằng bạn có thể tải xuống Docker Desktop. Vì vậy, điều này khá",
+      "linkedTask": null
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_31", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_31-3", "noteNo": 3,
+      "content": "Ứng dụng đã kết nối được với cơ sở dữ liệu thông qua cấu hình datasource.", "timestampSeconds": 2555, "vttTrack": "vi", "cueStartSeconds": 2555,
+      "evidenceText": "ứng dụng và lần này các bạn có thể thấy rằng, hoan hô, chúng ta đã kết nối được với",
+      "linkedTask": null
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_31", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_31-4", "noteNo": 4,
+      "content": "Spring Boot có thể dùng để xây dựng API; phần điều khiển gọi vào lớp xử lý phía dưới.", "timestampSeconds": 3705, "vttTrack": "vi", "cueStartSeconds": 3705,
+      "evidenceText": "điều này cho phép tôi chứng minh cách xây dựng một API xác thực, đó chính là sức mạnh của",
+      "linkedTask": null
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_32", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_32-1", "noteNo": 1,
+      "content": "Khóa học giới thiệu xác thực dựa trên biểu mẫu, Basic và JWT.", "timestampSeconds": 1549, "vttTrack": "vi", "cueStartSeconds": 1549,
+      "evidenceText": "những hạn chế giữa cơ bản và Xác thực dựa trên biểu mẫu và JWT. Nhưng",
+      "linkedTask": { "title": "Ôn ba cách xác thực trong Spring Security", "description": "So sánh xác thực form, Basic và JWT bằng bảng ngắn." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_32", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_32-2", "noteNo": 2,
+      "content": "Phân quyền có thể giới hạn quyền đọc và ghi API theo vai trò của người dùng.", "timestampSeconds": 4636, "vttTrack": "vi", "cueStartSeconds": 4636,
+      "evidenceText": "Linda à, cô ấy sẽ có thể... đọc và ghi trên API này, nhưng Tom,",
+      "linkedTask": null
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_32", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_32-3", "noteNo": 3,
+      "content": "Bộ lọc của Spring Security có thể chạy trên mỗi request và kiểm tra token.", "timestampSeconds": 7881, "vttTrack": "vi", "cueStartSeconds": 7881,
+      "evidenceText": "Ngay đây, nó là một bộ lọc đang hoạt động. Vì thế Nếu tôi cuộn lên, nó sẽ chạy một lần mỗi",
+      "linkedTask": null
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_32", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_32-4", "noteNo": 4,
+      "content": "Thông tin người dùng có thể được lấy từ datasource như PostgreSQL hoặc MongoDB.", "timestampSeconds": 11045, "vttTrack": "vi", "cueStartSeconds": 11045,
+      "evidenceText": "Ba người dùng đến từ một nguồn dữ liệu. Vậy nguồn dữ liệu này có thể là Postgress.",
+      "linkedTask": null
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_32", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_32-5", "noteNo": 5,
+      "content": "JWT được tạo thành token gồm payload, header và chữ ký trước khi gửi cho client.", "timestampSeconds": 14130, "vttTrack": "vi", "cueStartSeconds": 14130,
+      "evidenceText": "Mục đích của phương pháp này là tạo ra một mã thông báo. Vì thế một mã thông báo JWT và gửi nó cho khách hàng của chúng tôi.",
+      "linkedTask": null
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_01", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_01-1", "noteNo": 1,
+      "content": "Scanner dùng để nhận dữ liệu từ bàn phím; giá trị nhập có thể là chuỗi hoặc số nguyên.", "timestampSeconds": 3843, "vttTrack": "vi-orig", "cueStartSeconds": 3843,
+      "evidenceText": "thứ hai đấy để nhập từ bàn phím Chúng ta có một công cụ chính là scanner chúng ta", "linkedTask": { "title": "Thực hành nhập dữ liệu bằng Scanner", "description": "Tạo ví dụ đọc một chuỗi và một số nguyên từ bàn phím." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_01", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_01-2", "noteNo": 2,
+      "content": "Thuộc tính length cho biết số phần tử của mảng.", "timestampSeconds": 11672, "vttTrack": "vi-orig", "cueStartSeconds": 11672,
+      "evidenceText": "nó nói lên tất cả rồi hàm chấm l này nó sẽ trả ra chiều dài của cái mảng này và", "linkedTask": { "title": "Ôn cách lấy độ dài mảng", "description": "Tạo một mảng nhỏ và kiểm tra số phần tử bằng length." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_01", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_01-3", "noteNo": 3,
+      "content": "Từ khóa private giới hạn truy cập trực tiếp vào thuộc tính của class.", "timestampSeconds": 19207, "vttTrack": "vi-orig", "cueStartSeconds": 19207,
+      "evidenceText": "mình Keyword Private ngay ở đầu tiên luôn cái Keyword Private này nó ám chỉ", "linkedTask": null
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_01", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_01-4", "noteNo": 4,
+      "content": "Từ khóa extends dùng để thể hiện một lớp kế thừa lớp khác trong Java.", "timestampSeconds": 26824, "vttTrack": "vi-orig", "cueStartSeconds": 26824,
+      "evidenceText": "là gì Các bạn bỏ qua đi chúng ta Chớ hiểu extend là kế thừa đi và lưu ý giúp", "linkedTask": null
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_01", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_01-5", "noteNo": 5,
+      "content": "Có thể dùng generate toString để in nhanh thông tin của đối tượng.", "timestampSeconds": 34461, "vttTrack": "vi-orig", "cueStartSeconds": 34461,
+      "evidenceText": "có một cái phần s code này các bạn sẽ cho mình một cái là generate to string", "linkedTask": null
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_02", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_02-1", "noteNo": 1,
+      "content": "C++ class có thể dùng public, private và protected để quy định quyền truy cập.", "timestampSeconds": 417, "vttTrack": "vi-orig", "cueStartSeconds": 417,
+      "evidenceText": "nữa nhá. Và nó sẽ có ba cái quyền truy cập. Một là public, hai là private và ba", "linkedTask": { "title": "Ôn ba quyền truy cập trong C++", "description": "Tạo một class nhỏ và ghi lại vai trò của public, private và protected." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_02", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_02-2", "noteNo": 2,
+      "content": "Constructor được gọi khi tạo đối tượng và dùng để khởi tạo thuộc tính.", "timestampSeconds": 1253, "vttTrack": "vi-orig", "cueStartSeconds": 1253,
+      "evidenceText": "hàm tạo tức là các bạn hình dung cái hàm tạo này nó có chức năng là khởi tạo các", "linkedTask": { "title": "Thực hành constructor khởi tạo thuộc tính", "description": "Tạo một đối tượng và kiểm tra các thuộc tính được khởi tạo." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_02", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_02-3", "noteNo": 3,
+      "content": "Có thể chuẩn hóa tên và ngày sinh trước khi hiển thị dữ liệu.", "timestampSeconds": 2568, "vttTrack": "vi-orig", "cueStartSeconds": 2568,
+      "evidenceText": "chuẩn hóa tên. Đấy với lại bọn em gọi S chuẩn hóa ngày sinh rồi hãng in nhá. Thì", "linkedTask": null
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_02", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_02-4", "noteNo": 4,
+      "content": "Nắm chắc C++ và thuật toán giúp việc triển khai các công nghệ phức tạp dễ hơn.", "timestampSeconds": 3515, "vttTrack": "vi-orig", "cueStartSeconds": 3515,
+      "evidenceText": "đấy là rất nguy hiểm. Nên các bạn học cái si+ cộng và cái thuật toán này làm", "linkedTask": null
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_03", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_03-1", "noteNo": 1,
+      "content": "Cần nắm nền tảng lập trình trước khi học cấu trúc dữ liệu và giải thuật.", "timestampSeconds": 203, "vttTrack": "vi-orig", "cueStartSeconds": 203,
+      "evidenceText": "không nó cần những cái kiến thức các cái kỹ năng rồi khái niệm cơ bản về lập", "linkedTask": { "title": "Xác định nền tảng trước khi học thuật toán", "description": "Ghi lại các kiến thức lập trình cần nắm trước khi luyện thuật toán." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_03", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_03-2", "noteNo": 2,
+      "content": "Muốn giỏi cấu trúc dữ liệu và giải thuật phải luyện nhiều bài tập.", "timestampSeconds": 604, "vttTrack": "vi-orig", "cueStartSeconds": 604,
+      "evidenceText": "có kỹ năng tốt thì các bạn phải luyện tập nhiều tức là làm nhiều bài tập đấy", "linkedTask": { "title": "Luyện bài tập cấu trúc dữ liệu", "description": "Chọn một bài cấu trúc dữ liệu và tự giải rồi kiểm tra kết quả." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_04", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_04-1", "noteNo": 1,
+      "content": "Danh sách liên kết lưu các phần tử rải rác và nối chúng bằng liên kết, khác mảng liên tiếp.", "timestampSeconds": 501, "vttTrack": "vi-orig", "cueStartSeconds": 501,
+      "evidenceText": "cùng nhớ liên tiếp với nhau còn ở cấu trúc dữ liệu động này á thì nó sẽ nằm", "linkedTask": { "title": "Ôn cách tổ chức danh sách liên kết", "description": "Vẽ lại mối liên hệ giữa phần tử và con trỏ trong một danh sách liên kết." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_04", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_04-2", "noteNo": 2,
+      "content": "Danh sách liên kết có thể giữ con trỏ tới phần tử đầu và cuối để thao tác nhanh hơn.", "timestampSeconds": 1725, "vttTrack": "vi-orig", "cueStartSeconds": 1725,
+      "evidenceText": "phần tử đầu tiên và một con trỏ là trỏ Tới phần tử cuối cùng để bạn nắm được nó", "linkedTask": { "title": "Thực hành thêm phần tử vào cuối danh sách", "description": "Tạo một danh sách nhỏ và cập nhật con trỏ khi thêm phần tử cuối." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_04", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_04-3", "noteNo": 3,
+      "content": "Có thể viết phương thức để thêm phần tử mới vào danh sách liên kết.", "timestampSeconds": 3294, "vttTrack": "vi-orig", "cueStartSeconds": 3294,
+      "evidenceText": "giờ mình sẽ viết một cái phương thức để thêm một phần tử vào nó vào danh sách", "linkedTask": null
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_04", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_04-4", "noteNo": 4,
+      "content": "Khi thêm phần tử cuối, cần cập nhật các con trỏ theo đúng thứ tự.", "timestampSeconds": 5152, "vttTrack": "vi-orig", "cueStartSeconds": 5152,
+      "evidenceText": "Sau đó cái đi theo của bạn phải trỏ Tới phần tử cuối cùng theo cái thứ tự như", "linkedTask": null
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_04", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_04-5", "noteNo": 5,
+      "content": "Vòng lặp dừng khi điều kiện kiểm tra không còn đúng.", "timestampSeconds": 6939, "vttTrack": "vi-orig", "cueStartSeconds": 6939,
+      "evidenceText": "không còn bé hơn 1 nữa và nó sẽ thoát vòng lặp bây giờ nó sẽ bị", "linkedTask": null
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_05", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_05-1", "noteNo": 1,
+      "content": "Sau khi học lý thuyết lập trình, cần thực hành viết câu lệnh để ghi nhớ.", "timestampSeconds": 76, "vttTrack": "vi-orig", "cueStartSeconds": 76,
+      "evidenceText": "pháp thuật toán kỹ thuật giải bài đâu việc Thực hành viết các câu lệnh là cách", "linkedTask": { "title": "Thực hành sau khi học lý thuyết", "description": "Viết một ví dụ nhỏ ngay sau khi học một khái niệm lập trình." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_06", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_06-1", "noteNo": 1,
+      "content": "HTML và CSS tạo giao diện cho website, còn Java đảm nhiệm phần backend.", "timestampSeconds": 573, "vttTrack": "vi-orig", "cueStartSeconds": 573,
+      "evidenceText": "nên là ở đây đấy HTML và CSS để tạo nên cái giao diện cho website của các bạn", "linkedTask": { "title": "Ôn vai trò của HTML và CSS trong website", "description": "Tạo một trang nhỏ và ghi lại phần giao diện do HTML/CSS đảm nhiệm." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_06", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_06-2", "noteNo": 2,
+      "content": "Spring Boot là một phần của hệ sinh thái Spring và tập hợp nhiều thư viện.", "timestampSeconds": 1530, "vttTrack": "vi-orig", "cueStartSeconds": 1530,
+      "evidenceText": "từ thư viện bởi vì các bạn sử dụng Framework Thì thực tế rằng là nó là tập", "linkedTask": { "title": "Tìm hiểu Spring Boot trong hệ sinh thái Spring", "description": "Ghi lại các thư viện và vai trò của Spring Boot trong một dự án nhỏ." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_06", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_06-3", "noteNo": 3,
+      "content": "Nhiều website xoay quanh các thao tác CRUD: tạo, đọc, cập nhật và xóa dữ liệu.", "timestampSeconds": 2527, "vttTrack": "vi-orig", "cueStartSeconds": 2527,
+      "evidenceText": "rằng là nó nhỏ đấy nó đều xoay quanh Cái phần crud thôi thêm sử Xóa cái từ crud", "linkedTask": null
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_06", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_06-4", "noteNo": 4,
+      "content": "Lộ trình học cần đi từng giai đoạn để người mới biết công nghệ nào nên tìm hiểu tiếp.", "timestampSeconds": 3475, "vttTrack": "vi-orig", "cueStartSeconds": 3475,
+      "evidenceText": "là một người bắt đầu từ số 0 chúng ta đã có những cái gạch đầu dòng gì chúng ta", "linkedTask": null
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_10", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_10-1", "noteNo": 1,
+      "content": "const giúp tránh khai báo lại biến và làm cách gán giá trị chặt chẽ hơn.", "timestampSeconds": 1020, "vttTrack": "vi-orig", "cueStartSeconds": 1020,
+      "evidenceText": "con t tử như thế này thì nó sẽ bao lỗi rằng là biến test của chúng ta nó đã", "linkedTask": { "title": "Ôn cách dùng const để tránh khai báo lại", "description": "Viết ví dụ const và thử khai báo lại để quan sát lỗi." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_10", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_10-2", "noteNo": 2,
+      "content": "Object được khai báo bằng các cặp thuộc tính và giá trị, ngăn cách bằng dấu phẩy.", "timestampSeconds": 2958, "vttTrack": "vi-orig", "cueStartSeconds": 2958,
+      "evidenceText": "Ngăn cách với nhau bởi dấu phẩy thì đây chính là cách các bạn định nghĩa một", "linkedTask": { "title": "Tạo object bằng cặp thuộc tính và giá trị", "description": "Khai báo một object nhỏ với dấu hai chấm và dấu phẩy đúng cú pháp." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_10", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_10-3", "noteNo": 3,
+      "content": "filter nhận một arrow function để xử lý từng phần tử của mảng.", "timestampSeconds": 4819, "vttTrack": "vi-orig", "cueStartSeconds": 4819,
+      "evidenceText": "thì bên trong hàng filter này các bạn sẽ cần phải truyền vào một cái function", "linkedTask": null
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_10", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_10-4", "noteNo": 4,
+      "content": "Khi sao chép object hoặc array, cần dùng cú pháp ngoặc phù hợp với loại dữ liệu.", "timestampSeconds": 6720, "vttTrack": "vi-orig", "cueStartSeconds": 6720,
+      "evidenceText": "array chúng ta sẽ cần phải có dấu ngoặc vuông đóng ở ngoài còn khi các bạn làm", "linkedTask": null
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_10", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_10-5", "noteNo": 5,
+      "content": "Optional chaining giúp kiểm tra thuộc tính lồng nhau trước khi truy cập để tránh lỗi.", "timestampSeconds": 8658, "vttTrack": "vi-orig", "cueStartSeconds": 8658,
+      "evidenceText": "có thể code như thế này khi các bạn dùng dấu chấm hỏi và chúng ta gọi là có vế", "linkedTask": null
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_33", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_33-1", "noteNo": 1,
+      "content": "Docker image là snapshot phần mềm cùng các dependency; container chạy image đó.", "timestampSeconds": 58, "vttTrack": "vi", "cueStartSeconds": 58,
+      "evidenceText": "xây dựng một hình ảnh, bản thân hình ảnh là một ảnh chụp nhanh phần mềm của bạn", "linkedTask": { "title": "Ôn mối quan hệ giữa image và container", "description": "Ghi lại cách Docker image được tạo và chạy thành container." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_35", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_35-1", "noteNo": 1,
+      "content": "AssertJ cung cấp nhiều assertion giúp mã kiểm thử dễ đọc hơn.", "timestampSeconds": 540, "vttTrack": "vi", "cueStartSeconds": 540,
+      "evidenceText": "A.3J cung cấp một tập hợp các khẳng định phong phú giúp cải thiện khả năng đọc mã kiểm thử của bạn", "linkedTask": { "title": "Ôn assertion dễ đọc với AssertJ", "description": "Viết một assertion bằng AssertJ và so sánh cách đọc với assertion thông thường." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_35", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_35-2", "noteNo": 2,
+      "content": "Có thể lưu kết quả kiểm tra tồn tại email vào biến boolean trước khi assert.", "timestampSeconds": 1675, "vttTrack": "vi", "cueStartSeconds": 1675,
+      "evidenceText": "và điều này trả về một giá trị boolean, đúng không? Vậy là tồn tại rồi.", "linkedTask": null
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_35", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_35-3", "noteNo": 3,
+      "content": "Mockito được dùng để tạo mock cho student repository trong bài kiểm thử.", "timestampSeconds": 2824, "vttTrack": "vi", "cueStartSeconds": 2824,
+      "evidenceText": "và đây là lúc chúng ta tạo mock cho student repository này. Vì vậy, chúng ta nói, đúng không?", "linkedTask": null
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_35", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_35-4", "noteNo": 4,
+      "content": "BDDMockito.given dùng để cấu hình giá trị trả về cho lời gọi repository trong test.", "timestampSeconds": 4056, "vttTrack": "vi", "cueStartSeconds": 4056,
+      "evidenceText": "Mokito, vì vậy `bdd mokito.given` và ở đây tôi sẽ nói `", "linkedTask": null
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_36", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_36-1", "noteNo": 1,
+      "content": "Request body chứa các trường biểu mẫu hoặc dữ liệu gửi lên server.", "timestampSeconds": 337, "vttTrack": "vi", "cueStartSeconds": 337,
+      "evidenceText": "các trường biểu mẫu bạn đang gửi là một phần của phần thân yêu cầu. Được rồi, bây giờ", "linkedTask": { "title": "Ôn cấu trúc HTTP request", "description": "Ghi lại vai trò của request body và thử gửi một biểu mẫu đơn giản." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_36", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_36-2", "noteNo": 2,
+      "content": "GET request có thể trả về mã HTML và các response headers để kiểm tra kết quả.", "timestampSeconds": 1014, "vttTrack": "vi", "cueStartSeconds": 1014,
+      "evidenceText": "là yêu cầu GET, giống như trình duyệt đã thực hiện,", "linkedTask": null
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_36", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_36-3", "noteNo": 3,
+      "content": "Token xác thực có thể được gửi trong header của request.", "timestampSeconds": 1892, "vttTrack": "vi", "cueStartSeconds": 1892,
+      "evidenceText": "token trong header thôi nhé. Nhân tiện, nếu bạn quan tâm,", "linkedTask": null
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_16", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_16-1", "noteNo": 1,
+      "content": "Tham gia nhiều hoạt động giúp mở rộng mối quan hệ và kết nối với mọi người.", "timestampSeconds": 779, "vttTrack": "vi-orig", "cueStartSeconds": 779,
+      "evidenceText": "mình lại có thêm những mối quan hệ mới và điều đó thì nó khiến cho cái cuộc", "linkedTask": { "title": "Luyện kết nối trong giao tiếp", "description": "Chọn một hoạt động phù hợp và chủ động làm quen với người mới." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_16", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_16-2", "noteNo": 2,
+      "content": "Lắng nghe hiệu quả không chỉ bằng tai mà còn bằng ánh mắt và sự chú ý.", "timestampSeconds": 2121, "vttTrack": "vi-orig", "cueStartSeconds": 2121,
+      "evidenceText": "lắng nghe bằng tai mà chúng ta cần phải lắng nghe bằng bằng ánh mắt bằng trái", "linkedTask": { "title": "Thực hành lắng nghe chủ động", "description": "Trong một cuộc trò chuyện, chú ý ánh mắt và cử chỉ của người đối diện." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_16", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_16-3", "noteNo": 3,
+      "content": "Ngay cả người có kinh nghiệm vẫn có thể hồi hộp trước khi thuyết trình.", "timestampSeconds": 3679, "vttTrack": "vi-orig", "cueStartSeconds": 3679,
+      "evidenceText": "quốc sau này thì tim mình vẫn được đập và chân mình vẫn run kể chuyện để nói", "linkedTask": null
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_16", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_16-4", "noteNo": 4,
+      "content": "Khi thuyết trình, tránh đút tay vào túi quần và giữ cử chỉ tự nhiên.", "timestampSeconds": 5116, "vttTrack": "vi-orig", "cueStartSeconds": 5116,
+      "evidenceText": "thì đút túi quần hoặc là có những người thầy của mình Ví dụ như là suốt buổi dậy", "linkedTask": null
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_16", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_16-5", "noteNo": 5,
+      "content": "Khi không thể phát biểu trực tiếp, vẫn có thể chia sẻ qua phần chat.", "timestampSeconds": 6571, "vttTrack": "vi-orig", "cueStartSeconds": 6571,
+      "evidenceText": "trực tiếp thì có comment ở ở trong cái phần mục chát thì cũng là những cái chia", "linkedTask": null
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_17", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_17-1", "noteNo": 1,
+      "content": "CV cần mô tả dự án và công nghệ rõ ràng, tránh ghi thông tin mơ hồ.", "timestampSeconds": 417, "vttTrack": "vi-orig", "cueStartSeconds": 417,
+      "evidenceText": "viết cái gì như vậy rằng là có rất nhiều điểm trừ ở cái project này nha một cái", "linkedTask": { "title": "Rà lại phần dự án trong CV", "description": "Viết rõ vai trò, dự án và công nghệ đã dùng trong CV." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_17", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_17-2", "noteNo": 2,
+      "content": "Nên ghi đầy đủ tên trường hoặc đơn vị thay vì dùng viết tắt khó hiểu.", "timestampSeconds": 1238, "vttTrack": "vi-orig", "cueStartSeconds": 1238,
+      "evidenceText": "thì các bạn lưu ý một điều nha không nên ghi viết tắt như thế này nhá rồi Ở đây", "linkedTask": { "title": "Rà lại tên trường trong CV", "description": "Viết đầy đủ tên trường và kiểm tra các chữ viết tắt trong CV." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_17", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_17-3", "noteNo": 3,
+      "content": "CV nên thể hiện cả kiến thức nền như responsive và các công nghệ phù hợp với vị trí.", "timestampSeconds": 2077, "vttTrack": "vi-orig", "cueStartSeconds": 2077,
+      "evidenceText": "ngoài cái này thì các bạn nên học về cái thằng responsive ấy mình vẫn khuyên các", "linkedTask": null
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_18", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_18-1", "noteNo": 1,
+      "content": "Trì hoãn khiến kế hoạch học bị đẩy từ hôm nay sang ngày mai và ngày sau.", "timestampSeconds": 346, "vttTrack": "vi-orig", "cueStartSeconds": 346,
+      "evidenceText": "ngày mai ngày kia thậm chí là tuần sau tháng sau hay thậm chí là gần khi bắt", "linkedTask": { "title": "Lập kế hoạch học để tránh trì hoãn", "description": "Chọn một việc học cụ thể và đặt thời điểm thực hiện trong tuần này." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_18", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_18-2", "noteNo": 2,
+      "content": "Học IT cần tự làm bài thay vì thuê người khác viết code hộ.", "timestampSeconds": 1005, "vttTrack": "vi-orig", "cueStartSeconds": 1005,
+      "evidenceText": "kiếm tiền nhưng mà cuối cùng gặp bài cốt thì các bạn lại phải đi thuê người khác", "linkedTask": { "title": "Tự giải một bài lập trình", "description": "Chọn một bài nhỏ và tự viết lời giải trước khi xem hỗ trợ." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_20", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_20-1", "noteNo": 1,
+      "content": "Tự kiểm tra trước kỳ thi giúp phát hiện phần kiến thức còn yếu.", "timestampSeconds": 228, "vttTrack": "vi-orig", "cueStartSeconds": 228,
+      "evidenceText": "một cái cách lập luận để mình ghi nhớ cái bài đó tốt hơn kỹ năng tự kiểm tra", "linkedTask": { "title": "Tự kiểm tra kiến thức trước kỳ thi", "description": "Viết vài câu hỏi tự kiểm tra và ghi lại phần chưa chắc." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_20", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_20-2", "noteNo": 2,
+      "content": "Xem lỗi từ vựng, ngữ pháp và bài mẫu để cải thiện bài viết.", "timestampSeconds": 719, "vttTrack": "vi-orig", "cueStartSeconds": 719,
+      "evidenceText": "để mình biết là lỗi từ vực và lỗ ngữ pháp chi tiết ở đây thì còn có bài mẫu", "linkedTask": { "title": "Rà lại lỗi từ vựng và ngữ pháp", "description": "Chọn một bài viết cũ, ghi lại lỗi và đối chiếu với bài mẫu." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_22", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_22-1", "noteNo": 1,
+      "content": "Nên dành thời gian nghe podcast hoặc video liên quan đến nghề nghiệp để áp dụng tiếng Anh.", "timestampSeconds": 282, "vttTrack": "vi-orig", "cueStartSeconds": 282,
+      "evidenceText": "clip YouTube nào đó mà liên quan về nghề nghiệp của mình professional interest", "linkedTask": { "title": "Luyện nghe theo chủ đề nghề nghiệp", "description": "Chọn một podcast hoặc video nghề nghiệp và ghi lại ý chính." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_22", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_22-2", "noteNo": 2,
+      "content": "Duy trì học ngôn ngữ gần như mỗi ngày và đặt mục tiêu rõ ràng.", "timestampSeconds": 947, "vttTrack": "vi-orig", "cueStartSeconds": 947,
+      "evidenceText": "lot of times you are now learning Vietnamese every day almost every day", "linkedTask": { "title": "Ôn lại nhóm từ vựng đã học", "description": "Dành một khoảng thời gian ngắn mỗi ngày để ôn và dùng lại từ mới." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_23", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_23-1", "noteNo": 1,
+      "content": "Slow là tính từ, còn slowly là trạng từ dùng sau động từ như trong Drive slowly.", "timestampSeconds": 171, "vttTrack": "vi-orig", "cueStartSeconds": 171,
+      "evidenceText": "đấy phải thêm s vào khi Drive slowly là chậm Slow là tính từ mà slowly là trạng", "linkedTask": { "title": "Ôn slow và slowly", "description": "Tạo vài câu dùng slow và slowly đúng vai trò từ loại." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_23", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_23-2", "noteNo": 2,
+      "content": "Luyện hội thoại theo bối cảnh cụ thể giúp phản xạ khi giao tiếp.", "timestampSeconds": 566, "vttTrack": "vi-orig", "cueStartSeconds": 566,
+      "evidenceText": "nói như thế nào thì có một người đưa cho mình menu rồi bây giờ họ đang sẵn sàng", "linkedTask": { "title": "Luyện nghe lại đoạn hội thoại", "description": "Đóng vai một tình huống gọi món và luyện câu trả lời phù hợp." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_25", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_25-1", "noteNo": 1,
+      "content": "Khi chưa có hứng làm một việc, có thể đổi thứ tự và làm việc khác trước để tránh trì hoãn.", "timestampSeconds": 157, "vttTrack": "vi-orig", "cueStartSeconds": 157,
+      "evidenceText": "hãy nhớ là cháo việc nếu như chúng ta cảm thấy không có hứng là một việc gì đó", "linkedTask": { "title": "Thử đổi thứ tự công việc khi bị trì hoãn", "description": "Chọn một việc khác làm trước khi chưa có hứng bắt đầu việc đang định làm." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_25", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_25-2", "noteNo": 2,
+      "content": "Đặt sách trong tầm mắt tạo lời nhắc để duy trì thói quen đọc.", "timestampSeconds": 523, "vttTrack": "vi-orig", "cueStartSeconds": 523,
+      "evidenceText": "ngắm của mình tức là khi nào cũng phải thấy sách ở đấy thì mình thấy rằng OK để", "linkedTask": { "title": "Sắp xếp môi trường học dễ bắt đầu", "description": "Đặt tài liệu cần đọc ở nơi dễ nhìn thấy trong góc học tập." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_27", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_27-1", "noteNo": 1,
+      "content": "Chọn video phát âm theo trình độ phù hợp và chủ đề cần luyện.", "timestampSeconds": 212, "vttTrack": "vi-orig", "cueStartSeconds": 212,
+      "evidenceText": "là nhiều các video theo trình độ intermediate các bạn hoàn toàn có thể", "linkedTask": { "title": "Chọn nguồn luyện phát âm phù hợp", "description": "Chọn một video đúng trình độ và luyện lại phần phát âm chính." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_28", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_28-1", "noteNo": 1,
+      "content": "Kể chuyện chân thật và tự nhiên có thể giúp xử lý nhiều dạng câu hỏi trong bài thi.", "timestampSeconds": 388, "vttTrack": "vi-orig", "cueStartSeconds": 388,
+      "evidenceText": "experiencec I make đấy một cách kể chuyện nó rất là chân thật rất là gần", "linkedTask": { "title": "Luyện kể chuyện tự nhiên trong IELTS", "description": "Chọn một chủ đề và kể lại bằng trải nghiệm thật, rõ ràng và tự nhiên." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_28", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_28-2", "noteNo": 2,
+      "content": "Nên chọn nguồn nghe phù hợp với trình độ và lộ trình cá nhân.", "timestampSeconds": 1011, "vttTrack": "vi-orig", "cueStartSeconds": 1011,
+      "evidenceText": "Mochi sẽ giúp chúng ta chọn những nguồn nghe phù hợp với trình độ cá nhân của", "linkedTask": { "title": "Chọn nguồn nghe theo trình độ", "description": "Tìm một nguồn nghe vừa sức và ghi lại lý do phù hợp với lộ trình hiện tại." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_29", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_29-1", "noteNo": 1,
+      "content": "Please find attached the document dùng khi gửi kèm tài liệu trong email.", "timestampSeconds": 454, "vttTrack": "vi-orig", "cueStartSeconds": 454,
+      "evidenceText": "Please find attached the document document nhấn âm 1 mang nghĩa là cái tài", "linkedTask": { "title": "Luyện câu gửi kèm tài liệu", "description": "Viết một email ngắn dùng câu Please find attached the document." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_29", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_29-2", "noteNo": 2,
+      "content": "Here is the information you requested dùng để trả lời khi gửi thông tin được yêu cầu.", "timestampSeconds": 1516, "vttTrack": "vi-orig", "cueStartSeconds": 1516,
+      "evidenceText": "thông tin Here is the information you requested Đây là cái thông tin mà bạn đã", "linkedTask": { "title": "Ôn câu trả lời email công sở", "description": "Dùng câu Here is the information you requested trong một email ngắn." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_29", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_29-3", "noteNo": 3,
+      "content": "Luyện hội thoại theo tình huống cuối tuần giúp nhớ cách hỏi và trả lời tự nhiên.", "timestampSeconds": 2590, "vttTrack": "vi-orig", "cueStartSeconds": 2590,
+      "evidenceText": "người ha How was your weekend it was great Thanks I went hiking How about", "linkedTask": null
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_29", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_29-4", "noteNo": 4,
+      "content": "We're on track to meet our deadline nghĩa là đang đúng tiến độ để kịp hạn.", "timestampSeconds": 3831, "vttTrack": "vi-orig", "cueStartSeconds": 3831,
+      "evidenceText": "triển tốt và chúng ta đang đi đúng kịp tiến độ We're on track Chúng ta đang đi", "linkedTask": null
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_30", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_30-1", "noteNo": 1,
+      "content": "Tự học cần chủ động tìm cách học thay vì chỉ hỏi từng điểm ngữ pháp rời rạc.", "timestampSeconds": 830, "vttTrack": "vi-orig", "cueStartSeconds": 830,
+      "evidenceText": "nay thầy muốn các bạn sẽ học được một cái cách để để khi bạn gặp bất cứ cái", "linkedTask": { "title": "Lập cách tự học tiếng Anh", "description": "Ghi lại một phương pháp để tự xử lý tài liệu hoặc ứng dụng mới." }
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_30", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_30-2", "noteNo": 2,
+      "content": "Học tiếng Anh đều đặn mỗi ngày giúp tích lũy và tiến bộ dần.", "timestampSeconds": 2498, "vttTrack": "vi-orig", "cueStartSeconds": 2498,
+      "evidenceText": "thầy vấn đề là gì 10 năm nay thầy học thầy chưa dừng học một ngày nào các bạn", "linkedTask": null
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_30", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_30-3", "noteNo": 3,
+      "content": "Bắt đầu nói trước lớp có thể khiến người dạy hồi hộp; luyện tập giúp tự tin hơn.", "timestampSeconds": 4211, "vttTrack": "vi-orig", "cueStartSeconds": 4211,
+      "evidenceText": "nay buổi đầu tiên thầy dạy đấy và thầy khá là run đấy lúc cuối buổi học nên là", "linkedTask": null
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_30", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_30-4", "noteNo": 4,
+      "content": "Dùng ví dụ và câu hỏi cụ thể giúp luyện cách diễn đạt tiếng Anh.", "timestampSeconds": 5949, "vttTrack": "vi-orig", "cueStartSeconds": 5949,
+      "evidenceText": "xe mới Anh caros đã mua gì vậy Có phải anh ấy mua một xe đạp không Hay là anh", "linkedTask": null
+    },
+    {
+      "sourceFixtureKey": "LIBRARY_30", "sourceRole": "CURRENT_LIBRARY", "noteKey": "a1-note-LIBRARY_30-5", "noteNo": 5,
+      "content": "Một giáo trình tốt và môi trường học cùng nhau giúp định hướng việc tự học.", "timestampSeconds": 7655, "vttTrack": "vi-orig", "cueStartSeconds": 7655,
+      "evidenceText": "trọng là phải có một giáo trình Chất lượng để định hướng hơn cho việc tự học", "linkedTask": null
+    }
+    ,
+    {
+      "sourceFixtureKey": "H1_GIT_TEAMWORK", "sourceRole": "HISTORICAL_H1", "noteKey": "a1-note-H1_GIT_TEAMWORK-1", "noteNo": 1,
+      "content": "Mã được lưu ở nơi dùng chung, nhưng máy cá nhân vẫn cần lấy về các thay đổi mới.", "timestampSeconds": 318, "vttTrack": "vi-orig", "cueStartSeconds": 318,
+      "evidenceText": "biết bây giờ các bạn muốn kéo nhưng cái Khoai đấy về máy tính của các bạn để các",
+      "linkedTask": { "title": "Lấy thay đổi từ nơi lưu trữ chung về máy", "description": "Thực hành cập nhật mã trên máy sau khi có thay đổi ở nơi lưu trữ chung, rồi kiểm tra lại nội dung." }
+    },
+    {
+      "sourceFixtureKey": "H1_GIT_TEAMWORK", "sourceRole": "HISTORICAL_H1", "noteKey": "a1-note-H1_GIT_TEAMWORK-2", "noteNo": 2,
+      "content": "Thay đổi trên một nhánh chưa xuất hiện ở nhánh khác; cần kiểm tra nội dung tệp trên từng nhánh.", "timestampSeconds": 871, "vttTrack": "vi-orig", "cueStartSeconds": 871,
+      "evidenceText": "tại cái nhánh men lại nó không hề thay đổi đúng không Bây giờ thì mình sẽ sửa", "linkedTask": null
+    }
+  ]
+}

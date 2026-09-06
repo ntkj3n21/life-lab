@@ -1,0 +1,2 @@
+export type EntityType =
+  "video";

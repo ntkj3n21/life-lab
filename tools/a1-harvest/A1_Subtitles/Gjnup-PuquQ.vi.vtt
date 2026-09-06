@@ -1,0 +1,576 @@
+WEBVTT
+Kind: captions
+Language: vi
+
+00:00:00.320 --> 00:00:02.310 align:start position:0%
+ 
+Docker <00:00:00.471><c>là </c><00:00:00.622><c>một </c><00:00:00.773><c>công </c><00:00:00.924><c>cụ </c><00:00:01.075><c>có </c><00:00:01.226><c>thể </c><00:00:01.377><c>đóng </c><00:00:01.528><c>gói </c><00:00:01.679><c>phần </c><00:00:01.830><c>mềm</c>
+
+00:00:02.310 --> 00:00:02.320 align:start position:0%
+Docker là một công cụ có thể đóng gói phần mềm
+ 
+
+00:00:02.320 --> 00:00:04.710 align:start position:0%
+Docker là một công cụ có thể đóng gói phần mềm
+vào <00:00:02.580><c>các </c><00:00:02.840><c>container </c><00:00:03.100><c>chạy </c><00:00:03.360><c>ổn </c><00:00:03.620><c>định </c><00:00:03.880><c>trong </c><00:00:04.140><c>bất </c><00:00:04.400><c>kỳ</c>
+
+00:00:04.710 --> 00:00:04.720 align:start position:0%
+vào các container chạy ổn định trong bất kỳ
+ 
+
+00:00:04.720 --> 00:00:06.550 align:start position:0%
+vào các container chạy ổn định trong bất kỳ
+môi <00:00:04.959><c>trường </c><00:00:05.198><c>nào. </c><00:00:05.437><c>Nhưng </c><00:00:05.676><c>container </c><00:00:05.915><c>là </c><00:00:06.154><c>gì </c><00:00:06.393><c>và</c>
+
+00:00:06.550 --> 00:00:06.560 align:start position:0%
+môi trường nào. Nhưng container là gì và
+ 
+
+00:00:06.560 --> 00:00:07.909 align:start position:0%
+môi trường nào. Nhưng container là gì và
+tại <00:00:06.687><c>sao </c><00:00:06.814><c>bạn </c><00:00:06.941><c>cần </c><00:00:07.068><c>một </c><00:00:07.195><c>container? </c><00:00:07.322><c>Hãy </c><00:00:07.449><c>tưởng </c><00:00:07.576><c>tượng </c><00:00:07.703><c>bạn </c><00:00:07.830><c>đã</c>
+
+00:00:07.909 --> 00:00:07.919 align:start position:0%
+tại sao bạn cần một container? Hãy tưởng tượng bạn đã
+ 
+
+00:00:07.919 --> 00:00:09.430 align:start position:0%
+tại sao bạn cần một container? Hãy tưởng tượng bạn đã
+xây <00:00:08.089><c>dựng </c><00:00:08.259><c>một </c><00:00:08.429><c>ứng </c><00:00:08.599><c>dụng </c><00:00:08.769><c>bằng </c><00:00:08.939><c>Cobalt </c><00:00:09.109><c>chạy </c><00:00:09.279><c>trên</c>
+
+00:00:09.430 --> 00:00:09.440 align:start position:0%
+xây dựng một ứng dụng bằng Cobalt chạy trên
+ 
+
+00:00:09.440 --> 00:00:11.110 align:start position:0%
+xây dựng một ứng dụng bằng Cobalt chạy trên
+một <00:00:09.668><c>phiên </c><00:00:09.896><c>bản </c><00:00:10.124><c>Linux </c><00:00:10.352><c>nào </c><00:00:10.580><c>đó. </c><00:00:10.808><c>Bạn </c><00:00:11.036><c>muốn</c>
+
+00:00:11.110 --> 00:00:11.120 align:start position:0%
+một phiên bản Linux nào đó. Bạn muốn
+ 
+
+00:00:11.120 --> 00:00:12.470 align:start position:0%
+một phiên bản Linux nào đó. Bạn muốn
+chia <00:00:11.240><c>sẻ </c><00:00:11.360><c>ứng </c><00:00:11.480><c>dụng </c><00:00:11.600><c>này </c><00:00:11.720><c>với </c><00:00:11.840><c>bạn </c><00:00:11.960><c>bè </c><00:00:12.080><c>nhưng </c><00:00:12.200><c>họ </c><00:00:12.320><c>lại</c>
+
+00:00:12.470 --> 00:00:12.480 align:start position:0%
+chia sẻ ứng dụng này với bạn bè nhưng họ lại
+ 
+
+00:00:12.480 --> 00:00:14.070 align:start position:0%
+chia sẻ ứng dụng này với bạn bè nhưng họ lại
+sử <00:00:12.697><c>dụng </c><00:00:12.914><c>một </c><00:00:13.131><c>hệ </c><00:00:13.348><c>thống </c><00:00:13.565><c>hoàn </c><00:00:13.782><c>toàn </c><00:00:13.999><c>khác.</c>
+
+00:00:14.070 --> 00:00:14.080 align:start position:0%
+sử dụng một hệ thống hoàn toàn khác.
+ 
+
+00:00:14.080 --> 00:00:15.749 align:start position:0%
+sử dụng một hệ thống hoàn toàn khác.
+Vấn <00:00:14.247><c>đề </c><00:00:14.414><c>đặt </c><00:00:14.581><c>ra </c><00:00:14.748><c>là </c><00:00:14.915><c>làm </c><00:00:15.082><c>thế </c><00:00:15.249><c>nào </c><00:00:15.416><c>để </c><00:00:15.583><c>sao </c><00:00:15.750><c>chép</c>
+
+00:00:15.749 --> 00:00:15.759 align:start position:0%
+Vấn đề đặt ra là làm thế nào để sao chép
+ 
+
+00:00:15.759 --> 00:00:17.510 align:start position:0%
+Vấn đề đặt ra là làm thế nào để sao chép
+môi <00:00:15.911><c>trường </c><00:00:16.063><c>mà </c><00:00:16.215><c>phần </c><00:00:16.367><c>mềm </c><00:00:16.519><c>của </c><00:00:16.671><c>bạn </c><00:00:16.823><c>cần </c><00:00:16.975><c>trên </c><00:00:17.127><c>bất </c><00:00:17.279><c>kỳ</c>
+
+00:00:17.510 --> 00:00:17.520 align:start position:0%
+môi trường mà phần mềm của bạn cần trên bất kỳ
+ 
+
+00:00:17.520 --> 00:00:19.029 align:start position:0%
+môi trường mà phần mềm của bạn cần trên bất kỳ
+máy <00:00:17.680><c>nào? </c><00:00:17.840><c>Một </c><00:00:18.000><c>cách </c><00:00:18.160><c>để </c><00:00:18.320><c>đóng </c><00:00:18.480><c>gói </c><00:00:18.640><c>ứng </c><00:00:18.800><c>dụng </c><00:00:18.960><c>là</c>
+
+00:00:19.029 --> 00:00:19.039 align:start position:0%
+máy nào? Một cách để đóng gói ứng dụng là
+ 
+
+00:00:19.039 --> 00:00:20.310 align:start position:0%
+máy nào? Một cách để đóng gói ứng dụng là
+sử <00:00:19.339><c>dụng </c><00:00:19.639><c>máy </c><00:00:19.939><c>ảo, </c><00:00:20.239><c>nơi</c>
+
+00:00:20.310 --> 00:00:20.320 align:start position:0%
+sử dụng máy ảo, nơi
+ 
+
+00:00:20.320 --> 00:00:21.990 align:start position:0%
+sử dụng máy ảo, nơi
+phần <00:00:20.456><c>cứng </c><00:00:20.592><c>được </c><00:00:20.728><c>mô </c><00:00:20.864><c>phỏng </c><00:00:21.000><c>rồi </c><00:00:21.136><c>cài </c><00:00:21.272><c>đặt </c><00:00:21.408><c>hệ </c><00:00:21.544><c>điều </c><00:00:21.680><c>hành</c>
+
+00:00:21.990 --> 00:00:22.000 align:start position:0%
+phần cứng được mô phỏng rồi cài đặt hệ điều hành
+ 
+
+00:00:22.000 --> 00:00:24.150 align:start position:0%
+phần cứng được mô phỏng rồi cài đặt hệ điều hành
+và <00:00:22.255><c>các </c><00:00:22.510><c>phụ </c><00:00:22.765><c>thuộc </c><00:00:23.020><c>cần </c><00:00:23.275><c>thiết.</c>
+
+00:00:24.150 --> 00:00:24.160 align:start position:0%
+và các phụ thuộc cần thiết.
+ 
+
+00:00:24.160 --> 00:00:25.830 align:start position:0%
+và các phụ thuộc cần thiết.
+Điều <00:00:24.320><c>này </c><00:00:24.480><c>cho </c><00:00:24.640><c>phép </c><00:00:24.800><c>chúng </c><00:00:24.960><c>ta </c><00:00:25.120><c>chạy </c><00:00:25.280><c>nhiều </c><00:00:25.440><c>ứng </c><00:00:25.600><c>dụng </c><00:00:25.760><c>trên</c>
+
+00:00:25.830 --> 00:00:25.840 align:start position:0%
+Điều này cho phép chúng ta chạy nhiều ứng dụng trên
+ 
+
+00:00:25.840 --> 00:00:27.910 align:start position:0%
+Điều này cho phép chúng ta chạy nhiều ứng dụng trên
+cùng <00:00:26.059><c>một </c><00:00:26.278><c>cơ </c><00:00:26.497><c>sở </c><00:00:26.716><c>hạ </c><00:00:26.935><c>tầng. </c><00:00:27.154><c>Tuy </c><00:00:27.373><c>nhiên, </c><00:00:27.592><c>vì</c>
+
+00:00:27.910 --> 00:00:27.920 align:start position:0%
+cùng một cơ sở hạ tầng. Tuy nhiên, vì
+ 
+
+00:00:27.920 --> 00:00:28.630 align:start position:0%
+cùng một cơ sở hạ tầng. Tuy nhiên, vì
+mỗi <00:00:28.040><c>máy </c><00:00:28.160><c>ảo</c>
+
+00:00:28.630 --> 00:00:28.640 align:start position:0%
+mỗi máy ảo
+ 
+
+00:00:28.640 --> 00:00:30.470 align:start position:0%
+mỗi máy ảo
+chạy <00:00:28.920><c>hệ </c><00:00:29.200><c>điều </c><00:00:29.480><c>hành </c><00:00:29.760><c>riêng </c><00:00:30.040><c>nên </c><00:00:30.320><c>chúng</c>
+
+00:00:30.470 --> 00:00:30.480 align:start position:0%
+chạy hệ điều hành riêng nên chúng
+ 
+
+00:00:30.480 --> 00:00:32.069 align:start position:0%
+chạy hệ điều hành riêng nên chúng
+thường <00:00:30.719><c>cồng </c><00:00:30.958><c>kềnh </c><00:00:31.197><c>và </c><00:00:31.436><c>chậm.</c>
+
+00:00:32.069 --> 00:00:32.079 align:start position:0%
+thường cồng kềnh và chậm.
+ 
+
+00:00:32.079 --> 00:00:34.069 align:start position:0%
+thường cồng kềnh và chậm.
+Bây <00:00:32.273><c>giờ, </c><00:00:32.467><c>về </c><00:00:32.661><c>mặt </c><00:00:32.855><c>khái </c><00:00:33.049><c>niệm, </c><00:00:33.243><c>container </c><00:00:33.437><c>Docker</c>
+
+00:00:34.069 --> 00:00:34.079 align:start position:0%
+Bây giờ, về mặt khái niệm, container Docker
+ 
+
+00:00:34.079 --> 00:00:35.350 align:start position:0%
+Bây giờ, về mặt khái niệm, container Docker
+rất <00:00:34.179><c>giống </c><00:00:34.279><c>với </c><00:00:34.379><c>máy </c><00:00:34.479><c>ảo, </c><00:00:34.579><c>chỉ </c><00:00:34.679><c>khác </c><00:00:34.779><c>ở </c><00:00:34.879><c>chỗ</c>
+
+00:00:35.350 --> 00:00:35.360 align:start position:0%
+rất giống với máy ảo, chỉ khác ở chỗ
+ 
+
+00:00:35.360 --> 00:00:36.950 align:start position:0%
+rất giống với máy ảo, chỉ khác ở chỗ
+thay <00:00:36.880><c>vì</c>
+
+00:00:36.950 --> 00:00:36.960 align:start position:0%
+thay vì
+ 
+
+00:00:36.960 --> 00:00:38.869 align:start position:0%
+thay vì
+ảo <00:00:37.296><c>hóa </c><00:00:37.632><c>phần </c><00:00:37.968><c>cứng, </c><00:00:38.304><c>container </c><00:00:38.640><c>chỉ</c>
+
+00:00:38.869 --> 00:00:38.879 align:start position:0%
+ảo hóa phần cứng, container chỉ
+ 
+
+00:00:38.879 --> 00:00:40.310 align:start position:0%
+ảo hóa phần cứng, container chỉ
+ảo <00:00:39.059><c>hóa </c><00:00:39.239><c>hệ </c><00:00:39.419><c>điều </c><00:00:39.599><c>hành,</c>
+
+00:00:40.310 --> 00:00:40.320 align:start position:0%
+ảo hóa hệ điều hành,
+ 
+
+00:00:40.320 --> 00:00:42.549 align:start position:0%
+ảo hóa hệ điều hành,
+hay <00:00:40.488><c>nói </c><00:00:40.656><c>cách </c><00:00:40.824><c>khác, </c><00:00:40.992><c>tất </c><00:00:41.160><c>cả </c><00:00:41.328><c>các </c><00:00:41.496><c>ứng </c><00:00:41.664><c>dụng </c><00:00:41.832><c>hoặc </c><00:00:42.000><c>container</c>
+
+00:00:42.549 --> 00:00:42.559 align:start position:0%
+hay nói cách khác, tất cả các ứng dụng hoặc container
+ 
+
+00:00:42.559 --> 00:00:43.990 align:start position:0%
+hay nói cách khác, tất cả các ứng dụng hoặc container
+được <00:00:42.732><c>chạy </c><00:00:42.905><c>bởi </c><00:00:43.078><c>một </c><00:00:43.251><c>nhân </c><00:00:43.424><c>duy </c><00:00:43.597><c>nhất.</c>
+
+00:00:43.990 --> 00:00:44.000 align:start position:0%
+được chạy bởi một nhân duy nhất.
+ 
+
+00:00:44.000 --> 00:00:45.750 align:start position:0%
+được chạy bởi một nhân duy nhất.
+Điều <00:00:44.160><c>này </c><00:00:44.320><c>giúp </c><00:00:44.480><c>hầu </c><00:00:44.640><c>hết </c><00:00:44.800><c>mọi </c><00:00:44.960><c>thứ </c><00:00:45.120><c>nhanh </c><00:00:45.280><c>hơn</c>
+
+00:00:45.750 --> 00:00:45.760 align:start position:0%
+Điều này giúp hầu hết mọi thứ nhanh hơn
+ 
+
+00:00:45.760 --> 00:00:47.350 align:start position:0%
+Điều này giúp hầu hết mọi thứ nhanh hơn
+và <00:00:46.032><c>hiệu </c><00:00:46.304><c>quả </c><00:00:46.576><c>hơn. </c><00:00:46.848><c>Có </c><00:00:47.120><c>ba</c>
+
+00:00:47.350 --> 00:00:47.360 align:start position:0%
+và hiệu quả hơn. Có ba
+ 
+
+00:00:47.360 --> 00:00:49.029 align:start position:0%
+và hiệu quả hơn. Có ba
+yếu <00:00:47.613><c>tố </c><00:00:47.866><c>cơ </c><00:00:48.119><c>bản </c><00:00:48.372><c>trong </c><00:00:48.625><c>thế </c><00:00:48.878><c>giới</c>
+
+00:00:49.029 --> 00:00:49.039 align:start position:0%
+yếu tố cơ bản trong thế giới
+ 
+
+00:00:49.039 --> 00:00:49.670 align:start position:0%
+yếu tố cơ bản trong thế giới
+Docker:
+
+00:00:49.670 --> 00:00:49.680 align:start position:0%
+Docker:
+ 
+
+00:00:49.680 --> 00:00:51.830 align:start position:0%
+Docker:
+tệp <00:00:50.200><c>Docker, </c><00:00:50.720><c>hình </c><00:00:51.240><c>ảnh </c><00:00:51.760><c>và</c>
+
+00:00:51.830 --> 00:00:51.840 align:start position:0%
+tệp Docker, hình ảnh và
+ 
+
+00:00:51.840 --> 00:00:54.470 align:start position:0%
+tệp Docker, hình ảnh và
+container. <00:00:52.240><c>Tệp </c><00:00:52.640><c>Docker </c><00:00:53.040><c>giống </c><00:00:53.440><c>như </c><00:00:53.840><c>DNA,</c>
+
+00:00:54.470 --> 00:00:54.480 align:start position:0%
+container. Tệp Docker giống như DNA,
+ 
+
+00:00:54.480 --> 00:00:56.869 align:start position:0%
+container. Tệp Docker giống như DNA,
+nó <00:00:54.739><c>chỉ </c><00:00:54.998><c>là </c><00:00:55.257><c>mã </c><00:00:55.516><c>lệnh </c><00:00:55.775><c>cho </c><00:00:56.034><c>Docker </c><00:00:56.293><c>biết </c><00:00:56.552><c>cách</c>
+
+00:00:56.869 --> 00:00:56.879 align:start position:0%
+nó chỉ là mã lệnh cho Docker biết cách
+ 
+
+00:00:56.879 --> 00:00:58.630 align:start position:0%
+nó chỉ là mã lệnh cho Docker biết cách
+xây <00:00:57.047><c>dựng </c><00:00:57.215><c>một </c><00:00:57.383><c>hình </c><00:00:57.551><c>ảnh, </c><00:00:57.719><c>bản </c><00:00:57.887><c>thân </c><00:00:58.055><c>hình </c><00:00:58.223><c>ảnh </c><00:00:58.391><c>là </c><00:00:58.559><c>một</c>
+
+00:00:58.630 --> 00:00:58.640 align:start position:0%
+xây dựng một hình ảnh, bản thân hình ảnh là một
+ 
+
+00:00:58.640 --> 00:01:00.069 align:start position:0%
+xây dựng một hình ảnh, bản thân hình ảnh là một
+ảnh <00:00:58.786><c>chụp </c><00:00:58.932><c>nhanh </c><00:00:59.078><c>phần </c><00:00:59.224><c>mềm </c><00:00:59.370><c>của </c><00:00:59.516><c>bạn</c>
+
+00:01:00.069 --> 00:01:00.079 align:start position:0%
+ảnh chụp nhanh phần mềm của bạn
+ 
+
+00:01:00.079 --> 00:01:01.750 align:start position:0%
+ảnh chụp nhanh phần mềm của bạn
+cùng <00:01:00.269><c>với </c><00:01:00.459><c>tất </c><00:01:00.649><c>cả </c><00:01:00.839><c>các </c><00:01:01.029><c>phụ </c><00:01:01.219><c>thuộc </c><00:01:01.409><c>của </c><00:01:01.599><c>nó.</c>
+
+00:01:01.750 --> 00:01:01.760 align:start position:0%
+cùng với tất cả các phụ thuộc của nó.
+ 
+
+00:01:01.760 --> 00:01:03.670 align:start position:0%
+cùng với tất cả các phụ thuộc của nó.
+Ở <00:01:01.988><c>cấp </c><00:01:02.216><c>độ </c><00:01:02.444><c>hệ </c><00:01:02.672><c>điều </c><00:01:02.900><c>hành, </c><00:01:03.128><c>hình </c><00:01:03.356><c>ảnh</c>
+
+00:01:03.670 --> 00:01:03.680 align:start position:0%
+Ở cấp độ hệ điều hành, hình ảnh
+ 
+
+00:01:03.680 --> 00:01:05.670 align:start position:0%
+Ở cấp độ hệ điều hành, hình ảnh
+là <00:01:03.875><c>bất </c><00:01:04.070><c>biến </c><00:01:04.265><c>và </c><00:01:04.460><c>có </c><00:01:04.655><c>thể </c><00:01:04.850><c>được </c><00:01:05.045><c>sử </c><00:01:05.240><c>dụng </c><00:01:05.435><c>để</c>
+
+00:01:05.670 --> 00:01:05.680 align:start position:0%
+là bất biến và có thể được sử dụng để
+ 
+
+00:01:05.680 --> 00:01:07.190 align:start position:0%
+là bất biến và có thể được sử dụng để
+khởi <00:01:05.906><c>tạo </c><00:01:06.132><c>nhiều </c><00:01:06.358><c>container, </c><00:01:06.584><c>đó </c><00:01:06.810><c>chính </c><00:01:07.036><c>là</c>
+
+00:01:07.190 --> 00:01:07.200 align:start position:0%
+khởi tạo nhiều container, đó chính là
+ 
+
+00:01:07.200 --> 00:01:08.789 align:start position:0%
+khởi tạo nhiều container, đó chính là
+phần <00:01:07.370><c>mềm </c><00:01:07.540><c>thực </c><00:01:07.710><c>tế </c><00:01:07.880><c>của </c><00:01:08.050><c>bạn </c><00:01:08.220><c>đang </c><00:01:08.390><c>chạy </c><00:01:08.560><c>trong</c>
+
+00:01:08.789 --> 00:01:08.799 align:start position:0%
+phần mềm thực tế của bạn đang chạy trong
+ 
+
+00:01:08.799 --> 00:01:09.350 align:start position:0%
+phần mềm thực tế của bạn đang chạy trong
+thế giới thực.
+
+00:01:09.350 --> 00:01:09.360 align:start position:0%
+thế giới thực.
+ 
+
+00:01:09.360 --> 00:01:11.350 align:start position:0%
+thế giới thực.
+Hãy <00:01:09.544><c>tạo </c><00:01:09.728><c>một </c><00:01:09.912><c>tệp </c><00:01:10.096><c>Docker </c><00:01:10.280><c>và </c><00:01:10.464><c>sử </c><00:01:10.648><c>dụng </c><00:01:10.832><c>lệnh </c><00:01:11.016><c>`docker-file` </c><00:01:11.200><c>để</c>
+
+00:01:11.350 --> 00:01:11.360 align:start position:0%
+Hãy tạo một tệp Docker và sử dụng lệnh `docker-file` để
+ 
+
+00:01:11.360 --> 00:01:13.030 align:start position:0%
+Hãy tạo một tệp Docker và sử dụng lệnh `docker-file` để
+bắt <00:01:11.565><c>đầu </c><00:01:11.770><c>từ </c><00:01:11.975><c>một </c><00:01:12.180><c>mẫu </c><00:01:12.385><c>có </c><00:01:12.590><c>sẵn </c><00:01:12.795><c>như</c>
+
+00:01:13.030 --> 00:01:13.040 align:start position:0%
+bắt đầu từ một mẫu có sẵn như
+ 
+
+00:01:13.040 --> 00:01:15.109 align:start position:0%
+bắt đầu từ một mẫu có sẵn như
+Ubuntu. <00:01:13.270><c>Hình </c><00:01:13.500><c>ảnh </c><00:01:13.730><c>cơ </c><00:01:13.960><c>bản </c><00:01:14.190><c>này </c><00:01:14.420><c>được </c><00:01:14.650><c>tải </c><00:01:14.880><c>xuống</c>
+
+00:01:15.109 --> 00:01:15.119 align:start position:0%
+Ubuntu. Hình ảnh cơ bản này được tải xuống
+ 
+
+00:01:15.119 --> 00:01:15.830 align:start position:0%
+Ubuntu. Hình ảnh cơ bản này được tải xuống
+từ <00:01:15.279><c>đám </c><00:01:15.439><c>mây</c>
+
+00:01:15.830 --> 00:01:15.840 align:start position:0%
+từ đám mây
+ 
+
+00:01:15.840 --> 00:01:17.590 align:start position:0%
+từ đám mây
+và <00:01:15.963><c>bạn </c><00:01:16.086><c>cũng </c><00:01:16.209><c>có </c><00:01:16.332><c>thể </c><00:01:16.455><c>tải </c><00:01:16.578><c>lên </c><00:01:16.701><c>hình </c><00:01:16.824><c>ảnh </c><00:01:16.947><c>của </c><00:01:17.070><c>riêng </c><00:01:17.193><c>mình</c>
+
+00:01:17.590 --> 00:01:17.600 align:start position:0%
+và bạn cũng có thể tải lên hình ảnh của riêng mình
+ 
+
+00:01:17.600 --> 00:01:19.030 align:start position:0%
+và bạn cũng có thể tải lên hình ảnh của riêng mình
+lên <00:01:17.760><c>nhiều </c><00:01:17.920><c>kho </c><00:01:18.080><c>lưu </c><00:01:18.240><c>trữ </c><00:01:18.400><c>Docker </c><00:01:18.560><c>khác </c><00:01:18.720><c>nhau.</c>
+
+00:01:19.030 --> 00:01:19.040 align:start position:0%
+lên nhiều kho lưu trữ Docker khác nhau.
+ 
+
+00:01:19.040 --> 00:01:19.749 align:start position:0%
+lên nhiều kho lưu trữ Docker khác nhau.
+
+
+00:01:19.749 --> 00:01:19.759 align:start position:0%
+ 
+ 
+
+00:01:19.759 --> 00:01:21.429 align:start position:0%
+ 
+Từ <00:01:19.911><c>đó, </c><00:01:20.063><c>bạn </c><00:01:20.215><c>có </c><00:01:20.367><c>thể </c><00:01:20.519><c>muốn </c><00:01:20.671><c>sử </c><00:01:20.823><c>dụng </c><00:01:20.975><c>lệnh </c><00:01:21.127><c>`docker-file` </c><00:01:21.279><c>để</c>
+
+00:01:21.429 --> 00:01:21.439 align:start position:0%
+Từ đó, bạn có thể muốn sử dụng lệnh `docker-file` để
+ 
+
+00:01:21.439 --> 00:01:23.030 align:start position:0%
+Từ đó, bạn có thể muốn sử dụng lệnh `docker-file` để
+chạy <00:01:21.679><c>một </c><00:01:21.919><c>lệnh </c><00:01:22.159><c>terminal </c><00:01:22.399><c>cài </c><00:01:22.639><c>đặt</c>
+
+00:01:23.030 --> 00:01:23.040 align:start position:0%
+chạy một lệnh terminal cài đặt
+ 
+
+00:01:23.040 --> 00:01:24.390 align:start position:0%
+chạy một lệnh terminal cài đặt
+các <00:01:23.177><c>phụ </c><00:01:23.314><c>thuộc </c><00:01:23.451><c>vào </c><00:01:23.588><c>hình </c><00:01:23.725><c>ảnh </c><00:01:23.862><c>của </c><00:01:23.999><c>bạn.</c>
+
+00:01:24.390 --> 00:01:24.400 align:start position:0%
+các phụ thuộc vào hình ảnh của bạn.
+ 
+
+00:01:24.400 --> 00:01:26.149 align:start position:0%
+các phụ thuộc vào hình ảnh của bạn.
+Bạn <00:01:24.538><c>có </c><00:01:24.676><c>thể </c><00:01:24.814><c>thiết </c><00:01:24.952><c>lập </c><00:01:25.090><c>các </c><00:01:25.228><c>biến </c><00:01:25.366><c>môi </c><00:01:25.504><c>trường </c><00:01:25.642><c>và </c><00:01:25.780><c>thực </c><00:01:25.918><c>hiện</c>
+
+00:01:26.149 --> 00:01:26.159 align:start position:0%
+Bạn có thể thiết lập các biến môi trường và thực hiện
+ 
+
+00:01:26.159 --> 00:01:27.670 align:start position:0%
+Bạn có thể thiết lập các biến môi trường và thực hiện
+tất <00:01:26.341><c>cả </c><00:01:26.523><c>các </c><00:01:26.705><c>loại </c><00:01:26.887><c>việc </c><00:01:27.069><c>khác. </c><00:01:27.251><c>Cuối </c><00:01:27.433><c>cùng,</c>
+
+00:01:27.670 --> 00:01:27.680 align:start position:0%
+tất cả các loại việc khác. Cuối cùng,
+ 
+
+00:01:27.680 --> 00:01:29.350 align:start position:0%
+tất cả các loại việc khác. Cuối cùng,
+bạn <00:01:27.850><c>sẽ </c><00:01:28.020><c>thiết </c><00:01:28.190><c>lập </c><00:01:28.360><c>một </c><00:01:28.530><c>lệnh </c><00:01:28.700><c>mặc </c><00:01:28.870><c>định </c><00:01:29.040><c>được</c>
+
+00:01:29.350 --> 00:01:29.360 align:start position:0%
+bạn sẽ thiết lập một lệnh mặc định được
+ 
+
+00:01:29.360 --> 00:01:30.789 align:start position:0%
+bạn sẽ thiết lập một lệnh mặc định được
+thực <00:01:29.586><c>thi </c><00:01:29.812><c>khi </c><00:01:30.038><c>bạn </c><00:01:30.264><c>khởi </c><00:01:30.490><c>động </c><00:01:30.716><c>một</c>
+
+00:01:30.789 --> 00:01:30.799 align:start position:0%
+thực thi khi bạn khởi động một
+ 
+
+00:01:30.799 --> 00:01:31.429 align:start position:0%
+thực thi khi bạn khởi động một
+container
+
+00:01:31.429 --> 00:01:31.439 align:start position:0%
+container
+ 
+
+00:01:31.439 --> 00:01:33.270 align:start position:0%
+container
+và <00:01:31.579><c>bây </c><00:01:31.719><c>giờ </c><00:01:31.859><c>chúng </c><00:01:31.999><c>ta </c><00:01:32.139><c>có </c><00:01:32.279><c>thể </c><00:01:32.419><c>tạo </c><00:01:32.559><c>tệp </c><00:01:32.699><c>hình </c><00:01:32.839><c>ảnh </c><00:01:32.979><c>bằng </c><00:01:33.119><c>cách</c>
+
+00:01:33.270 --> 00:01:33.280 align:start position:0%
+và bây giờ chúng ta có thể tạo tệp hình ảnh bằng cách
+ 
+
+00:01:33.280 --> 00:01:34.870 align:start position:0%
+và bây giờ chúng ta có thể tạo tệp hình ảnh bằng cách
+chạy <00:01:33.800><c>lệnh </c><00:01:34.320><c>`docker-build`.</c>
+
+00:01:34.870 --> 00:01:34.880 align:start position:0%
+chạy lệnh `docker-build`.
+ 
+
+00:01:34.880 --> 00:01:36.310 align:start position:0%
+chạy lệnh `docker-build`.
+Nó <00:01:34.981><c>sẽ </c><00:01:35.082><c>thực </c><00:01:35.183><c>hiện </c><00:01:35.284><c>từng </c><00:01:35.385><c>bước </c><00:01:35.486><c>trong </c><00:01:35.587><c>tệp </c><00:01:35.688><c>Docker </c><00:01:35.789><c>của </c><00:01:35.890><c>chúng </c><00:01:35.991><c>ta</c>
+
+00:01:36.310 --> 00:01:36.320 align:start position:0%
+Nó sẽ thực hiện từng bước trong tệp Docker của chúng ta
+ 
+
+00:01:36.320 --> 00:01:38.630 align:start position:0%
+Nó sẽ thực hiện từng bước trong tệp Docker của chúng ta
+để <00:01:36.571><c>xây </c><00:01:36.822><c>dựng </c><00:01:37.073><c>hình </c><00:01:37.324><c>ảnh </c><00:01:37.575><c>từng </c><00:01:37.826><c>lớp </c><00:01:38.077><c>một.</c>
+
+00:01:38.630 --> 00:01:38.640 align:start position:0%
+để xây dựng hình ảnh từng lớp một.
+ 
+
+00:01:38.640 --> 00:01:40.390 align:start position:0%
+để xây dựng hình ảnh từng lớp một.
+Sau <00:01:38.763><c>đó, </c><00:01:38.886><c>chúng </c><00:01:39.009><c>ta </c><00:01:39.132><c>có </c><00:01:39.255><c>thể </c><00:01:39.378><c>đưa </c><00:01:39.501><c>hình </c><00:01:39.624><c>ảnh </c><00:01:39.747><c>này </c><00:01:39.870><c>vào </c><00:01:39.993><c>hoạt </c><00:01:40.116><c>động </c><00:01:40.239><c>như</c>
+
+00:01:40.390 --> 00:01:40.400 align:start position:0%
+Sau đó, chúng ta có thể đưa hình ảnh này vào hoạt động như
+ 
+
+00:01:40.400 --> 00:01:42.550 align:start position:0%
+Sau đó, chúng ta có thể đưa hình ảnh này vào hoạt động như
+một <00:01:40.780><c>container </c><00:01:41.160><c>bằng </c><00:01:41.540><c>lệnh </c><00:01:41.920><c>`docker-run`.</c>
+
+00:01:42.550 --> 00:01:42.560 align:start position:0%
+một container bằng lệnh `docker-run`.
+ 
+
+00:01:42.560 --> 00:01:44.310 align:start position:0%
+một container bằng lệnh `docker-run`.
+Khi <00:01:42.705><c>ứng </c><00:01:42.850><c>dụng </c><00:01:42.995><c>của </c><00:01:43.140><c>bạn </c><00:01:43.285><c>yêu </c><00:01:43.430><c>cầu </c><00:01:43.575><c>nhiều </c><00:01:43.720><c>tài </c><00:01:43.865><c>nguyên </c><00:01:44.010><c>hơn, </c><00:01:44.155><c>bạn</c>
+
+00:01:44.310 --> 00:01:44.320 align:start position:0%
+Khi ứng dụng của bạn yêu cầu nhiều tài nguyên hơn, bạn
+ 
+
+00:01:44.320 --> 00:01:46.230 align:start position:0%
+Khi ứng dụng của bạn yêu cầu nhiều tài nguyên hơn, bạn
+có <00:01:44.537><c>thể </c><00:01:44.754><c>chạy </c><00:01:44.971><c>nó </c><00:01:45.188><c>trên </c><00:01:45.405><c>nhiều </c><00:01:45.622><c>máy, </c><00:01:45.839><c>nhiều</c>
+
+00:01:46.230 --> 00:01:46.240 align:start position:0%
+có thể chạy nó trên nhiều máy, nhiều
+ 
+
+00:01:46.240 --> 00:01:47.510 align:start position:0%
+có thể chạy nó trên nhiều máy, nhiều
+đám <00:01:46.426><c>mây, </c><00:01:46.612><c>tại </c><00:01:46.798><c>chỗ</c>
+
+00:01:47.510 --> 00:01:47.520 align:start position:0%
+đám mây, tại chỗ
+ 
+
+00:01:47.520 --> 00:01:49.590 align:start position:0%
+đám mây, tại chỗ
+hoặc <00:01:47.686><c>bất </c><00:01:47.852><c>cứ </c><00:01:48.018><c>nơi </c><00:01:48.184><c>nào </c><00:01:48.350><c>bạn </c><00:01:48.516><c>muốn </c><00:01:48.682><c>một </c><00:01:48.848><c>cách </c><00:01:49.014><c>đáng </c><00:01:49.180><c>tin </c><00:01:49.346><c>cậy. </c><00:01:49.512><c>Đây</c>
+
+00:01:49.590 --> 00:01:49.600 align:start position:0%
+hoặc bất cứ nơi nào bạn muốn một cách đáng tin cậy. Đây
+ 
+
+00:01:49.600 --> 00:01:51.350 align:start position:0%
+hoặc bất cứ nơi nào bạn muốn một cách đáng tin cậy. Đây
+là <00:01:49.920><c>Docker </c><00:01:50.240><c>trong </c><00:01:50.560><c>100 </c><00:01:50.880><c>giây.</c>
+
+00:01:51.350 --> 00:01:51.360 align:start position:0%
+là Docker trong 100 giây.
+ 
+
+00:01:51.360 --> 00:01:52.950 align:start position:0%
+là Docker trong 100 giây.
+Nếu <00:01:51.613><c>bạn </c><00:01:51.866><c>thích, </c><00:01:52.119><c>hãy </c><00:01:52.372><c>nhớ </c><00:01:52.625><c>like </c><00:01:52.878><c>và</c>
+
+00:01:52.950 --> 00:01:52.960 align:start position:0%
+Nếu bạn thích, hãy nhớ like và
+ 
+
+00:01:52.960 --> 00:01:54.870 align:start position:0%
+Nếu bạn thích, hãy nhớ like và
+đăng <00:01:53.160><c>ký </c><00:01:53.360><c>và </c><00:01:53.560><c>hãy </c><00:01:53.760><c>theo </c><00:01:53.960><c>dõi </c><00:01:54.160><c>để </c><00:01:54.360><c>có </c><00:01:54.560><c>thêm</c>
+
+00:01:54.870 --> 00:01:54.880 align:start position:0%
+đăng ký và hãy theo dõi để có thêm
+ 
+
+00:01:54.880 --> 00:01:56.630 align:start position:0%
+đăng ký và hãy theo dõi để có thêm
+nội <00:01:55.039><c>dung </c><00:01:55.198><c>Docker </c><00:01:55.357><c>sắp </c><00:01:55.516><c>ra </c><00:01:55.675><c>mắt </c><00:01:55.834><c>trên </c><00:01:55.993><c>kênh </c><00:01:56.152><c>này.</c>
+
+00:01:56.630 --> 00:01:56.640 align:start position:0%
+nội dung Docker sắp ra mắt trên kênh này.
+ 
+
+00:01:56.640 --> 00:01:58.389 align:start position:0%
+nội dung Docker sắp ra mắt trên kênh này.
+Cảm <00:01:56.808><c>ơn </c><00:01:56.976><c>đã </c><00:01:57.144><c>xem </c><00:01:57.312><c>và </c><00:01:57.480><c>hẹn </c><00:01:57.648><c>gặp </c><00:01:57.816><c>lại </c><00:01:57.984><c>các </c><00:01:58.152><c>bạn</c>
+
+00:01:58.389 --> 00:01:58.399 align:start position:0%
+Cảm ơn đã xem và hẹn gặp lại các bạn
+ 
+
+00:01:58.399 --> 00:02:08.320 align:start position:0%
+Cảm ơn đã xem và hẹn gặp lại các bạn
+trong <00:02:00.706><c>video!  </c><00:02:03.013><c>tiếp </c><00:02:05.320><c>theo</c>
+
