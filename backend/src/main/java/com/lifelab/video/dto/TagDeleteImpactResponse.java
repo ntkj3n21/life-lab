@@ -3,5 +3,9 @@ package com.lifelab.video.dto;
 public record TagDeleteImpactResponse(
         Long tagId,
         long libraryVideoCountToDetach,
-        boolean libraryVideosPreserved) {
+        long noteCountToDetach,
+        long taskCountToDetach,
+        boolean libraryVideosPreserved,
+        boolean notesPreserved,
+        boolean tasksPreserved) {
 }

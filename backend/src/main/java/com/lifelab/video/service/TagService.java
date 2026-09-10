@@ -12,6 +12,8 @@ import com.lifelab.auth.domain.Account;
 import com.lifelab.auth.repository.AccountRepository;
 import com.lifelab.common.exception.UnauthenticatedException;
 import com.lifelab.common.persistence.DatabaseConstraintMatcher;
+import com.lifelab.note.repository.NoteTagRepository;
+import com.lifelab.task.repository.TaskTagRepository;
 import com.lifelab.video.domain.LibraryVideo;
 import com.lifelab.video.domain.LibraryVideoTag;
 import com.lifelab.video.domain.Tag;
@@ -36,6 +38,8 @@ public class TagService {
     private final TagRepository tagRepository;
     private final LibraryVideoRepository libraryVideoRepository;
     private final LibraryVideoTagRepository libraryVideoTagRepository;
+    private final NoteTagRepository noteTagRepository;
+    private final TaskTagRepository taskTagRepository;
     private final TagNameNormalizer tagNameNormalizer;
     private final Clock clock;
 
@@ -44,12 +48,16 @@ public class TagService {
             TagRepository tagRepository,
             LibraryVideoRepository libraryVideoRepository,
             LibraryVideoTagRepository libraryVideoTagRepository,
+            NoteTagRepository noteTagRepository,
+            TaskTagRepository taskTagRepository,
             TagNameNormalizer tagNameNormalizer,
             Clock clock) {
         this.accountRepository = accountRepository;
         this.tagRepository = tagRepository;
         this.libraryVideoRepository = libraryVideoRepository;
         this.libraryVideoTagRepository = libraryVideoTagRepository;
+        this.noteTagRepository = noteTagRepository;
+        this.taskTagRepository = taskTagRepository;
         this.tagNameNormalizer = tagNameNormalizer;
         this.clock = clock;
     }
@@ -181,6 +189,10 @@ public class TagService {
         return new TagDeleteImpactResponse(
                 tag.getId(),
                 libraryVideoTagRepository.countByTag_Id(tag.getId()),
+                noteTagRepository.countByTag_Id(tag.getId()),
+                taskTagRepository.countByTag_Id(tag.getId()),
+                true,
+                true,
                 true);
     }
 

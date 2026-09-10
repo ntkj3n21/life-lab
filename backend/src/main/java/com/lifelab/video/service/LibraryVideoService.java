@@ -27,6 +27,7 @@ import com.lifelab.video.domain.LibraryVideo;
 import com.lifelab.video.domain.YouTubeVideo;
 import com.lifelab.video.dto.AddLibraryVideoRequest;
 import com.lifelab.video.dto.LibraryVideoDeleteImpactResponse;
+import com.lifelab.video.dto.LibraryVideoNeighborsResponse;
 import com.lifelab.video.dto.LibraryVideoResponse;
 import com.lifelab.video.dto.UpdateLibraryVideoRequest;
 import com.lifelab.video.exception.LibraryVideoAlreadyExistsException;
@@ -151,57 +152,19 @@ public class LibraryVideoService {
         PageRequest pageRequest =
                 PageRequest.of(page, size);
 
-        String keyword =
-                SearchKeywordNormalizer.normalize(query);
-
-        List<Long> validatedTagIds =
-                validateTagIds(accountId, tagIds);
-
         Specification<LibraryVideo> specification =
-                LibraryVideoSpecifications.ownedBy(accountId);
-
-        if (keyword != null) {
-            specification = specification.and(
-                    LibraryVideoSpecifications.keywordContains(keyword));
-        }
-
-        if (minDurationSeconds != null || maxDurationSeconds != null) {
-            specification = specification.and(
-                    LibraryVideoSpecifications.durationBetween(
-                            minDurationSeconds,
-                            maxDurationSeconds));
-        }
-
-        if (publishedFrom != null || publishedTo != null) {
-            specification = specification.and(
-                    LibraryVideoSpecifications.publishedBetween(
-                            publishedFrom,
-                            publishedTo));
-        }
-
-        if (addedFrom != null || addedTo != null) {
-            specification = specification.and(
-                    LibraryVideoSpecifications.addedBetween(
-                            addedFrom,
-                            addedTo));
-        }
-
-        if (!validatedTagIds.isEmpty()) {
-            specification = specification.and(
-                    LibraryVideoSpecifications.hasAnyTagId(validatedTagIds));
-        }
-
-        if (watched != null) {
-            specification = specification.and(
-                    LibraryVideoSpecifications.watched(watched));
-        }
-
-        if (hasNotes != null) {
-            specification = specification.and(
-                    LibraryVideoSpecifications.hasNotes(
-                            accountId,
-                            hasNotes));
-        }
+                buildLibraryMembershipSpecification(
+                        accountId,
+                        query,
+                        minDurationSeconds,
+                        maxDurationSeconds,
+                        publishedFrom,
+                        publishedTo,
+                        addedFrom,
+                        addedTo,
+                        tagIds,
+                        watched,
+                        hasNotes);
 
         specification = specification.and(
                 LibraryVideoSpecifications.orderedBy(
@@ -218,6 +181,87 @@ public class LibraryVideoService {
                 videos.map(video -> toResponse(video, watchStats.get(video.getId())));
 
         return PagedResponse.from(result);
+    }
+
+    @Transactional(readOnly = true)
+    public LibraryVideoNeighborsResponse getNeighbors(
+            Long accountId,
+            Long libraryVideoId,
+            String query,
+            Integer minDurationSeconds,
+            Integer maxDurationSeconds,
+            LocalDate publishedFrom,
+            LocalDate publishedTo,
+            LocalDate addedFrom,
+            LocalDate addedTo,
+            List<Long> tagIds,
+            Boolean watched,
+            Boolean hasNotes,
+            String sortBy,
+            String sortDirection) {
+        LibraryVideo target = findOwnedVideo(accountId, libraryVideoId);
+
+        Specification<LibraryVideo> membership =
+                buildLibraryMembershipSpecification(
+                        accountId,
+                        query,
+                        minDurationSeconds,
+                        maxDurationSeconds,
+                        publishedFrom,
+                        publishedTo,
+                        addedFrom,
+                        addedTo,
+                        tagIds,
+                        watched,
+                        hasNotes);
+
+        boolean targetMatches = libraryVideoRepository.exists(
+                membership.and(LibraryVideoSpecifications.hasId(libraryVideoId)));
+
+        if (!targetMatches) {
+            return new LibraryVideoNeighborsResponse(null, null);
+        }
+
+        LibraryVideoWatchStatsProjection targetStats =
+                loadWatchStats(accountId, List.of(target)).get(target.getId());
+        long targetViewCount = targetStats == null || targetStats.getViewCount() == null
+                ? 0L
+                : targetStats.getViewCount();
+        OffsetDateTime targetLastWatchedAt = targetStats == null
+                ? null
+                : targetStats.getLastWatchedAt();
+        boolean ascending = "asc".equals(sortDirection);
+
+        LibraryVideo previous = findNeighbor(
+                membership,
+                target,
+                targetViewCount,
+                targetLastWatchedAt,
+                sortBy,
+                ascending,
+                true);
+        LibraryVideo next = findNeighbor(
+                membership,
+                target,
+                targetViewCount,
+                targetLastWatchedAt,
+                sortBy,
+                ascending,
+                false);
+
+        List<LibraryVideo> neighbors = new java.util.ArrayList<>(2);
+        if (previous != null) {
+            neighbors.add(previous);
+        }
+        if (next != null) {
+            neighbors.add(next);
+        }
+        Map<Long, LibraryVideoWatchStatsProjection> watchStats =
+                loadWatchStats(accountId, neighbors);
+
+        return new LibraryVideoNeighborsResponse(
+                previous == null ? null : toResponse(previous, watchStats.get(previous.getId())),
+                next == null ? null : toResponse(next, watchStats.get(next.getId())));
     }
 
     @Transactional(readOnly = true)
@@ -303,6 +347,79 @@ public class LibraryVideoService {
                 .collect(Collectors.toMap(
                         LibraryVideoWatchStatsProjection::getLibraryVideoId,
                         stats -> stats));
+    }
+
+    private Specification<LibraryVideo> buildLibraryMembershipSpecification(
+            Long accountId,
+            String query,
+            Integer minDurationSeconds,
+            Integer maxDurationSeconds,
+            LocalDate publishedFrom,
+            LocalDate publishedTo,
+            LocalDate addedFrom,
+            LocalDate addedTo,
+            List<Long> tagIds,
+            Boolean watched,
+            Boolean hasNotes) {
+        String keyword = SearchKeywordNormalizer.normalize(query);
+        List<Long> validatedTagIds = validateTagIds(accountId, tagIds);
+        Specification<LibraryVideo> specification =
+                LibraryVideoSpecifications.ownedBy(accountId);
+
+        if (keyword != null) {
+            specification = specification.and(
+                    LibraryVideoSpecifications.keywordContains(keyword));
+        }
+        if (minDurationSeconds != null || maxDurationSeconds != null) {
+            specification = specification.and(
+                    LibraryVideoSpecifications.durationBetween(
+                            minDurationSeconds,
+                            maxDurationSeconds));
+        }
+        if (publishedFrom != null || publishedTo != null) {
+            specification = specification.and(
+                    LibraryVideoSpecifications.publishedBetween(
+                            publishedFrom,
+                            publishedTo));
+        }
+        if (addedFrom != null || addedTo != null) {
+            specification = specification.and(
+                    LibraryVideoSpecifications.addedBetween(addedFrom, addedTo));
+        }
+        if (!validatedTagIds.isEmpty()) {
+            specification = specification.and(
+                    LibraryVideoSpecifications.hasAnyTagId(validatedTagIds));
+        }
+        if (watched != null) {
+            specification = specification.and(
+                    LibraryVideoSpecifications.watched(watched));
+        }
+        if (hasNotes != null) {
+            specification = specification.and(
+                    LibraryVideoSpecifications.hasNotes(accountId, hasNotes));
+        }
+
+        return specification;
+    }
+
+    private LibraryVideo findNeighbor(
+            Specification<LibraryVideo> membership,
+            LibraryVideo target,
+            long targetViewCount,
+            OffsetDateTime targetLastWatchedAt,
+            String sortBy,
+            boolean ascending,
+            boolean previous) {
+        return libraryVideoRepository.findBy(
+                        membership.and(LibraryVideoSpecifications.adjacentTo(
+                                target,
+                                targetViewCount,
+                                targetLastWatchedAt,
+                                sortBy,
+                                ascending,
+                                previous)),
+                        query -> query.limit(1).first())
+                .orElse(null);
     }
 
     private LibraryVideoResponse toResponse(

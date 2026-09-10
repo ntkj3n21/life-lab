@@ -540,7 +540,7 @@ export function NoteDetailPage() {
                   size={14}
                   aria-hidden="true"
                 />
-                Open source
+                Go to video
               </button>
 
               <button

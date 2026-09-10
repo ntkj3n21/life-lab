@@ -9,15 +9,25 @@ export function formatTime(
       ),
     );
 
+  const hours =
+    Math.floor(
+      secondsValue / 3600,
+    );
+
   const minutes =
     Math.floor(
-      secondsValue / 60,
+      (secondsValue % 3600) / 60,
     );
 
   const seconds =
     secondsValue % 60;
 
-  return `${minutes}:${seconds
-    .toString()
-    .padStart(2, "0")}`;
+  const formattedMinutes =
+    minutes.toString().padStart(2, "0");
+  const formattedSeconds =
+    seconds.toString().padStart(2, "0");
+
+  return hours > 0
+    ? `${hours}:${formattedMinutes}:${formattedSeconds}`
+    : `${minutes}:${formattedSeconds}`;
 }

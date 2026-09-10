@@ -14,6 +14,8 @@ public interface TaskRepository extends JpaRepository<Task, Long>, JpaSpecificat
 
     long countByAccount_IdAndSourceNote_Id(Long accountId, Long noteId);
 
+    long countByAccount_IdAndCategory_Id(Long accountId, Long categoryId);
+
     List<Task> findAllByAccount_IdAndSourceNote_Id(Long accountId, Long noteId);
 
     Optional<Task> findByIdAndAccount_Id(Long taskId, Long accountId);

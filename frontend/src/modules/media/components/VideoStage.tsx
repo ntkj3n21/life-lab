@@ -34,6 +34,8 @@ interface VideoStageProps {
   onCloseVideo: () => void;
 
   onTimeUpdate: (timestamp: number) => void;
+  onPlayerReady: (initialTimestamp?: number) => void;
+  onSeeked: (timestamp: number) => void;
   onPlaying: () => void;
   onPause: () => void;
   onWaiting: () => void;
@@ -59,6 +61,8 @@ export function VideoStage({
   onOpenVideo,
   onCloseVideo,
   onTimeUpdate,
+  onPlayerReady,
+  onSeeked,
   onPlaying,
   onPause,
   onWaiting,
@@ -230,10 +234,14 @@ export function VideoStage({
           </div>
         ) : (
           <EmbedVideoPlayer
+            key={activeVideo.id}
             title={displayTitle}
             url={activeVideo.youtubeSource.sourceUrl}
             playerRef={playerRef}
             onTimeUpdate={onTimeUpdate}
+            initialTimestamp={timestamp}
+            onPlayerReady={onPlayerReady}
+            onSeeked={onSeeked}
             onPlaying={onPlaying}
             onPause={onPause}
             onWaiting={onWaiting}

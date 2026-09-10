@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.lifelab.note.exception.InvalidNoteRequestException;
 import com.lifelab.note.exception.NoteNotFoundException;
+import com.lifelab.organization.category.exception.CategoryAlreadyExistsException;
+import com.lifelab.organization.category.exception.CategoryNotFoundException;
 import com.lifelab.task.exception.InvalidTaskFilterException;
 import com.lifelab.task.exception.TaskNotFoundException;
 import com.lifelab.video.exception.LibraryVideoAlreadyExistsException;
@@ -122,6 +124,16 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(TagAlreadyExistsException.class)
     public ResponseEntity<ApiError> handleTagAlreadyExists(TagAlreadyExistsException exception) {
         return businessError(HttpStatus.CONFLICT, "TAG_ALREADY_EXISTS", exception.getMessage());
+    }
+
+    @ExceptionHandler(CategoryNotFoundException.class)
+    public ResponseEntity<ApiError> handleCategoryNotFound(CategoryNotFoundException exception) {
+        return businessError(HttpStatus.NOT_FOUND, "CATEGORY_NOT_FOUND", exception.getMessage());
+    }
+
+    @ExceptionHandler(CategoryAlreadyExistsException.class)
+    public ResponseEntity<ApiError> handleCategoryAlreadyExists(CategoryAlreadyExistsException exception) {
+        return businessError(HttpStatus.CONFLICT, "CATEGORY_ALREADY_EXISTS", exception.getMessage());
     }
 
     @ExceptionHandler(InvalidLibraryFilterException.class)

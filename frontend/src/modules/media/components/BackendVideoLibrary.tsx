@@ -15,6 +15,7 @@ import { useLibraryStore } from "../../../stores/libraryStore";
 import { useTagStore } from "../../../stores/tagStore";
 import {
   getLibraryVideoDisplayTitle,
+  type LibraryNavigationQuery,
   type LibraryQuery,
   type LibraryVideo,
   type LibraryVideoDeleteImpact,
@@ -41,6 +42,11 @@ interface BackendVideoLibraryProps {
 
   onOpenVideo: (
     video: LibraryVideo,
+    navigationQuery: LibraryNavigationQuery,
+  ) => void;
+
+  onNavigationQueryChange: (
+    navigationQuery: LibraryNavigationQuery,
   ) => void;
 
   onVideoDeleted?: (
@@ -54,10 +60,7 @@ interface PendingVideoDelete {
 }
 
 type AppliedLibraryQuery =
-  Omit<
-    LibraryQuery,
-    "page" | "size"
-  >;
+  LibraryNavigationQuery;
 
 const DEFAULT_APPLIED_QUERY:
   AppliedLibraryQuery = {
@@ -406,6 +409,7 @@ function getAppliedFilterItems(
 export function BackendVideoLibrary({
   activeVideoId,
   onOpenVideo,
+  onNavigationQueryChange,
   onVideoDeleted,
 }: BackendVideoLibraryProps) {
   const videos =
@@ -626,6 +630,19 @@ export function BackendVideoLibrary({
   }, [
     loadLibrary,
     loadTags,
+  ]);
+
+  useEffect(() => {
+    onNavigationQueryChange(
+      applyViewMode(
+        appliedQuery,
+        viewMode,
+      ),
+    );
+  }, [
+    appliedQuery,
+    viewMode,
+    onNavigationQueryChange,
   ]);
 
   function buildAppliedQuery(
@@ -1495,7 +1512,13 @@ export function BackendVideoLibrary({
               onVideoAdded={(video) => {
                 setActiveMenuVideoId(null);
                 setIsAddFormOpen(false);
-                onOpenVideo(video);
+                onOpenVideo(
+                  video,
+                  applyViewMode(
+                    appliedQuery,
+                    viewMode,
+                  ),
+                );
                 void loadLibrary(buildAppliedQuery(0)).catch(() => {});
               }}
             />
@@ -1738,7 +1761,13 @@ export function BackendVideoLibrary({
                 }
                 onOpen={(targetVideo) => {
                   setActiveMenuVideoId(null);
-                  onOpenVideo(targetVideo);
+                  onOpenVideo(
+                    targetVideo,
+                    applyViewMode(
+                      appliedQuery,
+                      viewMode,
+                    ),
+                  );
                 }}
                 onUpdate={
                   handleUpdateVideo

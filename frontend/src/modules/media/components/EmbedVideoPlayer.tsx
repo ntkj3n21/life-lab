@@ -1,4 +1,5 @@
 import ReactPlayer from "react-player";
+import { useState } from "react";
 
 interface EmbedVideoPlayerProps {
   title: string;
@@ -8,6 +9,9 @@ interface EmbedVideoPlayerProps {
 
   onTimeUpdate: (timestamp: number) => void;
 
+  initialTimestamp?: number;
+  onPlayerReady?: (initialTimestamp?: number) => void;
+  onSeeked?: (timestamp: number) => void;
   onPlaying?: () => void;
   onPause?: () => void;
   onWaiting?: () => void;
@@ -19,20 +23,70 @@ export function EmbedVideoPlayer({
   url,
   playerRef,
   onTimeUpdate,
+  initialTimestamp,
+  onPlayerReady,
+  onSeeked,
   onPlaying,
   onPause,
   onWaiting,
   onEnded,
 }: EmbedVideoPlayerProps) {
+  /*
+   * Keep the mount-time context stable. YouTube can use
+   * this as its initial cue position without a later
+   * paused-player seek, which otherwise briefly starts
+   * playback before pausing again.
+   */
+  const [mountTimestamp] =
+    useState<number | undefined>(
+      initialTimestamp,
+    );
+
+  const playbackStart =
+    typeof mountTimestamp === "number" &&
+    mountTimestamp > 0
+      ? mountTimestamp
+      : undefined;
+
+  const [playbackUrl] = useState(() => {
+    if (playbackStart === undefined) {
+      return url;
+    }
+
+    const separator = url.includes("?")
+      ? "&"
+      : "?";
+
+    return `${url}${separator}t=${playbackStart}s`;
+  });
+
   return (
     <div className="aspect-video w-full max-h-[68vh] overflow-hidden rounded-3xl border border-(--border) bg-black shadow-2xl">
       <ReactPlayer
         ref={playerRef}
-        src={url}
+        src={playbackUrl}
         title={title}
         controls
         width="100%"
         height="100%"
+        onLoadedMetadata={() =>
+          onPlayerReady?.(
+            mountTimestamp,
+          )
+        }
+        onSeeked={() => {
+          const currentTime =
+            playerRef.current?.currentTime;
+
+          if (
+            typeof currentTime !== "number" ||
+            !Number.isFinite(currentTime)
+          ) {
+            return;
+          }
+
+          onSeeked?.(currentTime);
+        }}
         onPlaying={onPlaying}
         onPause={onPause}
         onWaiting={onWaiting}

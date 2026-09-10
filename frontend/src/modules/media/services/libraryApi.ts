@@ -95,6 +95,17 @@ export interface LibraryQuery {
   sortDirection?: "asc" | "desc";
 }
 
+export type LibraryNavigationQuery =
+  Omit<
+    LibraryQuery,
+    "page" | "size"
+  >;
+
+export interface LibraryVideoNeighbors {
+  previous: LibraryVideo | null;
+  next: LibraryVideo | null;
+}
+
 function buildLibraryQuery(
   query: LibraryQuery = {},
 ) {
@@ -293,5 +304,16 @@ export function getLibraryVideoDisplayTitle(
     video.customTitle?.trim() ||
     video.youtubeSource.title?.trim() ||
     "YouTube video"
+  );
+}
+
+export function getLibraryVideoNeighbors(
+  libraryVideoId: number,
+  query: LibraryNavigationQuery = {},
+) {
+  return apiGet<LibraryVideoNeighbors>(
+    `/api/library/videos/${libraryVideoId}/neighbors${buildLibraryQuery(
+      query,
+    )}`,
   );
 }

@@ -516,7 +516,7 @@ export function TaskCard({
                         size={13}
                         aria-hidden="true"
                       />
-                      View source
+                      Go to source
                     </button>
                   )}
 
@@ -711,7 +711,7 @@ export function TaskCard({
                   }
                   aria-label={
                     isWorkspace
-                      ? `View source for task ${task.title}`
+                      ? `Go to source for task ${task.title}`
                       : undefined
                   }
                   className={
@@ -719,7 +719,7 @@ export function TaskCard({
                       ? "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-(--border) text-(--text-muted) hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40 xl:h-8 xl:w-8"
                       : "flex shrink-0 items-center gap-1 rounded-lg border border-(--border) px-2 py-1.5 text-xs text-(--text-muted) hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
                   }
-                  title="View original source"
+                  title="Go to source"
                 >
                   <ExternalLink
                     size={12}
@@ -727,7 +727,7 @@ export function TaskCard({
                   />
 
                   {!isWorkspace &&
-                    "Source"}
+                    "Go to source"}
                 </button>
               )}
 

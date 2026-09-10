@@ -842,7 +842,7 @@ export function TaskDetailPage() {
                         size={14}
                         aria-hidden="true"
                       />
-                      Open source
+                      Go to source
                     </button>
                   </div>
                 </>

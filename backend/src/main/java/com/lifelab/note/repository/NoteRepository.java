@@ -15,6 +15,8 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
 
     long countByAccount_IdAndYoutubeSource_Id(Long accountId, Long youtubeSourceId);
 
+    long countByAccount_IdAndCategory_Id(Long accountId, Long categoryId);
+
     Optional<Note> findByIdAndAccount_Id(Long noteId, Long accountId);
 
     Page<Note> findAllByAccount_Id(Long accountId, Pageable pageable);

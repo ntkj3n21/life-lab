@@ -413,9 +413,9 @@ export function NoteCard({
                           );
                         }}
                         disabled={isMutating}
-                        aria-label={`View source for Note ${note.id}`}
+                        aria-label={`Go to video from Note ${note.id}`}
                         className="flex h-10 w-10 items-center justify-center rounded-lg text-(--text-muted) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40 xl:h-8 xl:w-8"
-                        title="View source"
+                        title="Go to video"
                       >
                         <ExternalLink
                           size={14}
@@ -559,7 +559,7 @@ export function NoteCard({
                     disabled={isMutating}
                     className="rounded-lg border border-(--border) px-2 py-1 text-xs text-(--text-secondary) hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
                   >
-                    View Source
+                    Go to video
                   </button>
 
                   {onCreateTask && (

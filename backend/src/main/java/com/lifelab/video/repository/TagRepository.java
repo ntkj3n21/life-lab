@@ -2,6 +2,7 @@ package com.lifelab.video.repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Collection;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -14,4 +15,6 @@ public interface TagRepository extends JpaRepository<Tag, Long> {
     Optional<Tag> findByAccount_IdAndNormalizedName(Long accountId, String normalizedName);
 
     List<Tag> findAllByAccount_IdOrderByNormalizedNameAscIdAsc(Long accountId);
+
+    List<Tag> findAllByAccount_IdAndIdIn(Long accountId, Collection<Long> tagIds);
 }

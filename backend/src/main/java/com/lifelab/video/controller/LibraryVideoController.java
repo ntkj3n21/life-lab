@@ -22,6 +22,7 @@ import com.lifelab.common.security.CurrentAccount;
 import com.lifelab.common.validation.PaginationValidator;
 import com.lifelab.video.dto.AddLibraryVideoRequest;
 import com.lifelab.video.dto.LibraryVideoDeleteImpactResponse;
+import com.lifelab.video.dto.LibraryVideoNeighborsResponse;
 import com.lifelab.video.dto.LibraryVideoResponse;
 import com.lifelab.video.dto.UpdateLibraryVideoRequest;
 import com.lifelab.video.exception.InvalidLibraryFilterException;
@@ -102,6 +103,46 @@ public class LibraryVideoController {
     @GetMapping("/{id}")
     public LibraryVideoResponse getVideo(@PathVariable Long id) {
         return libraryVideoService.getVideo(currentAccount.requireAccountId(), id);
+    }
+
+    @GetMapping("/{id}/neighbors")
+    public LibraryVideoNeighborsResponse getNeighbors(
+            @PathVariable Long id,
+            @RequestParam(required = false) String q,
+            @RequestParam(required = false) Integer minDurationSeconds,
+            @RequestParam(required = false) Integer maxDurationSeconds,
+            @RequestParam(required = false) LocalDate publishedFrom,
+            @RequestParam(required = false) LocalDate publishedTo,
+            @RequestParam(required = false) LocalDate addedFrom,
+            @RequestParam(required = false) LocalDate addedTo,
+            @RequestParam(required = false, name = "tagId") List<Long> tagIds,
+            @RequestParam(required = false) Boolean watched,
+            @RequestParam(required = false) Boolean hasNotes,
+            @RequestParam(required = false) String sortBy,
+            @RequestParam(required = false) String sortDirection) {
+        validateFilters(
+                minDurationSeconds,
+                maxDurationSeconds,
+                publishedFrom,
+                publishedTo,
+                addedFrom,
+                addedTo);
+
+        return libraryVideoService.getNeighbors(
+                currentAccount.requireAccountId(),
+                id,
+                q,
+                minDurationSeconds,
+                maxDurationSeconds,
+                publishedFrom,
+                publishedTo,
+                addedFrom,
+                addedTo,
+                tagIds,
+                watched,
+                hasNotes,
+                validateSortBy(sortBy),
+                validateSortDirection(sortDirection));
     }
 
     @PatchMapping("/{id}")

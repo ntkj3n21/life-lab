@@ -106,6 +106,10 @@ public final class LibraryVideoSpecifications {
         };
     }
 
+    public static Specification<LibraryVideo> hasId(Long libraryVideoId) {
+        return (root, query, builder) -> builder.equal(root.get("id"), libraryVideoId);
+    }
+
     public static Specification<LibraryVideo> orderedBy(String sortBy, boolean ascending) {
         return (root, query, builder) -> {
             if (Long.class.equals(query.getResultType()) || long.class.equals(query.getResultType())) {
@@ -140,6 +144,121 @@ public final class LibraryVideoSpecifications {
             }
             return builder.conjunction();
         };
+    }
+
+    public static Specification<LibraryVideo> adjacentTo(
+            LibraryVideo target,
+            long targetViewCount,
+            OffsetDateTime targetLastWatchedAt,
+            String sortBy,
+            boolean ascending,
+            boolean previous) {
+        return (root, query, builder) -> switch (sortBy) {
+            case "addedAt" -> adjacentToValue(
+                    root.<OffsetDateTime>get("addedAt"),
+                    target.getAddedAt(),
+                    root.get("id"),
+                    target.getId(),
+                    ascending,
+                    previous,
+                    false,
+                    query,
+                    builder);
+            case "duration" -> adjacentToValue(
+                    root.get("youtubeSource").<Integer>get("durationSeconds"),
+                    target.getYoutubeSource().getDurationSeconds(),
+                    root.get("id"),
+                    target.getId(),
+                    ascending,
+                    previous,
+                    true,
+                    query,
+                    builder);
+            case "viewCount" -> adjacentToValue(
+                    validViewCount(root, query, builder),
+                    targetViewCount,
+                    root.get("id"),
+                    target.getId(),
+                    ascending,
+                    previous,
+                    false,
+                    query,
+                    builder);
+            case "lastWatchedAt" -> adjacentToValue(
+                    lastValidWatchTime(root, query, builder),
+                    targetLastWatchedAt,
+                    root.get("id"),
+                    target.getId(),
+                    ascending,
+                    previous,
+                    true,
+                    query,
+                    builder);
+            default -> throw new IllegalArgumentException("Unsupported library video sort field");
+        };
+    }
+
+    private static <T extends Comparable<? super T>> Predicate adjacentToValue(
+            Expression<T> primary,
+            T targetPrimary,
+            Path<Long> id,
+            Long targetId,
+            boolean ascending,
+            boolean previous,
+            boolean nullsLast,
+            jakarta.persistence.criteria.CriteriaQuery<?> query,
+            jakarta.persistence.criteria.CriteriaBuilder builder) {
+        boolean greaterThanTarget = ascending != previous;
+
+        Predicate idRelative = greaterThanTarget
+                ? builder.greaterThan(id, targetId)
+                : builder.lessThan(id, targetId);
+
+        Predicate position;
+        if (targetPrimary == null) {
+            position = builder.and(builder.isNull(primary), idRelative);
+            if (previous && nullsLast) {
+                position = builder.or(builder.isNotNull(primary), position);
+            }
+        } else {
+            Predicate primaryRelative = greaterThanTarget
+                    ? builder.greaterThan(primary, targetPrimary)
+                    : builder.lessThan(primary, targetPrimary);
+            Predicate samePrimary = builder.and(
+                    builder.equal(primary, targetPrimary),
+                    idRelative);
+            position = builder.and(
+                    builder.isNotNull(primary),
+                    builder.or(primaryRelative, samePrimary));
+            if (!previous && nullsLast) {
+                position = builder.or(position, builder.isNull(primary));
+            }
+        }
+
+        if (!Long.class.equals(query.getResultType())
+                && !long.class.equals(query.getResultType())) {
+            boolean retrievalAscending = previous ? !ascending : ascending;
+            Order primaryOrder = retrievalAscending
+                    ? builder.asc(primary)
+                    : builder.desc(primary);
+            Order idOrder = retrievalAscending
+                    ? builder.asc(id)
+                    : builder.desc(id);
+
+            if (nullsLast) {
+                Expression<Integer> nullRank = builder.<Integer>selectCase()
+                        .when(builder.isNull(primary), 1)
+                        .otherwise(0);
+                Order nullOrder = previous
+                        ? builder.desc(nullRank)
+                        : builder.asc(nullRank);
+                query.orderBy(nullOrder, primaryOrder, idOrder);
+            } else {
+                query.orderBy(primaryOrder, idOrder);
+            }
+        }
+
+        return position;
     }
 
     private static Subquery<Long> validViewCount(

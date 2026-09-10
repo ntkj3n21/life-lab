@@ -1,9 +1,11 @@
 import {
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
 } from "react";
 import {
+  useLocation,
   useNavigate,
   useOutletContext,
   useParams,
@@ -16,13 +18,41 @@ import { useLibraryStore } from "../../../stores/libraryStore";
 import { useLayoutStore } from "../../../stores/layoutStore";
 import { useVideoWatchTracking } from "../hooks/useVideoWatchTracking";
 import {
+  getLibraryVideoNeighbors,
   getLibraryVideoDisplayTitle,
+  type LibraryNavigationQuery,
   type LibraryVideo,
+  type LibraryVideoNeighbors,
 } from "../services/libraryApi";
 import { BackendVideoLibrary } from "./BackendVideoLibrary";
 import { VideoStage } from "./VideoStage";
 
+const DEFAULT_LIBRARY_NAVIGATION_QUERY:
+  LibraryNavigationQuery = {
+    sortBy: "addedAt",
+    sortDirection: "desc",
+  };
+
+interface LibraryRouteState {
+  libraryNavigationQuery?:
+    LibraryNavigationQuery;
+}
+
+function getLibraryRouteState(
+  state: unknown,
+): LibraryRouteState | null {
+  if (
+    typeof state !== "object" ||
+    state === null
+  ) {
+    return null;
+  }
+
+  return state as LibraryRouteState;
+}
+
 export function VideoWorkspace() {
+  const location = useLocation();
   const navigate = useNavigate();
   const {
     isFocusMode,
@@ -58,6 +88,19 @@ export function VideoWorkspace() {
   const skipNextSeekRef =
     useRef(false);
 
+  const pendingSeekTimestampRef =
+    useRef<number | null>(null);
+
+  const synchronizedTimestampRef =
+    useRef<number | undefined>(
+      undefined,
+    );
+
+  const [
+    playerReadyVersion,
+    setPlayerReadyVersion,
+  ] = useState(0);
+
   /*
    * A detail route may point to a Video outside the
    * currently loaded Library page. Keep that exact
@@ -86,6 +129,21 @@ export function VideoWorkspace() {
     null,
   );
 
+  const [
+    resolvedVideoNeighbors,
+    setResolvedVideoNeighbors,
+  ] = useState<{
+    requestKey: string;
+    neighbors: LibraryVideoNeighbors;
+  } | null>(null);
+
+  const [
+    visibleLibraryNavigationQuery,
+    setVisibleLibraryNavigationQuery,
+  ] = useState<LibraryNavigationQuery>(
+    DEFAULT_LIBRARY_NAVIGATION_QUERY,
+  );
+
   const activeContext =
     useContextStore(
       (state) =>
@@ -108,18 +166,6 @@ export function VideoWorkspace() {
     useContextStore(
       (state) =>
         state.setTimestamp,
-    );
-
-  const increaseTimestamp =
-    useContextStore(
-      (state) =>
-        state.increaseTimestamp,
-    );
-
-  const decreaseTimestamp =
-    useContextStore(
-      (state) =>
-        state.decreaseTimestamp,
     );
 
   const videos =
@@ -166,6 +212,47 @@ export function VideoWorkspace() {
     validRouteVideoId !== null &&
     failedRouteVideoId ===
       validRouteVideoId;
+
+  const routeNavigationQuery =
+    getLibraryRouteState(
+      location.state,
+    )?.libraryNavigationQuery;
+
+  const neighborRequestKey =
+    validRouteVideoId === null
+      ? ""
+      : `${validRouteVideoId}:${JSON.stringify(
+          routeNavigationQuery ??
+            DEFAULT_LIBRARY_NAVIGATION_QUERY,
+        )}`;
+
+  /*
+   * Both /library and /library/:id render this same
+   * component. Clear the underlying Video context
+   * before the bare Library route paints so the player,
+   * summary, and right Workspace cannot retain the
+   * previously open Video.
+   */
+  useLayoutEffect(() => {
+    if (libraryVideoId !== undefined) {
+      return;
+    }
+
+    lastTrackedSecondRef.current =
+      null;
+    skipNextSeekRef.current = false;
+    pendingSeekTimestampRef.current =
+      null;
+    synchronizedTimestampRef.current =
+      undefined;
+
+    clearActiveContext();
+    exitFocusMode();
+  }, [
+    libraryVideoId,
+    clearActiveContext,
+    exitFocusMode,
+  ]);
 
   /*
    * Synchronize /library/:libraryVideoId with the
@@ -263,6 +350,49 @@ export function VideoWorkspace() {
     });
   }, [libraryVideoId]);
 
+  useEffect(() => {
+    if (validRouteVideoId === null) {
+      return;
+    }
+
+    let cancelled = false;
+
+    void getLibraryVideoNeighbors(
+      validRouteVideoId,
+      routeNavigationQuery ??
+        DEFAULT_LIBRARY_NAVIGATION_QUERY,
+    )
+      .then((neighbors) => {
+        if (!cancelled) {
+          setResolvedVideoNeighbors({
+            requestKey:
+              neighborRequestKey,
+            neighbors,
+          });
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setResolvedVideoNeighbors({
+            requestKey:
+              neighborRequestKey,
+            neighbors: {
+              previous: null,
+              next: null,
+            },
+          });
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [
+    validRouteVideoId,
+    routeNavigationQuery,
+    neighborRequestKey,
+  ]);
+
   const activeLibraryVideoId =
     activeContext
       ?.entityType ===
@@ -312,6 +442,10 @@ export function VideoWorkspace() {
           null;
         skipNextSeekRef.current =
           false;
+        pendingSeekTimestampRef.current =
+          null;
+        synchronizedTimestampRef.current =
+          undefined;
       },
     });
 
@@ -320,24 +454,23 @@ export function VideoWorkspace() {
       .availabilityStatus ===
     "UNAVAILABLE";
 
-  const activeVideoIndex =
-    activeVideo
-      ? videos.findIndex(
-          (video) =>
-            video.id === activeVideo.id,
-        )
-      : -1;
+  const videoNeighbors =
+    resolvedVideoNeighbors
+      ?.requestKey ===
+    neighborRequestKey
+      ? resolvedVideoNeighbors.neighbors
+      : {
+          previous: null,
+          next: null,
+        };
 
   const previousVideo =
-    activeVideoIndex > 0
-      ? videos[activeVideoIndex - 1]
-      : undefined;
+    videoNeighbors.previous ??
+    undefined;
 
   const nextVideo =
-    activeVideoIndex >= 0 &&
-    activeVideoIndex < videos.length - 1
-      ? videos[activeVideoIndex + 1]
-      : undefined;
+    videoNeighbors.next ??
+    undefined;
 
   /*
    * Keep context title synchronized when the user
@@ -390,6 +523,8 @@ export function VideoWorkspace() {
 
     if (
       !player ||
+      player.readyState < 1 ||
+      !activeVideo ||
       activeLibraryVideoId ===
         undefined ||
       isVideoUnavailable
@@ -410,13 +545,28 @@ export function VideoWorkspace() {
     ) {
       skipNextSeekRef.current =
         false;
+      synchronizedTimestampRef.current =
+        activeContext.timestamp;
+      return;
+    }
+
+    if (
+      synchronizedTimestampRef.current ===
+      activeContext.timestamp
+    ) {
       return;
     }
 
     try {
+      pendingSeekTimestampRef.current =
+        activeContext.timestamp;
       player.currentTime =
         activeContext.timestamp;
+      synchronizedTimestampRef.current =
+        activeContext.timestamp;
     } catch (error) {
+      pendingSeekTimestampRef.current =
+        null;
       console.error(
         "Failed to seek video timestamp:",
         error,
@@ -425,13 +575,24 @@ export function VideoWorkspace() {
   }, [
     activeContext?.entityId,
     activeContext?.timestamp,
+    activeVideo,
     activeLibraryVideoId,
+    playerReadyVersion,
     isVideoUnavailable,
   ]);
 
   async function handleOpenVideo(
     video: LibraryVideo,
+    navigationQuery?:
+      LibraryNavigationQuery,
   ) {
+    const nextNavigationQuery =
+      navigationQuery ??
+      (libraryVideoId === undefined
+        ? visibleLibraryNavigationQuery
+        : routeNavigationQuery ??
+          DEFAULT_LIBRARY_NAVIGATION_QUERY);
+
     await prepareForVideoSwitch(
       video.id,
     );
@@ -440,6 +601,10 @@ export function VideoWorkspace() {
       null;
     skipNextSeekRef.current =
       false;
+    pendingSeekTimestampRef.current =
+      null;
+    synchronizedTimestampRef.current =
+      undefined;
 
     clearWatchError();
     setRouteVideo(video);
@@ -455,9 +620,12 @@ export function VideoWorkspace() {
       timestamp: 0,
     });
 
-    navigate(
-      `/library/${video.id}`,
-    );
+    navigate(`/library/${video.id}`, {
+      state: {
+        libraryNavigationQuery:
+          nextNavigationQuery,
+      } satisfies LibraryRouteState,
+    });
   }
 
   async function handleCloseVideo() {
@@ -467,6 +635,10 @@ export function VideoWorkspace() {
       null;
     skipNextSeekRef.current =
       false;
+    pendingSeekTimestampRef.current =
+      null;
+    synchronizedTimestampRef.current =
+      undefined;
 
     setRouteVideo(null);
     clearActiveContext();
@@ -492,6 +664,10 @@ export function VideoWorkspace() {
 
     resetAfterVideoDelete();
     setRouteVideo(null);
+    pendingSeekTimestampRef.current =
+      null;
+    synchronizedTimestampRef.current =
+      undefined;
     clearActiveContext();
     exitFocusMode();
 
@@ -523,6 +699,25 @@ export function VideoWorkspace() {
       return;
     }
 
+    const pendingTimestamp =
+      pendingSeekTimestampRef.current;
+
+    if (
+      pendingTimestamp !== null
+    ) {
+      if (
+        Math.abs(
+          currentTime -
+            pendingTimestamp,
+        ) > 1
+      ) {
+        return;
+      }
+
+      pendingSeekTimestampRef.current =
+        null;
+    }
+
     const currentSecond =
       Math.floor(currentTime);
 
@@ -540,6 +735,80 @@ export function VideoWorkspace() {
     skipNextSeekRef.current = true;
 
     setTimestamp(currentTime);
+  }
+
+  function handlePlayerReady(
+    initialTimestamp?: number,
+  ) {
+    if (!activeVideo) {
+      return;
+    }
+
+    pendingSeekTimestampRef.current =
+      null;
+    synchronizedTimestampRef.current =
+      initialTimestamp;
+    setPlayerReadyVersion(
+      (version) => version + 1,
+    );
+  }
+
+  function handlePlayerSeeked(
+    currentTime: number,
+  ) {
+    const pendingTimestamp =
+      pendingSeekTimestampRef.current;
+
+    if (
+      pendingTimestamp !== null &&
+      Math.abs(
+        currentTime -
+          pendingTimestamp,
+      ) > 1
+    ) {
+      return;
+    }
+
+    pendingSeekTimestampRef.current =
+      null;
+    handleTrackVideoTime(
+      currentTime,
+    );
+  }
+
+  function handleTimestampChange(
+    seconds: number,
+  ) {
+    if (!activeVideo) {
+      return;
+    }
+
+    const currentContext =
+      useContextStore.getState()
+        .activeContext;
+
+    if (
+      currentContext?.entityType !==
+        "video" ||
+      currentContext.entityId !==
+        String(activeVideo.id)
+    ) {
+      return;
+    }
+
+    const baseTimestamp =
+      pendingSeekTimestampRef.current ??
+      currentContext.timestamp ??
+      0;
+
+    const nextTimestamp = Math.max(
+      0,
+      baseTimestamp + seconds,
+    );
+
+    pendingSeekTimestampRef.current =
+      nextTimestamp;
+    setTimestamp(nextTimestamp);
   }
 
   return (
@@ -574,6 +843,12 @@ export function VideoWorkspace() {
           onTimeUpdate={
             handleTrackVideoTime
           }
+          onPlayerReady={
+            handlePlayerReady
+          }
+          onSeeked={
+            handlePlayerSeeked
+          }
           onPlaying={
             handlePlayerPlaying
           }
@@ -584,10 +859,10 @@ export function VideoWorkspace() {
           previousVideo={previousVideo}
           nextVideo={nextVideo}
           onDecreaseTimestamp={() =>
-            decreaseTimestamp(10)
+            handleTimestampChange(-10)
           }
           onIncreaseTimestamp={() =>
-            increaseTimestamp(10)
+            handleTimestampChange(10)
           }
           onEnterFocus={
             activeVideo &&
@@ -628,10 +903,17 @@ export function VideoWorkspace() {
                 ? activeLibraryVideoId
                 : undefined
             }
-            onOpenVideo={(video) =>
+            onOpenVideo={(
+              video,
+              navigationQuery,
+            ) =>
               void handleOpenVideo(
                 video,
+                navigationQuery,
               )
+            }
+            onNavigationQueryChange={
+              setVisibleLibraryNavigationQuery
             }
             onVideoDeleted={
               handleVideoDeleted

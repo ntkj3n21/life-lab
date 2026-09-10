@@ -5,6 +5,7 @@ import java.time.OffsetDateTime;
 
 import com.lifelab.auth.domain.Account;
 import com.lifelab.note.domain.Note;
+import com.lifelab.organization.category.domain.Category;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -37,6 +38,10 @@ public class Task {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "source_note_id")
     private Note sourceNote;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -85,6 +90,7 @@ public class Task {
         Task task = new Task();
         task.account = account;
         task.sourceNote = null;
+        task.category = null;
         task.sourceStatus = TaskSourceStatus.INDEPENDENT;
         task.title = title;
         task.description = description;
@@ -111,6 +117,7 @@ public class Task {
         Task task = new Task();
         task.account = sourceNote.getAccount();
         task.sourceNote = sourceNote;
+        task.category = null;
         task.sourceStatus = TaskSourceStatus.HAS_SOURCE;
         task.title = title;
         task.description = description;
@@ -156,6 +163,14 @@ public class Task {
         this.updatedAt = now;
     }
 
+    public void changeCategory(Category category, OffsetDateTime now) {
+        if (now == null) {
+            throw new NullPointerException("now must not be null");
+        }
+        this.category = category;
+        this.updatedAt = now;
+    }
+
     public Long getId() {
         return id;
     }
@@ -166,6 +181,10 @@ public class Task {
 
     public Note getSourceNote() {
         return sourceNote;
+    }
+
+    public Category getCategory() {
+        return category;
     }
 
     public TaskSourceStatus getSourceStatus() {

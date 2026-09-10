@@ -3,6 +3,7 @@ package com.lifelab.note.domain;
 import java.time.OffsetDateTime;
 
 import com.lifelab.auth.domain.Account;
+import com.lifelab.organization.category.domain.Category;
 import com.lifelab.video.domain.YouTubeVideo;
 
 import jakarta.persistence.Column;
@@ -35,6 +36,10 @@ public class Note {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "youtube_source_id", nullable = false)
     private YouTubeVideo youtubeSource;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
 
     @NotBlank
     @Column(nullable = false, columnDefinition = "text")
@@ -77,6 +82,7 @@ public class Note {
         Note note = new Note();
         note.account = account;
         note.youtubeSource = youtubeSource;
+        note.category = null;
         note.content = content;
         note.timestampSeconds = timestampSeconds;
         note.createdAt = now;
@@ -93,6 +99,14 @@ public class Note {
         this.updatedAt = now;
     }
 
+    public void changeCategory(Category category, OffsetDateTime now) {
+        if (now == null) {
+            throw new NullPointerException("now must not be null");
+        }
+        this.category = category;
+        this.updatedAt = now;
+    }
+
     public Long getId() {
         return id;
     }
@@ -103,6 +117,10 @@ public class Note {
 
     public YouTubeVideo getYoutubeSource() {
         return youtubeSource;
+    }
+
+    public Category getCategory() {
+        return category;
     }
 
     public String getContent() {
