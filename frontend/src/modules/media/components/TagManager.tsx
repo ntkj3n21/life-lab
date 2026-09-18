@@ -2,6 +2,7 @@ import {
   Check,
   LoaderCircle,
   Pencil,
+  Plus,
   Tag as TagIcon,
   Trash2,
   X,
@@ -23,7 +24,25 @@ interface PendingTagDelete {
   impact: TagDeleteImpact;
 }
 
-export function TagManager() {
+export type TagManagerChange =
+  | {
+      type: "created" | "renamed";
+      tag: Tag;
+    }
+  | {
+      type: "deleted";
+      tag: Tag;
+    };
+
+interface TagManagerProps {
+  onChange?: (
+    change: TagManagerChange,
+  ) => void;
+}
+
+export function TagManager({
+  onChange,
+}: TagManagerProps = {}) {
   const tags = useTagStore(
     (state) => state.tags,
   );
@@ -44,6 +63,10 @@ export function TagManager() {
     (state) => state.loadTags,
   );
 
+  const createTag = useTagStore(
+    (state) => state.createTag,
+  );
+
   const renameTag = useTagStore(
     (state) => state.renameTag,
   );
@@ -59,6 +82,11 @@ export function TagManager() {
   const clearError = useTagStore(
     (state) => state.clearError,
   );
+
+  const [
+    newTagName,
+    setNewTagName,
+  ] = useState("");
 
   const [
     editingTagId,
@@ -86,6 +114,7 @@ export function TagManager() {
   ] = useState(false);
 
   const controlsBusy =
+    isLoading ||
     isMutating ||
     isPreparingDelete;
 
@@ -116,6 +145,33 @@ export function TagManager() {
     );
   }
 
+  async function handleCreate() {
+    const name =
+      newTagName.trim();
+
+    if (
+      !name ||
+      controlsBusy
+    ) {
+      return;
+    }
+
+    clearError();
+
+    try {
+      const tag =
+        await createTag(name);
+
+      setNewTagName("");
+      onChange?.({
+        type: "created",
+        tag,
+      });
+    } catch {
+      // tagStore keeps error.
+    }
+  }
+
   async function handleRename(
     tagId: number,
   ) {
@@ -130,12 +186,16 @@ export function TagManager() {
     }
 
     try {
-      await renameTag(
+      const tag = await renameTag(
         tagId,
         name,
       );
 
       cancelEditing();
+      onChange?.({
+        type: "renamed",
+        tag,
+      });
     } catch {
       // tagStore keeps error.
     }
@@ -183,6 +243,9 @@ export function TagManager() {
         pendingDelete.tag.id,
       );
 
+      const deletedTag =
+        pendingDelete.tag;
+
       if (
         editingTagId ===
         pendingDelete.tag.id
@@ -191,6 +254,10 @@ export function TagManager() {
       }
 
       setPendingDelete(null);
+      onChange?.({
+        type: "deleted",
+        tag: deletedTag,
+      });
     } catch {
       // tagStore keeps error.
     }
@@ -219,7 +286,7 @@ export function TagManager() {
               </p>
 
               <p className="text-xs text-(--text-muted)">
-                Rename or delete your tags.
+                Create, rename, or delete tags.
               </p>
             </div>
           </div>
@@ -227,6 +294,56 @@ export function TagManager() {
           <span className="rounded-full bg-(--surface) px-2 py-1 text-xs text-(--text-muted)">
             {tags.length}
           </span>
+        </div>
+
+        <div className="mt-3 flex min-w-0 gap-2">
+          <label
+            htmlFor="manager-new-tag"
+            className="sr-only"
+          >
+            New tag name
+          </label>
+
+          <input
+            id="manager-new-tag"
+            value={newTagName}
+            maxLength={100}
+            disabled={controlsBusy}
+            onChange={(event) =>
+              setNewTagName(
+                event.target.value,
+              )
+            }
+            onKeyDown={(event) => {
+              if (
+                event.key === "Enter"
+              ) {
+                event.preventDefault();
+                void handleCreate();
+              }
+            }}
+            placeholder="Create tag..."
+            className="h-10 min-w-0 flex-1 rounded-lg border border-(--border) bg-(--surface) px-2 text-xs outline-none placeholder:text-(--text-faint) focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50 xl:h-8"
+          />
+
+          <button
+            type="button"
+            disabled={
+              controlsBusy ||
+              !newTagName.trim()
+            }
+            onClick={() =>
+              void handleCreate()
+            }
+            aria-label="Create tag"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-(--border) text-(--text-muted) hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40 xl:h-8 xl:w-8"
+            title="Create tag"
+          >
+            <Plus
+              size={13}
+              aria-hidden="true"
+            />
+          </button>
         </div>
 
         {isLoading &&
@@ -421,14 +538,22 @@ export function TagManager() {
             ? `Delete tag "${pendingDelete.tag.name}"?`
             : "Delete tag?"
         }
-        description="Deleting a tag only removes the tag and its links from Library videos."
+        description="Deleting a tag removes that tag from organized items; the items themselves are preserved."
         details={
           pendingDelete
             ? [
                 `${pendingDelete.impact.libraryVideoCountToDetach} video link(s) will be detached.`,
+                `${pendingDelete.impact.noteCountToDetach} Note link(s) will be detached.`,
+                `${pendingDelete.impact.taskCountToDetach} Task link(s) will be detached.`,
                 pendingDelete.impact.libraryVideosPreserved
                   ? "Library videos will be preserved."
                   : "Library videos may be affected.",
+                pendingDelete.impact.notesPreserved
+                  ? "Notes will be preserved."
+                  : "Notes may be affected.",
+                pendingDelete.impact.tasksPreserved
+                  ? "Tasks will be preserved."
+                  : "Tasks may be affected.",
               ]
             : []
         }

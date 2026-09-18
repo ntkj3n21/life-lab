@@ -17,6 +17,14 @@ function getSectionTitle(
     return "Notes";
   }
 
+  if (
+    pathname.startsWith("/library") ||
+    pathname.startsWith("/images") ||
+    pathname.startsWith("/audio")
+  ) {
+    return "Library";
+  }
+
   if (pathname.startsWith("/tasks")) {
     return "Tasks";
   }

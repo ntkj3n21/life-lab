@@ -4,7 +4,7 @@ import {
   ListTodo,
   StickyNote,
 } from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 
 const navItems = [
   {
@@ -30,6 +30,8 @@ const navItems = [
 ] as const;
 
 export function MobileNavigation() {
+  const { pathname } = useLocation();
+
   return (
     <nav
       aria-label="Primary navigation"
@@ -46,13 +48,21 @@ export function MobileNavigation() {
             to={to}
             className={({
               isActive,
-            }) =>
+            }) => {
+              const isProductAreaActive =
+                isActive ||
+                (to === "/library" &&
+                  (pathname.startsWith("/images") ||
+                    pathname.startsWith("/audio")));
+
+              return (
               `flex h-10 shrink-0 items-center gap-2 rounded-[9px] px-3 text-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) ${
-                isActive
+                isProductAreaActive
                   ? "bg-(--surface-hover) font-medium text-(--text-primary)"
                   : "text-(--text-muted) hover:bg-(--surface) hover:text-(--text-primary)"
               }`
-            }
+              );
+            }}
           >
             <Icon
               size={15}

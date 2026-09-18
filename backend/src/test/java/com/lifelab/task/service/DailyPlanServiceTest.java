@@ -3,6 +3,7 @@ package com.lifelab.task.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.anyList;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -16,9 +17,11 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import com.lifelab.auth.domain.Account;
+import com.lifelab.organization.service.ItemOrganizationService;
 import com.lifelab.task.domain.Task;
 import com.lifelab.task.domain.TaskStatus;
 import com.lifelab.task.dto.DailyPlanResponse;
+import com.lifelab.task.dto.TaskResponse;
 import com.lifelab.task.exception.InvalidTaskFilterException;
 import com.lifelab.task.repository.TaskRepository;
 
@@ -36,7 +39,7 @@ class DailyPlanServiceTest {
         when(repository.findAllByAccount_IdOrderByCreatedAtDescIdDesc(ACCOUNT_ID))
                 .thenReturn(List.of());
 
-        DailyPlanService service = new DailyPlanService(repository, clock);
+        DailyPlanService service = new DailyPlanService(repository, organizationService(), clock);
 
         DailyPlanResponse response =
                 service.getDailyPlan(ACCOUNT_ID, "Asia/Ho_Chi_Minh");
@@ -118,7 +121,7 @@ class DailyPlanServiceTest {
                         completedFuture,
                         completedNoDeadline));
 
-        DailyPlanService service = new DailyPlanService(repository, clock);
+        DailyPlanService service = new DailyPlanService(repository, organizationService(), clock);
 
         DailyPlanResponse response =
                 service.getDailyPlan(ACCOUNT_ID, "UTC");
@@ -172,7 +175,7 @@ class DailyPlanServiceTest {
         when(repository.findAllByAccount_IdOrderByCreatedAtDescIdDesc(ACCOUNT_ID))
                 .thenReturn(List.of(task));
 
-        DailyPlanService service = new DailyPlanService(repository, clock);
+        DailyPlanService service = new DailyPlanService(repository, organizationService(), clock);
 
         DailyPlanResponse vietnam =
                 service.getDailyPlan(ACCOUNT_ID, "Asia/Ho_Chi_Minh");
@@ -202,7 +205,7 @@ class DailyPlanServiceTest {
         when(repository.findAllByAccount_IdOrderByCreatedAtDescIdDesc(ACCOUNT_ID))
                 .thenReturn(List.of());
 
-        DailyPlanService service = new DailyPlanService(repository, clock);
+        DailyPlanService service = new DailyPlanService(repository, organizationService(), clock);
 
         DailyPlanResponse response =
                 service.getDailyPlan(ACCOUNT_ID, null);
@@ -216,7 +219,7 @@ class DailyPlanServiceTest {
     void invalidOrBlankTimezoneReturnsValidationErrorData() {
         TaskRepository repository = mock(TaskRepository.class);
         Clock clock = Clock.fixed(INSTANT, ZoneOffset.UTC);
-        DailyPlanService service = new DailyPlanService(repository, clock);
+        DailyPlanService service = new DailyPlanService(repository, organizationService(), clock);
 
         for (String timeZone : List.of("", "   ", "Mars/Olympus")) {
             assertThatThrownBy(() ->
@@ -259,5 +262,16 @@ class DailyPlanServiceTest {
                 "Plan User",
                 java.time.OffsetDateTime.parse(
                         "2026-08-10T09:00:00Z"));
+    }
+
+    private ItemOrganizationService organizationService() {
+        ItemOrganizationService service = mock(ItemOrganizationService.class);
+        when(service.toTaskResponses(anyList())).thenAnswer(invocation -> {
+            List<Task> tasks = invocation.getArgument(0);
+            return tasks.stream()
+                    .map(task -> TaskResponse.from(task, List.of()))
+                    .toList();
+        });
+        return service;
     }
 }

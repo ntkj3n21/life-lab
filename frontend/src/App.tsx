@@ -15,6 +15,10 @@ import { TaskDetailPage } from "./modules/todo/pages/TaskDetailPage";
 import { TasksPage } from "./modules/todo/pages/TasksPage";
 import { NoteDetailPage } from "./modules/notes/pages/NoteDetailPage";
 import { NotesPage } from "./modules/notes/pages/NotesPage";
+import { ImageLibraryPage } from "./modules/images/pages/ImageLibraryPage";
+import { ImageWorkspacePage } from "./modules/images/pages/ImageWorkspacePage";
+import { AudioLibraryPage } from "./modules/audio/pages/AudioLibraryPage";
+import { AudioWorkspacePage } from "./modules/audio/pages/AudioWorkspacePage";
 
 function SourcePreviewRoute() {
   const { noteId } = useParams();
@@ -63,6 +67,26 @@ export default function App() {
             <Route
               path="/library/:libraryVideoId"
               element={<VideoWorkspace />}
+            />
+
+            <Route
+              path="/images"
+              element={<ImageLibraryPage />}
+            />
+
+            <Route
+              path="/images/:imageId"
+              element={<ImageWorkspacePage />}
+            />
+
+            <Route
+              path="/audio"
+              element={<AudioLibraryPage />}
+            />
+
+            <Route
+              path="/audio/:audioId"
+              element={<AudioWorkspacePage />}
             />
 
             <Route

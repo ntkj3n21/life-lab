@@ -1,24 +1,19 @@
-import {
-  useEffect,
-  useState,
-} from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import {
-  ChevronDown,
-} from "lucide-react";
+import { ChevronDown } from "lucide-react";
 
 import { ConfirmDialog } from "../../../components/ui/ConfirmDialog";
 import { ApiError } from "../../../lib/api";
-import { useContextStore } from "../../../stores/contextStore";
+import {
+  getWorkspaceSource,
+  useContextStore,
+} from "../../../stores/contextStore";
 import { useNoteStore } from "../../../stores/noteStore";
 import { useLayoutStore } from "../../../stores/layoutStore";
 import { useWorkspaceStore } from "../../../stores/workspaceStore";
 import { useReverseContextNavigation } from "../../context/hooks/useReverseContextNavigation";
-import type {
-  Note,
-  NoteDeleteImpact,
-} from "../services/noteApi";
+import type { Note, NoteDeleteImpact } from "../services/noteApi";
 import { NoteCard } from "./NoteCard";
 import { QuickNoteComposer } from "./QuickNoteComposer";
 
@@ -28,193 +23,127 @@ interface PendingNoteDelete {
 }
 
 interface ContextError {
-  libraryVideoId: number | null;
+  sourceKey: string | null;
   message: string;
 }
 
-function getErrorMessage(
-  error: unknown,
-) {
-  return error instanceof ApiError
-    ? error.message
-    : "Something went wrong.";
+function getErrorMessage(error: unknown) {
+  return error instanceof ApiError ? error.message : "Something went wrong.";
 }
 
 export function QuickNotePanel() {
   const navigate = useNavigate();
 
-  const openRightPanel = useLayoutStore(
-    (state) => state.openRightPanel,
-  );
+  const openRightPanel = useLayoutStore((state) => state.openRightPanel);
 
   const beginTaskFromNote = useWorkspaceStore(
     (state) => state.beginTaskFromNote,
   );
 
-  const activeContext = useContextStore(
-    (state) => state.activeContext,
+  const activeContext = useContextStore((state) => state.activeContext);
+
+  const notes = useNoteStore((state) => state.notes);
+
+  const workspaceNotes = useNoteStore((state) => state.workspaceNotes);
+
+  const totalElements = useNoteStore((state) => state.totalElements);
+
+  const notesLoadStatus = useNoteStore((state) => state.notesLoadStatus);
+
+  const isMutating = useNoteStore((state) => state.isMutating);
+
+  const notesLoadError = useNoteStore((state) => state.notesLoadError);
+
+  const workspaceNotesLoadStatus = useNoteStore(
+    (state) => state.workspaceNotesLoadStatus,
   );
 
-  const notes = useNoteStore(
-    (state) => state.notes,
+  const workspaceNotesLoadErrors = useNoteStore(
+    (state) => state.workspaceNotesLoadErrors,
   );
 
-  const videoNotesByVideo = useNoteStore(
-    (state) => state.videoNotes,
+  const loadNotes = useNoteStore((state) => state.loadNotes);
+
+  const loadWorkspaceNotes = useNoteStore((state) => state.loadWorkspaceNotes);
+
+  const createWorkspaceNote = useNoteStore(
+    (state) => state.createWorkspaceNote,
   );
 
-  const totalElements = useNoteStore(
-    (state) => state.totalElements,
-  );
+  const updateNote = useNoteStore((state) => state.updateNote);
 
-  const notesLoadStatus = useNoteStore(
-    (state) => state.notesLoadStatus,
-  );
+  const getDeleteImpact = useNoteStore((state) => state.getDeleteImpact);
 
-  const isMutating = useNoteStore(
-    (state) => state.isMutating,
-  );
+  const deleteNote = useNoteStore((state) => state.deleteNote);
 
-  const notesLoadError = useNoteStore(
-    (state) => state.notesLoadError,
-  );
+  const clearError = useNoteStore((state) => state.clearError);
 
-  const videoNotesLoadStatus =
-    useNoteStore(
-      (state) =>
-        state.videoNotesLoadStatus,
-    );
+  const { openNoteContext } = useReverseContextNavigation();
 
-  const videoNotesLoadErrors =
-    useNoteStore(
-      (state) =>
-        state.videoNotesLoadErrors,
-    );
+  const [captureContent, setCaptureContent] = useState("");
 
-  const loadNotes = useNoteStore(
-    (state) => state.loadNotes,
-  );
+  const [includeTimestamp, setIncludeTimestamp] = useState(true);
 
-  const loadVideoNotes = useNoteStore(
-    (state) => state.loadVideoNotes,
-  );
+  const [editingNoteId, setEditingNoteId] = useState<number | null>(null);
 
-  const createNote = useNoteStore(
-    (state) => state.createNote,
-  );
+  const [editingContent, setEditingContent] = useState("");
 
-  const updateNote = useNoteStore(
-    (state) => state.updateNote,
-  );
-
-  const getDeleteImpact = useNoteStore(
-    (state) => state.getDeleteImpact,
-  );
-
-  const deleteNote = useNoteStore(
-    (state) => state.deleteNote,
-  );
-
-  const clearError = useNoteStore(
-    (state) => state.clearError,
-  );
-
-  const { openNoteContext } =
-    useReverseContextNavigation();
-
-  const [
-    captureContent,
-    setCaptureContent,
-  ] = useState("");
-
-  const [
-    includeTimestamp,
-    setIncludeTimestamp,
-  ] = useState(true);
-
-  const [
-    editingNoteId,
-    setEditingNoteId,
-  ] = useState<number | null>(
+  const [pendingDelete, setPendingDelete] = useState<PendingNoteDelete | null>(
     null,
   );
 
-  const [
-    editingContent,
-    setEditingContent,
-  ] = useState("");
+  const [isPreparingDelete, setIsPreparingDelete] = useState(false);
 
-  const [
-    pendingDelete,
-    setPendingDelete,
-  ] =
-    useState<PendingNoteDelete | null>(
-      null,
-    );
+  const [createError, setCreateError] = useState<ContextError | null>(null);
 
-  const [
-    isPreparingDelete,
-    setIsPreparingDelete,
-  ] = useState(false);
+  const [actionError, setActionError] = useState<ContextError | null>(null);
 
-  const [
-    createError,
-    setCreateError,
-  ] = useState<ContextError | null>(null);
+  const [deleteErrorMessage, setDeleteErrorMessage] = useState<string | null>(
+    null,
+  );
 
-  const [
-    actionError,
-    setActionError,
-  ] = useState<ContextError | null>(null);
+  const activeSource = getWorkspaceSource(activeContext);
+  const activeSourceKey = activeSource?.key ?? null;
+  const activeSourceType = activeSource?.entityType ?? null;
+  const activeSourceLibraryId = activeSource?.libraryId ?? null;
 
-  const [
-    deleteErrorMessage,
-    setDeleteErrorMessage,
-  ] = useState<string | null>(null);
+  const previousActiveSourceKey = useRef(activeSourceKey);
 
-  const activeLibraryVideoId =
-    activeContext?.entityType ===
-      "video" &&
-    Number.isFinite(
-      Number(activeContext.entityId),
-    )
-      ? Number(
-          activeContext.entityId,
-        )
-      : null;
+  const currentSourceNotes =
+    activeSourceKey !== null ? (workspaceNotes[activeSourceKey] ?? []) : [];
 
-  const currentVideoNotes =
-    activeLibraryVideoId !== null
-      ? videoNotesByVideo[
-          activeLibraryVideoId
-        ] ?? []
-      : [];
-
-  const currentVideoLoadStatus =
-    activeLibraryVideoId !== null
-      ? videoNotesLoadStatus[
-          activeLibraryVideoId
-        ] ?? "idle"
+  const currentSourceLoadStatus =
+    activeSourceKey !== null
+      ? (workspaceNotesLoadStatus[activeSourceKey] ?? "idle")
       : "idle";
 
-  const currentVideoLoadError =
-    activeLibraryVideoId !== null
-      ? videoNotesLoadErrors[
-          activeLibraryVideoId
-        ] ?? null
+  const currentSourceLoadError =
+    activeSourceKey !== null
+      ? (workspaceNotesLoadErrors[activeSourceKey] ?? null)
       : null;
 
   const createErrorMessage =
-    createError?.libraryVideoId ===
-    activeLibraryVideoId
-      ? createError.message
-      : null;
+    createError?.sourceKey === activeSourceKey ? createError.message : null;
 
   const actionErrorMessage =
-    actionError?.libraryVideoId ===
-    activeLibraryVideoId
-      ? actionError.message
-      : null;
+    actionError?.sourceKey === activeSourceKey ? actionError.message : null;
+
+  useEffect(() => {
+    if (previousActiveSourceKey.current === activeSourceKey) {
+      return;
+    }
+
+    previousActiveSourceKey.current = activeSourceKey;
+
+    setCaptureContent("");
+    setIncludeTimestamp(true);
+    setEditingNoteId(null);
+    setEditingContent("");
+    setPendingDelete(null);
+    setCreateError(null);
+    setActionError(null);
+    setDeleteErrorMessage(null);
+  }, [activeSourceKey]);
 
   useEffect(() => {
     void loadNotes({
@@ -226,33 +155,27 @@ export function QuickNotePanel() {
   }, [loadNotes]);
 
   useEffect(() => {
-    if (
-      activeLibraryVideoId ===
-      null
-    ) {
+    if (activeSourceType === null || activeSourceLibraryId === null) {
       return;
     }
 
-    void loadVideoNotes(
-      activeLibraryVideoId,
-    ).catch(() => {
+    void loadWorkspaceNotes({
+      entityType: activeSourceType,
+      libraryId: activeSourceLibraryId,
+    }).catch(() => {
       // noteStore keeps error.
     });
   }, [
-    activeLibraryVideoId,
-    loadVideoNotes,
+    activeSourceKey,
+    activeSourceType,
+    activeSourceLibraryId,
+    loadWorkspaceNotes,
   ]);
 
   async function handleCreate() {
-    const content =
-      captureContent.trim();
+    const content = captureContent.trim();
 
-    if (
-      !content ||
-      activeLibraryVideoId ===
-        null ||
-      isMutating
-    ) {
+    if (!content || activeSource === null || isMutating) {
       return;
     }
 
@@ -260,104 +183,70 @@ export function QuickNotePanel() {
     setCreateError(null);
 
     const timestampSeconds =
-      includeTimestamp &&
-      typeof activeContext
-        ?.timestamp === "number"
-        ? Math.max(
-            0,
-            Math.floor(
-              activeContext.timestamp,
-            ),
-          )
+      includeTimestamp && typeof activeContext?.timestamp === "number"
+        ? Math.max(0, Math.floor(activeContext.timestamp))
         : null;
 
     try {
-      await createNote(
-        activeLibraryVideoId,
+      await createWorkspaceNote(
+        {
+          entityType: activeSource.entityType,
+          libraryId: activeSource.libraryId,
+        },
         {
           content,
           timestampSeconds,
-          withoutTimestampConfirmed:
-            timestampSeconds ===
-            null,
+          withoutTimestampConfirmed: timestampSeconds === null,
         },
       );
 
       setCaptureContent("");
     } catch (error) {
       setCreateError({
-        libraryVideoId:
-          activeLibraryVideoId,
-        message:
-          getErrorMessage(error),
+        sourceKey: activeSourceKey,
+        message: getErrorMessage(error),
       });
     }
   }
 
-  function handleStartEdit(
-    note: Note,
-  ) {
+  function handleStartEdit(note: Note) {
     clearError();
     setActionError(null);
 
-    setEditingNoteId(
-      note.id,
-    );
+    setEditingNoteId(note.id);
 
-    setEditingContent(
-      note.content,
-    );
+    setEditingContent(note.content);
   }
 
   function handleCancelEdit() {
-    setEditingNoteId(
-      null,
-    );
+    setEditingNoteId(null);
 
-    setEditingContent(
-      "",
-    );
+    setEditingContent("");
   }
 
-  async function handleSaveEdit(
-    noteId: number,
-  ) {
-    const content =
-      editingContent.trim();
+  async function handleSaveEdit(noteId: number) {
+    const content = editingContent.trim();
 
-    if (
-      !content ||
-      isMutating
-    ) {
+    if (!content || isMutating) {
       return;
     }
 
     setActionError(null);
 
     try {
-      await updateNote(
-        noteId,
-        content,
-      );
+      await updateNote(noteId, content);
 
       handleCancelEdit();
     } catch (error) {
       setActionError({
-        libraryVideoId:
-          activeLibraryVideoId,
-        message:
-          getErrorMessage(error),
+        sourceKey: activeSourceKey,
+        message: getErrorMessage(error),
       });
     }
   }
 
-  async function handleDelete(
-    note: Note,
-  ) {
-    if (
-      isMutating ||
-      isPreparingDelete
-    ) {
+  async function handleDelete(note: Note) {
+    if (isMutating || isPreparingDelete) {
       return;
     }
 
@@ -367,10 +256,7 @@ export function QuickNotePanel() {
     setIsPreparingDelete(true);
 
     try {
-      const impact =
-        await getDeleteImpact(
-          note.id,
-        );
+      const impact = await getDeleteImpact(note.id);
 
       setPendingDelete({
         note,
@@ -378,10 +264,8 @@ export function QuickNotePanel() {
       });
     } catch (error) {
       setActionError({
-        libraryVideoId:
-          activeLibraryVideoId,
-        message:
-          getErrorMessage(error),
+        sourceKey: activeSourceKey,
+        message: getErrorMessage(error),
       });
     } finally {
       setIsPreparingDelete(false);
@@ -389,10 +273,7 @@ export function QuickNotePanel() {
   }
 
   async function confirmDelete() {
-    if (
-      !pendingDelete ||
-      isMutating
-    ) {
+    if (!pendingDelete || isMutating) {
       return;
     }
 
@@ -400,40 +281,27 @@ export function QuickNotePanel() {
     setDeleteErrorMessage(null);
 
     try {
-      await deleteNote(
-        pendingDelete.note.id,
-      );
+      await deleteNote(pendingDelete.note.id);
 
-      if (
-        editingNoteId ===
-        pendingDelete.note.id
-      ) {
+      if (editingNoteId === pendingDelete.note.id) {
         handleCancelEdit();
       }
 
       setPendingDelete(null);
     } catch (error) {
-      setDeleteErrorMessage(
-        getErrorMessage(error),
-      );
+      setDeleteErrorMessage(getErrorMessage(error));
     }
   }
 
-  async function handleViewSource(
-    noteId: number,
-  ) {
+  async function handleViewSource(noteId: number) {
     setActionError(null);
 
     try {
-      await openNoteContext(
-        noteId,
-      );
+      await openNoteContext(noteId);
     } catch (error) {
       setActionError({
-        libraryVideoId:
-          activeLibraryVideoId,
-        message:
-          getErrorMessage(error),
+        sourceKey: activeSourceKey,
+        message: getErrorMessage(error),
       });
     }
   }
@@ -443,57 +311,24 @@ export function QuickNotePanel() {
     openRightPanel("tools");
   }
 
-  function renderNote(
-    note: Note,
-    current: boolean,
-  ) {
+  function renderNote(note: Note, current: boolean) {
     return (
       <NoteCard
         key={note.id}
         note={note}
         current={current}
-        variant={
-          current
-            ? "workspace-current"
-            : "workspace-recent"
-        }
-        isMutating={
-          isMutating ||
-          isPreparingDelete
-        }
-        isEditing={
-          editingNoteId ===
-          note.id
-        }
-        editingContent={
-          editingContent
-        }
-        onEditingContentChange={
-          setEditingContent
-        }
-        onStartEdit={
-          handleStartEdit
-        }
-        onCancelEdit={
-          handleCancelEdit
-        }
-        onSaveEdit={
-          handleSaveEdit
-        }
-        onDelete={
-          handleDelete
-        }
-        onViewSource={
-          handleViewSource
-        }
-        onCreateTask={
-          handleCreateTask
-        }
-        onOpenDetail={(noteId) =>
-          navigate(
-            `/notes/${noteId}`,
-          )
-        }
+        variant={current ? "workspace-current" : "workspace-recent"}
+        isMutating={isMutating || isPreparingDelete}
+        isEditing={editingNoteId === note.id}
+        editingContent={editingContent}
+        onEditingContentChange={setEditingContent}
+        onStartEdit={handleStartEdit}
+        onCancelEdit={handleCancelEdit}
+        onSaveEdit={handleSaveEdit}
+        onDelete={handleDelete}
+        onViewSource={handleViewSource}
+        onCreateTask={handleCreateTask}
+        onOpenDetail={(noteId) => navigate(`/notes/${noteId}`)}
       />
     );
   }
@@ -501,43 +336,33 @@ export function QuickNotePanel() {
   return (
     <>
       <QuickNoteComposer
-        hasActiveVideo={
-          activeLibraryVideoId !== null
-        }
-        timestamp={
-          activeContext?.timestamp
-        }
+        hasActiveSource={activeSource !== null}
+        sourceLabel={activeSource?.label}
+        sourceTitle={activeSource?.title}
+        supportsTimestamp={activeSource?.entityType !== "image"}
+        requiresAvailableTimestamp={activeSource?.entityType === "audio"}
+        timestamp={activeContext?.timestamp}
         content={captureContent}
-        includeTimestamp={
-          includeTimestamp
-        }
+        includeTimestamp={includeTimestamp}
         isMutating={isMutating}
-        errorMessage={
-          createErrorMessage
-        }
+        errorMessage={createErrorMessage}
         onContentChange={(value) => {
           setCaptureContent(value);
           setCreateError(null);
-        }
-        }
-        onIncludeTimestampChange={
-          setIncludeTimestamp
-        }
-        onCreate={
-          handleCreate
-        }
+        }}
+        onIncludeTimestampChange={setIncludeTimestamp}
+        onCreate={handleCreate}
       />
 
       <div className="mt-4">
         <div className="flex items-center justify-between gap-3 px-1">
           <h4 className="text-xs font-medium uppercase tracking-wide text-(--text-muted)">
-            Current video
+            Current {activeSource?.label ?? "source"}
           </h4>
 
           <span className="tabular-nums text-xs text-(--text-muted)">
-            {currentVideoLoadStatus ===
-            "success"
-              ? currentVideoNotes.length
+            {currentSourceLoadStatus === "success"
+              ? currentSourceNotes.length
               : "—"}
           </span>
         </div>
@@ -551,43 +376,34 @@ export function QuickNotePanel() {
           </p>
         )}
 
-        {currentVideoLoadStatus ===
-          "error" && (
+        {currentSourceLoadStatus === "error" && (
           <p
             role="alert"
             className="mt-2 rounded-lg border border-(--danger-border) bg-(--danger-surface) px-3 py-2 text-xs text-(--danger-text)"
           >
-            {currentVideoLoadError?.message ??
-              "Could not load notes for this video."}
+            {currentSourceLoadError?.message ??
+              "Could not load notes for this source."}
           </p>
         )}
 
-        {activeLibraryVideoId === null ? (
+        {activeSource === null ? (
           <p className="mt-2 px-1 text-xs text-(--text-muted)">
-            No active video.
+            No active Library item.
           </p>
-        ) : (currentVideoLoadStatus ===
-            "idle" ||
-            currentVideoLoadStatus ===
-              "loading") &&
-          currentVideoNotes.length === 0 ? (
-          <p
-            role="status"
-            className="mt-2 px-1 text-xs text-(--text-muted)"
-          >
-            Loading video notes...
+        ) : (currentSourceLoadStatus === "idle" ||
+            currentSourceLoadStatus === "loading") &&
+          currentSourceNotes.length === 0 ? (
+          <p role="status" className="mt-2 px-1 text-xs text-(--text-muted)">
+            Loading {activeSource.label} notes...
           </p>
-        ) : currentVideoLoadStatus ===
-            "success" &&
-          currentVideoNotes.length === 0 ? (
+        ) : currentSourceLoadStatus === "success" &&
+          currentSourceNotes.length === 0 ? (
           <p className="mt-2 px-1 text-xs text-(--text-muted)">
-            No notes for this video yet.
+            No notes for this {activeSource.label} yet.
           </p>
-        ) : currentVideoNotes.length > 0 ? (
+        ) : currentSourceNotes.length > 0 ? (
           <div className="mt-2 space-y-2">
-            {currentVideoNotes.map((note) =>
-              renderNote(note, true),
-            )}
+            {currentSourceNotes.map((note) => renderNote(note, true))}
           </div>
         ) : null}
       </div>
@@ -595,11 +411,7 @@ export function QuickNotePanel() {
       <details className="group mt-4">
         <summary className="flex cursor-pointer list-none items-center justify-between gap-2 rounded-lg px-1.5 py-1.5 text-xs font-medium text-(--text-muted) outline-none transition-colors hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:ring-2 focus-visible:ring-(--focus)">
           <span>
-            Recent notes ·{" "}
-            {notesLoadStatus ===
-            "success"
-              ? totalElements
-              : "—"}
+            Recent notes · {notesLoadStatus === "success" ? totalElements : "—"}
           </span>
 
           <ChevronDown
@@ -609,42 +421,25 @@ export function QuickNotePanel() {
           />
         </summary>
 
-        {notesLoadStatus ===
-          "error" && (
+        {notesLoadStatus === "error" && (
           <p
             role="alert"
             className="mt-3 rounded-lg border border-(--danger-border) bg-(--danger-surface) px-3 py-2 text-xs text-(--danger-text)"
           >
-            {notesLoadError?.message ??
-              "Could not load recent notes."}
+            {notesLoadError?.message ?? "Could not load recent notes."}
           </p>
         )}
 
         {notes.length > 0 ? (
           <div className="mt-3 space-y-2">
-            {notes.map((note) =>
-              renderNote(
-                note,
-                false,
-              ),
-            )}
+            {notes.map((note) => renderNote(note, false))}
           </div>
-        ) : notesLoadStatus ===
-          "success" ? (
-          <p
-            role="status"
-            className="mt-3 px-1 text-xs text-(--text-muted)"
-          >
+        ) : notesLoadStatus === "success" ? (
+          <p role="status" className="mt-3 px-1 text-xs text-(--text-muted)">
             No notes yet.
           </p>
-        ) : notesLoadStatus ===
-            "idle" ||
-          notesLoadStatus ===
-            "loading" ? (
-          <p
-            role="status"
-            className="mt-3 px-1 text-xs text-(--text-muted)"
-          >
+        ) : notesLoadStatus === "idle" || notesLoadStatus === "loading" ? (
+          <p role="status" className="mt-3 px-1 text-xs text-(--text-muted)">
             Loading notes...
           </p>
         ) : null}
@@ -655,7 +450,7 @@ export function QuickNotePanel() {
         title="Delete Note?"
         description={
           pendingDelete
-            ? `This will delete the selected Note. Its exact YouTube source history is handled according to the impact below.`
+            ? "This will delete the selected Note. Its exact source history is handled according to the impact below."
             : undefined
         }
         details={
@@ -665,9 +460,9 @@ export function QuickNotePanel() {
                 pendingDelete.impact.tasksPreserved
                   ? "Linked tasks will be preserved."
                   : "Linked tasks may be affected.",
-                pendingDelete.impact.youtubeSourcePreserved
-                  ? "The exact YouTube source will be preserved."
-                  : "The exact YouTube source may be affected.",
+                pendingDelete.impact.sourcePreserved
+                  ? "The exact source will be preserved."
+                  : "The exact source may be affected.",
               ]
             : []
         }

@@ -75,8 +75,9 @@ class TaskReadSearchApiIntegrationTest {
     @BeforeEach
     void cleanDatabase() {
         jdbcTemplate.execute("""
-                TRUNCATE TABLE tasks, notes, watch_sessions, library_video_tags, tags,
-                    library_videos, youtube_videos, accounts RESTART IDENTITY CASCADE
+                TRUNCATE TABLE task_tags, note_tags, categories, tasks, notes, watch_sessions,
+                    library_video_tags, tags, library_videos, youtube_videos, accounts
+                    RESTART IDENTITY CASCADE
                 """);
     }
 
@@ -290,6 +291,152 @@ class TaskReadSearchApiIntegrationTest {
     }
 
     @Test
+    void organizationSourceStatusExistingFiltersSortingAndPaginationCompose() throws Exception {
+        Account owner = createAccount("task-v2-owner@example.com");
+        Account other = createAccount("task-v2-other@example.com");
+        YouTubeVideo source = createSource("task-v2-source", YouTubeAvailabilityStatus.AVAILABLE);
+        Long sourceNoteId = insertNote(owner.getId(), source.getId(), "Source context");
+        Long foreignNoteId = insertNote(other.getId(), source.getId(), "Private context");
+        Long categoryId = insertCategory(owner.getId(), "Learning", "learning");
+        Long otherCategoryId = insertCategory(owner.getId(), "Other", "other");
+        Long foreignCategoryId = insertCategory(other.getId(), "Private", "private");
+        Long alphaTagId = insertTag(owner.getId(), "Alpha", "alpha");
+        Long betaTagId = insertTag(owner.getId(), "Beta", "beta");
+        Long foreignTagId = insertTag(other.getId(), "Private", "private");
+
+        Long firstIndependent = insertTask(
+                owner.getId(), null, "INDEPENDENT", "Project alpha", null,
+                "IN_PROGRESS", LocalDate.of(2026, 8, 20), BASE_TIME);
+        Long secondIndependent = insertTask(
+                owner.getId(), null, "INDEPENDENT", "Review", "Project beta",
+                "IN_PROGRESS", LocalDate.of(2026, 8, 21), BASE_TIME);
+        Long sourced = insertTask(
+                owner.getId(), sourceNoteId, "HAS_SOURCE", "Project sourced", null,
+                "IN_PROGRESS", LocalDate.of(2026, 8, 20), BASE_TIME.minusDays(1));
+        Long missing = insertTask(
+                owner.getId(), null, "SOURCE_MISSING", "Project missing", null,
+                "NOT_STARTED", null, BASE_TIME.minusDays(2));
+        Long wrongCategory = insertTask(
+                owner.getId(), null, "INDEPENDENT", "Project other", null,
+                "IN_PROGRESS", LocalDate.of(2026, 8, 20), BASE_TIME.plusDays(1));
+        Long foreignTask = insertTask(
+                other.getId(), foreignNoteId, "HAS_SOURCE", "Project private", null,
+                "IN_PROGRESS", LocalDate.of(2026, 8, 20), BASE_TIME.plusDays(2));
+
+        organizeTask(firstIndependent, categoryId, alphaTagId);
+        organizeTask(secondIndependent, categoryId, betaTagId);
+        organizeTask(sourced, categoryId, alphaTagId);
+        organizeTask(missing, categoryId, betaTagId);
+        organizeTask(wrongCategory, otherCategoryId, alphaTagId);
+        organizeTask(foreignTask, foreignCategoryId, foreignTagId);
+        jdbcTemplate.update("UPDATE tasks SET updated_at = ? WHERE id = ?",
+                BASE_TIME, firstIndependent);
+        jdbcTemplate.update("UPDATE tasks SET updated_at = ? WHERE id = ?",
+                BASE_TIME.plusHours(1), secondIndependent);
+        Cookie token = login(owner.getEmail());
+
+        getTask(firstIndependent, token)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.category.id").value(categoryId))
+                .andExpect(jsonPath("$.tags.length()").value(1))
+                .andExpect(jsonPath("$.tags[0].id").value(alphaTagId));
+
+        JsonNode organizationFiltered = getJson(
+                "/api/tasks?categoryId=" + categoryId
+                        + "&tagId=" + alphaTagId
+                        + "&tagId=" + betaTagId,
+                token);
+        assertThat(ids(organizationFiltered))
+                .containsExactly(secondIndependent, firstIndependent, sourced, missing);
+        assertThat(organizationFiltered.get("items").get(0).get("category").get("id").longValue())
+                .isEqualTo(categoryId);
+        assertThat(organizationFiltered.get("items").get(0).get("tags").isArray()).isTrue();
+
+        assertThat(ids(getJson("/api/tasks?sourceStatus=INDEPENDENT", token)))
+                .containsExactly(wrongCategory, secondIndependent, firstIndependent);
+        assertThat(ids(getJson("/api/tasks?sourceStatus=HAS_SOURCE", token)))
+                .containsExactly(sourced);
+        assertThat(ids(getJson("/api/tasks?sourceStatus=SOURCE_MISSING", token)))
+                .containsExactly(missing);
+
+        JsonNode composed = getJson(
+                "/api/tasks?q=project&status=IN_PROGRESS"
+                        + "&deadlineFrom=2026-08-20&deadlineTo=2026-08-21"
+                        + "&categoryId=" + categoryId
+                        + "&tagId=" + alphaTagId
+                        + "&tagId=" + betaTagId
+                        + "&sourceStatus=INDEPENDENT",
+                token);
+        assertThat(ids(composed)).containsExactly(secondIndependent, firstIndependent);
+
+        assertThat(ids(getJson(
+                "/api/tasks?categoryId=" + categoryId
+                        + "&sourceStatus=INDEPENDENT&sortBy=createdAt&sortDirection=asc",
+                token))).containsExactly(firstIndependent, secondIndependent);
+        assertThat(ids(getJson(
+                "/api/tasks?categoryId=" + categoryId
+                        + "&sourceStatus=INDEPENDENT&sortBy=createdAt&sortDirection=desc",
+                token))).containsExactly(secondIndependent, firstIndependent);
+        assertThat(ids(getJson(
+                "/api/tasks?categoryId=" + categoryId
+                        + "&sourceStatus=INDEPENDENT&sortBy=updatedAt&sortDirection=desc",
+                token))).containsExactly(secondIndependent, firstIndependent);
+        assertThat(ids(getJson(
+                "/api/tasks?categoryId=" + categoryId
+                        + "&sourceStatus=INDEPENDENT&sortBy=deadline&sortDirection=asc",
+                token))).containsExactly(firstIndependent, secondIndependent);
+        assertThat(ids(getJson(
+                "/api/tasks?categoryId=" + categoryId
+                        + "&sourceStatus=INDEPENDENT&sortBy=deadline&sortDirection=desc",
+                token))).containsExactly(secondIndependent, firstIndependent);
+
+        JsonNode firstPage = getJson(
+                "/api/tasks?categoryId=" + categoryId
+                        + "&sourceStatus=INDEPENDENT&sortBy=createdAt&sortDirection=asc&page=0&size=1",
+                token);
+        JsonNode secondPage = getJson(
+                "/api/tasks?categoryId=" + categoryId
+                        + "&sourceStatus=INDEPENDENT&sortBy=createdAt&sortDirection=asc&page=1&size=1",
+                token);
+        assertThat(ids(firstPage)).containsExactly(firstIndependent);
+        assertThat(ids(secondPage)).containsExactly(secondIndependent);
+        assertThat(firstPage.get("totalElements").longValue()).isEqualTo(2);
+        assertThat(firstPage.get("totalPages").intValue()).isEqualTo(2);
+    }
+
+    @Test
+    void organizationFiltersAreOwnershipSafeAndNewEnumsAndSortsAreValidated() throws Exception {
+        Account owner = createAccount("task-v2-validation-owner@example.com");
+        Account other = createAccount("task-v2-validation-other@example.com");
+        Long foreignCategoryId = insertCategory(other.getId(), "Private", "private");
+        Long foreignTagId = insertTag(other.getId(), "Private", "private");
+        Cookie token = login(owner.getEmail());
+
+        mockMvc.perform(get("/api/tasks")
+                        .param("categoryId", foreignCategoryId.toString())
+                        .cookie(token))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.code").value("CATEGORY_NOT_FOUND"));
+        mockMvc.perform(get("/api/tasks")
+                        .param("tagId", foreignTagId.toString())
+                        .cookie(token))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.code").value("TAG_NOT_FOUND"));
+
+        for (String[] invalid : new String[][] {
+                {"sourceStatus", "AVAILABLE", "sourceStatus"},
+                {"sortBy", "status", "sortBy"},
+                {"sortDirection", "up", "sortDirection"}}) {
+            mockMvc.perform(get("/api/tasks")
+                            .param(invalid[0], invalid[1])
+                            .cookie(token))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.code").value("VALIDATION_ERROR"))
+                    .andExpect(jsonPath("$.fieldErrors." + invalid[2]).exists());
+        }
+    }
+
+    @Test
     void detailIsOwnershipSafeAndSupportsEverySourceLifecycleState() throws Exception {
         Account owner = createAccount("task-detail-owner@example.com");
         Account other = createAccount("task-detail-other@example.com");
@@ -422,6 +569,27 @@ class TaskReadSearchApiIntegrationTest {
                 RETURNING id
                 """, Long.class, accountId, sourceNoteId, sourceStatus, title, description,
                 status, deadline, createdAt, createdAt);
+    }
+
+    private Long insertCategory(Long accountId, String name, String normalizedName) {
+        return jdbcTemplate.queryForObject("""
+                INSERT INTO categories (account_id, name, normalized_name, created_at, updated_at)
+                VALUES (?, ?, ?, ?, ?)
+                RETURNING id
+                """, Long.class, accountId, name, normalizedName, BASE_TIME, BASE_TIME);
+    }
+
+    private Long insertTag(Long accountId, String name, String normalizedName) {
+        return jdbcTemplate.queryForObject("""
+                INSERT INTO tags (account_id, name, normalized_name, created_at, updated_at)
+                VALUES (?, ?, ?, ?, ?)
+                RETURNING id
+                """, Long.class, accountId, name, normalizedName, BASE_TIME, BASE_TIME);
+    }
+
+    private void organizeTask(Long taskId, Long categoryId, Long tagId) {
+        jdbcTemplate.update("UPDATE tasks SET category_id = ? WHERE id = ?", categoryId, taskId);
+        jdbcTemplate.update("INSERT INTO task_tags (task_id, tag_id) VALUES (?, ?)", taskId, tagId);
     }
 
     private org.springframework.test.web.servlet.ResultActions getTask(Long taskId, Cookie accessToken)

@@ -221,3 +221,40 @@ export function apiDelete(path: string) {
     method: "DELETE",
   });
 }
+
+export function apiPostMultipart<TResponse>(
+  path: string,
+  body: FormData,
+) {
+  return enqueueUnsafeRequest(
+    async () => {
+      const csrf = await getCsrf();
+      const headers = new Headers({
+        Accept: "application/json",
+      });
+
+      headers.set(
+        csrf.headerName,
+        csrf.token,
+      );
+
+      const response = await fetch(
+        path,
+        {
+          method: "POST",
+          headers,
+          credentials: "include",
+          body,
+        },
+      );
+
+      if (!response.ok) {
+        throw await createApiError(
+          response,
+        );
+      }
+
+      return response.json() as Promise<TResponse>;
+    },
+  );
+}

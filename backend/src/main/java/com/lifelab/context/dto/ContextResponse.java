@@ -8,5 +8,7 @@ public record ContextResponse(
         ContextNavigationMode navigationMode,
         TaskResponse task,
         NoteResponse note,
-        Long libraryVideoId) {
+        Long libraryVideoId,
+        Long libraryImageId,
+        Long libraryAudioId) {
 }

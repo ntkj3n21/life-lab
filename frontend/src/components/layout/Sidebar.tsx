@@ -12,7 +12,7 @@ import {
   Sun,
   UserRound,
 } from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 
 import { useAppearanceStore } from "../../stores/appearanceStore";
 import { useAuthStore } from "../../stores/authStore";
@@ -47,6 +47,7 @@ const navItems = [
 ] as const;
 
 export function Sidebar() {
+  const { pathname } = useLocation();
   const [isLoggingOut, setIsLoggingOut] =
     useState(false);
 
@@ -228,9 +229,16 @@ export function Sidebar() {
               to={to}
               className={({
                 isActive,
-              }) =>
+              }) => {
+                const isProductAreaActive =
+                  isActive ||
+                  (to === "/library" &&
+                    (pathname.startsWith("/images") ||
+                      pathname.startsWith("/audio")));
+
+                return (
                 `flex h-10 w-full items-center gap-3 rounded-[10px] px-3 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) ${
-                  isActive
+                  isProductAreaActive
                     ? "bg-(--surface-hover) font-medium text-(--text-primary)"
                     : "text-(--text-secondary) hover:bg-(--surface) hover:text-(--text-primary)"
                 } ${
@@ -238,7 +246,8 @@ export function Sidebar() {
                     ? "justify-center px-0"
                     : ""
                 }`
-              }
+                );
+              }}
               title={
                 isSidebarCollapsed
                   ? label

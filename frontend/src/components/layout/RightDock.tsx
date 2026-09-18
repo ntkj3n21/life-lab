@@ -9,7 +9,10 @@ import {
   useRef,
 } from "react";
 
-import { useContextStore } from "../../stores/contextStore";
+import {
+  getWorkspaceSource,
+  useContextStore,
+} from "../../stores/contextStore";
 
 import { QuickNotePanel } from "../../modules/notes/components/QuickNotePanel";
 import { TodoPanel } from "../../modules/todo/components/TodoPanel";
@@ -39,18 +42,18 @@ export function RightDock() {
     (state) => state.activeContext,
   );
 
-  const videoNotesByVideo = useNoteStore(
-    (state) => state.videoNotes,
+  const workspaceNotes = useNoteStore(
+    (state) => state.workspaceNotes,
   );
 
-  const loadVideoNotes = useNoteStore(
-    (state) => state.loadVideoNotes,
+  const loadWorkspaceNotes = useNoteStore(
+    (state) => state.loadWorkspaceNotes,
   );
 
-  const videoNotesLoadStatus =
+  const workspaceNotesLoadStatus =
     useNoteStore(
       (state) =>
-        state.videoNotesLoadStatus,
+        state.workspaceNotesLoadStatus,
     );
 
   const dailyPlan = useTodoStore(
@@ -73,24 +76,22 @@ export function RightDock() {
         state.dailyPlanRevision,
     );
 
-  const activeLibraryVideoId =
-    activeContext?.entityType === "video"
-      ? Number(activeContext.entityId)
-      : null;
+  const activeSource =
+    getWorkspaceSource(activeContext);
+  const activeSourceKey =
+    activeSource?.key ?? null;
+  const activeSourceType =
+    activeSource?.entityType ?? null;
+  const activeSourceLibraryId =
+    activeSource?.libraryId ?? null;
 
-  const validVideoId =
-    activeLibraryVideoId !== null &&
-    Number.isFinite(activeLibraryVideoId)
-      ? activeLibraryVideoId
-      : null;
-
-  const currentVideoNotes =
-    validVideoId !== null
-      ? videoNotesByVideo[validVideoId] ?? []
+  const currentSourceNotes =
+    activeSourceKey !== null
+      ? workspaceNotes[activeSourceKey] ?? []
       : [];
 
   const relatedNoteIds = new Set(
-    currentVideoNotes.map(
+    currentSourceNotes.map(
       (note) => note.id,
     ),
   );
@@ -115,11 +116,11 @@ export function RightDock() {
     ).length;
 
   const noteCount =
-    validVideoId !== null &&
-    videoNotesLoadStatus[
-      validVideoId
+    activeSourceKey !== null &&
+    workspaceNotesLoadStatus[
+      activeSourceKey
     ] === "success"
-      ? currentVideoNotes.length
+      ? currentSourceNotes.length
       : null;
 
   const taskCount =
@@ -131,16 +132,22 @@ export function RightDock() {
       : null;
 
   useEffect(() => {
-    if (validVideoId !== null) {
-      void loadVideoNotes(
-        validVideoId,
-      ).catch(() => {
+    if (
+      activeSourceType !== null &&
+      activeSourceLibraryId !== null
+    ) {
+      void loadWorkspaceNotes({
+        entityType: activeSourceType,
+        libraryId: activeSourceLibraryId,
+      }).catch(() => {
         // noteStore keeps error.
       });
     }
   }, [
-    validVideoId,
-    loadVideoNotes,
+    activeSourceKey,
+    activeSourceType,
+    activeSourceLibraryId,
+    loadWorkspaceNotes,
   ]);
 
   useEffect(() => {

@@ -6,9 +6,15 @@ import org.springframework.transaction.annotation.Transactional;
 import com.lifelab.context.domain.ContextNavigationMode;
 import com.lifelab.context.dto.ContextResponse;
 import com.lifelab.note.domain.Note;
+import com.lifelab.note.domain.NoteSourceType;
 import com.lifelab.note.dto.NoteResponse;
 import com.lifelab.note.exception.NoteNotFoundException;
 import com.lifelab.note.repository.NoteRepository;
+import com.lifelab.organization.service.ItemOrganizationService;
+import com.lifelab.source.audio.domain.LibraryAudio;
+import com.lifelab.source.audio.repository.LibraryAudioRepository;
+import com.lifelab.source.image.domain.LibraryImage;
+import com.lifelab.source.image.repository.LibraryImageRepository;
 import com.lifelab.task.domain.Task;
 import com.lifelab.task.domain.TaskSourceStatus;
 import com.lifelab.task.dto.TaskResponse;
@@ -27,17 +33,26 @@ public class ContextService {
     private final NoteRepository noteRepository;
     private final TaskRepository taskRepository;
     private final LibraryVideoRepository libraryVideoRepository;
+    private final LibraryImageRepository libraryImageRepository;
+    private final LibraryAudioRepository libraryAudioRepository;
     private final YouTubeMetadataClient youTubeMetadataClient;
+    private final ItemOrganizationService organizationService;
 
     public ContextService(
             NoteRepository noteRepository,
             TaskRepository taskRepository,
             LibraryVideoRepository libraryVideoRepository,
-            YouTubeMetadataClient youTubeMetadataClient) {
+            LibraryImageRepository libraryImageRepository,
+            LibraryAudioRepository libraryAudioRepository,
+            YouTubeMetadataClient youTubeMetadataClient,
+            ItemOrganizationService organizationService) {
         this.noteRepository = noteRepository;
         this.taskRepository = taskRepository;
         this.libraryVideoRepository = libraryVideoRepository;
+        this.libraryImageRepository = libraryImageRepository;
+        this.libraryAudioRepository = libraryAudioRepository;
         this.youTubeMetadataClient = youTubeMetadataClient;
+        this.organizationService = organizationService;
     }
 
     @Transactional(readOnly = true)
@@ -53,12 +68,14 @@ public class ContextService {
         Task task = taskRepository.findByIdAndAccount_Id(taskId, accountId)
                 .orElseThrow(TaskNotFoundException::new);
 
-        TaskResponse taskResponse = TaskResponse.from(task);
+        TaskResponse taskResponse = organizationService.toTaskResponse(task);
 
         if (task.getSourceStatus() == TaskSourceStatus.INDEPENDENT) {
             return new ContextResponse(
                     ContextNavigationMode.NO_SOURCE,
                     taskResponse,
+                    null,
+                    null,
                     null,
                     null);
         }
@@ -68,6 +85,8 @@ public class ContextService {
             return new ContextResponse(
                     ContextNavigationMode.SOURCE_MISSING,
                     taskResponse,
+                    null,
+                    null,
                     null,
                     null);
         }
@@ -84,6 +103,8 @@ public class ContextService {
                     ContextNavigationMode.SOURCE_MISSING,
                     taskResponse,
                     null,
+                    null,
+                    null,
                     null);
         }
 
@@ -98,7 +119,15 @@ public class ContextService {
             TaskResponse task,
             Note note) {
 
-        NoteResponse noteResponse = NoteResponse.from(note);
+        NoteResponse noteResponse = organizationService.toNoteResponse(note);
+
+        if (note.getSourceType() == NoteSourceType.IMAGE) {
+            return resolveImageContext(accountId, task, note, noteResponse);
+        }
+
+        if (note.getSourceType() == NoteSourceType.AUDIO) {
+            return resolveAudioContext(accountId, task, note, noteResponse);
+        }
 
         if (note.getYoutubeSource().getAvailabilityStatus()
                 == YouTubeAvailabilityStatus.UNAVAILABLE) {
@@ -124,14 +153,60 @@ public class ContextService {
                     ContextNavigationMode.WORKSPACE,
                     task,
                     noteResponse,
-                    libraryVideo.getId());
+                    libraryVideo.getId(),
+                    null,
+                    null);
         }
 
         return new ContextResponse(
                 ContextNavigationMode.SOURCE_PREVIEW,
                 task,
                 noteResponse,
+                null,
+                null,
                 null);
+    }
+
+    private ContextResponse resolveImageContext(
+            Long accountId,
+            TaskResponse task,
+            Note note,
+            NoteResponse noteResponse) {
+        LibraryImage image = libraryImageRepository
+                .findByAccount_IdAndImageSource_Id(
+                        accountId,
+                        note.getImageSource().getId())
+                .orElse(null);
+        return new ContextResponse(
+                image == null
+                        ? ContextNavigationMode.SOURCE_PREVIEW
+                        : ContextNavigationMode.WORKSPACE,
+                task,
+                noteResponse,
+                null,
+                image == null ? null : image.getId(),
+                null);
+    }
+
+    private ContextResponse resolveAudioContext(
+            Long accountId,
+            TaskResponse task,
+            Note note,
+            NoteResponse noteResponse) {
+        LibraryAudio audio = libraryAudioRepository
+                .findByAccount_IdAndAudioSource_Id(
+                        accountId,
+                        note.getAudioSource().getId())
+                .orElse(null);
+        return new ContextResponse(
+                audio == null
+                        ? ContextNavigationMode.SOURCE_PREVIEW
+                        : ContextNavigationMode.WORKSPACE,
+                task,
+                noteResponse,
+                null,
+                null,
+                audio == null ? null : audio.getId());
     }
 
     private ContextResponse videoUnavailable(
@@ -142,6 +217,8 @@ public class ContextService {
                 ContextNavigationMode.VIDEO_UNAVAILABLE,
                 task,
                 note,
+                null,
+                null,
                 null);
     }
 }

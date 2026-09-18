@@ -22,8 +22,12 @@ import { formatTime } from "../../../utils/formatTime";
 import {
   useReverseContextNavigation,
 } from "../../context/hooks/useReverseContextNavigation";
+import { ImagePreview } from "../../images/components/ImagePreview";
+import { AudioPlayer } from "../../audio/components/AudioPlayer";
+import { getAudioPlaybackUrl } from "../../audio/services/audioApi";
 import {
   getNote,
+  getNoteSourceTitle,
   type Note,
 } from "../../notes/services/noteApi";
 import {
@@ -785,13 +789,10 @@ export function TaskDetailPage() {
 
                       <div className="mt-4 rounded-xl border border-(--border) bg-(--app-bg) p-3">
                         <p className="wrap-break-word text-sm font-medium text-(--text-primary)">
-                          {sourceNote.youtubeSource
-                            .title ??
-                            "YouTube video"}
+                          {getNoteSourceTitle(sourceNote)}
                         </p>
 
-                        {sourceNote.youtubeSource
-                          .channelName && (
+                        {sourceNote.youtubeSource?.channelName && (
                           <p className="mt-1 text-xs text-(--text-muted)">
                             {
                               sourceNote
@@ -799,6 +800,32 @@ export function TaskDetailPage() {
                                 .channelName
                             }
                           </p>
+                        )}
+
+                        {sourceNote.sourceType === "IMAGE" &&
+                          sourceNote.imageSource && (
+                          <div className="mt-3 max-h-56 overflow-hidden rounded-lg border border-(--border)">
+                            <ImagePreview
+                              sourceId={sourceNote.imageSource.id}
+                              origin={sourceNote.imageSource.origin}
+                              url={sourceNote.imageSource.url}
+                              alt={getNoteSourceTitle(sourceNote)}
+                              className="max-h-56 w-full object-contain"
+                            />
+                          </div>
+                        )}
+
+                        {sourceNote.sourceType === "AUDIO" &&
+                          sourceNote.audioSource && (
+                          <AudioPlayer
+                            url={getAudioPlaybackUrl(
+                              sourceNote.audioSource.id,
+                              sourceNote.audioSource.origin,
+                              sourceNote.audioSource.url,
+                            )}
+                            title={getNoteSourceTitle(sourceNote)}
+                            className="mt-3"
+                          />
                         )}
 
                         <p className="mt-2 text-xs tabular-nums text-(--text-secondary)">
@@ -900,7 +927,10 @@ export function TaskDetailPage() {
         description={
           task?.sourceStatus ===
           "HAS_SOURCE"
-            ? "Deleting this Task does not delete its source Note or YouTube source."
+            ? sourceNote?.sourceType ===
+              "YOUTUBE"
+              ? "Deleting this Task does not delete its source Note or YouTube source."
+              : "Deleting this Task does not delete its source Note or exact source record."
             : "This permanently deletes the Task."
         }
         confirmLabel="Delete Task"

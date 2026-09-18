@@ -11,6 +11,7 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.lifelab.organization.service.ItemOrganizationService;
 import com.lifelab.task.domain.Task;
 import com.lifelab.task.domain.TaskStatus;
 import com.lifelab.task.dto.DailyPlanResponse;
@@ -22,10 +23,15 @@ import com.lifelab.task.repository.TaskRepository;
 public class DailyPlanService {
 
     private final TaskRepository taskRepository;
+    private final ItemOrganizationService organizationService;
     private final Clock clock;
 
-    public DailyPlanService(TaskRepository taskRepository, Clock clock) {
+    public DailyPlanService(
+            TaskRepository taskRepository,
+            ItemOrganizationService organizationService,
+            Clock clock) {
         this.taskRepository = taskRepository;
+        this.organizationService = organizationService;
         this.clock = clock;
     }
 
@@ -36,6 +42,7 @@ public class DailyPlanService {
 
         List<Task> tasks =
                 taskRepository.findAllByAccount_IdOrderByCreatedAtDescIdDesc(accountId);
+        List<TaskResponse> taskResponses = organizationService.toTaskResponses(tasks);
 
         List<TaskResponse> overdue = new ArrayList<>();
         List<TaskResponse> today = new ArrayList<>();
@@ -43,8 +50,9 @@ public class DailyPlanService {
         List<TaskResponse> noDeadline = new ArrayList<>();
         List<TaskResponse> completed = new ArrayList<>();
 
-        for (Task task : tasks) {
-            TaskResponse response = TaskResponse.from(task);
+        for (int index = 0; index < tasks.size(); index++) {
+            Task task = tasks.get(index);
+            TaskResponse response = taskResponses.get(index);
 
             if (task.getStatus() == TaskStatus.COMPLETED) {
                 completed.add(response);

@@ -30,6 +30,7 @@ import {
   type LibrarySortDirection,
 } from "./LibraryFilters";
 import { LibraryPagination } from "./LibraryPagination";
+import { LibraryMediaNavigation } from "./LibraryMediaNavigation";
 import { LibraryVideoCard } from "./LibraryVideoCard";
 import {
   LibraryViewModes,
@@ -1357,6 +1358,8 @@ export function BackendVideoLibrary({
       aria-busy={isLoading || isMutating || isPreparingDelete}
       className="w-full rounded-xl border border-(--border) bg-(--surface) p-4 sm:p-5"
     >
+      <LibraryMediaNavigation className="mb-4" />
+
       <div className="mb-4 flex items-start justify-between gap-6">
         <div className="min-w-0">
           <h4 className="text-base font-semibold text-(--text-primary)">

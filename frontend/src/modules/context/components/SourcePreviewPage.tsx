@@ -16,7 +16,11 @@ import {
 import {
   formatTime,
 } from "../../../utils/formatTime";
+import { ImagePreview } from "../../images/components/ImagePreview";
+import { AudioPlayer } from "../../audio/components/AudioPlayer";
+import { getAudioPlaybackUrl } from "../../audio/services/audioApi";
 import { EmbedVideoPlayer } from "../../media/components/EmbedVideoPlayer";
+import { getNoteSourceTitle } from "../../notes/services/noteApi";
 import {
   useReverseContextNavigation,
 } from "../hooks/useReverseContextNavigation";
@@ -107,7 +111,9 @@ export function SourcePreviewPage({
     if (
       !player ||
       navigationMode !==
-        "SOURCE_PREVIEW"
+        "SOURCE_PREVIEW" ||
+      note?.sourceType !==
+        "YOUTUBE"
     ) {
       return;
     }
@@ -133,13 +139,29 @@ export function SourcePreviewPage({
     }
   }, [
     note?.id,
+    note?.sourceType,
     note?.timestampSeconds,
     navigationMode,
   ]);
 
   const sourceTitle =
-    note?.youtubeSource.title ??
-    "YouTube video";
+    note
+      ? getNoteSourceTitle(note)
+      : "Source";
+  const isImageSource =
+    note?.sourceType === "IMAGE";
+  const isAudioSource =
+    note?.sourceType === "AUDIO";
+  const backPath = isImageSource
+    ? "/images"
+    : isAudioSource
+      ? "/audio"
+      : "/library";
+  const backLabel = isImageSource
+    ? "Images"
+    : isAudioSource
+      ? "Audio"
+      : "Library";
 
   const showHistoricalContext =
     Boolean(note) &&
@@ -156,7 +178,7 @@ export function SourcePreviewPage({
         <button
           type="button"
           onClick={() =>
-            navigate("/library")
+            navigate(backPath)
           }
           className="flex items-center gap-2 rounded-xl border border-(--border) px-3 py-2 text-sm text-(--text-secondary) transition hover:bg-(--surface) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)"
         >
@@ -164,7 +186,7 @@ export function SourcePreviewPage({
             size={15}
             aria-hidden="true"
           />
-          Back to Library
+          Back to {backLabel}
         </button>
 
         <header className="mt-6">
@@ -176,8 +198,7 @@ export function SourcePreviewPage({
             {sourceTitle}
           </h1>
 
-          {note?.youtubeSource
-            .channelName && (
+          {note?.youtubeSource?.channelName && (
             <p className="mt-1 text-sm text-(--text-muted)">
               {
                 note.youtubeSource
@@ -264,7 +285,44 @@ export function SourcePreviewPage({
           </div>
         ) : note &&
           navigationMode ===
-            "SOURCE_PREVIEW" ? (
+            "SOURCE_PREVIEW" &&
+          note.sourceType === "IMAGE" &&
+          note.imageSource ? (
+          <div className="mt-8 flex min-h-[320px] items-center justify-center overflow-hidden rounded-3xl border border-(--border) bg-(--surface) sm:min-h-[480px]">
+            <ImagePreview
+              sourceId={note.imageSource.id}
+              origin={note.imageSource.origin}
+              url={note.imageSource.url}
+              alt={sourceTitle}
+              className="max-h-[75vh] w-full object-contain"
+            />
+          </div>
+        ) : note &&
+          navigationMode ===
+            "SOURCE_PREVIEW" &&
+          note.sourceType === "AUDIO" &&
+          note.audioSource ? (
+          <div className="mt-8 rounded-3xl border border-(--border) bg-(--surface) p-5 sm:p-8">
+            <AudioPlayer
+              url={getAudioPlaybackUrl(
+                note.audioSource.id,
+                note.audioSource.origin,
+                note.audioSource.url,
+              )}
+              title={sourceTitle}
+              seekToSeconds={note.timestampSeconds}
+            />
+            {note.audioSource.origin === "EXTERNAL" && (
+              <p className="mt-4 break-all text-xs leading-5 text-(--text-muted)">
+                {note.audioSource.url}
+              </p>
+            )}
+          </div>
+        ) : note &&
+          navigationMode ===
+            "SOURCE_PREVIEW" &&
+          note.sourceType === "YOUTUBE" &&
+          note.youtubeSource ? (
           <div className="mt-8">
             <EmbedVideoPlayer
               title={sourceTitle}
@@ -334,10 +392,14 @@ export function SourcePreviewPage({
               </div>
 
               {navigationMode ===
-                "SOURCE_PREVIEW" && (
+                "SOURCE_PREVIEW" &&
+                (note.sourceType ===
+                  "YOUTUBE" ||
+                  note.sourceType ===
+                    "AUDIO") && (
                 <p className="mt-3 text-xs leading-5 text-(--text-muted)">
-                  Source Preview playback does not affect your
-                  watch history.
+                  Source Preview playback does not create media
+                  history or listening statistics.
                 </p>
               )}
             </section>

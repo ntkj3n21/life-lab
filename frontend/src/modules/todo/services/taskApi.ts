@@ -7,6 +7,8 @@ import {
 } from "../../../lib/api";
 
 import type { PagedResponse } from "../../media/services/libraryApi";
+import type { Tag } from "../../media/services/tagApi";
+import type { Category } from "../../organization/services/categoryApi";
 
 export type TaskStatus =
   | "NOT_STARTED"
@@ -26,6 +28,8 @@ export interface Task {
   deadline: string | null;
   sourceStatus: TaskSourceStatus;
   sourceNoteId: number | null;
+  category: Category | null;
+  tags: Tag[];
   createdAt: string;
   updatedAt: string;
 }
@@ -50,6 +54,26 @@ export interface TaskQuery {
   deadlineFrom?: string;
   deadlineTo?: string;
   libraryVideoId?: number;
+  libraryImageId?: number;
+  libraryAudioId?: number;
+  categoryId?: number;
+  tagIds?: number[];
+  sourceStatus?: TaskSourceStatus;
+  sortBy?:
+    | "createdAt"
+    | "updatedAt"
+    | "deadline";
+  sortDirection?: "asc" | "desc";
+}
+
+export interface UpdateTaskOrganizationInput {
+  categoryId: number | null;
+  tagIds: number[];
+}
+
+export interface TaskOrganization {
+  category: Category | null;
+  tags: Tag[];
 }
 
 export interface DailyPlan {
@@ -115,6 +139,59 @@ function buildTaskQuery(
     params.set(
       "libraryVideoId",
       String(query.libraryVideoId),
+    );
+  }
+
+  if (query.libraryImageId !== undefined) {
+    params.set(
+      "libraryImageId",
+      String(query.libraryImageId),
+    );
+  }
+
+  if (query.libraryAudioId !== undefined) {
+    params.set(
+      "libraryAudioId",
+      String(query.libraryAudioId),
+    );
+  }
+
+  if (
+    query.categoryId !== undefined
+  ) {
+    params.set(
+      "categoryId",
+      String(query.categoryId),
+    );
+  }
+
+  query.tagIds?.forEach(
+    (tagId) => {
+      params.append(
+        "tagId",
+        String(tagId),
+      );
+    },
+  );
+
+  if (query.sourceStatus) {
+    params.set(
+      "sourceStatus",
+      query.sourceStatus,
+    );
+  }
+
+  if (query.sortBy) {
+    params.set(
+      "sortBy",
+      query.sortBy,
+    );
+  }
+
+  if (query.sortDirection) {
+    params.set(
+      "sortDirection",
+      query.sortDirection,
     );
   }
 
@@ -225,5 +302,18 @@ export function getDailyPlan() {
           }
         : undefined,
     },
+  );
+}
+
+export function updateTaskOrganization(
+  taskId: number,
+  input: UpdateTaskOrganizationInput,
+) {
+  return apiPatch<
+    TaskOrganization,
+    UpdateTaskOrganizationInput
+  >(
+    `/api/tasks/${taskId}/organization`,
+    input,
   );
 }

@@ -1,4 +1,5 @@
 import { useContextStore } from "./contextStore";
+import { useCategoryStore } from "./categoryStore";
 import { useLibraryStore } from "./libraryStore";
 import { useNoteStore } from "./noteStore";
 import { useReverseContextStore } from "./reverseContextStore";
@@ -70,6 +71,10 @@ export function resetAccountScopedState() {
   useContextStore
     .getState()
     .clearActiveContext();
+
+  useCategoryStore
+    .getState()
+    .reset();
 
   useLibraryStore
     .getState()

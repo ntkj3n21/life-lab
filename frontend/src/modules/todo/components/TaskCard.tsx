@@ -2,7 +2,10 @@ import {
   Ellipsis,
   Eye,
   ExternalLink,
+  Folder,
+  FolderPen,
   Pencil,
+  Tags,
   Trash2,
 } from "lucide-react";
 import {
@@ -49,6 +52,12 @@ interface TaskCardProps {
   onOpenDetail?: (
     taskId: number,
   ) => void;
+
+  onEditOrganization?: (
+    task: Task,
+  ) => void;
+
+  isOrganizationDisabled?: boolean;
 }
 
 function getTaskStatusClassName(
@@ -72,6 +81,8 @@ export function TaskCard({
   onStatusChange,
   onDelete,
   onOpenDetail,
+  onEditOrganization,
+  isOrganizationDisabled = false,
 }: TaskCardProps) {
   const isWorkspace =
     variant === "workspace";
@@ -474,6 +485,46 @@ export function TaskCard({
               )}
             </div>
 
+            {(task.category ||
+              task.tags.length > 0) && (
+              <div className="mt-2 flex flex-wrap items-center gap-1.5 text-[10px] text-(--text-secondary)">
+                {task.category && (
+                  <span className="inline-flex max-w-full items-center gap-1 rounded-full border border-(--border) bg-(--app-bg) px-2 py-1">
+                    <Folder
+                      size={10}
+                      className="shrink-0 text-(--text-muted)"
+                      aria-hidden="true"
+                    />
+                    <span
+                      className="truncate"
+                      title={
+                        task.category.name
+                      }
+                    >
+                      {task.category.name}
+                    </span>
+                  </span>
+                )}
+
+                {task.tags.map((tag) => (
+                  <span
+                    key={tag.id}
+                    className="inline-flex max-w-full items-center gap-1 rounded-full bg-(--surface-hover) px-2 py-1"
+                    title={tag.name}
+                  >
+                    <Tags
+                      size={10}
+                      className="shrink-0 text-(--text-muted)"
+                      aria-hidden="true"
+                    />
+                    <span className="truncate">
+                      {tag.name}
+                    </span>
+                  </span>
+                ))}
+              </div>
+            )}
+
             {isPlanner &&
               plannerActionsOpen && (
                 <div
@@ -731,6 +782,37 @@ export function TaskCard({
                 </button>
               )}
 
+              {onEditOrganization && (
+                <button
+                  type="button"
+                  disabled={
+                    isMutating ||
+                    isOrganizationDisabled
+                  }
+                  onClick={() =>
+                    onEditOrganization(task)
+                  }
+                  className={
+                    isWorkspace
+                      ? "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-(--border) text-(--text-muted) hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40 xl:h-8 xl:w-8"
+                      : "flex shrink-0 items-center gap-1 rounded-lg border border-(--border) px-2 py-1.5 text-xs text-(--text-muted) hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
+                  }
+                  aria-label={
+                    isWorkspace
+                      ? `Organize task ${task.title}`
+                      : undefined
+                  }
+                  title="Organize task"
+                >
+                  <FolderPen
+                    size={12}
+                    aria-hidden="true"
+                  />
+                  {!isWorkspace &&
+                    "Organize"}
+                </button>
+              )}
+
               <label
                 htmlFor={`task-status-${task.id}`}
                 className="sr-only"
@@ -799,7 +881,7 @@ export function TaskCard({
         title={`Delete task "${task.title}"?`}
         description={
           task.sourceStatus === "HAS_SOURCE"
-            ? "Deleting the Task does not delete its source Note or YouTube source."
+            ? "Deleting the Task does not delete its source Note or exact source record."
             : "This will permanently delete the Task."
         }
         confirmLabel="Delete Task"

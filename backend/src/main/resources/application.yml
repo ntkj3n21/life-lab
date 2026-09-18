@@ -18,9 +18,19 @@ spring:
       hibernate:
         jdbc:
           time_zone: UTC
+  servlet:
+    multipart:
+      max-file-size: ${LIFELAB_MULTIPART_MAX_FILE_SIZE:52MB}
+      max-request-size: ${LIFELAB_MULTIPART_MAX_REQUEST_SIZE:54MB}
 
 app:
   default-time-zone: ${LIFELAB_DEFAULT_TIME_ZONE:UTC}
+  image-storage:
+    location: ${LIFELAB_IMAGE_STORAGE_PATH:./data/images}
+    max-upload-size: ${LIFELAB_IMAGE_MAX_UPLOAD_SIZE:10MB}
+  audio-storage:
+    location: ${LIFELAB_AUDIO_STORAGE_PATH:./data/audio}
+    max-upload-size: ${LIFELAB_AUDIO_MAX_UPLOAD_SIZE:50MB}
   youtube:
     api-key: ${LIFELAB_YOUTUBE_API_KEY:}
   security:

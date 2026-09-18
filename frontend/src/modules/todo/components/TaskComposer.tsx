@@ -20,6 +20,7 @@ interface TaskComposerProps {
   notes?: Note[];
   isLoadingNotes?: boolean;
   noteLoadErrorMessage?: string | null;
+  sourceLabel?: string;
   isMutating: boolean;
   errorMessage?: string | null;
   onTitleChange: (value: string) => void;
@@ -44,6 +45,7 @@ export function TaskComposer({
   notes = [],
   isLoadingNotes = false,
   noteLoadErrorMessage,
+  sourceLabel = "video",
   isMutating,
   errorMessage,
   onTitleChange,
@@ -147,7 +149,7 @@ export function TaskComposer({
         >
           <div className="flex items-center justify-between gap-2 px-1">
             <p className="text-xs font-medium text-(--text-secondary)">
-              Choose a note from this video
+              Choose a note from this {sourceLabel}
             </p>
             {onCloseNotePicker && (
               <button
@@ -190,10 +192,10 @@ export function TaskComposer({
           ) : notes.length === 0 ? (
             <div className="px-2 py-4 text-center">
               <p className="text-xs font-medium text-(--text-secondary)">
-                No notes for this video yet.
+                No notes for this {sourceLabel} yet.
               </p>
               <p className="mt-1 text-[11px] leading-5 text-(--text-muted)">
-                Create a note first if you want the task to preserve video context.
+                Create a note first if you want the task to preserve {sourceLabel} context.
               </p>
             </div>
           ) : (

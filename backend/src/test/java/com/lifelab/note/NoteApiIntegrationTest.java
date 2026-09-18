@@ -85,8 +85,9 @@ class NoteApiIntegrationTest {
     @BeforeEach
     void cleanDatabase() {
         jdbcTemplate.execute("""
-                TRUNCATE TABLE tasks, notes, watch_sessions, library_video_tags, tags,
-                    library_videos, youtube_videos, accounts RESTART IDENTITY CASCADE
+                TRUNCATE TABLE task_tags, note_tags, categories, tasks, notes, watch_sessions,
+                    library_video_tags, tags, library_videos, youtube_videos, accounts
+                    RESTART IDENTITY CASCADE
                 """);
     }
 
@@ -206,6 +207,153 @@ class NoteApiIntegrationTest {
                 .andExpect(jsonPath("$.items").isEmpty())
                 .andExpect(jsonPath("$.totalElements").value(0))
                 .andExpect(jsonPath("$.totalPages").value(0));
+    }
+
+    @Test
+    void organizationTimestampSourceSearchSortingAndFilteredPaginationCompose() throws Exception {
+        Account owner = createAccount("note-v2-owner@example.com");
+        Account other = createAccount("note-v2-other@example.com");
+        YouTubeVideo source = createSource("note-v2-source", YouTubeAvailabilityStatus.AVAILABLE);
+        jdbcTemplate.update(
+                "UPDATE youtube_videos SET title = 'Deep Work Lecture', channel_name = 'Focus Academy' WHERE id = ?",
+                source.getId());
+        Long categoryId = insertCategory(owner.getId(), "Learning", "learning");
+        Long otherCategoryId = insertCategory(owner.getId(), "Other", "other");
+        Long foreignCategoryId = insertCategory(other.getId(), "Private", "private");
+        Long alphaTagId = insertTag(owner.getId(), "Alpha", "alpha");
+        Long betaTagId = insertTag(owner.getId(), "Beta", "beta");
+        Long foreignTagId = insertTag(other.getId(), "Private", "private");
+
+        Long oldTimestamped = insertNote(
+                owner.getId(), source.getId(), "First practice", 10, BASE_TIME.minusDays(1));
+        Long newTimestamped = insertNote(
+                owner.getId(), source.getId(), "Second practice", 20, BASE_TIME);
+        Long newWithoutTimestamp = insertNote(
+                owner.getId(), source.getId(), "Third practice", null, BASE_TIME);
+        Long oldWithoutTimestamp = insertNote(
+                owner.getId(), source.getId(), "Review", null, BASE_TIME.minusDays(2));
+        Long wrongCategory = insertNote(
+                owner.getId(), source.getId(), "First practice", 30, BASE_TIME.plusDays(1));
+        Long foreignNote = insertNote(
+                other.getId(), source.getId(), "First practice", 40, BASE_TIME.plusDays(2));
+
+        organizeNote(oldTimestamped, categoryId, alphaTagId);
+        organizeNote(newTimestamped, categoryId, alphaTagId);
+        organizeNote(newWithoutTimestamp, categoryId, betaTagId);
+        organizeNote(oldWithoutTimestamp, categoryId, betaTagId);
+        organizeNote(wrongCategory, otherCategoryId, alphaTagId);
+        organizeNote(foreignNote, foreignCategoryId, foreignTagId);
+        jdbcTemplate.update("UPDATE notes SET updated_at = ? WHERE id IN (?, ?)",
+                BASE_TIME, oldTimestamped, newTimestamped);
+        jdbcTemplate.update("UPDATE notes SET updated_at = ? WHERE id = ?",
+                BASE_TIME.plusHours(1), newWithoutTimestamp);
+        jdbcTemplate.update("UPDATE notes SET updated_at = ? WHERE id = ?",
+                BASE_TIME.plusHours(2), oldWithoutTimestamp);
+        Cookie token = login(owner.getEmail());
+
+        mockMvc.perform(get("/api/notes/{id}", newTimestamped).cookie(token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.category.id").value(categoryId))
+                .andExpect(jsonPath("$.tags.length()").value(1))
+                .andExpect(jsonPath("$.tags[0].id").value(alphaTagId));
+
+        mockMvc.perform(get("/api/notes")
+                        .param("categoryId", categoryId.toString())
+                        .param("tagId", alphaTagId.toString(), betaTagId.toString())
+                        .cookie(token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.totalElements").value(4))
+                .andExpect(jsonPath("$.items[0].category.id").value(categoryId))
+                .andExpect(jsonPath("$.items[0].tags").isArray());
+
+        mockMvc.perform(get("/api/notes")
+                        .param("hasTimestamp", "true")
+                        .cookie(token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.totalElements").value(3));
+        mockMvc.perform(get("/api/notes")
+                        .param("hasTimestamp", "false")
+                        .cookie(token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.totalElements").value(2));
+
+        MvcResult ascending = mockMvc.perform(get("/api/notes")
+                        .param("q", "academy")
+                        .param("categoryId", categoryId.toString())
+                        .param("tagId", alphaTagId.toString(), betaTagId.toString())
+                        .param("hasTimestamp", "false")
+                        .param("sortBy", "createdAt")
+                        .param("sortDirection", "asc")
+                        .cookie(token))
+                .andExpect(status().isOk())
+                .andReturn();
+        assertThat(itemIds(ascending)).containsExactly(oldWithoutTimestamp, newWithoutTimestamp);
+
+        MvcResult descending = mockMvc.perform(get("/api/notes")
+                        .param("categoryId", categoryId.toString())
+                        .param("hasTimestamp", "false")
+                        .param("sortBy", "updatedAt")
+                        .param("sortDirection", "desc")
+                        .cookie(token))
+                .andExpect(status().isOk())
+                .andReturn();
+        assertThat(itemIds(descending)).containsExactly(oldWithoutTimestamp, newWithoutTimestamp);
+
+        MvcResult firstPage = mockMvc.perform(get("/api/notes")
+                        .param("categoryId", categoryId.toString())
+                        .param("tagId", alphaTagId.toString())
+                        .param("sortBy", "updatedAt")
+                        .param("sortDirection", "asc")
+                        .param("page", "0")
+                        .param("size", "1")
+                        .cookie(token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.totalElements").value(2))
+                .andExpect(jsonPath("$.totalPages").value(2))
+                .andReturn();
+        MvcResult secondPage = mockMvc.perform(get("/api/notes")
+                        .param("categoryId", categoryId.toString())
+                        .param("tagId", alphaTagId.toString())
+                        .param("sortBy", "updatedAt")
+                        .param("sortDirection", "asc")
+                        .param("page", "1")
+                        .param("size", "1")
+                        .cookie(token))
+                .andExpect(status().isOk())
+                .andReturn();
+        assertThat(itemIds(firstPage)).containsExactly(oldTimestamped);
+        assertThat(itemIds(secondPage)).containsExactly(newTimestamped);
+    }
+
+    @Test
+    void organizationFiltersAreOwnershipSafeAndSortParametersAreValidated() throws Exception {
+        Account owner = createAccount("note-v2-validation-owner@example.com");
+        Account other = createAccount("note-v2-validation-other@example.com");
+        Long foreignCategoryId = insertCategory(other.getId(), "Private", "private");
+        Long foreignTagId = insertTag(other.getId(), "Private", "private");
+        Cookie token = login(owner.getEmail());
+
+        mockMvc.perform(get("/api/notes")
+                        .param("categoryId", foreignCategoryId.toString())
+                        .cookie(token))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.code").value("CATEGORY_NOT_FOUND"));
+        mockMvc.perform(get("/api/notes")
+                        .param("tagId", foreignTagId.toString())
+                        .cookie(token))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.code").value("TAG_NOT_FOUND"));
+
+        for (String[] invalid : new String[][] {
+                {"sortBy", "deadline", "sortBy"},
+                {"sortDirection", "up", "sortDirection"}}) {
+            mockMvc.perform(get("/api/notes")
+                            .param(invalid[0], invalid[1])
+                            .cookie(token))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.code").value("VALIDATION_ERROR"))
+                    .andExpect(jsonPath("$.fieldErrors." + invalid[2]).exists());
+        }
     }
 
     @Test
@@ -408,6 +556,35 @@ class NoteApiIntegrationTest {
                 ) VALUES (?, ?, ?, ?, ?, ?)
                 RETURNING id
                 """, Long.class, accountId, youtubeSourceId, content, timestampSeconds, createdAt, createdAt);
+    }
+
+    private Long insertCategory(Long accountId, String name, String normalizedName) {
+        return jdbcTemplate.queryForObject("""
+                INSERT INTO categories (account_id, name, normalized_name, created_at, updated_at)
+                VALUES (?, ?, ?, ?, ?)
+                RETURNING id
+                """, Long.class, accountId, name, normalizedName, BASE_TIME, BASE_TIME);
+    }
+
+    private Long insertTag(Long accountId, String name, String normalizedName) {
+        return jdbcTemplate.queryForObject("""
+                INSERT INTO tags (account_id, name, normalized_name, created_at, updated_at)
+                VALUES (?, ?, ?, ?, ?)
+                RETURNING id
+                """, Long.class, accountId, name, normalizedName, BASE_TIME, BASE_TIME);
+    }
+
+    private void organizeNote(Long noteId, Long categoryId, Long tagId) {
+        jdbcTemplate.update("UPDATE notes SET category_id = ? WHERE id = ?", categoryId, noteId);
+        jdbcTemplate.update("INSERT INTO note_tags (note_id, tag_id) VALUES (?, ?)", noteId, tagId);
+    }
+
+    private java.util.List<Long> itemIds(MvcResult result) throws Exception {
+        return objectMapper.readTree(result.getResponse().getContentAsByteArray())
+                .get("items")
+                .valueStream()
+                .map(item -> item.get("id").longValue())
+                .toList();
     }
 
     private void insertTask(Long accountId, Long noteId) {

@@ -4,11 +4,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -17,10 +19,15 @@ import com.lifelab.auth.domain.Account;
 import com.lifelab.context.domain.ContextNavigationMode;
 import com.lifelab.context.dto.ContextResponse;
 import com.lifelab.note.domain.Note;
+import com.lifelab.note.dto.NoteResponse;
 import com.lifelab.note.exception.NoteNotFoundException;
 import com.lifelab.note.repository.NoteRepository;
+import com.lifelab.organization.service.ItemOrganizationService;
+import com.lifelab.source.audio.repository.LibraryAudioRepository;
+import com.lifelab.source.image.repository.LibraryImageRepository;
 import com.lifelab.task.domain.Task;
 import com.lifelab.task.domain.TaskSourceStatus;
+import com.lifelab.task.dto.TaskResponse;
 import com.lifelab.task.exception.TaskNotFoundException;
 import com.lifelab.task.repository.TaskRepository;
 import com.lifelab.video.domain.LibraryVideo;
@@ -73,7 +80,10 @@ class ContextServiceTest {
                 noteRepository,
                 taskRepository,
                 libraryVideoRepository,
-                youTubeMetadataClient);
+                mock(LibraryImageRepository.class),
+                mock(LibraryAudioRepository.class),
+                youTubeMetadataClient,
+                organizationService());
 
         ContextResponse response =
                 service.resolveFromNote(ACCOUNT_ID, NOTE_ID);
@@ -123,7 +133,10 @@ class ContextServiceTest {
                 noteRepository,
                 taskRepository,
                 libraryVideoRepository,
-                youTubeMetadataClient);
+                mock(LibraryImageRepository.class),
+                mock(LibraryAudioRepository.class),
+                youTubeMetadataClient,
+                organizationService());
 
         ContextResponse response =
                 service.resolveFromNote(ACCOUNT_ID, NOTE_ID);
@@ -168,7 +181,10 @@ class ContextServiceTest {
                 noteRepository,
                 taskRepository,
                 libraryVideoRepository,
-                youTubeMetadataClient);
+                mock(LibraryImageRepository.class),
+                mock(LibraryAudioRepository.class),
+                youTubeMetadataClient,
+                organizationService());
 
         ContextResponse response =
                 service.resolveFromNote(ACCOUNT_ID, NOTE_ID);
@@ -220,7 +236,10 @@ class ContextServiceTest {
                 noteRepository,
                 taskRepository,
                 libraryVideoRepository,
-                youTubeMetadataClient);
+                mock(LibraryImageRepository.class),
+                mock(LibraryAudioRepository.class),
+                youTubeMetadataClient,
+                organizationService());
 
         ContextResponse response =
                 service.resolveFromTask(ACCOUNT_ID, TASK_ID);
@@ -265,7 +284,10 @@ class ContextServiceTest {
                 noteRepository,
                 taskRepository,
                 libraryVideoRepository,
-                youTubeMetadataClient);
+                mock(LibraryImageRepository.class),
+                mock(LibraryAudioRepository.class),
+                youTubeMetadataClient,
+                organizationService());
 
         ContextResponse response =
                 service.resolveFromTask(ACCOUNT_ID, TASK_ID);
@@ -334,7 +356,10 @@ class ContextServiceTest {
                 noteRepository,
                 taskRepository,
                 libraryVideoRepository,
-                youTubeMetadataClient);
+                mock(LibraryImageRepository.class),
+                mock(LibraryAudioRepository.class),
+                youTubeMetadataClient,
+                organizationService());
 
         ContextResponse response =
                 service.resolveFromTask(ACCOUNT_ID, TASK_ID);
@@ -385,7 +410,10 @@ class ContextServiceTest {
                 noteRepository,
                 taskRepository,
                 libraryVideoRepository,
-                youTubeMetadataClient);
+                mock(LibraryImageRepository.class),
+                mock(LibraryAudioRepository.class),
+                youTubeMetadataClient,
+                organizationService());
 
         assertThatThrownBy(() ->
                 service.resolveFromNote(
@@ -432,7 +460,10 @@ class ContextServiceTest {
                 noteRepository,
                 taskRepository,
                 libraryVideoRepository,
-                youTubeMetadataClient);
+                mock(LibraryImageRepository.class),
+                mock(LibraryAudioRepository.class),
+                youTubeMetadataClient,
+                organizationService());
 
         ContextResponse response =
                 service.resolveFromNote(ACCOUNT_ID, NOTE_ID);
@@ -484,7 +515,10 @@ class ContextServiceTest {
                 noteRepository,
                 taskRepository,
                 libraryVideoRepository,
-                youTubeMetadataClient);
+                mock(LibraryImageRepository.class),
+                mock(LibraryAudioRepository.class),
+                youTubeMetadataClient,
+                organizationService());
 
         assertThatThrownBy(() ->
                 service.resolveFromNote(
@@ -497,6 +531,15 @@ class ContextServiceTest {
 
         verifyNoInteractions(taskRepository);
         verifyNoInteractions(libraryVideoRepository);
+    }
+
+    private ItemOrganizationService organizationService() {
+        ItemOrganizationService service = mock(ItemOrganizationService.class);
+        when(service.toNoteResponse(any(Note.class))).thenAnswer(invocation ->
+                NoteResponse.from(invocation.getArgument(0), List.of()));
+        when(service.toTaskResponse(any(Task.class))).thenAnswer(invocation ->
+                TaskResponse.from(invocation.getArgument(0), List.of()));
+        return service;
     }
 
     private Note note(

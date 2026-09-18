@@ -440,7 +440,7 @@ export function DailyPlanPage() {
 
     setNotice(
       refreshed
-        ? "Task deleted. Its Note and YouTube source were not deleted."
+        ? "Task deleted."
         : "Task deleted, but Daily Plan could not be refreshed.",
     );
     setIsMutating(false);

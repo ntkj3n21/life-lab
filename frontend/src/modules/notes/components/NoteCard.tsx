@@ -2,9 +2,12 @@ import {
   Ellipsis,
   Eye,
   ExternalLink,
+  Folder,
+  FolderPen,
   ListTodo,
   Pencil,
   StickyNote,
+  Tags,
   Trash2,
 } from "lucide-react";
 import {
@@ -14,7 +17,11 @@ import {
 } from "react";
 
 import { formatTime } from "../../../utils/formatTime";
-import type { Note } from "../services/noteApi";
+import {
+  getNoteSourceLabel,
+  getNoteSourceTitle,
+  type Note,
+} from "../services/noteApi";
 
 type NoteCaseTransform =
   | "uppercase"
@@ -61,6 +68,10 @@ interface NoteCardProps {
   onDelete: (note: Note) => Promise<void>;
   onViewSource: (noteId: number) => Promise<void>;
   onCreateTask?: (note: Note) => void;
+  onEditOrganization?: (
+    note: Note,
+  ) => void;
+  isOrganizationDisabled?: boolean;
   isCreatingTask?: boolean;
   isCreateTaskDisabled?: boolean;
 
@@ -81,12 +92,18 @@ export function NoteCard({
   onDelete,
   onViewSource,
   onCreateTask,
+  onEditOrganization,
+  isOrganizationDisabled = false,
   isCreatingTask = false,
   isCreateTaskDisabled = false,
   onOpenDetail,
 }: NoteCardProps) {
   const contentId =
     `note-content-${note.id}`;
+  const sourceTitle =
+    getNoteSourceTitle(note);
+  const sourceLabel =
+    getNoteSourceLabel(note).toLowerCase();
 
   const isWorkspace =
     variant !== "default";
@@ -304,20 +321,54 @@ export function NoteCard({
             </p>
           </div>
 
+          {(note.category ||
+            note.tags.length > 0) && (
+            <div className="mt-2 flex flex-wrap items-center gap-1.5 text-[11px] text-(--text-secondary)">
+              {note.category && (
+                <span className="inline-flex max-w-full items-center gap-1 rounded-full border border-(--border) bg-(--app-bg) px-2 py-1">
+                  <Folder
+                    size={11}
+                    className="shrink-0 text-(--text-muted)"
+                    aria-hidden="true"
+                  />
+                  <span
+                    className="truncate"
+                    title={
+                      note.category.name
+                    }
+                  >
+                    {note.category.name}
+                  </span>
+                </span>
+              )}
+
+              {note.tags.map((tag) => (
+                <span
+                  key={tag.id}
+                  className="inline-flex max-w-full items-center gap-1 rounded-full bg-(--surface-hover) px-2 py-1"
+                  title={tag.name}
+                >
+                  <Tags
+                    size={10}
+                    className="shrink-0 text-(--text-muted)"
+                    aria-hidden="true"
+                  />
+                  <span className="truncate">
+                    {tag.name}
+                  </span>
+                </span>
+              ))}
+            </div>
+          )}
+
           {isWorkspace ? (
             <div className="mt-2 min-w-0 text-xs text-(--text-muted)">
               {showSource && (
                 <p
                   className="truncate"
-                  title={
-                    note.youtubeSource
-                      .title ??
-                    "YouTube video"
-                  }
+                  title={sourceTitle}
                 >
-                  {note.youtubeSource
-                    .title ??
-                    "YouTube video"}
+                  {sourceTitle}
                 </p>
               )}
 
@@ -413,9 +464,9 @@ export function NoteCard({
                           );
                         }}
                         disabled={isMutating}
-                        aria-label={`Go to video from Note ${note.id}`}
+                        aria-label={`Go to ${sourceLabel} from Note ${note.id}`}
                         className="flex h-10 w-10 items-center justify-center rounded-lg text-(--text-muted) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40 xl:h-8 xl:w-8"
-                        title="Go to video"
+                        title={`Go to ${sourceLabel}`}
                       >
                         <ExternalLink
                           size={14}
@@ -492,15 +543,9 @@ export function NoteCard({
                 {showSource && (
                   <p
                     className="truncate"
-                    title={
-                      note.youtubeSource
-                        .title ??
-                      "YouTube video"
-                    }
+                    title={sourceTitle}
                   >
-                    {note.youtubeSource
-                      .title ??
-                      "YouTube video"}
+                    {sourceTitle}
                   </p>
                 )}
 
@@ -559,7 +604,7 @@ export function NoteCard({
                     disabled={isMutating}
                     className="rounded-lg border border-(--border) px-2 py-1 text-xs text-(--text-secondary) hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
                   >
-                    Go to video
+                    Go to {sourceLabel}
                   </button>
 
                   {onCreateTask && (
@@ -585,6 +630,28 @@ export function NoteCard({
                       {isCreatingTask
                         ? "Opening..."
                         : "Create Task"}
+                    </button>
+                  )}
+
+                  {onEditOrganization && (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        onEditOrganization(
+                          note,
+                        )
+                      }
+                      disabled={
+                        isMutating ||
+                        isOrganizationDisabled
+                      }
+                      className="flex items-center gap-1.5 rounded-lg border border-(--border) px-2 py-1 text-xs text-(--text-secondary) hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
+                    >
+                      <FolderPen
+                        size={12}
+                        aria-hidden="true"
+                      />
+                      Organize
                     </button>
                   )}
 

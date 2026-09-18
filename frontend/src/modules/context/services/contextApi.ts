@@ -17,6 +17,8 @@ export interface ContextResponse {
   note: Note | null;
 
   libraryVideoId: number | null;
+  libraryImageId: number | null;
+  libraryAudioId: number | null;
 }
 
 export function resolveContextFromNote(

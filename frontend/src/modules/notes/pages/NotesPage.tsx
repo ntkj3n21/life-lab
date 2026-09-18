@@ -2,7 +2,6 @@ import {
   ChevronLeft,
   ChevronRight,
   LoaderCircle,
-  Search,
   StickyNote,
 } from "lucide-react";
 import {
@@ -17,20 +16,35 @@ import { ConfirmDialog } from "../../../components/ui/ConfirmDialog";
 import {
   ApiError,
 } from "../../../lib/api";
+import { useCategoryStore } from "../../../stores/categoryStore";
 import { useLayoutStore } from "../../../stores/layoutStore";
+import { useTagStore } from "../../../stores/tagStore";
 import { useWorkspaceStore } from "../../../stores/workspaceStore";
 import {
   useReverseContextNavigation,
 } from "../../context/hooks/useReverseContextNavigation";
 import {
+  TagManager,
+  type TagManagerChange,
+} from "../../media/components/TagManager";
+import {
+  CategoryManager,
+  type CategoryManagerChange,
+} from "../../organization/components/CategoryManager";
+import {
   deleteNote as deleteNoteRequest,
   getNoteDeleteImpact,
+  getNoteSourceRecordLabel,
   getNotes,
   updateNote as updateNoteRequest,
+  updateNoteOrganization,
   type Note,
   type NoteDeleteImpact,
+  type NoteQuery,
 } from "../services/noteApi";
 import { NoteCard } from "../components/NoteCard";
+import { NoteFilters } from "../components/NoteFilters";
+import { NoteOrganizationEditor } from "../components/NoteOrganizationEditor";
 
 interface PendingNoteDelete {
   note: Note;
@@ -38,6 +52,29 @@ interface PendingNoteDelete {
 }
 
 const PAGE_SIZE = 20;
+
+type NoteSortBy = NonNullable<
+  NoteQuery["sortBy"]
+>;
+
+type NoteSortDirection =
+  NonNullable<
+    NoteQuery["sortDirection"]
+  >;
+
+interface AppliedNoteFilters {
+  categoryId?: number;
+  tagIds: number[];
+  hasTimestamp?: boolean;
+  sortBy: NoteSortBy;
+  sortDirection: NoteSortDirection;
+}
+
+const DEFAULT_FILTERS: AppliedNoteFilters = {
+  tagIds: [],
+  sortBy: "createdAt",
+  sortDirection: "desc",
+};
 
 function getErrorMessage(error: unknown) {
   if (error instanceof ApiError) {
@@ -66,6 +103,53 @@ export function NotesPage() {
       (state) =>
         state.beginTaskFromNote,
     );
+
+  const categories =
+    useCategoryStore(
+      (state) => state.categories,
+    );
+
+  const loadCategories =
+    useCategoryStore(
+      (state) =>
+        state.loadCategories,
+    );
+
+  const categoriesLoading =
+    useCategoryStore(
+      (state) => state.isLoading,
+    );
+
+  const hasLoadedCategories =
+    useCategoryStore(
+      (state) =>
+        state.hasLoadedCategories,
+    );
+
+  const categoryError =
+    useCategoryStore(
+      (state) => state.error,
+    );
+
+  const tags = useTagStore(
+    (state) => state.tags,
+  );
+
+  const loadTags = useTagStore(
+    (state) => state.loadTags,
+  );
+
+  const tagsLoading = useTagStore(
+    (state) => state.isLoading,
+  );
+
+  const hasLoadedTags = useTagStore(
+    (state) => state.hasLoadedTags,
+  );
+
+  const tagError = useTagStore(
+    (state) => state.error,
+  );
 
   const createTaskResolutionInFlightRef =
     useRef(false);
@@ -101,6 +185,13 @@ export function NotesPage() {
   ] = useState("");
 
   const [
+    filters,
+    setFilters,
+  ] = useState<AppliedNoteFilters>(
+    DEFAULT_FILTERS,
+  );
+
+  const [
     isLoading,
     setIsLoading,
   ] = useState(true);
@@ -132,6 +223,13 @@ export function NotesPage() {
   );
 
   const [
+    organizationErrorMessage,
+    setOrganizationErrorMessage,
+  ] = useState<string | null>(
+    null,
+  );
+
+  const [
     editingNoteId,
     setEditingNoteId,
   ] = useState<number | null>(
@@ -142,6 +240,13 @@ export function NotesPage() {
     editingContent,
     setEditingContent,
   ] = useState("");
+
+  const [
+    editingOrganizationNoteId,
+    setEditingOrganizationNoteId,
+  ] = useState<number | null>(
+    null,
+  );
 
   const [
     pendingDelete,
@@ -159,6 +264,19 @@ export function NotesPage() {
   );
 
   useEffect(() => {
+    void loadCategories().catch(() => {
+      // categoryStore keeps error.
+    });
+
+    void loadTags().catch(() => {
+      // tagStore keeps error.
+    });
+  }, [
+    loadCategories,
+    loadTags,
+  ]);
+
+  useEffect(() => {
     let cancelled = false;
 
     void getNotes({
@@ -167,6 +285,17 @@ export function NotesPage() {
       q:
         appliedQuery ||
         undefined,
+      categoryId:
+        filters.categoryId,
+      tagIds:
+        filters.tagIds.length > 0
+          ? filters.tagIds
+          : undefined,
+      hasTimestamp:
+        filters.hasTimestamp,
+      sortBy: filters.sortBy,
+      sortDirection:
+        filters.sortDirection,
     })
       .then((response) => {
         if (cancelled) {
@@ -203,7 +332,39 @@ export function NotesPage() {
   }, [
     page,
     appliedQuery,
+    filters.categoryId,
+    filters.tagIds,
+    filters.hasTimestamp,
+    filters.sortBy,
+    filters.sortDirection,
   ]);
+
+  function buildNoteQuery(
+    targetPage: number,
+    targetFilters = filters,
+    targetSearch = appliedQuery,
+  ): NoteQuery {
+    return {
+      page: targetPage,
+      size: PAGE_SIZE,
+      q:
+        targetSearch ||
+        undefined,
+      categoryId:
+        targetFilters.categoryId,
+      tagIds:
+        targetFilters.tagIds
+          .length > 0
+          ? targetFilters.tagIds
+          : undefined,
+      hasTimestamp:
+        targetFilters.hasTimestamp,
+      sortBy:
+        targetFilters.sortBy,
+      sortDirection:
+        targetFilters.sortDirection,
+    };
+  }
 
   async function reloadNotesAfterMutation(
     preferredPage: number,
@@ -212,13 +373,11 @@ export function NotesPage() {
       Math.max(0, preferredPage);
 
     const response =
-      await getNotes({
-        page: targetPage,
-        size: PAGE_SIZE,
-        q:
-          appliedQuery ||
-          undefined,
-      });
+      await getNotes(
+        buildNoteQuery(
+          targetPage,
+        ),
+      );
 
     const normalizedPage =
       response.totalPages === 0
@@ -254,21 +413,23 @@ export function NotesPage() {
     );
   }
 
-  async function reloadSameSearch(
-    query: string,
+  async function reloadNotesOnDemand(
+    targetPage: number,
+    targetFilters = filters,
+    targetSearch = appliedQuery,
   ) {
     setIsLoading(true);
     setLoadErrorMessage(null);
 
     try {
       const response =
-        await getNotes({
-          page: 0,
-          size: PAGE_SIZE,
-          q:
-            query ||
-            undefined,
-        });
+        await getNotes(
+          buildNoteQuery(
+            targetPage,
+            targetFilters,
+            targetSearch,
+          ),
+        );
 
       setNotes(response.items);
       setTotalElements(
@@ -284,6 +445,18 @@ export function NotesPage() {
     } finally {
       setIsLoading(false);
     }
+  }
+
+  function applyFilterChange(
+    nextFilters: AppliedNoteFilters,
+  ) {
+    setLoadErrorMessage(null);
+    setActionErrorMessage(null);
+    setOrganizationErrorMessage(null);
+    setEditingOrganizationNoteId(null);
+    setIsLoading(true);
+    setPage(0);
+    setFilters(nextFilters);
   }
 
   function handleSearchSubmit(
@@ -307,7 +480,9 @@ export function NotesPage() {
       page === 0 &&
       nextQuery === appliedQuery
     ) {
-      void reloadSameSearch(
+      void reloadNotesOnDemand(
+        0,
+        filters,
         nextQuery,
       );
       return;
@@ -315,32 +490,40 @@ export function NotesPage() {
 
     setIsLoading(true);
 
-    if (page !== 0) {
-      setPage(0);
-    }
-
+    setPage(0);
     setAppliedQuery(nextQuery);
   }
 
-  function handleClearSearch() {
+  function handleClearFilters() {
+    const appliedAlreadyClear =
+      !appliedQuery &&
+      filters.categoryId ===
+        undefined &&
+      filters.tagIds.length === 0 &&
+      filters.hasTimestamp ===
+        undefined &&
+      filters.sortBy ===
+        DEFAULT_FILTERS.sortBy &&
+      filters.sortDirection ===
+        DEFAULT_FILTERS.sortDirection;
+
     setSearchText("");
     setLoadErrorMessage(null);
     setActionErrorMessage(null);
+    setOrganizationErrorMessage(null);
+    setEditingOrganizationNoteId(null);
 
     if (
-      page === 0 &&
-      appliedQuery === ""
+      appliedAlreadyClear &&
+      page === 0
     ) {
       return;
     }
 
     setIsLoading(true);
-
-    if (page !== 0) {
-      setPage(0);
-    }
-
+    setPage(0);
     setAppliedQuery("");
+    setFilters(DEFAULT_FILTERS);
   }
 
   function handlePageChange(
@@ -364,6 +547,9 @@ export function NotesPage() {
   function handleStartEdit(
     note: Note,
   ) {
+    setEditingOrganizationNoteId(
+      null,
+    );
     setEditingNoteId(note.id);
     setEditingContent(
       note.content,
@@ -424,6 +610,74 @@ export function NotesPage() {
     }
   }
 
+  function handleStartOrganizationEdit(
+    note: Note,
+  ) {
+    handleCancelEdit();
+    setEditingOrganizationNoteId(
+      note.id,
+    );
+    setOrganizationErrorMessage(null);
+  }
+
+  async function handleSaveOrganization(
+    noteId: number,
+    categoryId: number | null,
+    tagIds: number[],
+  ) {
+    if (isMutating) {
+      return;
+    }
+
+    setIsMutating(true);
+    setOrganizationErrorMessage(null);
+
+    try {
+      const organization =
+        await updateNoteOrganization(
+          noteId,
+          {
+            categoryId,
+            tagIds,
+          },
+        );
+
+      setNotes((current) =>
+        current.map((note) =>
+          note.id === noteId
+            ? {
+                ...note,
+                category:
+                  organization.category,
+                tags:
+                  organization.tags,
+              }
+            : note,
+        ),
+      );
+      setEditingOrganizationNoteId(
+        null,
+      );
+
+      try {
+        await reloadNotesAfterMutation(
+          page,
+        );
+        setLoadErrorMessage(null);
+      } catch (error) {
+        setLoadErrorMessage(
+          getErrorMessage(error),
+        );
+      }
+    } catch (error) {
+      setOrganizationErrorMessage(
+        getErrorMessage(error),
+      );
+    } finally {
+      setIsMutating(false);
+    }
+  }
+
   async function handleRequestDelete(
     note: Note,
   ) {
@@ -473,6 +727,15 @@ export function NotesPage() {
         pendingDelete.note.id
       ) {
         handleCancelEdit();
+      }
+
+      if (
+        editingOrganizationNoteId ===
+        pendingDelete.note.id
+      ) {
+        setEditingOrganizationNoteId(
+          null,
+        );
       }
 
       setPendingDelete(null);
@@ -556,16 +819,155 @@ export function NotesPage() {
     }
   }
 
-  const hasSearch =
-    Boolean(appliedQuery);
+  function refreshAfterCatalogChange() {
+    setEditingOrganizationNoteId(null);
+
+    void reloadNotesAfterMutation(page)
+      .then(() => {
+        setLoadErrorMessage(null);
+      })
+      .catch((error: unknown) => {
+        setLoadErrorMessage(
+          getErrorMessage(error),
+        );
+      });
+  }
+
+  function handleCategoryChange(
+    change: CategoryManagerChange,
+  ) {
+    if (change.type === "created") {
+      return;
+    }
+
+    if (change.type === "renamed") {
+      setNotes((current) =>
+        current.map((note) =>
+          note.category?.id ===
+          change.category.id
+            ? {
+                ...note,
+                category:
+                  change.category,
+              }
+            : note,
+        ),
+      );
+      refreshAfterCatalogChange();
+      return;
+    }
+
+    setNotes((current) =>
+      current.map((note) =>
+        note.category?.id ===
+        change.category.id
+          ? {
+              ...note,
+              category: null,
+            }
+          : note,
+      ),
+    );
+
+    if (
+      filters.categoryId ===
+      change.category.id
+    ) {
+      applyFilterChange({
+        ...filters,
+        categoryId: undefined,
+      });
+      return;
+    }
+
+    refreshAfterCatalogChange();
+  }
+
+  function handleTagChange(
+    change: TagManagerChange,
+  ) {
+    if (change.type === "created") {
+      return;
+    }
+
+    if (change.type === "renamed") {
+      setNotes((current) =>
+        current.map((note) => ({
+          ...note,
+          tags: note.tags.map((tag) =>
+            tag.id === change.tag.id
+              ? change.tag
+              : tag,
+          ),
+        })),
+      );
+      refreshAfterCatalogChange();
+      return;
+    }
+
+    setNotes((current) =>
+      current.map((note) => ({
+        ...note,
+        tags: note.tags.filter(
+          (tag) =>
+            tag.id !== change.tag.id,
+        ),
+      })),
+    );
+
+    if (
+      filters.tagIds.includes(
+        change.tag.id,
+      )
+    ) {
+      applyFilterChange({
+        ...filters,
+        tagIds:
+          filters.tagIds.filter(
+            (tagId) =>
+              tagId !== change.tag.id,
+          ),
+      });
+      return;
+    }
+
+    refreshAfterCatalogChange();
+  }
+
+  const hasResultFilters = Boolean(
+    appliedQuery ||
+      filters.categoryId !==
+        undefined ||
+      filters.tagIds.length > 0 ||
+      filters.hasTimestamp !==
+        undefined,
+  );
+
+  const hasChangedControls = Boolean(
+    hasResultFilters ||
+      searchText ||
+      filters.sortBy !==
+        DEFAULT_FILTERS.sortBy ||
+      filters.sortDirection !==
+        DEFAULT_FILTERS.sortDirection,
+  );
+
+  const organizationLoadError =
+    (!hasLoadedCategories
+      ? categoryError?.message
+      : null) ??
+    (!hasLoadedTags
+      ? tagError?.message
+      : null) ??
+    null;
 
   const deleteDetails =
     pendingDelete
       ? [
           `${pendingDelete.impact.taskCountToMarkSourceMissing} linked task(s) will remain, but will no longer be linked to this Note.`,
-          pendingDelete.impact.youtubeSourcePreserved
-            ? "The exact YouTube source record will be preserved."
-            : "The YouTube source will not be preserved.",
+          pendingDelete.impact.sourcePreserved
+            ? `The exact ${getNoteSourceRecordLabel(pendingDelete.note)} source record will be preserved.`
+            : `The ${getNoteSourceRecordLabel(pendingDelete.note)} source will not be preserved.`,
           pendingDelete.impact.tasksPreserved
             ? "Linked Tasks are preserved."
             : "Linked Tasks are not preserved.",
@@ -589,77 +991,101 @@ export function NotesPage() {
 
             <p className="w-fit rounded-full border border-(--border) bg-(--surface) px-3 py-1.5 text-xs font-medium text-(--text-secondary)">
               {totalElements}{" "}
-              {hasSearch
+              {hasResultFilters
                 ? `result${totalElements === 1 ? "" : "s"}`
                 : `note${totalElements === 1 ? "" : "s"}`}
             </p>
           </div>
         </header>
 
-        <form
-          onSubmit={
-            handleSearchSubmit
+        <NoteFilters
+          searchText={searchText}
+          categoryId={
+            filters.categoryId
           }
-          className="mt-5 flex flex-col gap-2 sm:flex-row"
-        >
-          <div className="flex min-w-0 flex-1 items-center gap-2 rounded-xl border border-(--border) bg-(--surface) px-3 focus-within:border-(--border-strong) focus-within:ring-2 focus-within:ring-(--focus)">
-            <Search
-              size={16}
-              className="shrink-0 text-(--text-muted)"
-              aria-hidden="true"
-            />
+          tagIds={filters.tagIds}
+          hasTimestamp={
+            filters.hasTimestamp
+          }
+          sortBy={filters.sortBy}
+          sortDirection={
+            filters.sortDirection
+          }
+          categories={categories}
+          tags={tags}
+          categoriesLoading={
+            categoriesLoading
+          }
+          tagsLoading={tagsLoading}
+          isLoading={isLoading}
+          canClear={hasChangedControls}
+          onSearchTextChange={
+            setSearchText
+          }
+          onSearch={handleSearchSubmit}
+          onCategoryChange={(
+            categoryId,
+          ) =>
+            applyFilterChange({
+              ...filters,
+              categoryId,
+            })
+          }
+          onTagIdsChange={(tagIds) =>
+            applyFilterChange({
+              ...filters,
+              tagIds,
+            })
+          }
+          onTimestampChange={(
+            hasTimestamp,
+          ) =>
+            applyFilterChange({
+              ...filters,
+              hasTimestamp,
+            })
+          }
+          onSortByChange={(sortBy) =>
+            applyFilterChange({
+              ...filters,
+              sortBy,
+            })
+          }
+          onSortDirectionChange={(
+            sortDirection,
+          ) =>
+            applyFilterChange({
+              ...filters,
+              sortDirection,
+            })
+          }
+          onClear={handleClearFilters}
+        />
 
-            <label
-              htmlFor="global-note-search"
-              className="sr-only"
-            >
-              Search Notes
-            </label>
+        {organizationLoadError && (
+          <div
+            role="alert"
+            className="mt-4 rounded-xl border border-(--danger-border) bg-(--danger-surface) px-4 py-3 text-sm text-(--danger-text)"
+          >
+            Organization options could not be loaded: {organizationLoadError}
+          </div>
+        )}
 
-            <input
-              id="global-note-search"
-              value={searchText}
-              disabled={isLoading}
-              onChange={(event) =>
-                setSearchText(
-                  event.target.value,
-                )
+        <details className="mt-4 rounded-xl border border-(--border) bg-(--surface)">
+          <summary className="cursor-pointer px-4 py-3 text-sm font-medium text-(--text-secondary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)">
+            Manage categories and tags
+          </summary>
+          <div className="grid gap-3 border-t border-(--border) p-3 md:grid-cols-2">
+            <CategoryManager
+              onChange={
+                handleCategoryChange
               }
-              placeholder="Search note content..."
-              className="min-w-0 flex-1 bg-transparent py-2.5 text-sm outline-none placeholder:text-(--text-faint) disabled:cursor-not-allowed disabled:opacity-50"
+            />
+            <TagManager
+              onChange={handleTagChange}
             />
           </div>
-
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="flex items-center justify-center gap-2 rounded-lg bg-(--primary-bg) px-4 py-2 text-sm font-medium text-(--primary-text) transition hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            {isLoading && (
-              <LoaderCircle
-                size={14}
-                className="animate-spin"
-                aria-hidden="true"
-              />
-            )}
-
-            Search
-          </button>
-
-          {(searchText ||
-            hasSearch) && (
-            <button
-              type="button"
-              disabled={isLoading}
-              onClick={
-                handleClearSearch
-              }
-              className="rounded-lg px-4 py-2 text-sm text-(--text-muted) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              Clear
-            </button>
-          )}
-        </form>
+        </details>
 
         {loadErrorMessage && (
           <div
@@ -707,24 +1133,24 @@ export function NotesPage() {
               />
 
               <h2 className="mt-3 text-sm font-medium text-(--text-secondary)">
-                {hasSearch
+                {hasResultFilters
                   ? "No matching Notes"
                   : "No Notes yet"}
               </h2>
 
               <p className="mt-2 max-w-md text-xs leading-5 text-(--text-muted)">
-                {hasSearch
-                  ? "No Note content matches the current keyword. Change or clear the search condition."
+                {hasResultFilters
+                  ? "No Notes match the current server-side filters. Change or clear the filter conditions."
                   : "Notes created from a Video Workspace will appear here."}
               </p>
 
-              {hasSearch && (
+              {hasResultFilters && (
                 <button
                   type="button"
-                  onClick={handleClearSearch}
+                  onClick={handleClearFilters}
                   className="mt-4 rounded-xl border border-(--border) bg-(--surface) px-3 py-2 text-xs font-medium text-(--text-secondary) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)"
                 >
-                  Clear search
+                  Clear filters
                 </button>
               )}
             </div>
@@ -732,62 +1158,107 @@ export function NotesPage() {
         ) : (
           <div className="mt-6 space-y-3">
             {notes.map((note) => (
-              <NoteCard
-                key={note.id}
-                note={note}
-                current={false}
-                isMutating={
-                  isMutating
-                }
-                isEditing={
-                  editingNoteId ===
-                  note.id
-                }
-                editingContent={
-                  editingNoteId ===
-                  note.id
-                    ? editingContent
-                    : ""
-                }
-                onEditingContentChange={
-                  setEditingContent
-                }
-                onStartEdit={
-                  handleStartEdit
-                }
-                onCancelEdit={
-                  handleCancelEdit
-                }
-                onSaveEdit={
-                  handleSaveEdit
-                }
-                onDelete={
-                  handleRequestDelete
-                }
-                onViewSource={
-                  handleViewSource
-                }
-                onCreateTask={(note) =>
-                  void handleCreateTask(
-                    note,
-                  )
-                }
-                isCreatingTask={
-                  preparingTaskNoteId ===
-                  note.id
-                }
-                isCreateTaskDisabled={
-                  preparingTaskNoteId !==
-                  null
-                }
-                onOpenDetail={(
-                  noteId,
-                ) =>
-                  navigate(
-                    `/notes/${noteId}`,
-                  )
-                }
-              />
+              <div key={note.id}>
+                <NoteCard
+                  note={note}
+                  current={false}
+                  isMutating={
+                    isMutating
+                  }
+                  isEditing={
+                    editingNoteId ===
+                    note.id
+                  }
+                  editingContent={
+                    editingNoteId ===
+                    note.id
+                      ? editingContent
+                      : ""
+                  }
+                  onEditingContentChange={
+                    setEditingContent
+                  }
+                  onStartEdit={
+                    handleStartEdit
+                  }
+                  onCancelEdit={
+                    handleCancelEdit
+                  }
+                  onSaveEdit={
+                    handleSaveEdit
+                  }
+                  onDelete={
+                    handleRequestDelete
+                  }
+                  onViewSource={
+                    handleViewSource
+                  }
+                  onCreateTask={(selectedNote) =>
+                    void handleCreateTask(
+                      selectedNote,
+                    )
+                  }
+                  onEditOrganization={
+                    handleStartOrganizationEdit
+                  }
+                  isOrganizationDisabled={
+                    categoriesLoading ||
+                    tagsLoading ||
+                    Boolean(
+                      organizationLoadError,
+                    )
+                  }
+                  isCreatingTask={
+                    preparingTaskNoteId ===
+                    note.id
+                  }
+                  isCreateTaskDisabled={
+                    preparingTaskNoteId !==
+                    null
+                  }
+                  onOpenDetail={(
+                    noteId,
+                  ) =>
+                    navigate(
+                      `/notes/${noteId}`,
+                    )
+                  }
+                />
+
+                {editingOrganizationNoteId ===
+                  note.id && (
+                  <NoteOrganizationEditor
+                    key={`organization-${note.id}`}
+                    note={note}
+                    categories={categories}
+                    tags={tags}
+                    isBusy={isMutating}
+                    errorMessage={
+                      organizationErrorMessage
+                    }
+                    onSave={(
+                      categoryId,
+                      tagIds,
+                    ) =>
+                      handleSaveOrganization(
+                        note.id,
+                        categoryId,
+                        tagIds,
+                      )
+                    }
+                    onCancel={() => {
+                      if (!isMutating) {
+                        setEditingOrganizationNoteId(
+                          null,
+                        );
+                        setOrganizationErrorMessage(
+                          null,
+                        );
+                      }
+                    }}
+                  />
+                )}
+              </div>
             ))}
           </div>
         )}

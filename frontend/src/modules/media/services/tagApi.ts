@@ -20,7 +20,11 @@ export interface TagNameInput {
 export interface TagDeleteImpact {
   tagId: number;
   libraryVideoCountToDetach: number;
+  noteCountToDetach: number;
+  taskCountToDetach: number;
   libraryVideosPreserved: boolean;
+  notesPreserved: boolean;
+  tasksPreserved: boolean;
 }
 
 export function getTags() {

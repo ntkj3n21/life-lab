@@ -24,10 +24,16 @@ import { formatTime } from "../../../utils/formatTime";
 import {
   useReverseContextNavigation,
 } from "../../context/hooks/useReverseContextNavigation";
+import { ImagePreview } from "../../images/components/ImagePreview";
+import { AudioPlayer } from "../../audio/components/AudioPlayer";
+import { getAudioPlaybackUrl } from "../../audio/services/audioApi";
 import {
   deleteNote,
   getNote,
   getNoteDeleteImpact,
+  getNoteSourceLabel,
+  getNoteSourceRecordLabel,
+  getNoteSourceTitle,
   updateNote,
   type Note,
   type NoteDeleteImpact,
@@ -344,16 +350,20 @@ export function NoteDetailPage() {
   }
 
   const sourceTitle =
-    note?.youtubeSource.title ??
-    "YouTube video";
+    note
+      ? getNoteSourceTitle(note)
+      : "Source";
+  const sourceLabel = note
+    ? getNoteSourceLabel(note)
+    : "Source";
 
   const deleteDetails =
     deleteImpact
       ? [
           `${deleteImpact.taskCountToMarkSourceMissing} linked task(s) will remain, but will no longer be linked to this Note.`,
-          deleteImpact.youtubeSourcePreserved
-            ? "The exact YouTube source record will be preserved."
-            : "The YouTube source will not be preserved.",
+          deleteImpact.sourcePreserved
+            ? `The exact ${note ? getNoteSourceRecordLabel(note) : sourceLabel} source record will be preserved.`
+            : `The ${sourceLabel} source will not be preserved.`,
           deleteImpact.tasksPreserved
             ? "Linked Tasks are preserved."
             : "Linked Tasks are not preserved.",
@@ -497,21 +507,46 @@ export function NoteDetailPage() {
 
             <section className="mt-4 rounded-2xl border border-(--border) bg-(--surface) p-4 sm:p-5">
               <p className="text-[11px] font-medium uppercase tracking-wide text-(--text-muted)">
-                From video
+                From {sourceLabel.toLowerCase()}
               </p>
 
               <h2 className="mt-2 wrap-break-word text-base font-semibold text-(--text-primary)">
                 {sourceTitle}
               </h2>
 
-              {note.youtubeSource
-                .channelName && (
+              {note.youtubeSource?.channelName && (
                 <p className="mt-1 text-sm text-(--text-muted)">
                   {
                     note.youtubeSource
                       .channelName
                   }
                 </p>
+              )}
+
+              {note.sourceType === "IMAGE" &&
+                note.imageSource && (
+                <div className="mt-4 max-h-80 overflow-hidden rounded-xl border border-(--border) bg-(--app-bg)">
+                  <ImagePreview
+                    sourceId={note.imageSource.id}
+                    origin={note.imageSource.origin}
+                    url={note.imageSource.url}
+                    alt={sourceTitle}
+                    className="max-h-80 w-full object-contain"
+                  />
+                </div>
+              )}
+
+              {note.sourceType === "AUDIO" &&
+                note.audioSource && (
+                <AudioPlayer
+                  url={getAudioPlaybackUrl(
+                    note.audioSource.id,
+                    note.audioSource.origin,
+                    note.audioSource.url,
+                  )}
+                  title={sourceTitle}
+                  className="mt-4"
+                />
               )}
 
               <p className="mt-3 text-sm tabular-nums text-(--text-secondary)">
@@ -540,7 +575,7 @@ export function NoteDetailPage() {
                   size={14}
                   aria-hidden="true"
                 />
-                Go to video
+                Go to {sourceLabel.toLowerCase()}
               </button>
 
               <button

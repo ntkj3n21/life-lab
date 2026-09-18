@@ -28,6 +28,12 @@ export function useReverseContextNavigation() {
         state.setActiveContext,
     );
 
+  const clearActiveContext =
+    useContextStore(
+      (state) =>
+        state.clearActiveContext,
+    );
+
   const ensureVideo =
     useLibraryStore(
       (state) =>
@@ -74,8 +80,91 @@ export function useReverseContextNavigation() {
           resolution.navigationMode
         ) {
           case "WORKSPACE": {
+            if (!resolution.note) {
+              return;
+            }
+
             if (
-              !resolution.note ||
+              resolution.note.sourceType ===
+              "IMAGE"
+            ) {
+              if (
+                resolution.libraryImageId ===
+                null
+              ) {
+                return;
+              }
+
+              clearActiveContext();
+
+              /*
+               * Let Video workspace cleanup finish before
+               * the caller can link this Image Note.
+               */
+              await new Promise<void>(
+                (resolve) => {
+                  window.setTimeout(
+                    resolve,
+                    0,
+                  );
+                },
+              );
+
+              navigate(
+                `/images/${resolution.libraryImageId}`,
+              );
+
+              return;
+            }
+
+            if (
+              resolution.note.sourceType ===
+              "AUDIO"
+            ) {
+              if (
+                resolution.libraryAudioId ===
+                null
+              ) {
+                return;
+              }
+
+              clearActiveContext();
+
+              /*
+               * Settle Video workspace cleanup before an
+               * awaiting caller links the exact Audio Note.
+               */
+              await new Promise<void>(
+                (resolve) => {
+                  window.setTimeout(
+                    resolve,
+                    0,
+                  );
+                },
+              );
+
+              navigate(
+                `/audio/${resolution.libraryAudioId}`,
+                {
+                  state: {
+                    audioWorkspaceRestore: {
+                      libraryAudioId:
+                        resolution.libraryAudioId,
+                      noteId:
+                        resolution.note.id,
+                      timestampSeconds:
+                        resolution.note.timestampSeconds,
+                    },
+                  },
+                },
+              );
+
+              return;
+            }
+
+            if (
+              resolution.note.sourceType !==
+                "YOUTUBE" ||
               resolution.libraryVideoId ===
                 null
             ) {
@@ -162,6 +251,7 @@ export function useReverseContextNavigation() {
         }
       },
       [
+        clearActiveContext,
         clearNotice,
         ensureVideo,
         navigate,

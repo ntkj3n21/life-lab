@@ -8,11 +8,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import com.lifelab.note.exception.InvalidNoteRequestException;
 import com.lifelab.note.exception.NoteNotFoundException;
 import com.lifelab.organization.category.exception.CategoryAlreadyExistsException;
 import com.lifelab.organization.category.exception.CategoryNotFoundException;
+import com.lifelab.source.audio.exception.InvalidAudioRequestException;
+import com.lifelab.source.audio.exception.AudioContentNotFoundException;
+import com.lifelab.source.audio.exception.AudioStorageException;
+import com.lifelab.source.audio.exception.LibraryAudioAlreadyExistsException;
+import com.lifelab.source.audio.exception.LibraryAudioNotFoundException;
+import com.lifelab.source.image.exception.ImageContentNotFoundException;
+import com.lifelab.source.image.exception.ImageStorageException;
+import com.lifelab.source.image.exception.InvalidImageRequestException;
+import com.lifelab.source.image.exception.LibraryImageAlreadyExistsException;
+import com.lifelab.source.image.exception.LibraryImageNotFoundException;
 import com.lifelab.task.exception.InvalidTaskFilterException;
 import com.lifelab.task.exception.TaskNotFoundException;
 import com.lifelab.video.exception.LibraryVideoAlreadyExistsException;
@@ -168,6 +179,78 @@ public class GlobalExceptionHandler {
                 "VALIDATION_ERROR",
                 exception.getMessage(),
                 exception.getFieldErrors()));
+    }
+
+    @ExceptionHandler(InvalidImageRequestException.class)
+    public ResponseEntity<ApiError> handleInvalidImageRequest(InvalidImageRequestException exception) {
+        return ResponseEntity.badRequest().body(new ApiError(
+                "INVALID_IMAGE",
+                exception.getMessage(),
+                exception.getFieldErrors()));
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<ApiError> handleMaxUploadSize(MaxUploadSizeExceededException exception) {
+        return ResponseEntity.badRequest().body(new ApiError(
+                "INVALID_IMAGE",
+                "Request validation failed.",
+                Map.of("file", "exceeds the configured maximum upload size")));
+    }
+
+    @ExceptionHandler(LibraryImageNotFoundException.class)
+    public ResponseEntity<ApiError> handleLibraryImageNotFound(LibraryImageNotFoundException exception) {
+        return businessError(HttpStatus.NOT_FOUND, "LIBRARY_IMAGE_NOT_FOUND", exception.getMessage());
+    }
+
+    @ExceptionHandler(ImageContentNotFoundException.class)
+    public ResponseEntity<ApiError> handleImageContentNotFound(ImageContentNotFoundException exception) {
+        return businessError(HttpStatus.NOT_FOUND, "IMAGE_CONTENT_NOT_FOUND", exception.getMessage());
+    }
+
+    @ExceptionHandler(LibraryImageAlreadyExistsException.class)
+    public ResponseEntity<ApiError> handleLibraryImageAlreadyExists(
+            LibraryImageAlreadyExistsException exception) {
+        return businessError(HttpStatus.CONFLICT, "LIBRARY_IMAGE_ALREADY_EXISTS", exception.getMessage());
+    }
+
+    @ExceptionHandler(ImageStorageException.class)
+    public ResponseEntity<ApiError> handleImageStorage(ImageStorageException exception) {
+        return businessError(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "IMAGE_STORAGE_ERROR",
+                "Image storage is unavailable.");
+    }
+
+    @ExceptionHandler(InvalidAudioRequestException.class)
+    public ResponseEntity<ApiError> handleInvalidAudioRequest(InvalidAudioRequestException exception) {
+        return ResponseEntity.badRequest().body(new ApiError(
+                "INVALID_AUDIO",
+                exception.getMessage(),
+                exception.getFieldErrors()));
+    }
+
+    @ExceptionHandler(LibraryAudioNotFoundException.class)
+    public ResponseEntity<ApiError> handleLibraryAudioNotFound(LibraryAudioNotFoundException exception) {
+        return businessError(HttpStatus.NOT_FOUND, "LIBRARY_AUDIO_NOT_FOUND", exception.getMessage());
+    }
+
+    @ExceptionHandler(LibraryAudioAlreadyExistsException.class)
+    public ResponseEntity<ApiError> handleLibraryAudioAlreadyExists(
+            LibraryAudioAlreadyExistsException exception) {
+        return businessError(HttpStatus.CONFLICT, "LIBRARY_AUDIO_ALREADY_EXISTS", exception.getMessage());
+    }
+
+    @ExceptionHandler(AudioContentNotFoundException.class)
+    public ResponseEntity<ApiError> handleAudioContentNotFound(AudioContentNotFoundException exception) {
+        return businessError(HttpStatus.NOT_FOUND, "AUDIO_CONTENT_NOT_FOUND", exception.getMessage());
+    }
+
+    @ExceptionHandler(AudioStorageException.class)
+    public ResponseEntity<ApiError> handleAudioStorage(AudioStorageException exception) {
+        return businessError(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "AUDIO_STORAGE_ERROR",
+                "Audio storage is unavailable.");
     }
 
     private ResponseEntity<ApiError> businessError(HttpStatus status, String code, String message) {

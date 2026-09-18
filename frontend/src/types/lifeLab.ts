@@ -1,2 +1,4 @@
 export type EntityType =
-  "video";
+  | "video"
+  | "image"
+  | "audio";

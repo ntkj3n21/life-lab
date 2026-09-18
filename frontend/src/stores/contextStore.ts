@@ -1,11 +1,51 @@
 import { create } from "zustand";
 import type { EntityType } from "../types/lifeLab";
 
-interface ActiveContext {
+export interface ActiveContext {
   entityId: string;
   entityType: EntityType;
   title: string;
   timestamp?: number;
+}
+
+export interface WorkspaceSource {
+  entityType: EntityType;
+  libraryId: number;
+  key: string;
+  label: string;
+  title: string;
+  timestamp?: number;
+}
+
+export function getWorkspaceSource(
+  context: ActiveContext | null,
+): WorkspaceSource | null {
+  if (!context) {
+    return null;
+  }
+
+  const libraryId = Number(
+    context.entityId,
+  );
+
+  if (
+    !Number.isSafeInteger(libraryId) ||
+    libraryId <= 0
+  ) {
+    return null;
+  }
+
+  return {
+    entityType: context.entityType,
+    libraryId,
+    key: `${context.entityType}:${libraryId}`,
+    label:
+      context.entityType === "video"
+        ? "video"
+        : context.entityType,
+    title: context.title,
+    timestamp: context.timestamp,
+  };
 }
 
 interface ContextStore {

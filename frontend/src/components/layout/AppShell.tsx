@@ -29,6 +29,12 @@ export function AppShell() {
     pathname === "/library" ||
     pathname.startsWith(
       "/library/",
+    ) ||
+    pathname.startsWith(
+      "/images/",
+    ) ||
+    pathname.startsWith(
+      "/audio/",
     );
 
   const isLibraryVideoWorkspace =

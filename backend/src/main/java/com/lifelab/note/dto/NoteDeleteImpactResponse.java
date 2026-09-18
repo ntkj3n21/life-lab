@@ -4,5 +4,6 @@ public record NoteDeleteImpactResponse(
         Long noteId,
         long taskCountToMarkSourceMissing,
         boolean tasksPreserved,
-        boolean youtubeSourcePreserved) {
+        boolean youtubeSourcePreserved,
+        boolean sourcePreserved) {
 }
