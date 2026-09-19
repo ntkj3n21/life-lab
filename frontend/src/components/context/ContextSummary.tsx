@@ -14,145 +14,126 @@ import { useTodoStore } from "../../stores/todoStore";
 import { formatTime } from "../../utils/formatTime";
 
 export function ContextSummary() {
-  const activeContext =
-    useContextStore(
-      (state) =>
-        state.activeContext,
-    );
+  const activeContext = useContextStore(
+    (state) => state.activeContext,
+  );
 
-  const videoNotesByVideo =
-    useNoteStore(
-      (state) =>
-        state.videoNotes,
-    );
+  const workspaceNotes = useNoteStore(
+    (state) => state.workspaceNotes,
+  );
 
-  const loadVideoNotes =
-    useNoteStore(
-      (state) =>
-        state.loadVideoNotes,
-    );
+  const loadWorkspaceNotes = useNoteStore(
+    (state) => state.loadWorkspaceNotes,
+  );
 
-  const videoNotesLoadStatus =
-    useNoteStore(
-      (state) =>
-        state.videoNotesLoadStatus,
-    );
+  const workspaceNotesLoadStatus = useNoteStore(
+    (state) => state.workspaceNotesLoadStatus,
+  );
 
-  const dailyPlan =
-    useTodoStore(
-      (state) =>
-        state.dailyPlan,
-    );
+  const dailyPlan = useTodoStore(
+    (state) => state.dailyPlan,
+  );
 
-  const loadDailyPlan =
-    useTodoStore(
-      (state) =>
-        state.loadDailyPlan,
-    );
+  const loadDailyPlan = useTodoStore(
+    (state) => state.loadDailyPlan,
+  );
 
-  const dailyPlanLoadStatus =
-    useTodoStore(
-      (state) =>
-        state.dailyPlanLoadStatus,
-    );
+  const dailyPlanLoadStatus = useTodoStore(
+    (state) => state.dailyPlanLoadStatus,
+  );
 
-  const dailyPlanRevision =
-    useTodoStore(
-      (state) =>
-        state.dailyPlanRevision,
-    );
+  const dailyPlanRevision = useTodoStore(
+    (state) => state.dailyPlanRevision,
+  );
 
-  const activeLibraryVideoId =
-    activeContext?.entityType ===
-      "video"
-      ? Number(
-          activeContext.entityId,
-        )
+  const parsedLibraryId = activeContext
+    ? Number(activeContext.entityId)
+    : null;
+
+  const activeLibraryId =
+    parsedLibraryId !== null &&
+    Number.isSafeInteger(parsedLibraryId) &&
+    parsedLibraryId > 0
+      ? parsedLibraryId
       : null;
 
-  const validVideoId =
-    activeLibraryVideoId !==
-      null &&
-    Number.isFinite(
-      activeLibraryVideoId,
-    )
-      ? activeLibraryVideoId
+  const activeEntityType =
+    activeContext?.entityType ?? null;
+
+  const workspaceKey =
+    activeEntityType !== null &&
+    activeLibraryId !== null
+      ? `${activeEntityType}:${activeLibraryId}`
       : null;
 
   const relatedNotes =
-    validVideoId !== null
-      ? videoNotesByVideo[
-          validVideoId
-        ] ?? []
+    workspaceKey !== null
+      ? workspaceNotes[workspaceKey] ?? []
       : [];
 
   const notesResolved =
-    validVideoId !== null &&
-    videoNotesLoadStatus[
-      validVideoId
-    ] === "success";
+    workspaceKey !== null &&
+    workspaceNotesLoadStatus[workspaceKey] ===
+      "success";
 
   const tasksResolved =
     notesResolved &&
-    dailyPlanLoadStatus ===
-      "success" &&
+    dailyPlanLoadStatus === "success" &&
     dailyPlan !== null;
 
   useEffect(() => {
-    void loadDailyPlan().catch(
-      () => {
-        // todoStore keeps error.
-      },
-    );
-  }, [
-    loadDailyPlan,
-    dailyPlanRevision,
-  ]);
-
-  useEffect(() => {
     if (
-      validVideoId === null
+      activeEntityType === null ||
+      activeLibraryId === null
     ) {
       return;
     }
 
-    void loadVideoNotes(
-      validVideoId,
-    ).catch(() => {
+    void loadWorkspaceNotes({
+      entityType: activeEntityType,
+      libraryId: activeLibraryId,
+    }).catch(() => {
       // noteStore keeps error.
     });
   }, [
-    validVideoId,
-    loadVideoNotes,
+    activeEntityType,
+    activeLibraryId,
+    loadWorkspaceNotes,
   ]);
 
-  const relatedNoteIds =
-    new Set(
-      relatedNotes.map(
-        (note) => note.id,
-      ),
-    );
+  useEffect(() => {
+    if (workspaceKey === null) {
+      return;
+    }
 
-  const allTasks =
-    dailyPlan
-      ? [
-          ...dailyPlan.overdue,
-          ...dailyPlan.today,
-          ...dailyPlan.upcoming,
-          ...dailyPlan.noDeadline,
-          ...dailyPlan.completed,
-        ]
-      : [];
+    void loadDailyPlan().catch(() => {
+      // todoStore keeps error.
+    });
+  }, [
+    workspaceKey,
+    loadDailyPlan,
+    dailyPlanRevision,
+  ]);
 
-  const relatedTasksCount =
-    allTasks.filter(
-      (task) =>
-        task.sourceNoteId !==
-          null &&
-        relatedNoteIds.has(
-          task.sourceNoteId,
-        ),
-    ).length;
+  const relatedNoteIds = new Set(
+    relatedNotes.map((note) => note.id),
+  );
+
+  const allTasks = dailyPlan
+    ? [
+        ...dailyPlan.overdue,
+        ...dailyPlan.today,
+        ...dailyPlan.upcoming,
+        ...dailyPlan.noDeadline,
+        ...dailyPlan.completed,
+      ]
+    : [];
+
+  const relatedTasksCount = allTasks.filter(
+    (task) =>
+      task.sourceNoteId !== null &&
+      relatedNoteIds.has(task.sourceNoteId),
+  ).length;
 
   if (!activeContext) {
     return (
@@ -173,35 +154,45 @@ export function ContextSummary() {
     );
   }
 
+  const showTimestamp =
+    activeContext.entityType !== "image";
+
   return (
     <div className="flex flex-wrap items-center gap-x-4 gap-y-2 rounded-xl border border-(--border) bg-(--surface) px-3 py-2.5">
-      <div className="flex items-center gap-1.5 text-xs text-(--text-secondary)">
-        <Clock
-          size={13}
-          className="text-(--text-muted)"
-          aria-hidden="true"
-        />
-        <span className="tabular-nums text-(--text-primary)">
-          {typeof activeContext.timestamp ===
-          "number"
-            ? formatTime(
-                activeContext.timestamp,
-              )
-            : "—"}
-        </span>
-      </div>
+      {showTimestamp && (
+        <>
+          <div className="flex items-center gap-1.5 text-xs text-(--text-secondary)">
+            <Clock
+              size={13}
+              className="text-(--text-muted)"
+              aria-hidden="true"
+            />
 
-      <div
-        className="h-4 w-px bg-(--border)"
-        aria-hidden="true"
-      />
+            <span className="tabular-nums text-(--text-primary)">
+              {typeof activeContext.timestamp ===
+              "number"
+                ? formatTime(
+                    activeContext.timestamp,
+                  )
+                : "—"}
+            </span>
+          </div>
+
+          <div
+            className="h-4 w-px bg-(--border)"
+            aria-hidden="true"
+          />
+        </>
+      )}
 
       <div className="flex items-center gap-1.5 text-xs text-(--text-secondary)">
         <StickyNote
           size={13}
           aria-hidden="true"
         />
+
         <span>Notes</span>
+
         <span className="font-medium text-(--text-primary)">
           {notesResolved
             ? relatedNotes.length
@@ -219,7 +210,9 @@ export function ContextSummary() {
           size={13}
           aria-hidden="true"
         />
+
         <span>Tasks</span>
+
         <span className="font-medium text-(--text-primary)">
           {tasksResolved
             ? relatedTasksCount

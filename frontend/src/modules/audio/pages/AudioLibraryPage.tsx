@@ -3,6 +3,7 @@ import {
   LoaderCircle,
   Plus,
   RefreshCw,
+  Search,
   Trash2,
   Upload,
   X,
@@ -25,7 +26,6 @@ import { ContextSummary } from "../../../components/context/ContextSummary";
 import { ConfirmDialog } from "../../../components/ui/ConfirmDialog";
 import { ApiError } from "../../../lib/api";
 import { useContextStore } from "../../../stores/contextStore";
-import { formatTime } from "../../../utils/formatTime";
 import { LibraryMediaNavigation } from "../../media/components/LibraryMediaNavigation";
 import { LibraryPagination } from "../../media/components/LibraryPagination";
 import { AudioPlayer } from "../components/AudioPlayer";
@@ -135,17 +135,23 @@ export function AudioLibraryPage() {
 
   const [activeReloadKey, setActiveReloadKey] = useState(0);
 
-  const [reliablePosition, setReliablePosition] = useState<number | null>(null);
-
   const [page, setPage] = useState(0);
 
   const [totalPages, setTotalPages] = useState(0);
 
   const [totalElements, setTotalElements] = useState(0);
 
+  const [searchText, setSearchText] = useState("");
+
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const [shuffleEnabled, setShuffleEnabled] = useState(false);
+
   const [url, setUrl] = useState("");
 
   const [title, setTitle] = useState("");
+
+  const [uploadTitle, setUploadTitle] = useState("");
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -169,39 +175,43 @@ export function AudioLibraryPage() {
 
   const setActiveContext = useContextStore((state) => state.setActiveContext);
 
-  const loadAudio = useCallback(async (targetPage: number) => {
-    await Promise.resolve();
+  const loadAudio = useCallback(
+    async (targetPage: number) => {
+      await Promise.resolve();
 
-    setIsLoading(true);
-    setLoadError(null);
+      setIsLoading(true);
+      setLoadError(null);
 
-    try {
-      const response = await getAudioLibrary({
-        page: targetPage,
-        size: PAGE_SIZE,
-      });
+      try {
+        const response = await getAudioLibrary({
+          page: targetPage,
+          size: PAGE_SIZE,
+          q: searchQuery || undefined,
+        });
 
-      if (
-        targetPage > 0 &&
-        response.totalPages > 0 &&
-        targetPage >= response.totalPages
-      ) {
-        setPage(response.totalPages - 1);
+        if (
+          targetPage > 0 &&
+          response.totalPages > 0 &&
+          targetPage >= response.totalPages
+        ) {
+          setPage(response.totalPages - 1);
 
-        return;
+          return;
+        }
+
+        setItems(response.items);
+
+        setTotalPages(response.totalPages);
+
+        setTotalElements(response.totalElements);
+      } catch (error) {
+        setLoadError(getErrorMessage(error));
+      } finally {
+        setIsLoading(false);
       }
-
-      setItems(response.items);
-
-      setTotalPages(response.totalPages);
-
-      setTotalElements(response.totalElements);
-    } catch (error) {
-      setLoadError(getErrorMessage(error));
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+    },
+    [searchQuery],
+  );
 
   useEffect(() => {
     const timer = window.setTimeout(() => void loadAudio(page), 0);
@@ -230,7 +240,6 @@ export function AudioLibraryPage() {
         setActiveAudio(null);
         setLoadingAudioId(null);
         setActiveLoadError(null);
-        setReliablePosition(null);
 
         const current = useContextStore.getState().activeContext;
 
@@ -257,8 +266,6 @@ export function AudioLibraryPage() {
       setActiveAudio(null);
 
       setActiveLoadError(null);
-
-      setReliablePosition(null);
 
       setLoadingAudioId(validRouteAudioId);
 
@@ -342,6 +349,19 @@ export function AudioLibraryPage() {
     });
   }
 
+  function handleSearch(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    setPage(0);
+    setSearchQuery(searchText.trim());
+  }
+
+  function handleClearSearch() {
+    setSearchText("");
+    setSearchQuery("");
+    setPage(0);
+  }
+
   async function handleAdd(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -385,7 +405,9 @@ export function AudioLibraryPage() {
     setActionError(null);
 
     try {
-      await uploadAudio(file);
+      await uploadAudio(file, uploadTitle.trim() || null);
+
+      setUploadTitle("");
 
       closeAddPanelAndRestoreFocus();
 
@@ -424,8 +446,6 @@ export function AudioLibraryPage() {
 
       if (removedActiveAudio) {
         setActiveAudio(null);
-
-        setReliablePosition(null);
 
         const current = useContextStore.getState().activeContext;
 
@@ -473,9 +493,133 @@ export function AudioLibraryPage() {
     });
   }
 
-  function handleReliablePosition(seconds: number) {
-    setReliablePosition(seconds);
+  async function openAudioFromLibraryPage(
+    targetPage: number,
+    target: "first" | "last",
+  ) {
+    setLoadError(null);
 
+    try {
+      const response = await getAudioLibrary({
+        page: targetPage,
+        size: PAGE_SIZE,
+        q: searchQuery || undefined,
+      });
+
+      const targetAudio =
+        target === "first"
+          ? response.items[0]
+          : response.items[response.items.length - 1];
+
+      if (!targetAudio) {
+        return;
+      }
+
+      setItems(response.items);
+      setTotalPages(response.totalPages);
+      setTotalElements(response.totalElements);
+      setPage(targetPage);
+
+      navigate(`/audio/${targetAudio.id}`);
+      focusAudioStage();
+    } catch (error) {
+      setLoadError(getErrorMessage(error));
+    }
+  }
+
+  function handlePreviousAudio() {
+    if (activeAudioIndex < 0) {
+      return;
+    }
+
+    if (activeAudioIndex > 0) {
+      handleOpenAudio(items[activeAudioIndex - 1]);
+
+      return;
+    }
+
+    if (page > 0) {
+      void openAudioFromLibraryPage(page - 1, "last");
+    }
+  }
+
+  function handleNextAudio() {
+    if (activeAudioIndex < 0) {
+      return;
+    }
+
+    if (shuffleEnabled) {
+      void handleShuffleNext();
+
+      return;
+    }
+
+    if (activeAudioIndex < items.length - 1) {
+      handleOpenAudio(items[activeAudioIndex + 1]);
+
+      return;
+    }
+
+    if (page < totalPages - 1) {
+      void openAudioFromLibraryPage(page + 1, "first");
+    }
+  }
+
+  async function handleShuffleNext() {
+    if (totalElements <= 1 || totalPages <= 0) {
+      return;
+    }
+
+    /*
+     * Shuffle uses the currently visible
+     * Library scope, including an active
+     * search query.
+     */
+    const randomPage = Math.floor(Math.random() * totalPages);
+
+    try {
+      const response = await getAudioLibrary({
+        page: randomPage,
+        size: PAGE_SIZE,
+        q: searchQuery || undefined,
+      });
+
+      const candidates = response.items.filter(
+        (item) => item.id !== activeAudio?.id,
+      );
+
+      /*
+       * A random page can contain only the
+       * current item when the Library is
+       * very small. Fall back to the next
+       * ordered item instead of doing
+       * nothing.
+       */
+      if (candidates.length === 0) {
+        if (activeAudioIndex >= 0 && activeAudioIndex < items.length - 1) {
+          handleOpenAudio(items[activeAudioIndex + 1]);
+        }
+
+        return;
+      }
+
+      const randomAudio =
+        candidates[Math.floor(Math.random() * candidates.length)];
+
+      setItems(response.items);
+      setTotalPages(response.totalPages);
+      setTotalElements(response.totalElements);
+      setPage(randomPage);
+
+      navigate(`/audio/${randomAudio.id}`);
+
+      focusAudioStage();
+    } catch (error) {
+      setLoadError(getErrorMessage(error));
+    }
+  }
+
+  function handleReliablePosition(seconds: number) {
     if (validRouteAudioId === null) {
       return;
     }
@@ -489,6 +633,17 @@ export function AudioLibraryPage() {
       useContextStore.getState().setTimestamp(seconds);
     }
   }
+
+  const activeAudioIndex = activeAudio
+    ? items.findIndex((item) => item.id === activeAudio.id)
+    : -1;
+
+  const canPreviousAudio =
+    activeAudioIndex > 0 || (activeAudioIndex === 0 && page > 0);
+
+  const canNextAudio =
+    activeAudioIndex >= 0 &&
+    (activeAudioIndex < items.length - 1 || page < totalPages - 1);
 
   const navigationState = location.state as {
     audioWorkspaceRestore?: {
@@ -513,14 +668,6 @@ export function AudioLibraryPage() {
         activeAudio.url,
       )
     : "";
-
-  const sourceLabel =
-    activeAudio?.origin === "UPLOAD" ? "Uploaded file" : "External URL";
-
-  const sourceValue =
-    activeAudio?.origin === "UPLOAD"
-      ? activeAudio.originalFilename
-      : activeAudio?.url;
 
   const routeLoadError =
     validRouteAudioId !== null && activeLoadError?.audioId === validRouteAudioId
@@ -699,57 +846,50 @@ export function AudioLibraryPage() {
                           : "ordinary-navigation"
                       }
                       onReliablePosition={handleReliablePosition}
+                      onPrevious={handlePreviousAudio}
+                      onNext={handleNextAudio}
+                      canPrevious={canPreviousAudio}
+                      canNext={
+                        shuffleEnabled ? totalElements > 1 : canNextAudio
+                      }
+                      shuffleEnabled={shuffleEnabled}
+                      onToggleShuffle={() =>
+                        setShuffleEnabled((enabled) => !enabled)
+                      }
                     />
                   </div>
                 </div>
 
-                <div className="mt-3 rounded-xl border border-(--border) bg-(--surface) p-3">
-                  <dl className="grid min-w-0 gap-x-5 gap-y-3 sm:grid-cols-2">
-                    <div className="min-w-0">
-                      <dt className="text-[11px] font-medium uppercase tracking-wide text-(--text-muted)">
-                        Source type
-                      </dt>
+                <div className="mt-3 flex flex-col gap-2 rounded-xl border border-(--border) bg-(--surface) p-3 text-sm sm:flex-row sm:items-center sm:justify-between">
+                  <div className="min-w-0 text-(--text-muted)">
+                    Added {formatDate(activeAudio.addedAt)}
+                    {activeAudio.origin === "UPLOAD" &&
+                      activeAudio.originalFilename && (
+                        <>
+                          <span className="mx-2" aria-hidden="true">
+                            ·
+                          </span>
 
-                      <dd className="mt-1 text-sm text-(--text-secondary)">
-                        {activeAudio.origin === "UPLOAD"
-                          ? "Uploaded audio"
-                          : "External audio"}
-                      </dd>
-                    </div>
+                          <span
+                            title={activeAudio.originalFilename}
+                            className="text-(--text-secondary)"
+                          >
+                            File: {activeAudio.originalFilename}
+                          </span>
+                        </>
+                      )}
+                  </div>
 
-                    <div className="min-w-0">
-                      <dt className="text-[11px] font-medium uppercase tracking-wide text-(--text-muted)">
-                        Note timestamp
-                      </dt>
-
-                      <dd className="mt-1 text-sm tabular-nums text-(--text-secondary)">
-                        {reliablePosition !== null
-                          ? formatTime(reliablePosition)
-                          : "Not established yet"}
-                      </dd>
-                    </div>
-
-                    <div className="min-w-0 sm:col-span-2">
-                      <dt className="text-[11px] font-medium uppercase tracking-wide text-(--text-muted)">
-                        {sourceLabel}
-                      </dt>
-
-                      <dd
-                        title={sourceValue ?? undefined}
-                        className="mt-1 max-h-20 overflow-y-auto break-all font-mono text-xs leading-5 text-(--text-secondary)"
-                      >
-                        {sourceValue || "Unavailable"}
-                      </dd>
-                    </div>
-                  </dl>
-
-                  <p className="mt-3 border-t border-(--border) pt-3 text-xs leading-5 text-(--text-muted)">
-                    {reliablePosition !== null
-                      ? `Current reliable position: ${formatTime(
-                          reliablePosition,
-                        )}. New timestamped Notes can use this exact position.`
-                      : "Play or load the audio to establish a reliable timestamp before capturing a timestamped Note."}
-                  </p>
+                  {activeAudio.origin === "EXTERNAL" && activeAudio.url && (
+                    <a
+                      href={activeAudio.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="shrink-0 text-sm font-medium text-(--text-secondary) underline-offset-4 hover:text-(--text-primary) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)"
+                    >
+                      Open original
+                    </a>
+                  )}
                 </div>
               </div>
             </>
@@ -826,6 +966,48 @@ export function AudioLibraryPage() {
               </button>
             </div>
           </div>
+
+          <form
+            onSubmit={handleSearch}
+            className="mb-4 flex flex-col gap-2 sm:flex-row"
+          >
+            <div className="flex min-w-0 flex-1 items-center gap-2 rounded-lg border border-(--border) bg-(--app-bg) px-3 focus-within:border-(--border-strong) focus-within:ring-2 focus-within:ring-(--focus)">
+              <Search
+                size={14}
+                className="shrink-0 text-(--text-muted)"
+                aria-hidden="true"
+              />
+
+              <label htmlFor="audio-library-search" className="sr-only">
+                Search audio Library
+              </label>
+
+              <input
+                id="audio-library-search"
+                value={searchText}
+                onChange={(event) => setSearchText(event.target.value)}
+                placeholder="Search audio..."
+                className="min-w-0 flex-1 bg-transparent py-2 text-sm outline-none placeholder:text-(--text-faint)"
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="min-h-10 rounded-lg border border-(--border) px-3 text-xs font-medium text-(--text-secondary) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) sm:min-h-9"
+            >
+              Search
+            </button>
+
+            {(searchText || searchQuery) && (
+              <button
+                type="button"
+                onClick={handleClearSearch}
+                className="min-h-10 rounded-lg px-3 text-xs text-(--text-muted) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) sm:min-h-9"
+              >
+                Clear
+              </button>
+            )}
+          </form>
 
           {isAddPanelOpen && (
             <div
@@ -911,40 +1093,53 @@ export function AudioLibraryPage() {
                     </p>
                   </div>
 
-                  <div className="shrink-0">
+                  <div className="grid gap-2 sm:grid-cols-[minmax(180px,1fr)_auto]">
+                    <label htmlFor="audio-upload-title" className="sr-only">
+                      Audio title
+                    </label>
+
                     <input
-                      ref={uploadInputRef}
-                      id="audio-upload"
-                      type="file"
-                      accept="audio/mpeg,.mp3"
+                      id="audio-upload-title"
+                      value={uploadTitle}
+                      onChange={(event) => setUploadTitle(event.target.value)}
                       disabled={isAdding || isUploading}
-                      onChange={(event) =>
-                        void handleUpload(event.target.files?.[0])
-                      }
-                      className="sr-only"
+                      maxLength={255}
+                      placeholder="Optional title"
+                      className="min-w-0 rounded-lg border border-(--border) bg-(--surface) px-3 py-2 text-sm outline-none placeholder:text-(--text-faint) focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:opacity-50"
                     />
 
-                    <label
-                      htmlFor="audio-upload"
-                      aria-disabled={isAdding || isUploading}
-                      className={`inline-flex min-h-10 w-full cursor-pointer items-center justify-center gap-2 rounded-lg border border-(--border) px-3 text-xs text-(--text-secondary) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-within:ring-2 focus-within:ring-(--focus) sm:min-h-9 sm:w-auto ${
-                        isAdding || isUploading
-                          ? "pointer-events-none opacity-50"
-                          : ""
-                      }`}
-                    >
-                      {isUploading ? (
-                        <LoaderCircle
-                          size={14}
-                          className="animate-spin"
-                          aria-hidden="true"
-                        />
-                      ) : (
-                        <Upload size={14} aria-hidden="true" />
-                      )}
+                    <div>
+                      <input
+                        ref={uploadInputRef}
+                        id="audio-upload"
+                        type="file"
+                        accept="audio/mpeg,.mp3"
+                        disabled={isAdding || isUploading}
+                        onChange={(event) =>
+                          void handleUpload(event.target.files?.[0])
+                        }
+                        className="hidden"
+                      />
 
-                      {isUploading ? "Uploading..." : "Upload MP3"}
-                    </label>
+                      <button
+                        type="button"
+                        onClick={() => uploadInputRef.current?.click()}
+                        disabled={isAdding || isUploading}
+                        className="inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-lg border border-(--border) px-3 text-xs text-(--text-secondary) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50 sm:min-h-9"
+                      >
+                        {isUploading ? (
+                          <LoaderCircle
+                            size={14}
+                            className="animate-spin"
+                            aria-hidden="true"
+                          />
+                        ) : (
+                          <Upload size={14} aria-hidden="true" />
+                        )}
+
+                        {isUploading ? "Uploading..." : "Upload MP3"}
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1073,12 +1268,14 @@ export function AudioLibraryPage() {
                         )}
                       </div>
 
-                      <p
-                        className="mt-1 truncate text-xs text-(--text-secondary)"
-                        title={sourceText}
-                      >
-                        {sourceText}
-                      </p>
+                      {audio.origin === "EXTERNAL" && (
+                        <p
+                          className="mt-1 truncate text-xs text-(--text-secondary)"
+                          title={sourceText}
+                        >
+                          External source
+                        </p>
+                      )}
 
                       <div className="mt-3 flex items-center justify-between gap-2">
                         <span className="min-w-0 truncate text-[11px] text-(--text-muted)">

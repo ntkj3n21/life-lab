@@ -77,7 +77,10 @@ public class LibraryAudioService {
     }
 
     @Transactional
-    public LibraryAudioResponse uploadAudio(Long accountId, MultipartFile file) {
+    public LibraryAudioResponse uploadAudio(
+            Long accountId,
+            MultipartFile file,
+            String title) {
         Account account = requireAccount(accountId);
         StoredAudio stored = audioStorage.store(file);
         OffsetDateTime now = OffsetDateTime.now(clock);
@@ -89,7 +92,18 @@ public class LibraryAudioService {
                     stored.mediaType(),
                     stored.sizeBytes(),
                     now));
-            return addMembership(account, source, null, now);
+            String normalizedTitle = normalizeTitle(title);
+
+            String effectiveTitle = normalizedTitle != null
+                    ? normalizedTitle
+                    : defaultTitleFromFilename(
+                            stored.originalFilename());
+
+            return addMembership(
+                    account,
+                    source,
+                    effectiveTitle,
+                    now);
         } catch (RuntimeException exception) {
             audioStorage.deleteAfterFailedCreate(stored.storageKey());
             throw exception;
@@ -117,15 +131,29 @@ public class LibraryAudioService {
     }
 
     @Transactional(readOnly = true)
-    public PagedResponse<LibraryAudioResponse> getLibrary(Long accountId, int page, int size) {
+    public PagedResponse<LibraryAudioResponse> getLibrary(
+            Long accountId,
+            int page,
+            int size,
+            String q) {
         PageRequest pageRequest = PageRequest.of(
                 page,
                 size,
                 Sort.by(Sort.Order.desc("addedAt"), Sort.Order.desc("id")));
-        Page<LibraryAudioResponse> result = libraryAudioRepository
-                .findAllByAccount_Id(accountId, pageRequest)
-                .map(LibraryAudioResponse::from);
-        return PagedResponse.from(result);
+
+        String normalizedQuery = normalizeSearch(q);
+
+        Page<LibraryAudio> audio = normalizedQuery == null
+                ? libraryAudioRepository.findAllByAccount_Id(
+                        accountId,
+                        pageRequest)
+                : libraryAudioRepository.searchByAccount(
+                        accountId,
+                        normalizedQuery,
+                        pageRequest);
+
+        return PagedResponse.from(
+                audio.map(LibraryAudioResponse::from));
     }
 
     @Transactional(readOnly = true)
@@ -174,6 +202,54 @@ public class LibraryAudioService {
             return null;
         }
         String normalized = title.trim();
-        return normalized.isEmpty() ? null : normalized;
+
+        if (normalized.isEmpty()) {
+            return null;
+        }
+
+        if (normalized.length() > 255) {
+            throw new InvalidAudioRequestException(
+                    "title",
+                    "must not exceed 255 characters");
+        }
+
+        return normalized;
+    }
+
+    private String normalizeSearch(String query) {
+        if (query == null) {
+            return null;
+        }
+
+        String normalized = query.trim();
+
+        return normalized.isEmpty()
+                ? null
+                : normalized;
+    }
+
+    private String defaultTitleFromFilename(
+            String filename) {
+
+        if (filename == null || filename.isBlank()) {
+            return null;
+        }
+
+        String normalized = filename.trim();
+
+        int extensionIndex = normalized.lastIndexOf('.');
+
+        if (extensionIndex > 0) {
+            String withoutExtension = normalized.substring(
+                    0,
+                    extensionIndex)
+                    .trim();
+
+            if (!withoutExtension.isEmpty()) {
+                return withoutExtension;
+            }
+        }
+
+        return normalized;
     }
 }

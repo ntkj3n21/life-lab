@@ -54,7 +54,6 @@ public class LocalImageStorage {
         }
 
         DetectedImage detected = detectImage(file);
-        validateDeclaredType(file.getContentType(), detected.mediaType());
 
         String storageKey = UUID.randomUUID() + detected.extension();
         Path destination = resolveStorageKey(storageKey);
@@ -130,21 +129,6 @@ public class LocalImageStorage {
         throw new InvalidImageRequestException(
                 "file",
                 "must be a JPG, JPEG, PNG, or WebP image");
-    }
-
-    private void validateDeclaredType(String contentType, String detectedType) {
-        if (contentType == null || contentType.isBlank()) {
-            return;
-        }
-
-        String normalized = contentType.toLowerCase(Locale.ROOT);
-        boolean matches = normalized.equals(detectedType)
-                || (detectedType.equals("image/jpeg") && normalized.equals("image/jpg"));
-        if (!matches) {
-            throw new InvalidImageRequestException(
-                    "file",
-                    "declared media type does not match the image content");
-        }
     }
 
     private boolean startsWith(byte[] value, byte[] prefix) {

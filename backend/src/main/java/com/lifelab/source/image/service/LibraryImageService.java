@@ -67,16 +67,22 @@ public class LibraryImageService {
             throw new InvalidImageRequestException("url", exception.getMessage());
         }
 
+        String title = normalizeTitle(request.title());
+
         OffsetDateTime now = OffsetDateTime.now(clock);
         ImageSource source = imageSourceRepository
                 .findByOriginAndExternalUrl(ImageOrigin.EXTERNAL, url)
                 .orElseGet(() -> imageSourceRepository.saveAndFlush(ImageSource.external(url, now)));
 
-        return addMembership(account, source, now);
+        return addMembership(
+                account,
+                source,
+                title,
+                now);
     }
 
     @Transactional
-    public LibraryImageResponse uploadImage(Long accountId, MultipartFile file) {
+    public LibraryImageResponse uploadImage(Long accountId, MultipartFile file, String title) {
         Account account = requireAccount(accountId);
         StoredImage stored = imageStorage.store(file);
         OffsetDateTime now = OffsetDateTime.now(clock);
@@ -88,7 +94,18 @@ public class LibraryImageService {
                     stored.mediaType(),
                     stored.sizeBytes(),
                     now));
-            return addMembership(account, source, now);
+            String normalizedTitle = normalizeTitle(title);
+
+            String effectiveTitle = normalizedTitle != null
+                    ? normalizedTitle
+                    : defaultTitleFromFilename(
+                            stored.originalFilename());
+
+            return addMembership(
+                    account,
+                    source,
+                    effectiveTitle,
+                    now);
         } catch (RuntimeException exception) {
             imageStorage.deleteAfterFailedCreate(stored.storageKey());
             throw exception;
@@ -96,15 +113,29 @@ public class LibraryImageService {
     }
 
     @Transactional(readOnly = true)
-    public PagedResponse<LibraryImageResponse> getLibrary(Long accountId, int page, int size) {
+    public PagedResponse<LibraryImageResponse> getLibrary(
+            Long accountId,
+            int page,
+            int size,
+            String q) {
         PageRequest pageRequest = PageRequest.of(
                 page,
                 size,
                 Sort.by(Sort.Order.desc("addedAt"), Sort.Order.desc("id")));
-        Page<LibraryImageResponse> result = libraryImageRepository
-                .findAllByAccount_Id(accountId, pageRequest)
-                .map(LibraryImageResponse::from);
-        return PagedResponse.from(result);
+
+        String normalizedQuery = normalizeSearch(q);
+
+        Page<LibraryImage> images = normalizedQuery == null
+                ? libraryImageRepository.findAllByAccount_Id(
+                        accountId,
+                        pageRequest)
+                : libraryImageRepository.searchByAccount(
+                        accountId,
+                        normalizedQuery,
+                        pageRequest);
+
+        return PagedResponse.from(
+                images.map(LibraryImageResponse::from));
     }
 
     @Transactional(readOnly = true)
@@ -141,6 +172,7 @@ public class LibraryImageService {
     private LibraryImageResponse addMembership(
             Account account,
             ImageSource source,
+            String title,
             OffsetDateTime now) {
         if (libraryImageRepository.existsByAccount_IdAndImageSource_Id(
                 account.getId(), source.getId())) {
@@ -149,7 +181,11 @@ public class LibraryImageService {
 
         try {
             LibraryImage image = libraryImageRepository.saveAndFlush(
-                    LibraryImage.create(account, source, now));
+                    LibraryImage.create(
+                            account,
+                            source,
+                            title,
+                            now));
             return LibraryImageResponse.from(image);
         } catch (DataIntegrityViolationException exception) {
             throw new LibraryImageAlreadyExistsException();
@@ -164,5 +200,62 @@ public class LibraryImageService {
     private LibraryImage findOwnedImage(Long accountId, Long imageId) {
         return libraryImageRepository.findByIdAndAccount_Id(imageId, accountId)
                 .orElseThrow(LibraryImageNotFoundException::new);
+    }
+
+    private String normalizeTitle(String title) {
+        if (title == null) {
+            return null;
+        }
+
+        String normalized = title.trim();
+
+        if (normalized.isEmpty()) {
+            return null;
+        }
+
+        if (normalized.length() > 255) {
+            throw new InvalidImageRequestException(
+                    "title",
+                    "must not exceed 255 characters");
+        }
+
+        return normalized;
+    }
+
+    private String normalizeSearch(String query) {
+        if (query == null) {
+            return null;
+        }
+
+        String normalized = query.trim();
+
+        return normalized.isEmpty()
+                ? null
+                : normalized;
+    }
+
+    private String defaultTitleFromFilename(
+            String filename) {
+
+        if (filename == null || filename.isBlank()) {
+            return null;
+        }
+
+        String normalized = filename.trim();
+
+        int extensionIndex = normalized.lastIndexOf('.');
+
+        if (extensionIndex > 0) {
+            String withoutExtension = normalized.substring(
+                    0,
+                    extensionIndex)
+                    .trim();
+
+            if (!withoutExtension.isEmpty()) {
+                return withoutExtension;
+            }
+        }
+
+        return normalized;
     }
 }

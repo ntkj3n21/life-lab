@@ -27,51 +27,62 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/library/images")
 public class LibraryImageController {
 
-    private final LibraryImageService libraryImageService;
-    private final CurrentAccount currentAccount;
+        private final LibraryImageService libraryImageService;
+        private final CurrentAccount currentAccount;
 
-    public LibraryImageController(
-            LibraryImageService libraryImageService,
-            CurrentAccount currentAccount) {
-        this.libraryImageService = libraryImageService;
-        this.currentAccount = currentAccount;
-    }
+        public LibraryImageController(
+                        LibraryImageService libraryImageService,
+                        CurrentAccount currentAccount) {
+                this.libraryImageService = libraryImageService;
+                this.currentAccount = currentAccount;
+        }
 
-    @PostMapping("/url")
-    public ResponseEntity<LibraryImageResponse> addExternalImage(
-            @Valid @RequestBody CreateExternalImageRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(
-                libraryImageService.addExternalImage(
-                        currentAccount.requireAccountId(), request));
-    }
+        @PostMapping("/url")
+        public ResponseEntity<LibraryImageResponse> addExternalImage(
+                        @Valid @RequestBody CreateExternalImageRequest request) {
+                return ResponseEntity.status(HttpStatus.CREATED).body(
+                                libraryImageService.addExternalImage(
+                                                currentAccount.requireAccountId(), request));
+        }
 
-    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<LibraryImageResponse> uploadImage(
-            @RequestPart("file") MultipartFile file) {
+        @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+        public ResponseEntity<LibraryImageResponse> uploadImage(
+                @RequestPart("file") MultipartFile file,
+                @RequestPart(value = "title", required = false) String title) {
+
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 libraryImageService.uploadImage(
-                        currentAccount.requireAccountId(), file));
-    }
+                        currentAccount.requireAccountId(),
+                        file,
+                        title));
+        }
 
-    @GetMapping
-    public PagedResponse<LibraryImageResponse> getLibrary(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size) {
-        PaginationValidator.validate(page, size);
-        return libraryImageService.getLibrary(
-                currentAccount.requireAccountId(), page, size);
-    }
+        @GetMapping
+        public PagedResponse<LibraryImageResponse> getLibrary(
+                        @RequestParam(defaultValue = "0") int page,
+                        @RequestParam(defaultValue = "20") int size,
+                        @RequestParam(required = false) String q) {
+                PaginationValidator.validate(
+                                page,
+                                size);
 
-    @GetMapping("/{imageId}")
-    public LibraryImageResponse getImage(@PathVariable Long imageId) {
-        return libraryImageService.getImage(
-                currentAccount.requireAccountId(), imageId);
-    }
+                return libraryImageService.getLibrary(
+                                currentAccount.requireAccountId(),
+                                page,
+                                size,
+                                q);
+        }
 
-    @DeleteMapping("/{imageId}")
-    public ResponseEntity<Void> removeImage(@PathVariable Long imageId) {
-        libraryImageService.removeImage(
-                currentAccount.requireAccountId(), imageId);
-        return ResponseEntity.noContent().build();
-    }
+        @GetMapping("/{imageId}")
+        public LibraryImageResponse getImage(@PathVariable Long imageId) {
+                return libraryImageService.getImage(
+                                currentAccount.requireAccountId(), imageId);
+        }
+
+        @DeleteMapping("/{imageId}")
+        public ResponseEntity<Void> removeImage(@PathVariable Long imageId) {
+                libraryImageService.removeImage(
+                                currentAccount.requireAccountId(), imageId);
+                return ResponseEntity.noContent().build();
+        }
 }

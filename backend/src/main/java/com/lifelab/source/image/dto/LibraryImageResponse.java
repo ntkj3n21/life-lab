@@ -14,10 +14,12 @@ public record LibraryImageResponse(
         String originalFilename,
         String mediaType,
         Long sizeBytes,
+        String title,
         OffsetDateTime addedAt) {
 
     public static LibraryImageResponse from(LibraryImage image) {
         ImageSource source = image.getImageSource();
+
         return new LibraryImageResponse(
                 image.getId(),
                 source.getId(),
@@ -26,6 +28,7 @@ public record LibraryImageResponse(
                 source.getOriginalFilename(),
                 source.getMediaType(),
                 source.getSizeBytes(),
+                image.getTitle(),
                 image.getAddedAt());
     }
 }

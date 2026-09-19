@@ -1,5 +1,4 @@
 import {
-  ExternalLink,
   ImagePlus,
   LoaderCircle,
   Plus,
@@ -119,6 +118,14 @@ export function ImageLibraryPage() {
 
   const [url, setUrl] = useState("");
 
+  const [externalTitle, setExternalTitle] = useState("");
+
+  const [uploadTitle, setUploadTitle] = useState("");
+
+  const [searchText, setSearchText] = useState("");
+
+  const [searchQuery, setSearchQuery] = useState("");
+
   const [isLoading, setIsLoading] = useState(true);
 
   const [isActiveLoading, setIsActiveLoading] = useState(false);
@@ -141,47 +148,49 @@ export function ImageLibraryPage() {
 
   const [isAddPanelOpen, setIsAddPanelOpen] = useState(false);
 
-  const [imageSearchText, setImageSearchText] = useState("");
-
   const clearActiveContext = useContextStore(
     (state) => state.clearActiveContext,
   );
 
   const setActiveContext = useContextStore((state) => state.setActiveContext);
 
-  const loadImages = useCallback(async (targetPage: number) => {
-    await Promise.resolve();
+  const loadImages = useCallback(
+    async (targetPage: number) => {
+      await Promise.resolve();
 
-    setIsLoading(true);
-    setLoadError(null);
+      setIsLoading(true);
+      setLoadError(null);
 
-    try {
-      const response = await getImageLibrary({
-        page: targetPage,
-        size: PAGE_SIZE,
-      });
+      try {
+        const response = await getImageLibrary({
+          page: targetPage,
+          size: PAGE_SIZE,
+          q: searchQuery || undefined,
+        });
 
-      if (
-        targetPage > 0 &&
-        response.totalPages > 0 &&
-        targetPage >= response.totalPages
-      ) {
-        setPage(response.totalPages - 1);
+        if (
+          targetPage > 0 &&
+          response.totalPages > 0 &&
+          targetPage >= response.totalPages
+        ) {
+          setPage(response.totalPages - 1);
 
-        return;
+          return;
+        }
+
+        setImages(response.items);
+
+        setTotalPages(response.totalPages);
+
+        setTotalElements(response.totalElements);
+      } catch (error) {
+        setLoadError(getErrorMessage(error));
+      } finally {
+        setIsLoading(false);
       }
-
-      setImages(response.items);
-
-      setTotalPages(response.totalPages);
-
-      setTotalElements(response.totalElements);
-    } catch (error) {
-      setLoadError(getErrorMessage(error));
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+    },
+    [searchQuery],
+  );
 
   useEffect(() => {
     const loadTimer = window.setTimeout(() => {
@@ -323,6 +332,19 @@ export function ImageLibraryPage() {
     });
   }
 
+  function handleSearch(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    setPage(0);
+    setSearchQuery(searchText.trim());
+  }
+
+  function handleClearSearch() {
+    setSearchText("");
+    setSearchQuery("");
+    setPage(0);
+  }
+
   async function handleAddUrl(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -336,9 +358,13 @@ export function ImageLibraryPage() {
     setActionError(null);
 
     try {
-      await addExternalImage(nextUrl);
+      await addExternalImage({
+        url: nextUrl,
+        title: externalTitle.trim() || null,
+      });
 
       setUrl("");
+      setExternalTitle("");
       closeAddPanelAndRestoreFocus();
 
       if (page === 0) {
@@ -362,7 +388,9 @@ export function ImageLibraryPage() {
     setActionError(null);
 
     try {
-      await uploadImage(file);
+      await uploadImage(file, uploadTitle.trim() || null);
+
+      setUploadTitle("");
 
       closeAddPanelAndRestoreFocus();
 
@@ -446,20 +474,6 @@ export function ImageLibraryPage() {
     window.requestAnimationFrame(() => {
       imageStageRef.current?.focus();
     });
-  }
-
-  function handleImageSearch() {
-    const query = imageSearchText.trim();
-
-    if (!query) {
-      return;
-    }
-
-    window.open(
-      `https://www.google.com/search?tbm=isch&q=${encodeURIComponent(query)}`,
-      "_blank",
-      "noopener,noreferrer",
-    );
   }
 
   const activeTitle = activeImage ? getWorkspaceTitle(activeImage) : "Image";
@@ -625,54 +639,37 @@ export function ImageLibraryPage() {
                   />
                 </div>
 
-                <dl className="mt-3 grid min-w-0 gap-x-5 gap-y-3 rounded-xl border border-(--border) bg-(--surface) p-3 sm:grid-cols-3">
-                  <div className="min-w-0">
-                    <dt className="text-[11px] font-medium uppercase tracking-wide text-(--text-muted)">
-                      Source type
-                    </dt>
+                <div className="mt-3 flex flex-col gap-2 rounded-xl border border-(--border) bg-(--surface) p-3 text-sm sm:flex-row sm:items-center sm:justify-between">
+                  <div className="min-w-0 text-(--text-muted)">
+                    Added {formatDate(activeImage.addedAt)}
+                    {activeImage.origin === "UPLOAD" &&
+                      activeImage.originalFilename && (
+                        <>
+                          <span className="mx-2" aria-hidden="true">
+                            ·
+                          </span>
 
-                    <dd className="mt-1 text-sm text-(--text-secondary)">
-                      {activeImage.origin === "UPLOAD"
-                        ? "Uploaded image"
-                        : "External image"}
-                    </dd>
-                  </div>
-
-                  <div className="min-w-0">
-                    <dt className="text-[11px] font-medium uppercase tracking-wide text-(--text-muted)">
-                      Added to Library
-                    </dt>
-
-                    <dd className="mt-1 text-sm text-(--text-secondary)">
-                      {formatDate(activeImage.addedAt)}
-                    </dd>
-                  </div>
-
-                  <div className="min-w-0">
-                    <dt className="text-[11px] font-medium uppercase tracking-wide text-(--text-muted)">
-                      Media type
-                    </dt>
-
-                    <dd className="mt-1 text-sm text-(--text-secondary)">
-                      {activeImage.mediaType || "Unknown"}
-                    </dd>
+                          <span
+                            title={activeImage.originalFilename}
+                            className="text-(--text-secondary)"
+                          >
+                            File: {activeImage.originalFilename}
+                          </span>
+                        </>
+                      )}
                   </div>
 
                   {activeImage.origin === "EXTERNAL" && activeImage.url && (
-                    <div className="min-w-0 sm:col-span-3">
-                      <dt className="text-[11px] font-medium uppercase tracking-wide text-(--text-muted)">
-                        Exact source URL
-                      </dt>
-
-                      <dd
-                        title={activeImage.url}
-                        className="mt-1 max-h-20 overflow-y-auto break-all font-mono text-xs leading-5 text-(--text-secondary)"
-                      >
-                        {activeImage.url}
-                      </dd>
-                    </div>
+                    <a
+                      href={activeImage.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="shrink-0 text-sm font-medium text-(--text-secondary) underline-offset-4 hover:text-(--text-primary) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)"
+                    >
+                      Open original
+                    </a>
                   )}
-                </dl>
+                </div>
               </div>
             </>
           ) : null}
@@ -717,12 +714,8 @@ export function ImageLibraryPage() {
                 }}
                 aria-expanded={isAddPanelOpen}
                 aria-controls="library-add-image-panel"
-                aria-label={
-                  isAddPanelOpen
-                    ? "Close find or add image"
-                    : "Find or add image"
-                }
-                title={isAddPanelOpen ? "Close" : "Find or add image"}
+                aria-label={isAddPanelOpen ? "Close add image" : "Add image"}
+                title={isAddPanelOpen ? "Close" : "Add image"}
                 className="flex h-10 items-center justify-center gap-1.5 rounded-lg border border-(--border) px-2.5 text-xs font-medium text-(--text-secondary) transition-colors hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) sm:h-8"
               >
                 {isAddPanelOpen ? (
@@ -732,7 +725,7 @@ export function ImageLibraryPage() {
                 )}
 
                 <span className="hidden sm:inline">
-                  {isAddPanelOpen ? "Close" : "Find / Add"}
+                  {isAddPanelOpen ? "Close" : "Add image"}
                 </span>
               </button>
 
@@ -752,7 +745,47 @@ export function ImageLibraryPage() {
               </button>
             </div>
           </div>
+          <form
+            onSubmit={handleSearch}
+            className="mb-4 flex flex-col gap-2 sm:flex-row"
+          >
+            <div className="flex min-w-0 flex-1 items-center gap-2 rounded-lg border border-(--border) bg-(--app-bg) px-3 focus-within:border-(--border-strong) focus-within:ring-2 focus-within:ring-(--focus)">
+              <Search
+                size={14}
+                className="shrink-0 text-(--text-muted)"
+                aria-hidden="true"
+              />
 
+              <label htmlFor="image-library-search" className="sr-only">
+                Search image Library
+              </label>
+
+              <input
+                id="image-library-search"
+                value={searchText}
+                onChange={(event) => setSearchText(event.target.value)}
+                placeholder="Search images..."
+                className="min-w-0 flex-1 bg-transparent py-2 text-sm outline-none placeholder:text-(--text-faint)"
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="min-h-10 rounded-lg border border-(--border) px-3 text-xs font-medium text-(--text-secondary) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) sm:min-h-9"
+            >
+              Search
+            </button>
+
+            {(searchText || searchQuery) && (
+              <button
+                type="button"
+                onClick={handleClearSearch}
+                className="min-h-10 rounded-lg px-3 text-xs text-(--text-muted) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) sm:min-h-9"
+              >
+                Clear
+              </button>
+            )}
+          </form>
           {isAddPanelOpen && (
             <div
               id="library-add-image-panel"
@@ -760,63 +793,20 @@ export function ImageLibraryPage() {
             >
               <div className="mb-3">
                 <h3 className="text-sm font-medium text-(--text-primary)">
-                  Find or add an image
+                  Add image
                 </h3>
 
                 <p className="mt-1 text-xs text-(--text-muted)">
-                  Discover an image online, then paste its exact URL below or
-                  upload a JPG, PNG, or WEBP file.
+                  Add an image by URL or upload a JPG, PNG, or WEBP file from
+                  your device.
                 </p>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <div className="flex min-w-0 flex-1 items-center gap-2 rounded-lg border border-(--border) bg-(--surface) px-3 transition focus-within:border-(--border-strong) focus-within:ring-2 focus-within:ring-(--focus)">
-                  <Search
-                    size={14}
-                    className="shrink-0 text-(--text-muted)"
-                    aria-hidden="true"
-                  />
-
-                  <label htmlFor="image-discovery-search" className="sr-only">
-                    Search images
-                  </label>
-
-                  <input
-                    id="image-discovery-search"
-                    value={imageSearchText}
-                    onChange={(event) => setImageSearchText(event.target.value)}
-                    onKeyDown={(event) => {
-                      if (event.key === "Enter") {
-                        handleImageSearch();
-                      }
-
-                      if (event.key === "Escape") {
-                        closeAddPanelAndRestoreFocus();
-                      }
-                    }}
-                    autoFocus
-                    placeholder="Search images..."
-                    className="min-w-0 flex-1 bg-transparent py-2 text-sm outline-none placeholder:text-(--text-faint)"
-                  />
-                </div>
-
-                <button
-                  type="button"
-                  onClick={handleImageSearch}
-                  disabled={!imageSearchText.trim()}
-                  aria-label="Open image search"
-                  title="Search images"
-                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-(--primary-bg) text-(--primary-text) transition-colors hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50 sm:h-9 sm:w-9"
-                >
-                  <ExternalLink size={14} aria-hidden="true" />
-                </button>
               </div>
 
               <div className="mt-3 border-t border-(--border) pt-3">
                 <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_auto]">
                   <form
                     onSubmit={handleAddUrl}
-                    className="flex min-w-0 flex-col gap-2 sm:flex-row"
+                    className="grid min-w-0 gap-2 lg:grid-cols-[minmax(0,1fr)_minmax(180px,0.4fr)_auto]"
                   >
                     <label htmlFor="image-url" className="sr-only">
                       External image URL
@@ -829,6 +819,20 @@ export function ImageLibraryPage() {
                       onChange={(event) => setUrl(event.target.value)}
                       disabled={isAddingUrl || isUploading}
                       placeholder="https://example.com/image.jpg"
+                      className="min-w-0 flex-1 rounded-lg border border-(--border) bg-(--surface) px-3 py-2 text-sm outline-none placeholder:text-(--text-faint) focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:opacity-50"
+                    />
+
+                    <label htmlFor="image-title" className="sr-only">
+                      Image title
+                    </label>
+
+                    <input
+                      id="image-title"
+                      value={externalTitle}
+                      onChange={(event) => setExternalTitle(event.target.value)}
+                      disabled={isAddingUrl || isUploading}
+                      maxLength={255}
+                      placeholder="Optional title"
                       className="min-w-0 flex-1 rounded-lg border border-(--border) bg-(--surface) px-3 py-2 text-sm outline-none placeholder:text-(--text-faint) focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:opacity-50"
                     />
 
@@ -850,40 +854,53 @@ export function ImageLibraryPage() {
                     </button>
                   </form>
 
-                  <div>
+                  <div className="grid gap-2 sm:grid-cols-[minmax(180px,1fr)_auto]">
+                    <label htmlFor="image-upload-title" className="sr-only">
+                      Image title
+                    </label>
+
                     <input
-                      ref={uploadInputRef}
-                      type="file"
-                      accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp"
+                      id="image-upload-title"
+                      value={uploadTitle}
+                      onChange={(event) => setUploadTitle(event.target.value)}
                       disabled={isAddingUrl || isUploading}
-                      onChange={(event) =>
-                        void handleUpload(event.target.files?.[0])
-                      }
-                      className="sr-only"
-                      id="image-upload"
+                      maxLength={255}
+                      placeholder="Optional title"
+                      className="min-w-0 rounded-lg border border-(--border) bg-(--surface) px-3 py-2 text-sm outline-none placeholder:text-(--text-faint) focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:opacity-50"
                     />
 
-                    <label
-                      htmlFor="image-upload"
-                      aria-disabled={isAddingUrl || isUploading}
-                      className={`inline-flex min-h-10 w-full cursor-pointer items-center justify-center gap-2 rounded-lg border border-(--border) px-3 text-xs text-(--text-secondary) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-within:ring-2 focus-within:ring-(--focus) sm:min-h-9 ${
-                        isAddingUrl || isUploading
-                          ? "pointer-events-none opacity-50"
-                          : ""
-                      }`}
-                    >
-                      {isUploading ? (
-                        <LoaderCircle
-                          size={14}
-                          className="animate-spin"
-                          aria-hidden="true"
-                        />
-                      ) : (
-                        <Upload size={14} aria-hidden="true" />
-                      )}
+                    <div>
+                      <input
+                        ref={uploadInputRef}
+                        id="image-upload"
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp"
+                        disabled={isAddingUrl || isUploading}
+                        onChange={(event) =>
+                          void handleUpload(event.target.files?.[0])
+                        }
+                        className="hidden"
+                      />
 
-                      {isUploading ? "Uploading..." : "Upload image"}
-                    </label>
+                      <button
+                        type="button"
+                        onClick={() => uploadInputRef.current?.click()}
+                        disabled={isAddingUrl || isUploading}
+                        className="inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-lg border border-(--border) px-3 text-xs text-(--text-secondary) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50 sm:min-h-9"
+                      >
+                        {isUploading ? (
+                          <LoaderCircle
+                            size={14}
+                            className="animate-spin"
+                            aria-hidden="true"
+                          />
+                        ) : (
+                          <Upload size={14} aria-hidden="true" />
+                        )}
+
+                        {isUploading ? "Uploading..." : "Upload image"}
+                      </button>
+                    </div>
                   </div>
                 </div>
 
@@ -935,7 +952,8 @@ export function ImageLibraryPage() {
               </h3>
 
               <p className="mt-1 text-sm text-(--text-muted)">
-                Add an external URL or upload a JPG, PNG, or WEBP file.
+                Add an image by URL or upload a JPG, PNG, or WEBP file from your
+                device.
               </p>
 
               <button
@@ -944,7 +962,7 @@ export function ImageLibraryPage() {
                 className="mt-4 inline-flex min-h-9 items-center justify-center gap-2 rounded-lg border border-(--border) px-3 text-xs font-medium text-(--text-secondary) transition hover:bg-(--surface-hover) hover:text-(--text-primary)"
               >
                 <Plus size={14} aria-hidden="true" />
-                Find / Add
+                Add image
               </button>
             </div>
           ) : (

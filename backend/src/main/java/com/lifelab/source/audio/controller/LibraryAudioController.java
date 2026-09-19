@@ -27,51 +27,61 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/library/audio")
 public class LibraryAudioController {
 
-    private final LibraryAudioService libraryAudioService;
-    private final CurrentAccount currentAccount;
+        private final LibraryAudioService libraryAudioService;
+        private final CurrentAccount currentAccount;
 
-    public LibraryAudioController(
-            LibraryAudioService libraryAudioService,
-            CurrentAccount currentAccount) {
-        this.libraryAudioService = libraryAudioService;
-        this.currentAccount = currentAccount;
-    }
+        public LibraryAudioController(
+                        LibraryAudioService libraryAudioService,
+                        CurrentAccount currentAccount) {
+                this.libraryAudioService = libraryAudioService;
+                this.currentAccount = currentAccount;
+        }
 
-    @PostMapping("/url")
-    public ResponseEntity<LibraryAudioResponse> addAudio(
-            @Valid @RequestBody CreateAudioRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(
-                libraryAudioService.addAudio(
-                        currentAccount.requireAccountId(), request));
-    }
+        @PostMapping("/url")
+        public ResponseEntity<LibraryAudioResponse> addAudio(
+                        @Valid @RequestBody CreateAudioRequest request) {
+                return ResponseEntity.status(HttpStatus.CREATED).body(
+                                libraryAudioService.addAudio(
+                                                currentAccount.requireAccountId(), request));
+        }
 
-    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<LibraryAudioResponse> uploadAudio(
-            @RequestPart("file") MultipartFile file) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(
-                libraryAudioService.uploadAudio(
-                        currentAccount.requireAccountId(), file));
-    }
+        @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+        public ResponseEntity<LibraryAudioResponse> uploadAudio(
+                        @RequestPart("file") MultipartFile file,
+                        @RequestPart(value = "title", required = false) String title) {
+                return ResponseEntity.status(HttpStatus.CREATED).body(
+                                libraryAudioService.uploadAudio(
+                                                currentAccount.requireAccountId(),
+                                                file,
+                                                title));
+        }
 
-    @GetMapping
-    public PagedResponse<LibraryAudioResponse> getLibrary(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size) {
-        PaginationValidator.validate(page, size);
-        return libraryAudioService.getLibrary(
-                currentAccount.requireAccountId(), page, size);
-    }
+        @GetMapping
+        public PagedResponse<LibraryAudioResponse> getLibrary(
+                        @RequestParam(defaultValue = "0") int page,
+                        @RequestParam(defaultValue = "20") int size,
+                        @RequestParam(required = false) String q) {
+                PaginationValidator.validate(
+                                page,
+                                size);
 
-    @GetMapping("/{audioId}")
-    public LibraryAudioResponse getAudio(@PathVariable Long audioId) {
-        return libraryAudioService.getAudio(
-                currentAccount.requireAccountId(), audioId);
-    }
+                return libraryAudioService.getLibrary(
+                                currentAccount.requireAccountId(),
+                                page,
+                                size,
+                                q);
+        }
 
-    @DeleteMapping("/{audioId}")
-    public ResponseEntity<Void> removeAudio(@PathVariable Long audioId) {
-        libraryAudioService.removeAudio(
-                currentAccount.requireAccountId(), audioId);
-        return ResponseEntity.noContent().build();
-    }
+        @GetMapping("/{audioId}")
+        public LibraryAudioResponse getAudio(@PathVariable Long audioId) {
+                return libraryAudioService.getAudio(
+                                currentAccount.requireAccountId(), audioId);
+        }
+
+        @DeleteMapping("/{audioId}")
+        public ResponseEntity<Void> removeAudio(@PathVariable Long audioId) {
+                libraryAudioService.removeAudio(
+                                currentAccount.requireAccountId(), audioId);
+                return ResponseEntity.noContent().build();
+        }
 }

@@ -1,15 +1,8 @@
-import {
-  apiDelete,
-  apiGet,
-  apiPost,
-  apiPostMultipart,
-} from "../../../lib/api";
+import { apiDelete, apiGet, apiPost, apiPostMultipart } from "../../../lib/api";
 
 import type { PagedResponse } from "../../media/services/libraryApi";
 
-export type AudioOrigin =
-  | "EXTERNAL"
-  | "UPLOAD";
+export type AudioOrigin = "EXTERNAL" | "UPLOAD";
 
 export interface LibraryAudio {
   id: number;
@@ -26,6 +19,7 @@ export interface LibraryAudio {
 export interface AudioLibraryQuery {
   page?: number;
   size?: number;
+  q?: string;
 }
 
 export interface CreateAudioInput {
@@ -33,9 +27,7 @@ export interface CreateAudioInput {
   title: string | null;
 }
 
-export function getAudioLibrary(
-  query: AudioLibraryQuery = {},
-) {
+export function getAudioLibrary(query: AudioLibraryQuery = {}) {
   const params = new URLSearchParams();
 
   if (query.page !== undefined) {
@@ -46,19 +38,19 @@ export function getAudioLibrary(
     params.set("size", String(query.size));
   }
 
+  if (query.q?.trim()) {
+    params.set("q", query.q.trim());
+  }
+
   const queryString = params.toString();
 
   return apiGet<PagedResponse<LibraryAudio>>(
-    `/api/library/audio${
-      queryString ? `?${queryString}` : ""
-    }`,
+    `/api/library/audio${queryString ? `?${queryString}` : ""}`,
   );
 }
 
 export function getLibraryAudio(audioId: number) {
-  return apiGet<LibraryAudio>(
-    `/api/library/audio/${audioId}`,
-  );
+  return apiGet<LibraryAudio>(`/api/library/audio/${audioId}`);
 }
 
 export function addAudioUrl(input: CreateAudioInput) {
@@ -68,14 +60,16 @@ export function addAudioUrl(input: CreateAudioInput) {
   );
 }
 
-export function uploadAudio(file: File) {
+export function uploadAudio(file: File, title: string | null = null) {
   const formData = new FormData();
+
   formData.set("file", file);
 
-  return apiPostMultipart<LibraryAudio>(
-    "/api/library/audio/upload",
-    formData,
-  );
+  if (title?.trim()) {
+    formData.set("title", title.trim());
+  }
+
+  return apiPostMultipart<LibraryAudio>("/api/library/audio/upload", formData);
 }
 
 export function removeLibraryAudio(audioId: number) {
@@ -86,14 +80,11 @@ export function getLibraryAudioTitle(audio: LibraryAudio) {
   return (
     audio.title?.trim() ||
     audio.originalFilename?.trim() ||
-    audio.url?.trim() ||
-    "Audio"
+    (audio.origin === "EXTERNAL" ? "External audio" : "Audio")
   );
 }
 
-export function getAudioContentUrl(
-  sourceId: number,
-) {
+export function getAudioContentUrl(sourceId: number) {
   return `/api/audio/${sourceId}/content`;
 }
 
@@ -102,7 +93,5 @@ export function getAudioPlaybackUrl(
   origin: AudioOrigin,
   url: string | null,
 ): string {
-  return origin === "UPLOAD"
-    ? getAudioContentUrl(sourceId)
-    : url ?? "";
+  return origin === "UPLOAD" ? getAudioContentUrl(sourceId) : (url ?? "");
 }
