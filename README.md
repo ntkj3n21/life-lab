@@ -2,17 +2,33 @@
 
 **Life Lab** is a full-stack productivity workspace that preserves context from multimedia learning all the way to daily planning.
 
-Instead of separating videos, notes, and tasks into disconnected tools, Life Lab keeps the original learning context attached to the user's work.
+Instead of separating media sources, notes, and tasks into disconnected tools, Life Lab keeps the original learning context attached to the user's work.
 
 ### Core workflow
 
-`YouTube Video → Timestamp → Note → Task → Daily Plan`
+Life Lab preserves a source-aware learning chain:
+
+`Video / Image / Audio → Note → Task → Daily Plan`
+
+For timestamp-capable media:
+
+- YouTube Video Notes may preserve an optional playback timestamp.
+- Audio Notes may preserve an optional playback timestamp.
+- Image Notes do not use timestamps.
+
+A timestamp value of `0` is a valid exact position and is distinct from an unknown timestamp.
 
 ### Reverse context
 
-`Daily Plan → Task → Note → Exact YouTube Source → Original Timestamp`
+`Daily Plan → Task → Note → Exact Source → Original Context`
 
-This allows users to move from consuming video content to taking notes and planning work, while still being able to return to the exact source that created that context.
+Reverse Context returns to the exact source referenced by the Note:
+
+- Video → original YouTube source and timestamp when available
+- Audio → original audio source and timestamp when available
+- Image → original image source
+
+If the original Library membership no longer exists, Life Lab may use a read-only Source Preview without recreating Library membership or watch history.
 
 **Tech:** React · TypeScript · Spring Boot · PostgreSQL · Docker
 
@@ -34,22 +50,26 @@ Recommended screenshots:
 
 ## Key Features
 
-### Video Library
+### Unified Library
 
+- Manage YouTube Videos, Images, and Audio in one Library
 - Add YouTube videos by URL
-- Retrieve video metadata through the YouTube Data API
-- Search, filter, sort, and paginate Library videos
-- Organize videos with tags
-- Filter by watched state and note existence
-- Rename or remove videos from the personal Library
+- Add Images through local upload
+- Add Audio by URL or local MP3 upload
+- Retrieve YouTube metadata through the YouTube Data API
+- Search, filter, sort, and paginate supported Library content
+- Keep source identity separate from personal Library membership
+- Remove Library membership without deleting existing Notes or Tasks
 
 ### Context-Aware Notes
 
-- Create Notes directly from a Library video
-- Preserve the exact YouTube source
-- Capture an optional playback timestamp
-- Edit and delete Notes
-- Preserve historical source context even if the video is removed from the Library
+- Create Notes from Video, Image, or Audio sources
+- Preserve the exact source that created the Note
+- Capture an optional timestamp for Video and Audio
+- Keep Image Notes timestamp-free
+- Edit, organize, filter, and delete Notes
+- Preserve historical source context after Library membership is removed
+- Keep unknown timestamp distinct from timestamp `0`
 
 ### Tasks
 
@@ -58,6 +78,8 @@ Recommended screenshots:
 - Manage title, description, deadline, and status
 - Preserve Tasks even if their source Note is later deleted
 - Clearly distinguish independent, linked, and missing-source Tasks
+- Filter Tasks by their exact Video, Image, or Audio source
+- Keep Tasks linked to Notes rather than linking Tasks directly to media sources
 
 ### Daily Plan
 
@@ -73,30 +95,33 @@ Daily Plan is derived from authoritative Task data rather than stored as a separ
 
 ### Reverse Context Navigation
 
-Life Lab can resolve a Task or Note back to its original multimedia context.
-
-For example:
+Life Lab can resolve a Task or Note back to its exact original source.
 
 ```text
 Task
   ↓
 Note
   ↓
-Exact YouTube source
+Exact Video / Image / Audio source
   ↓
-Original timestamp
+Original timestamp when the source supports one
 ```
 
-If the original video is no longer in the user's Library but still exists on YouTube, Life Lab provides a read-only Source Preview.
+Reverse navigation never substitutes a different source.
 
-If the original source is unavailable or missing, Life Lab reports that state instead of substituting unrelated content.
+If Library membership was removed but the underlying source is still available, Life Lab can provide a read-only Source Preview without restoring Library membership.
 
-### Watch Tracking
+If the source Note was deleted, the Task remains valid and explicitly reports `SOURCE_MISSING`.
 
-- Track real video viewing sessions
+### YouTube Watch Tracking
+
+WatchSession applies only to normal YouTube Library playback.
+
+- Track real YouTube viewing sessions
 - Synchronize playback progress through heartbeat updates
 - Close sessions when switching videos or leaving the workspace
-- Keep Source Preview playback separate from normal Library watch tracking
+- Do not create WatchSessions for Image or Audio
+- Do not create WatchSessions for read-only Source Preview
 
 ### Authentication & Data Isolation
 
@@ -113,28 +138,28 @@ If the original source is unavailable or missing, Life Lab reports that state in
 
 Life Lab includes several domain and architecture decisions beyond basic CRUD behavior:
 
-- **Exact context preservation**  
-  Notes can preserve the exact YouTube source and playback timestamp that created them.
+- **Exact context preservation**
+  Notes preserve their exact Video, Image, or Audio source. Video and Audio may additionally preserve an exact playback timestamp.
 
-- **Source vs Library separation**  
-  A YouTube source is distinct from a user's personal Library entry.
+- **Source vs Library separation**
+  A source identity is distinct from an account's Library membership. Removing Library membership does not delete historical Note or Task provenance.
 
-- **Historical context preservation**  
-  Removing a video from the Library does not invalidate Notes that reference its original source.
+- **Historical context preservation**
+  Removing Video, Image, or Audio Library membership does not invalidate Notes that reference the original source.
 
-- **Task preservation**  
+- **Task preservation**
   Deleting a source Note does not delete Tasks created from it. The Task remains valid while its source is explicitly represented as missing.
 
-- **Derived planning model**  
+- **Derived planning model**
   Daily Plan is computed from Task data instead of persisting duplicate planning state.
 
-- **Strict Reverse Context**  
-  Navigation follows only the real Task → Note → source relationship and never fabricates substitute context.
+- **Multisource Reverse Context**
+  Navigation follows only the real Task → Note → source relationship and returns to the exact Video, Image, or Audio source without substituting unrelated content.
 
-- **Account-scoped data boundaries**  
+- **Account-scoped data boundaries**
   User-owned resources are isolated by authenticated account.
 
-- **Browser-side video playback**  
+- **Browser-side video playback**
   YouTube video streams remain browser-side. The backend only handles metadata, validation, and source resolution.
 
 ---
@@ -169,6 +194,7 @@ Browser
 ```
 
 The backend does **not** proxy YouTube video streams.
+Uploaded Image and Audio content is stored by the backend. Local development uses filesystem storage under the backend data directory, while production Docker deployment mounts persistent named volumes for uploaded media.
 
 ---
 
@@ -229,9 +255,11 @@ The backend is organized as a modular monolith by feature:
 ```text
 auth
 video
+source
 watch
 note
 task
+organization
 context
 common
 ```
@@ -425,18 +453,32 @@ See [`DEPLOYMENT.md`](./DEPLOYMENT.md) for the complete deployment procedure.
 
 ## Data Model
 
-The main persisted concepts are:
+The main persisted concepts include:
 
 ```text
 Account
+
 YouTubeVideo
 LibraryVideo
 Tag
 LibraryVideoTag
 WatchSession
+
+ImageSource
+LibraryImage
+
+AudioSource
+LibraryAudio
+
 Note
+Category
+NoteTag
+
 Task
+TaskTag
 ```
+
+Notes provide the provenance bridge from Tasks back to their original media source.
 
 Daily Plan and Reverse Context are **derived application concepts** rather than independent persisted models.
 

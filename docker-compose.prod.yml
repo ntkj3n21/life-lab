@@ -37,6 +37,14 @@ services:
 
       LIFELAB_DEFAULT_TIME_ZONE: ${LIFELAB_DEFAULT_TIME_ZONE:-UTC}
       LIFELAB_COOKIE_SECURE: "true"
+
+      LIFELAB_IMAGE_STORAGE_PATH: /app/data/images
+      LIFELAB_AUDIO_STORAGE_PATH: /app/data/audio
+
+    volumes:
+      - lifelab_image_data:/app/data/images
+      - lifelab_audio_data:/app/data/audio
+
     networks:
       - frontend_backend
       - backend_database
@@ -51,11 +59,7 @@ services:
     volumes:
       - lifelab_postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"
-        ]
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -65,6 +69,8 @@ services:
 
 volumes:
   lifelab_postgres_data:
+  lifelab_image_data:
+  lifelab_audio_data:
 
 networks:
   frontend_backend:

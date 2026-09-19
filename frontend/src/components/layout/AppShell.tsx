@@ -30,9 +30,11 @@ export function AppShell() {
     pathname.startsWith(
       "/library/",
     ) ||
+    pathname === "/images" ||
     pathname.startsWith(
       "/images/",
     ) ||
+    pathname === "/audio" ||
     pathname.startsWith(
       "/audio/",
     );

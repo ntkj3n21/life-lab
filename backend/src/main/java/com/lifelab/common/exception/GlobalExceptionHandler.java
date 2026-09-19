@@ -3,6 +3,8 @@ package com.lifelab.common.exception;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -43,8 +45,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiError> handleValidation(MethodArgumentNotValidException exception) {
         Map<String, String> fieldErrors = new LinkedHashMap<>();
-        exception.getBindingResult().getFieldErrors().forEach(error ->
-                fieldErrors.putIfAbsent(error.getField(), error.getDefaultMessage()));
+        exception.getBindingResult().getFieldErrors()
+                .forEach(error -> fieldErrors.putIfAbsent(error.getField(), error.getDefaultMessage()));
 
         ApiError apiError = new ApiError(
                 "VALIDATION_ERROR",
@@ -190,9 +192,22 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MaxUploadSizeExceededException.class)
-    public ResponseEntity<ApiError> handleMaxUploadSize(MaxUploadSizeExceededException exception) {
+    public ResponseEntity<ApiError> handleMaxUploadSize(
+            MaxUploadSizeExceededException exception,
+            HttpServletRequest request) {
+        String requestUri = request.getRequestURI();
+
+        String code;
+        if ("/api/library/audio/upload".equals(requestUri)) {
+            code = "INVALID_AUDIO";
+        } else if ("/api/library/images/upload".equals(requestUri)) {
+            code = "INVALID_IMAGE";
+        } else {
+            code = "VALIDATION_ERROR";
+        }
+
         return ResponseEntity.badRequest().body(new ApiError(
-                "INVALID_IMAGE",
+                code,
                 "Request validation failed.",
                 Map.of("file", "exceeds the configured maximum upload size")));
     }

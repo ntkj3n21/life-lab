@@ -167,7 +167,7 @@ export function ContextSummary() {
         </span>
 
         <span className="text-xs text-(--text-muted)">
-          No active video context.
+          No active source context.
         </span>
       </div>
     );

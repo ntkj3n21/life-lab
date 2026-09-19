@@ -182,7 +182,7 @@ export function ConfirmDialog({
         }
         aria-busy={isBusy}
         tabIndex={-1}
-        className="max-h-[calc(100vh-2rem)] w-full max-w-md overflow-y-auto overscroll-contain rounded-2xl border border-(--border) bg-(--surface) p-5 shadow-[var(--elevated-shadow)]"
+        className="max-h-[calc(100vh-2rem)] w-full max-w-md overflow-y-auto overscroll-contain rounded-2xl border border-(--border) bg-(--surface) p-5 shadow-(--elevated-shadow)"
       >
         <h2
           id={titleId}
@@ -237,7 +237,7 @@ export function ConfirmDialog({
             type="button"
             disabled={isBusy}
             onClick={onCancel}
-            className="rounded-xl border border-(--border) px-4 py-2 text-sm text-(--text-secondary) transition hover:bg-(--surface) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
+            className="min-h-10 rounded-xl border border-(--border) px-4 text-sm text-(--text-secondary) transition hover:bg-(--surface) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50 sm:min-h-0 sm:py-2"
           >
             {cancelLabel}
           </button>
@@ -248,7 +248,7 @@ export function ConfirmDialog({
             onClick={() =>
               void onConfirm()
             }
-            className="rounded-xl bg-(--danger-solid-bg) px-4 py-2 text-sm font-medium text-(--danger-solid-text) transition hover:bg-(--danger-solid-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--danger-ring) disabled:cursor-not-allowed disabled:opacity-50"
+            className="min-h-10 rounded-xl bg-(--danger-solid-bg) px-4 text-sm font-medium text-(--danger-solid-text) transition hover:bg-(--danger-solid-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--danger-ring) disabled:cursor-not-allowed disabled:opacity-50 sm:min-h-0 sm:py-2"
           >
             {isBusy
               ? "Working..."

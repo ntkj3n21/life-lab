@@ -288,7 +288,7 @@ export function SourcePreviewPage({
             "SOURCE_PREVIEW" &&
           note.sourceType === "IMAGE" &&
           note.imageSource ? (
-          <div className="mt-8 flex min-h-[320px] items-center justify-center overflow-hidden rounded-3xl border border-(--border) bg-(--surface) sm:min-h-[480px]">
+          <div className="mt-8 flex min-h-80 items-center justify-center overflow-hidden rounded-3xl border border-(--border) bg-(--surface) sm:min-h-120">
             <ImagePreview
               sourceId={note.imageSource.id}
               origin={note.imageSource.origin}

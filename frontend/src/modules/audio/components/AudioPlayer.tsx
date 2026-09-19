@@ -77,7 +77,7 @@ export function AudioPlayer({
         src={url}
         controls
         preload="metadata"
-        aria-label={title}
+        aria-label={`Audio player: ${title}`}
         onLoadedMetadata={(event) => handleReady(event.currentTarget)}
         onCanPlay={(event) => handleReady(event.currentTarget)}
         onDurationChange={(event) => applyHistoricalSeek(event.currentTarget)}
@@ -86,7 +86,7 @@ export function AudioPlayer({
         onPlay={(event) => reportPosition(event.currentTarget)}
         onPause={(event) => reportPosition(event.currentTarget)}
         onError={() => setFailedUrl(url)}
-        className="w-full"
+        className="w-full rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)"
       >
         Your browser does not support audio playback.
       </audio>

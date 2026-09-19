@@ -79,7 +79,7 @@ export function VideoStage({
 }: VideoStageProps) {
   if (!activeVideo) {
     return (
-      <section className="flex min-h-56 items-center justify-center rounded-3xl border border-(--border) bg-(--surface) p-6">
+        <section aria-label="Video workspace" aria-busy={isResolvingVideo} className="flex min-h-56 items-center justify-center rounded-3xl border border-(--border) bg-(--surface) p-6">
         <div className="max-w-lg text-center">
           <Film
             className="mx-auto mb-4 text-(--text-muted)"
@@ -95,7 +95,16 @@ export function VideoStage({
                 : "No video open"}
           </h3>
 
-          <p className="mt-2 text-sm leading-6 text-(--text-secondary)">
+          <p
+            role={
+              isResolvingVideo
+                ? "status"
+                : hasVideoLoadError
+                  ? "alert"
+                  : undefined
+            }
+            className="mt-2 text-sm leading-6 text-(--text-secondary)"
+          >
             {isResolvingVideo
               ? "Loading the saved video context."
               : hasVideoLoadError
@@ -129,7 +138,7 @@ export function VideoStage({
     getLibraryVideoDisplayTitle(activeVideo);
 
   return (
-    <section>
+    <section aria-label="Video workspace">
       <div
         className={`mb-4 flex flex-wrap items-start justify-between gap-4 ${
           isFocusMode

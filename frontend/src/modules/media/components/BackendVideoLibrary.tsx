@@ -1,14 +1,5 @@
-import {
-  useEffect,
-  useState,
-} from "react";
-import {
-  ExternalLink,
-  Plus,
-  RefreshCw,
-  Search,
-  X,
-} from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { ExternalLink, Plus, RefreshCw, Search, X } from "lucide-react";
 
 import { ConfirmDialog } from "../../../components/ui/ConfirmDialog";
 import { useLibraryStore } from "../../../stores/libraryStore";
@@ -32,10 +23,7 @@ import {
 import { LibraryPagination } from "./LibraryPagination";
 import { LibraryMediaNavigation } from "./LibraryMediaNavigation";
 import { LibraryVideoCard } from "./LibraryVideoCard";
-import {
-  LibraryViewModes,
-  type LibraryViewMode,
-} from "./LibraryViewModes";
+import { LibraryViewModes, type LibraryViewMode } from "./LibraryViewModes";
 import { TagManager } from "./TagManager";
 
 interface BackendVideoLibraryProps {
@@ -46,13 +34,9 @@ interface BackendVideoLibraryProps {
     navigationQuery: LibraryNavigationQuery,
   ) => void;
 
-  onNavigationQueryChange: (
-    navigationQuery: LibraryNavigationQuery,
-  ) => void;
+  onNavigationQueryChange: (navigationQuery: LibraryNavigationQuery) => void;
 
-  onVideoDeleted?: (
-    libraryVideoId: number,
-  ) => void;
+  onVideoDeleted?: (libraryVideoId: number) => void;
 }
 
 interface PendingVideoDelete {
@@ -60,26 +44,18 @@ interface PendingVideoDelete {
   impact: LibraryVideoDeleteImpact;
 }
 
-type AppliedLibraryQuery =
-  LibraryNavigationQuery;
+type AppliedLibraryQuery = LibraryNavigationQuery;
 
-const DEFAULT_APPLIED_QUERY:
-  AppliedLibraryQuery = {
-    sortBy: "addedAt",
-    sortDirection: "desc",
-  };
+const DEFAULT_APPLIED_QUERY: AppliedLibraryQuery = {
+  sortBy: "addedAt",
+  sortDirection: "desc",
+};
 
-const LIBRARY_FIELD_LABELS: Record<
-  string,
-  string
-> = {
+const LIBRARY_FIELD_LABELS: Record<string, string> = {
   q: "Keyword",
-  minDurationSeconds:
-    "Minimum duration",
-  maxDurationSeconds:
-    "Maximum duration",
-  publishedFrom:
-    "Published from",
+  minDurationSeconds: "Minimum duration",
+  maxDurationSeconds: "Maximum duration",
+  publishedFrom: "Published from",
   publishedTo: "Published to",
   addedFrom: "Added from",
   addedTo: "Added to",
@@ -88,21 +64,16 @@ const LIBRARY_FIELD_LABELS: Record<
   watched: "Watch status",
   hasNotes: "Note status",
   sortBy: "Sort by",
-  sortDirection:
-    "Sort direction",
+  sortDirection: "Sort direction",
   page: "Page",
   size: "Page size",
   youtubeUrl: "YouTube URL",
   customTitle: "Custom title",
-  personalDescription:
-    "Personal description",
+  personalDescription: "Personal description",
 };
 
-function getLibraryFieldLabel(
-  field: string,
-) {
-  const mappedLabel =
-    LIBRARY_FIELD_LABELS[field];
+function getLibraryFieldLabel(field: string) {
+  const mappedLabel = LIBRARY_FIELD_LABELS[field];
 
   if (mappedLabel) {
     return mappedLabel;
@@ -113,58 +84,29 @@ function getLibraryFieldLabel(
     .replace(/[_-]+/g, " ")
     .trim();
 
-  return words
-    ? words.charAt(0).toUpperCase() +
-        words.slice(1)
-    : "Field";
+  return words ? words.charAt(0).toUpperCase() + words.slice(1) : "Field";
 }
 
-function getLibraryValidationMessage(
-  field: string,
-  message: string,
-) {
+function getLibraryValidationMessage(field: string, message: string) {
   const fieldLabels = {
     ...LIBRARY_FIELD_LABELS,
-    [field]:
-      getLibraryFieldLabel(field),
+    [field]: getLibraryFieldLabel(field),
   };
 
-  const identifiers =
-    Object.keys(fieldLabels)
-      .filter((identifier) =>
-        /[A-Z_-]/.test(identifier),
-      )
-      .sort(
-        (left, right) =>
-          right.length - left.length,
-      );
+  const identifiers = Object.keys(fieldLabels)
+    .filter((identifier) => /[A-Z_-]/.test(identifier))
+    .sort((left, right) => right.length - left.length);
 
-  const presentationMessage =
-    identifiers.reduce(
-      (result, identifier) => {
-        const escapedIdentifier =
-          identifier.replace(
-            /[.*+?^${}()|[\]\\]/g,
-            "\\$&",
-          );
+  const presentationMessage = identifiers.reduce((result, identifier) => {
+    const escapedIdentifier = identifier.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
-        return result.replace(
-          new RegExp(
-            `\\b${escapedIdentifier}\\b`,
-            "g",
-          ),
-          fieldLabels[identifier],
-        );
-      },
-      message.trim(),
+    return result.replace(
+      new RegExp(`\\b${escapedIdentifier}\\b`, "g"),
+      fieldLabels[identifier],
     );
+  }, message.trim());
 
-  if (
-    !presentationMessage ||
-    /[.!?]$/.test(
-      presentationMessage,
-    )
-  ) {
+  if (!presentationMessage || /[.!?]$/.test(presentationMessage)) {
     return presentationMessage;
   }
 
@@ -197,9 +139,7 @@ function applyViewMode(
   }
 }
 
-function parseOptionalNonNegativeInteger(
-  value: string,
-) {
+function parseOptionalNonNegativeInteger(value: string) {
   if (!value.trim()) {
     return {
       value: undefined,
@@ -207,13 +147,9 @@ function parseOptionalNonNegativeInteger(
     };
   }
 
-  const parsed =
-    Number(value);
+  const parsed = Number(value);
 
-  if (
-    !Number.isSafeInteger(parsed) ||
-    parsed < 0
-  ) {
+  if (!Number.isSafeInteger(parsed) || parsed < 0) {
     return {
       value: undefined,
       error:
@@ -227,45 +163,35 @@ function parseOptionalNonNegativeInteger(
   };
 }
 
-function hasAppliedLibraryFilters(
-  query: AppliedLibraryQuery,
-) {
+function hasAppliedLibraryFilters(query: AppliedLibraryQuery) {
   return Boolean(
     query.q ||
-      query.minDurationSeconds !==
-        undefined ||
-      query.maxDurationSeconds !==
-        undefined ||
-      query.publishedFrom ||
-      query.publishedTo ||
-      query.addedFrom ||
-      query.addedTo ||
-      query.tagIds?.length ||
-      query.watched !== undefined ||
-      query.hasNotes !== undefined,
+    query.minDurationSeconds !== undefined ||
+    query.maxDurationSeconds !== undefined ||
+    query.publishedFrom ||
+    query.publishedTo ||
+    query.addedFrom ||
+    query.addedTo ||
+    query.tagIds?.length ||
+    query.watched !== undefined ||
+    query.hasNotes !== undefined,
   );
 }
 
-const LIBRARY_FILTER_DATE_FORMATTER =
-  new Intl.DateTimeFormat("en", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-    timeZone: "UTC",
-  });
+const LIBRARY_FILTER_DATE_FORMATTER = new Intl.DateTimeFormat("en", {
+  month: "short",
+  day: "numeric",
+  year: "numeric",
+  timeZone: "UTC",
+});
 
-function formatAppliedDuration(
-  seconds: number,
-) {
+function formatAppliedDuration(seconds: number) {
   if (seconds < 60) {
     return `${seconds} sec`;
   }
 
-  const minutes = Math.floor(
-    seconds / 60,
-  );
-  const remainingSeconds =
-    seconds % 60;
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
 
   if (remainingSeconds === 0) {
     return `${minutes} min`;
@@ -274,18 +200,12 @@ function formatAppliedDuration(
   return `${minutes} min ${remainingSeconds} sec`;
 }
 
-function formatAppliedDate(
-  value: string,
-) {
-  const date = new Date(
-    `${value}T00:00:00Z`,
-  );
+function formatAppliedDate(value: string) {
+  const date = new Date(`${value}T00:00:00Z`);
 
   return Number.isNaN(date.getTime())
     ? value
-    : LIBRARY_FILTER_DATE_FORMATTER.format(
-        date,
-      );
+    : LIBRARY_FILTER_DATE_FORMATTER.format(date);
 }
 
 function getAppliedFilterItems(
@@ -296,9 +216,7 @@ function getAppliedFilterItems(
   }>,
   viewMode: LibraryViewMode,
 ): AppliedLibraryFilterItem[] {
-  const items:
-    AppliedLibraryFilterItem[] =
-    [];
+  const items: AppliedLibraryFilterItem[] = [];
 
   if (query.q) {
     items.push({
@@ -307,100 +225,68 @@ function getAppliedFilterItems(
     });
   }
 
-  query.tagIds?.forEach(
-    (tagId) => {
-      const tag = tags.find(
-        (candidate) =>
-          candidate.id === tagId,
-      );
+  query.tagIds?.forEach((tagId) => {
+    const tag = tags.find((candidate) => candidate.id === tagId);
 
-      items.push({
-        id: `tag:${tagId}`,
-        label:
-          tag?.name ??
-          "Selected tag",
-      });
-    },
-  );
+    items.push({
+      id: `tag:${tagId}`,
+      label: tag?.name ?? "Selected tag",
+    });
+  });
 
-  if (
-    viewMode === "all" &&
-    query.watched !== undefined
-  ) {
+  if (viewMode === "all" && query.watched !== undefined) {
     items.push({
       id: "watched",
-      label: query.watched
-        ? "Watched"
-        : "Not watched",
+      label: query.watched ? "Watched" : "Not watched",
     });
   }
 
   if (query.hasNotes !== undefined) {
     items.push({
       id: "hasNotes",
-      label: query.hasNotes
-        ? "Has notes"
-        : "No notes",
+      label: query.hasNotes ? "Has notes" : "No notes",
     });
   }
 
-  if (
-    query.minDurationSeconds !==
-    undefined
-  ) {
+  if (query.minDurationSeconds !== undefined) {
     items.push({
       id: "minDurationSeconds",
-      label: `Minimum ${formatAppliedDuration(
-        query.minDurationSeconds,
-      )}`,
+      label: `Minimum ${formatAppliedDuration(query.minDurationSeconds)}`,
     });
   }
 
-  if (
-    query.maxDurationSeconds !==
-    undefined
-  ) {
+  if (query.maxDurationSeconds !== undefined) {
     items.push({
       id: "maxDurationSeconds",
-      label: `Maximum ${formatAppliedDuration(
-        query.maxDurationSeconds,
-      )}`,
+      label: `Maximum ${formatAppliedDuration(query.maxDurationSeconds)}`,
     });
   }
 
   if (query.publishedFrom) {
     items.push({
       id: "publishedFrom",
-      label: `Published from ${formatAppliedDate(
-        query.publishedFrom,
-      )}`,
+      label: `Published from ${formatAppliedDate(query.publishedFrom)}`,
     });
   }
 
   if (query.publishedTo) {
     items.push({
       id: "publishedTo",
-      label: `Published to ${formatAppliedDate(
-        query.publishedTo,
-      )}`,
+      label: `Published to ${formatAppliedDate(query.publishedTo)}`,
     });
   }
 
   if (query.addedFrom) {
     items.push({
       id: "addedFrom",
-      label: `Added from ${formatAppliedDate(
-        query.addedFrom,
-      )}`,
+      label: `Added from ${formatAppliedDate(query.addedFrom)}`,
     });
   }
 
   if (query.addedTo) {
     items.push({
       id: "addedTo",
-      label: `Added to ${formatAppliedDate(
-        query.addedTo,
-      )}`,
+      label: `Added to ${formatAppliedDate(query.addedTo)}`,
     });
   }
 
@@ -413,213 +299,100 @@ export function BackendVideoLibrary({
   onNavigationQueryChange,
   onVideoDeleted,
 }: BackendVideoLibraryProps) {
-  const videos =
-    useLibraryStore(
-      (state) => state.videos,
-    );
+  const videos = useLibraryStore((state) => state.videos);
 
-  const page =
-    useLibraryStore(
-      (state) => state.page,
-    );
+  const page = useLibraryStore((state) => state.page);
 
-  const size =
-    useLibraryStore(
-      (state) => state.size,
-    );
+  const size = useLibraryStore((state) => state.size);
 
-  const totalElements =
-    useLibraryStore(
-      (state) =>
-        state.totalElements,
-    );
+  const totalElements = useLibraryStore((state) => state.totalElements);
 
-  const totalPages =
-    useLibraryStore(
-      (state) =>
-        state.totalPages,
-    );
+  const totalPages = useLibraryStore((state) => state.totalPages);
 
-  const isLoading =
-    useLibraryStore(
-      (state) => state.isLoading,
-    );
+  const isLoading = useLibraryStore((state) => state.isLoading);
 
-  const hasLoaded =
-    useLibraryStore(
-      (state) => state.hasLoaded,
-    );
+  const hasLoaded = useLibraryStore((state) => state.hasLoaded);
 
-  const hasLoadError =
-    useLibraryStore(
-      (state) => state.hasLoadError,
-    );
+  const hasLoadError = useLibraryStore((state) => state.hasLoadError);
 
-  const isMutating =
-    useLibraryStore(
-      (state) => state.isMutating,
-    );
+  const isMutating = useLibraryStore((state) => state.isMutating);
 
-  const error =
-    useLibraryStore(
-      (state) => state.error,
-    );
+  const error = useLibraryStore((state) => state.error);
 
-  const loadLibrary =
-    useLibraryStore(
-      (state) =>
-        state.loadLibrary,
-    );
+  const loadLibrary = useLibraryStore((state) => state.loadLibrary);
 
-  const updateVideo =
-    useLibraryStore(
-      (state) =>
-        state.updateVideo,
-    );
+  const updateVideo = useLibraryStore((state) => state.updateVideo);
 
-  const getDeleteImpact =
-    useLibraryStore(
-      (state) =>
-        state.getDeleteImpact,
-    );
+  const getDeleteImpact = useLibraryStore((state) => state.getDeleteImpact);
 
-  const deleteVideo =
-    useLibraryStore(
-      (state) =>
-        state.deleteVideo,
-    );
+  const deleteVideo = useLibraryStore((state) => state.deleteVideo);
 
-  const clearError =
-    useLibraryStore(
-      (state) =>
-        state.clearError,
-    );
+  const clearError = useLibraryStore((state) => state.clearError);
 
-  const tags =
-    useTagStore(
-      (state) => state.tags,
-    );
+  const tags = useTagStore((state) => state.tags);
 
-  const loadTags =
-    useTagStore(
-      (state) => state.loadTags,
-    );
+  const loadTags = useTagStore((state) => state.loadTags);
 
-  const [
-    searchText,
-    setSearchText,
-  ] = useState("");
+  const [searchText, setSearchText] = useState("");
 
-  const [
-    selectedTagIds,
-    setSelectedTagIds,
-  ] = useState<number[]>([]);
+  const [selectedTagIds, setSelectedTagIds] = useState<number[]>([]);
 
-  const [
-    minDurationSeconds,
-    setMinDurationSeconds,
-  ] = useState("");
+  const [minDurationSeconds, setMinDurationSeconds] = useState("");
 
-  const [
-    maxDurationSeconds,
-    setMaxDurationSeconds,
-  ] = useState("");
+  const [maxDurationSeconds, setMaxDurationSeconds] = useState("");
 
-  const [
-    publishedFrom,
-    setPublishedFrom,
-  ] = useState("");
+  const [publishedFrom, setPublishedFrom] = useState("");
 
-  const [
-    publishedTo,
-    setPublishedTo,
-  ] = useState("");
+  const [publishedTo, setPublishedTo] = useState("");
 
-  const [
-    addedFrom,
-    setAddedFrom,
-  ] = useState("");
+  const [addedFrom, setAddedFrom] = useState("");
 
-  const [
-    addedTo,
-    setAddedTo,
-  ] = useState("");
+  const [addedTo, setAddedTo] = useState("");
 
-  const [
-    watchedFilter,
-    setWatchedFilter,
-  ] =
-    useState<BooleanFilter>("");
+  const [watchedFilter, setWatchedFilter] = useState<BooleanFilter>("");
 
-  const [
-    notesFilter,
-    setNotesFilter,
-  ] =
-    useState<BooleanFilter>("");
+  const [notesFilter, setNotesFilter] = useState<BooleanFilter>("");
 
-  const [
-    sortBy,
-    setSortBy,
-  ] =
-    useState<LibrarySortBy>(
-      "addedAt",
-    );
+  const [sortBy, setSortBy] = useState<LibrarySortBy>("addedAt");
 
-  const [
-    sortDirection,
-    setSortDirection,
-  ] =
-    useState<LibrarySortDirection>(
-      "desc",
-    );
+  const [sortDirection, setSortDirection] =
+    useState<LibrarySortDirection>("desc");
 
-  const [
-    viewMode,
-    setViewMode,
-  ] =
-    useState<LibraryViewMode>(
-      "all",
-    );
+  const [viewMode, setViewMode] = useState<LibraryViewMode>("all");
 
-  const [
-    appliedQuery,
-    setAppliedQuery,
-  ] =
-    useState<AppliedLibraryQuery>(
-      DEFAULT_APPLIED_QUERY,
-    );
+  const [appliedQuery, setAppliedQuery] = useState<AppliedLibraryQuery>(
+    DEFAULT_APPLIED_QUERY,
+  );
 
-  const [
-    validationMessage,
-    setValidationMessage,
-  ] = useState<
-    string | null
-  >(null);
+  const [validationMessage, setValidationMessage] = useState<string | null>(
+    null,
+  );
 
-  const [
-    showAdvancedFilters,
-    setShowAdvancedFilters,
-  ] = useState(false);
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
 
-  const [
-    pendingDelete,
-    setPendingDelete,
-  ] =
-    useState<PendingVideoDelete | null>(
-      null,
-    );
+  const [pendingDelete, setPendingDelete] = useState<PendingVideoDelete | null>(
+    null,
+  );
 
-  const [
-    isPreparingDelete,
-    setIsPreparingDelete,
-  ] = useState(false);
+  const [isPreparingDelete, setIsPreparingDelete] = useState(false);
 
   const [isAddFormOpen, setIsAddFormOpen] = useState(false);
+
+  const addFormTriggerRef = useRef<HTMLButtonElement | null>(null);
+
   const [youtubeSearchText, setYoutubeSearchText] = useState("");
-  const [
-    activeMenuVideoId,
-    setActiveMenuVideoId,
-  ] = useState<number | null>(null);
+  const [activeMenuVideoId, setActiveMenuVideoId] = useState<number | null>(
+    null,
+  );
+
+  function closeAddFormAndRestoreFocus() {
+    setIsAddFormOpen(false);
+
+    window.requestAnimationFrame(() => {
+      addFormTriggerRef.current?.focus();
+    });
+  }
+
   useEffect(() => {
     void loadLibrary().catch(() => {
       // libraryStore keeps error.
@@ -628,53 +401,33 @@ export function BackendVideoLibrary({
     void loadTags().catch(() => {
       // tagStore keeps error.
     });
-  }, [
-    loadLibrary,
-    loadTags,
-  ]);
+  }, [loadLibrary, loadTags]);
 
   useEffect(() => {
-    onNavigationQueryChange(
-      applyViewMode(
-        appliedQuery,
-        viewMode,
-      ),
-    );
-  }, [
-    appliedQuery,
-    viewMode,
-    onNavigationQueryChange,
-  ]);
+    onNavigationQueryChange(applyViewMode(appliedQuery, viewMode));
+  }, [appliedQuery, viewMode, onNavigationQueryChange]);
 
   function buildAppliedQuery(
     targetPage: number,
-    mode: LibraryViewMode =
-      viewMode,
+    mode: LibraryViewMode = viewMode,
   ): LibraryQuery {
     return {
       page: targetPage,
       size,
-      ...applyViewMode(
-        appliedQuery,
-        mode,
-      ),
+      ...applyViewMode(appliedQuery, mode),
     };
   }
 
   function buildDraftQuery():
     | {
-        query:
-          AppliedLibraryQuery;
+        query: AppliedLibraryQuery;
         error: null;
       }
     | {
         query: null;
         error: string;
       } {
-    const parsedMin =
-      parseOptionalNonNegativeInteger(
-        minDurationSeconds,
-      );
+    const parsedMin = parseOptionalNonNegativeInteger(minDurationSeconds);
 
     if (parsedMin.error) {
       return {
@@ -683,10 +436,7 @@ export function BackendVideoLibrary({
       };
     }
 
-    const parsedMax =
-      parseOptionalNonNegativeInteger(
-        maxDurationSeconds,
-      );
+    const parsedMax = parseOptionalNonNegativeInteger(maxDurationSeconds);
 
     if (parsedMax.error) {
       return {
@@ -696,12 +446,9 @@ export function BackendVideoLibrary({
     }
 
     if (
-      parsedMin.value !==
-        undefined &&
-      parsedMax.value !==
-        undefined &&
-      parsedMin.value >
-        parsedMax.value
+      parsedMin.value !== undefined &&
+      parsedMax.value !== undefined &&
+      parsedMin.value > parsedMax.value
     ) {
       return {
         query: null,
@@ -710,91 +457,48 @@ export function BackendVideoLibrary({
       };
     }
 
-    if (
-      publishedFrom &&
-      publishedTo &&
-      publishedFrom >
-        publishedTo
-    ) {
+    if (publishedFrom && publishedTo && publishedFrom > publishedTo) {
       return {
         query: null,
-        error:
-          "Published-from date must be on or before published-to date.",
+        error: "Published-from date must be on or before published-to date.",
       };
     }
 
-    if (
-      addedFrom &&
-      addedTo &&
-      addedFrom > addedTo
-    ) {
+    if (addedFrom && addedTo && addedFrom > addedTo) {
       return {
         query: null,
-        error:
-          "Added-from date must be on or before added-to date.",
+        error: "Added-from date must be on or before added-to date.",
       };
     }
 
-    const availableTagIds =
-      new Set(
-        tags.map(
-          (tag) => tag.id,
-        ),
-      );
+    const availableTagIds = new Set(tags.map((tag) => tag.id));
 
-    const validTagIds =
-      selectedTagIds.filter(
-        (tagId) =>
-          availableTagIds.has(
-            tagId,
-          ),
-      );
+    const validTagIds = selectedTagIds.filter((tagId) =>
+      availableTagIds.has(tagId),
+    );
 
     return {
       error: null,
       query: {
-        q:
-          appliedQuery.q,
+        q: appliedQuery.q,
 
-        minDurationSeconds:
-          parsedMin.value,
+        minDurationSeconds: parsedMin.value,
 
-        maxDurationSeconds:
-          parsedMax.value,
+        maxDurationSeconds: parsedMax.value,
 
-        publishedFrom:
-          publishedFrom ||
-          undefined,
+        publishedFrom: publishedFrom || undefined,
 
-        publishedTo:
-          publishedTo ||
-          undefined,
+        publishedTo: publishedTo || undefined,
 
-        addedFrom:
-          addedFrom ||
-          undefined,
+        addedFrom: addedFrom || undefined,
 
-        addedTo:
-          addedTo ||
-          undefined,
+        addedTo: addedTo || undefined,
 
-        tagIds:
-          validTagIds.length >
-          0
-            ? validTagIds
-            : undefined,
+        tagIds: validTagIds.length > 0 ? validTagIds : undefined,
 
-        watched:
-          watchedFilter === ""
-            ? undefined
-            : watchedFilter ===
-              "true",
+        watched: watchedFilter === "" ? undefined : watchedFilter === "true",
 
-        hasNotes:
-          notesFilter === ""
-            ? undefined
-            : notesFilter ===
-              "true",
+        hasNotes: notesFilter === "" ? undefined : notesFilter === "true",
 
         sortBy,
         sortDirection,
@@ -805,17 +509,12 @@ export function BackendVideoLibrary({
   async function applyFilters() {
     setActiveMenuVideoId(null);
     clearError();
-    setValidationMessage(
-      null,
-    );
+    setValidationMessage(null);
 
-    const draft =
-      buildDraftQuery();
+    const draft = buildDraftQuery();
 
     if (draft.query === null) {
-      setValidationMessage(
-        draft.error,
-      );
+      setValidationMessage(draft.error);
       return;
     }
 
@@ -823,15 +522,10 @@ export function BackendVideoLibrary({
       await loadLibrary({
         page: 0,
         size,
-        ...applyViewMode(
-          draft.query,
-          viewMode,
-        ),
+        ...applyViewMode(draft.query, viewMode),
       });
 
-      setAppliedQuery(
-        draft.query,
-      );
+      setAppliedQuery(draft.query);
       setShowAdvancedFilters(false);
     } catch {
       // libraryStore keeps error.
@@ -845,19 +539,14 @@ export function BackendVideoLibrary({
 
     const nextQuery = {
       ...appliedQuery,
-      q:
-        searchText.trim() ||
-        undefined,
+      q: searchText.trim() || undefined,
     };
 
     try {
       await loadLibrary({
         page: 0,
         size,
-        ...applyViewMode(
-          nextQuery,
-          viewMode,
-        ),
+        ...applyViewMode(nextQuery, viewMode),
       });
 
       setAppliedQuery(nextQuery);
@@ -866,58 +555,26 @@ export function BackendVideoLibrary({
     }
   }
 
-  function initializeFilterDraft(
-    query: AppliedLibraryQuery,
-  ) {
-    setSelectedTagIds(
-      query.tagIds ?? [],
-    );
-    setMinDurationSeconds(
-      query.minDurationSeconds?.toString() ??
-        "",
-    );
-    setMaxDurationSeconds(
-      query.maxDurationSeconds?.toString() ??
-        "",
-    );
-    setPublishedFrom(
-      query.publishedFrom ?? "",
-    );
-    setPublishedTo(
-      query.publishedTo ?? "",
-    );
-    setAddedFrom(
-      query.addedFrom ?? "",
-    );
-    setAddedTo(
-      query.addedTo ?? "",
-    );
+  function initializeFilterDraft(query: AppliedLibraryQuery) {
+    setSelectedTagIds(query.tagIds ?? []);
+    setMinDurationSeconds(query.minDurationSeconds?.toString() ?? "");
+    setMaxDurationSeconds(query.maxDurationSeconds?.toString() ?? "");
+    setPublishedFrom(query.publishedFrom ?? "");
+    setPublishedTo(query.publishedTo ?? "");
+    setAddedFrom(query.addedFrom ?? "");
+    setAddedTo(query.addedTo ?? "");
     setWatchedFilter(
-      query.watched === undefined
-        ? ""
-        : query.watched
-          ? "true"
-          : "false",
+      query.watched === undefined ? "" : query.watched ? "true" : "false",
     );
     setNotesFilter(
-      query.hasNotes === undefined
-        ? ""
-        : query.hasNotes
-          ? "true"
-          : "false",
+      query.hasNotes === undefined ? "" : query.hasNotes ? "true" : "false",
     );
-    setSortBy(
-      query.sortBy ?? "addedAt",
-    );
-    setSortDirection(
-      query.sortDirection ?? "desc",
-    );
+    setSortBy(query.sortBy ?? "addedAt");
+    setSortDirection(query.sortDirection ?? "desc");
   }
 
   function openAdvancedFilters() {
-    initializeFilterDraft(
-      appliedQuery,
-    );
+    initializeFilterDraft(appliedQuery);
     setValidationMessage(null);
     clearError();
     setActiveMenuVideoId(null);
@@ -934,9 +591,7 @@ export function BackendVideoLibrary({
   }
 
   function resetFilterDraft() {
-    initializeFilterDraft(
-      DEFAULT_APPLIED_QUERY,
-    );
+    initializeFilterDraft(DEFAULT_APPLIED_QUERY);
     setValidationMessage(null);
   }
 
@@ -954,9 +609,7 @@ export function BackendVideoLibrary({
     setNotesFilter("");
     setSortBy("addedAt");
     setSortDirection("desc");
-    setValidationMessage(
-      null,
-    );
+    setValidationMessage(null);
 
     clearError();
 
@@ -964,58 +617,39 @@ export function BackendVideoLibrary({
       await loadLibrary({
         page: 0,
         size,
-        ...applyViewMode(
-          DEFAULT_APPLIED_QUERY,
-          viewMode,
-        ),
+        ...applyViewMode(DEFAULT_APPLIED_QUERY, viewMode),
       });
 
-      setAppliedQuery(
-        DEFAULT_APPLIED_QUERY,
-      );
+      setAppliedQuery(DEFAULT_APPLIED_QUERY);
     } catch {
       // libraryStore keeps error.
     }
   }
 
-  async function removeAppliedFilter(
-    filterId: string,
-  ) {
+  async function removeAppliedFilter(filterId: string) {
     setActiveMenuVideoId(null);
     let nextQuery = {
       ...appliedQuery,
     };
 
     if (filterId.startsWith("tag:")) {
-      const tagId = Number(
-        filterId.slice(4),
-      );
+      const tagId = Number(filterId.slice(4));
 
       if (!Number.isSafeInteger(tagId)) {
         return;
       }
 
-      const nextTagIds =
-        appliedQuery.tagIds?.filter(
-          (candidateId) =>
-            candidateId !== tagId,
-        );
+      const nextTagIds = appliedQuery.tagIds?.filter(
+        (candidateId) => candidateId !== tagId,
+      );
 
       nextQuery = {
         ...nextQuery,
-        tagIds:
-          nextTagIds &&
-          nextTagIds.length > 0
-            ? nextTagIds
-            : undefined,
+        tagIds: nextTagIds && nextTagIds.length > 0 ? nextTagIds : undefined,
       };
 
-      setSelectedTagIds(
-        (current) =>
-          current.filter(
-            (candidateId) =>
-              candidateId !== tagId,
-          ),
+      setSelectedTagIds((current) =>
+        current.filter((candidateId) => candidateId !== tagId),
       );
     } else {
       switch (filterId) {
@@ -1030,8 +664,7 @@ export function BackendVideoLibrary({
         case "minDurationSeconds":
           nextQuery = {
             ...nextQuery,
-            minDurationSeconds:
-              undefined,
+            minDurationSeconds: undefined,
           };
           setMinDurationSeconds("");
           break;
@@ -1039,8 +672,7 @@ export function BackendVideoLibrary({
         case "maxDurationSeconds":
           nextQuery = {
             ...nextQuery,
-            maxDurationSeconds:
-              undefined,
+            maxDurationSeconds: undefined,
           };
           setMaxDurationSeconds("");
           break;
@@ -1105,10 +737,7 @@ export function BackendVideoLibrary({
       await loadLibrary({
         page: 0,
         size,
-        ...applyViewMode(
-          nextQuery,
-          viewMode,
-        ),
+        ...applyViewMode(nextQuery, viewMode),
       });
 
       setAppliedQuery(nextQuery);
@@ -1117,29 +746,17 @@ export function BackendVideoLibrary({
     }
   }
 
-  async function handleChangeViewMode(
-    nextMode: LibraryViewMode,
-  ) {
-    if (
-      isLoading ||
-      nextMode === viewMode
-    ) {
+  async function handleChangeViewMode(nextMode: LibraryViewMode) {
+    if (isLoading || nextMode === viewMode) {
       return;
     }
 
     setActiveMenuVideoId(null);
     clearError();
-    setValidationMessage(
-      null,
-    );
+    setValidationMessage(null);
 
     try {
-      await loadLibrary(
-        buildAppliedQuery(
-          0,
-          nextMode,
-        ),
-      );
+      await loadLibrary(buildAppliedQuery(0, nextMode));
 
       setViewMode(nextMode);
     } catch {
@@ -1147,44 +764,25 @@ export function BackendVideoLibrary({
     }
   }
 
-  function toggleTag(
-    tagId: number,
-  ) {
-    setSelectedTagIds(
-      (current) =>
-        current.includes(tagId)
-          ? current.filter(
-              (currentTagId) =>
-                currentTagId !==
-                tagId,
-            )
-          : [
-              ...current,
-              tagId,
-            ],
+  function toggleTag(tagId: number) {
+    setSelectedTagIds((current) =>
+      current.includes(tagId)
+        ? current.filter((currentTagId) => currentTagId !== tagId)
+        : [...current, tagId],
     );
   }
 
   async function handleUpdateVideo(
     libraryVideoId: number,
-    input:
-      UpdateLibraryVideoInput,
+    input: UpdateLibraryVideoInput,
   ) {
     clearError();
 
-    await updateVideo(
-      libraryVideoId,
-      input,
-    );
+    await updateVideo(libraryVideoId, input);
   }
 
-  async function handleDeleteVideo(
-    video: LibraryVideo,
-  ) {
-    if (
-      isMutating ||
-      isPreparingDelete
-    ) {
+  async function handleDeleteVideo(video: LibraryVideo) {
+    if (isMutating || isPreparingDelete) {
       return;
     }
 
@@ -1192,10 +790,7 @@ export function BackendVideoLibrary({
     setIsPreparingDelete(true);
 
     try {
-      const impact =
-        await getDeleteImpact(
-          video.id,
-        );
+      const impact = await getDeleteImpact(video.id);
 
       setPendingDelete({
         video,
@@ -1209,60 +804,35 @@ export function BackendVideoLibrary({
   }
 
   async function confirmDeleteVideo() {
-    if (
-      !pendingDelete ||
-      isMutating
-    ) {
+    if (!pendingDelete || isMutating) {
       return;
     }
 
     clearError();
 
-    const targetPage =
-      videos.length === 1 &&
-      page > 0
-        ? page - 1
-        : page;
+    const targetPage = videos.length === 1 && page > 0 ? page - 1 : page;
 
     try {
-      await deleteVideo(
-        pendingDelete.video.id,
-      );
+      await deleteVideo(pendingDelete.video.id);
 
-      onVideoDeleted?.(
-        pendingDelete.video.id,
-      );
+      onVideoDeleted?.(pendingDelete.video.id);
 
       setPendingDelete(null);
 
-      await loadLibrary(
-        buildAppliedQuery(
-          targetPage,
-        ),
-      );
+      await loadLibrary(buildAppliedQuery(targetPage));
     } catch {
       // libraryStore keeps error.
     }
   }
 
-  async function handleChangePage(
-    nextPage: number,
-  ) {
-    if (
-      isLoading ||
-      nextPage < 0 ||
-      nextPage >= totalPages
-    ) {
+  async function handleChangePage(nextPage: number) {
+    if (isLoading || nextPage < 0 || nextPage >= totalPages) {
       return;
     }
 
     setActiveMenuVideoId(null);
     try {
-      await loadLibrary(
-        buildAppliedQuery(
-          nextPage,
-        ),
-      );
+      await loadLibrary(buildAppliedQuery(nextPage));
     } catch {
       // libraryStore keeps error.
     }
@@ -1271,39 +841,27 @@ export function BackendVideoLibrary({
   async function handleRefresh() {
     setActiveMenuVideoId(null);
     try {
-      await Promise.all([
-        loadLibrary(
-          buildAppliedQuery(page),
-        ),
-        loadTags(true),
-      ]);
+      await Promise.all([loadLibrary(buildAppliedQuery(page)), loadTags(true)]);
     } catch {
       // stores keep errors.
     }
   }
 
   function handleYouTubeSearch() {
-    const query =
-      youtubeSearchText.trim();
+    const query = youtubeSearchText.trim();
 
     if (!query) {
       return;
     }
 
-    const url =
-      `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`;
+    const url = `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`;
 
     const width = 900;
     const height = 700;
 
-    const left =
-      window.screenX +
-      window.outerWidth -
-      width -
-      24;
+    const left = window.screenX + window.outerWidth - width - 24;
 
-    const top =
-      window.screenY + 70;
+    const top = window.screenY + 70;
 
     window.open(
       url,
@@ -1320,17 +878,13 @@ export function BackendVideoLibrary({
     );
   }
 
-  const hasActiveFilters =
-    hasAppliedLibraryFilters(
-      appliedQuery,
-    );
+  const hasActiveFilters = hasAppliedLibraryFilters(appliedQuery);
 
-  const appliedFilterItems =
-    getAppliedFilterItems(
-      appliedQuery,
-      tags,
-      viewMode,
-    );
+  const appliedFilterItems = getAppliedFilterItems(
+    appliedQuery,
+    tags,
+    viewMode,
+  );
 
   const isTrulyEmptyLibrary =
     hasLoaded &&
@@ -1339,19 +893,13 @@ export function BackendVideoLibrary({
     viewMode === "all" &&
     !hasActiveFilters;
 
-  const isAwaitingInitialLoad =
-    !hasLoaded &&
-    !hasLoadError;
+  const isAwaitingInitialLoad = !hasLoaded && !hasLoadError;
 
-  const shouldShowLoadErrorOnly =
-    hasLoadError &&
-    videos.length === 0;
+  const shouldShowLoadErrorOnly = hasLoadError && videos.length === 0;
 
   const shouldShowLoadingState =
     !shouldShowLoadErrorOnly &&
-    (isAwaitingInitialLoad ||
-      (isLoading &&
-        videos.length === 0));
+    (isAwaitingInitialLoad || (isLoading && videos.length === 0));
 
   return (
     <section
@@ -1360,7 +908,7 @@ export function BackendVideoLibrary({
     >
       <LibraryMediaNavigation className="mb-4" />
 
-      <div className="mb-4 flex items-start justify-between gap-6">
+      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
         <div className="min-w-0">
           <h4 className="text-base font-semibold text-(--text-primary)">
             Library
@@ -1371,19 +919,16 @@ export function BackendVideoLibrary({
           </p>
         </div>
 
-        <div className="flex shrink-0 items-center gap-2">
+        <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto sm:shrink-0 sm:justify-end">
           <span className="rounded-full bg-(--surface-hover) px-2.5 py-1 text-xs text-(--text-secondary)">
             {totalElements} video
             {totalElements === 1 ? "" : "s"}
           </span>
 
           <button
+            ref={addFormTriggerRef}
             type="button"
-            onClick={() =>
-              setIsAddFormOpen(
-                (open) => !open,
-              )
-            }
+            onClick={() => setIsAddFormOpen((open) => !open)}
             aria-expanded={isAddFormOpen}
             aria-controls="library-add-video-panel"
             aria-label={
@@ -1391,53 +936,34 @@ export function BackendVideoLibrary({
                 ? "Close find or add video"
                 : "Find or add YouTube video"
             }
-            title={
-              isAddFormOpen
-                ? "Close"
-                : "Find or add video"
-            }
-            className="flex h-8 items-center justify-center gap-1.5 rounded-lg border border-(--border) px-2.5 text-xs font-medium text-(--text-secondary) transition-colors hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)"
+            title={isAddFormOpen ? "Close" : "Find or add video"}
+            className="flex h-10 items-center justify-center gap-1.5 rounded-lg border border-(--border) px-2.5 text-xs font-medium text-(--text-secondary) transition-colors hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) sm:h-8"
           >
             {isAddFormOpen ? (
-              <X
-                size={14}
-                aria-hidden="true"
-              />
+              <X size={14} aria-hidden="true" />
             ) : (
-              <Plus
-                size={14}
-                aria-hidden="true"
-              />
+              <Plus size={14} aria-hidden="true" />
             )}
 
             <span className="hidden sm:inline">
-              {isAddFormOpen
-                ? "Close"
-                : "Find / Add"}
+              {isAddFormOpen ? "Close" : "Find / Add"}
             </span>
           </button>
 
           <button
             type="button"
-            onClick={() =>
-              void handleRefresh()
-            }
+            onClick={() => void handleRefresh()}
             disabled={isLoading}
             aria-label="Refresh library"
             title="Refresh library"
-            className="flex h-8 w-8 items-center justify-center rounded-lg border border-(--border) text-(--text-muted) transition-colors hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex h-10 w-10 items-center justify-center rounded-lg border border-(--border) text-(--text-muted) transition-colors hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50 sm:h-8 sm:w-8"
           >
             <RefreshCw
               size={14}
-              className={
-                isLoading
-                  ? "animate-spin"
-                  : undefined
-              }
+              className={isLoading ? "animate-spin" : undefined}
               aria-hidden="true"
             />
           </button>
-
         </div>
       </div>
 
@@ -1451,7 +977,8 @@ export function BackendVideoLibrary({
               Find or add a YouTube video
             </h5>
             <p className="mt-1 text-xs text-(--text-muted)">
-              Discover on YouTube, then paste the video URL below to add it to your Library.
+              Discover on YouTube, then paste the video URL below to add it to
+              your Library.
             </p>
           </div>
 
@@ -1463,28 +990,21 @@ export function BackendVideoLibrary({
                 aria-hidden="true"
               />
 
-              <label
-                htmlFor="youtube-discovery-search"
-                className="sr-only"
-              >
+              <label htmlFor="youtube-discovery-search" className="sr-only">
                 Search YouTube
               </label>
 
               <input
                 id="youtube-discovery-search"
                 value={youtubeSearchText}
-                onChange={(event) =>
-                  setYoutubeSearchText(
-                    event.target.value,
-                  )
-                }
+                onChange={(event) => setYoutubeSearchText(event.target.value)}
                 onKeyDown={(event) => {
                   if (event.key === "Enter") {
                     handleYouTubeSearch();
                   }
 
                   if (event.key === "Escape") {
-                    setIsAddFormOpen(false);
+                    closeAddFormAndRestoreFocus();
                   }
                 }}
                 autoFocus
@@ -1496,17 +1016,12 @@ export function BackendVideoLibrary({
             <button
               type="button"
               onClick={handleYouTubeSearch}
-              disabled={
-                !youtubeSearchText.trim()
-              }
+              disabled={!youtubeSearchText.trim()}
               aria-label="Open YouTube search"
               title="Search YouTube"
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-(--primary-bg) text-(--primary-text) transition-colors hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-(--primary-bg) text-(--primary-text) transition-colors hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50 sm:h-9 sm:w-9"
             >
-              <ExternalLink
-                size={14}
-                aria-hidden="true"
-              />
+              <ExternalLink size={14} aria-hidden="true" />
             </button>
           </div>
 
@@ -1515,13 +1030,7 @@ export function BackendVideoLibrary({
               onVideoAdded={(video) => {
                 setActiveMenuVideoId(null);
                 setIsAddFormOpen(false);
-                onOpenVideo(
-                  video,
-                  applyViewMode(
-                    appliedQuery,
-                    viewMode,
-                  ),
-                );
+                onOpenVideo(video, applyViewMode(appliedQuery, viewMode));
                 void loadLibrary(buildAppliedQuery(0)).catch(() => {});
               }}
             />
@@ -1538,29 +1047,15 @@ export function BackendVideoLibrary({
       <LibraryFilters
         tags={tags}
         searchText={searchText}
-        selectedTagIds={
-          selectedTagIds
-        }
-        minDurationSeconds={
-          minDurationSeconds
-        }
-        maxDurationSeconds={
-          maxDurationSeconds
-        }
-        publishedFrom={
-          publishedFrom
-        }
+        selectedTagIds={selectedTagIds}
+        minDurationSeconds={minDurationSeconds}
+        maxDurationSeconds={maxDurationSeconds}
+        publishedFrom={publishedFrom}
         publishedTo={publishedTo}
         addedFrom={addedFrom}
         addedTo={addedTo}
-        watchedFilter={
-          viewMode === "all"
-            ? watchedFilter
-            : "true"
-        }
-        notesFilter={
-          notesFilter
-        }
+        watchedFilter={viewMode === "all" ? watchedFilter : "true"}
+        notesFilter={notesFilter}
         sortBy={
           viewMode === "recent"
             ? "lastWatchedAt"
@@ -1568,78 +1063,32 @@ export function BackendVideoLibrary({
               ? "viewCount"
               : sortBy
         }
-        sortDirection={
-          viewMode === "all"
-            ? sortDirection
-            : "desc"
-        }
-        showAdvancedFilters={
-          showAdvancedFilters
-        }
+        sortDirection={viewMode === "all" ? sortDirection : "desc"}
+        showAdvancedFilters={showAdvancedFilters}
         isLoading={isLoading}
-        watchAndSortLocked={
-          viewMode !== "all"
-        }
-        validationMessage={
-          validationMessage
-        }
-        errorMessage={
-          showAdvancedFilters
-            ? error?.message
-            : null
-        }
-        appliedFilters={
-          appliedFilterItems
-        }
-        onSearchTextChange={
-          setSearchText
-        }
+        watchAndSortLocked={viewMode !== "all"}
+        validationMessage={validationMessage}
+        errorMessage={showAdvancedFilters ? error?.message : null}
+        appliedFilters={appliedFilterItems}
+        onSearchTextChange={setSearchText}
         onApplySearch={applySearch}
         onToggleTag={toggleTag}
-        onMinDurationSecondsChange={
-          setMinDurationSeconds
-        }
-        onMaxDurationSecondsChange={
-          setMaxDurationSeconds
-        }
-        onPublishedFromChange={
-          setPublishedFrom
-        }
-        onPublishedToChange={
-          setPublishedTo
-        }
-        onAddedFromChange={
-          setAddedFrom
-        }
-        onAddedToChange={
-          setAddedTo
-        }
-        onWatchedFilterChange={
-          setWatchedFilter
-        }
-        onNotesFilterChange={
-          setNotesFilter
-        }
-        onSortByChange={
-          setSortBy
-        }
-        onSortDirectionChange={
-          setSortDirection
-        }
-        onOpenAdvancedFilters={
-          openAdvancedFilters
-        }
-        onDismissAdvancedFilters={
-          dismissAdvancedFilters
-        }
+        onMinDurationSecondsChange={setMinDurationSeconds}
+        onMaxDurationSecondsChange={setMaxDurationSeconds}
+        onPublishedFromChange={setPublishedFrom}
+        onPublishedToChange={setPublishedTo}
+        onAddedFromChange={setAddedFrom}
+        onAddedToChange={setAddedTo}
+        onWatchedFilterChange={setWatchedFilter}
+        onNotesFilterChange={setNotesFilter}
+        onSortByChange={setSortBy}
+        onSortDirectionChange={setSortDirection}
+        onOpenAdvancedFilters={openAdvancedFilters}
+        onDismissAdvancedFilters={dismissAdvancedFilters}
         onApply={applyFilters}
-        onResetDraft={
-          resetFilterDraft
-        }
+        onResetDraft={resetFilterDraft}
         onClearAll={resetFilters}
-        onRemoveAppliedFilter={
-          removeAppliedFilter
-        }
+        onRemoveAppliedFilter={removeAppliedFilter}
       />
 
       <details className="mt-4">
@@ -1657,35 +1106,16 @@ export function BackendVideoLibrary({
           role="alert"
           className="mt-4 rounded-xl border border-(--danger-border) bg-(--danger-surface) px-4 py-3"
         >
-          <p className="text-sm text-(--danger-text)">
-            {error.message}
-          </p>
+          <p className="text-sm text-(--danger-text)">{error.message}</p>
 
-          {Object.keys(
-            error.fieldErrors,
-          ).length > 0 && (
+          {Object.keys(error.fieldErrors).length > 0 && (
             <div className="mt-2 space-y-1">
-              {Object.entries(
-                error.fieldErrors,
-              ).map(
-                ([
-                  field,
-                  message,
-                ]) => (
-                  <p
-                    key={field}
-                    className="text-xs text-(--danger-text)"
-                  >
-                    {getLibraryFieldLabel(
-                      field,
-                    )}:{" "}
-                    {getLibraryValidationMessage(
-                      field,
-                      message,
-                    )}
-                  </p>
-                ),
-              )}
+              {Object.entries(error.fieldErrors).map(([field, message]) => (
+                <p key={field} className="text-xs text-(--danger-text)">
+                  {getLibraryFieldLabel(field)}:{" "}
+                  {getLibraryValidationMessage(field, message)}
+                </p>
+              ))}
             </div>
           )}
         </div>
@@ -1696,9 +1126,7 @@ export function BackendVideoLibrary({
           role="status"
           className="flex min-h-48 items-center justify-center"
         >
-          <p className="text-sm text-(--text-muted)">
-            Loading library...
-          </p>
+          <p className="text-sm text-(--text-muted)">Loading library...</p>
         </div>
       ) : videos.length === 0 ? (
         <div
@@ -1721,9 +1149,7 @@ export function BackendVideoLibrary({
             <div className="mt-4 flex flex-wrap justify-center gap-2">
               <button
                 type="button"
-                onClick={() =>
-                  setIsAddFormOpen(true)
-                }
+                onClick={() => setIsAddFormOpen(true)}
                 className="rounded-lg bg-(--primary-bg) px-3 py-2 text-xs font-medium text-(--primary-text) transition hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)"
               >
                 Find or add your first video
@@ -1732,9 +1158,7 @@ export function BackendVideoLibrary({
           ) : hasActiveFilters ? (
             <button
               type="button"
-              onClick={() =>
-                void resetFilters()
-              }
+              onClick={() => void resetFilters()}
               disabled={isLoading}
               className="mt-4 rounded-lg border border-(--border) px-3 py-2 text-xs text-(--text-secondary) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
             >
@@ -1744,63 +1168,32 @@ export function BackendVideoLibrary({
         </div>
       ) : (
         <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-          {videos.map(
-            (video) => (
-              <LibraryVideoCard
-                key={video.id}
-                video={video}
-                isActive={
-                  activeVideoId ===
-                  video.id
-                }
-                isMutating={
-                  isMutating ||
-                  isPreparingDelete
-                }
-                viewMode={viewMode}
-                isActionsOpen={
-                  activeMenuVideoId ===
-                  video.id
-                }
-                onOpen={(targetVideo) => {
-                  setActiveMenuVideoId(null);
-                  onOpenVideo(
-                    targetVideo,
-                    applyViewMode(
-                      appliedQuery,
-                      viewMode,
-                    ),
-                  );
-                }}
-                onUpdate={
-                  handleUpdateVideo
-                }
-                onDelete={(
-                  targetVideo,
-                ) =>
-                  void handleDeleteVideo(
-                    targetVideo,
-                    )
-                }
-                onToggleActions={() =>
-                  setActiveMenuVideoId(
-                    (current) =>
-                      current === video.id
-                        ? null
-                        : video.id,
-                  )
-                }
-                onCloseActions={() =>
-                  setActiveMenuVideoId(
-                    (current) =>
-                      current === video.id
-                        ? null
-                        : current,
-                  )
-                }
-              />
-            ),
-          )}
+          {videos.map((video) => (
+            <LibraryVideoCard
+              key={video.id}
+              video={video}
+              isActive={activeVideoId === video.id}
+              isMutating={isMutating || isPreparingDelete}
+              viewMode={viewMode}
+              isActionsOpen={activeMenuVideoId === video.id}
+              onOpen={(targetVideo) => {
+                setActiveMenuVideoId(null);
+                onOpenVideo(targetVideo, applyViewMode(appliedQuery, viewMode));
+              }}
+              onUpdate={handleUpdateVideo}
+              onDelete={(targetVideo) => void handleDeleteVideo(targetVideo)}
+              onToggleActions={() =>
+                setActiveMenuVideoId((current) =>
+                  current === video.id ? null : video.id,
+                )
+              }
+              onCloseActions={() =>
+                setActiveMenuVideoId((current) =>
+                  current === video.id ? null : current,
+                )
+              }
+            />
+          ))}
         </div>
       )}
 
@@ -1808,15 +1201,11 @@ export function BackendVideoLibrary({
         page={page}
         totalPages={totalPages}
         isLoading={isLoading}
-        onChangePage={
-          handleChangePage
-        }
+        onChangePage={handleChangePage}
       />
 
       <ConfirmDialog
-        open={
-          pendingDelete !== null
-        }
+        open={pendingDelete !== null}
         title={
           pendingDelete
             ? `Delete "${getLibraryVideoDisplayTitle(
@@ -1840,18 +1229,9 @@ export function BackendVideoLibrary({
         }
         confirmLabel="Remove from Library"
         isBusy={isMutating}
-        errorMessage={
-          pendingDelete
-            ? error?.message ??
-              null
-            : null
-        }
-        onConfirm={
-          confirmDeleteVideo
-        }
-        onCancel={() =>
-          setPendingDelete(null)
-        }
+        errorMessage={pendingDelete ? (error?.message ?? null) : null}
+        onConfirm={confirmDeleteVideo}
+        onCancel={() => setPendingDelete(null)}
       />
     </section>
   );

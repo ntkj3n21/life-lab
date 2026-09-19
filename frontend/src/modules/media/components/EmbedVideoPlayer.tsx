@@ -61,11 +61,11 @@ export function EmbedVideoPlayer({
   });
 
   return (
-    <div className="aspect-video w-full max-h-[68vh] overflow-hidden rounded-3xl border border-(--border) bg-black shadow-2xl">
+    <div className="aspect-video max-h-[68vh] w-full overflow-hidden rounded-3xl border border-(--border) bg-black shadow-2xl focus-within:outline-none focus-within:ring-2 focus-within:ring-(--focus)">
       <ReactPlayer
         ref={playerRef}
         src={playbackUrl}
-        title={title}
+        title={`Video player: ${title}`}
         controls
         width="100%"
         height="100%"

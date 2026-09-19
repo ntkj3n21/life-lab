@@ -327,7 +327,7 @@ export function RightPanel({
             "--right-panel-width": `${rightPanelWidth}px`,
           } as CSSProperties
         }
-        className="absolute inset-y-0 right-0 z-50 flex w-[min(92vw,360px)] flex-col border-l border-(--border) bg-(--panel-bg) shadow-[var(--elevated-shadow)] xl:relative xl:w-(--right-panel-width) xl:shrink-0 xl:border-l xl:shadow-none"
+        className="absolute inset-y-0 right-0 z-50 flex w-[min(92vw,360px)] flex-col border-l border-(--border) bg-(--panel-bg) shadow-(--elevated-shadow) xl:relative xl:w-(--right-panel-width) xl:shrink-0 xl:border-l xl:shadow-none"
       >
         <div
           role="separator"

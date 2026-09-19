@@ -115,7 +115,7 @@ export function LibraryAddVideoForm({
                 : undefined
             }
             placeholder="Paste YouTube URL..."
-            className="h-10 w-full rounded-[8px] border border-(--border) bg-(--surface) px-3 text-sm outline-none transition placeholder:text-(--text-faint) focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-60 sm:h-9"
+            className="h-10 w-full rounded-lg border border-(--border) bg-(--surface) px-3 text-sm outline-none transition placeholder:text-(--text-faint) focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-60 sm:h-9"
           />
 
           {youtubeUrlError && (
@@ -135,7 +135,7 @@ export function LibraryAddVideoForm({
             isMutating ||
             !youtubeUrl.trim()
           }
-          className="flex h-10 shrink-0 items-center justify-center gap-1.5 rounded-[8px] bg-(--primary-bg) px-3.5 text-sm font-medium text-(--primary-text) transition hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50 sm:h-9"
+          className="flex h-10 shrink-0 items-center justify-center gap-1.5 rounded-lg bg-(--primary-bg) px-3.5 text-sm font-medium text-(--primary-text) transition hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50 sm:h-9"
         >
           {isMutating ? (
             <LoaderCircle

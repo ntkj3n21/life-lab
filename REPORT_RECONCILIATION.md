@@ -6,7 +6,7 @@ Use these formulations when the implementation chapter/report needs to describe 
 
 Recommended wording:
 
-> Zustand được sử dụng cho các trạng thái dùng chung cần phối hợp giữa nhiều màn hình hoặc thành phần, chẳng hạn trạng thái xác thực, ngữ cảnh Video đang hoạt động, điều hướng truy xuất ngược và một số trạng thái đồng bộ của thư viện, Ghi chú, Công việc và phiên xem. Các trạng thái cục bộ như dữ liệu biểu mẫu hoặc bộ lọc chỉ thuộc một màn hình tiếp tục được quản lý bằng state của React. Vì vậy Zustand đóng vai trò hỗ trợ quản lý state dùng chung, không thay thế toàn bộ state cục bộ của giao diện.
+> Zustand được sử dụng cho các trạng thái dùng chung cần phối hợp giữa nhiều màn hình hoặc thành phần, chẳng hạn trạng thái xác thực, ngữ cảnh nguồn đang hoạt động, điều hướng truy xuất ngược và một số trạng thái đồng bộ của thư viện, Ghi chú, Công việc và phiên xem YouTube. Ngữ cảnh nguồn có thể đại diện cho Video, Hình ảnh hoặc Âm thanh. Các trạng thái cục bộ như dữ liệu biểu mẫu hoặc bộ lọc chỉ thuộc một màn hình tiếp tục được quản lý bằng state của React. Vì vậy Zustand đóng vai trò hỗ trợ quản lý state dùng chung, không thay thế toàn bộ state cục bộ của giao diện.
 
 This replaces wording that could be read as saying Zustand is used only for authentication/context.
 
@@ -28,4 +28,4 @@ Recommended wording:
 
 Recommended wording:
 
-> Môi trường production được tổ chức bằng Docker Compose với ba dịch vụ chính gồm Frontend/Nginx, Spring Boot Backend và PostgreSQL. Chỉ Nginx công khai cổng ra ngoài, phục vụ bản build React và reverse proxy /api/* đến Backend trong mạng nội bộ. PostgreSQL sử dụng persistent volume, còn TLS được kết thúc tại Nginx.
+> Môi trường production được tổ chức bằng Docker Compose với ba dịch vụ chính gồm Frontend/Nginx, Spring Boot Backend và PostgreSQL. Chỉ Nginx công khai cổng ra ngoài, phục vụ bản build React và reverse proxy /api/\* đến Backend trong mạng nội bộ. PostgreSQL sử dụng persistent volume riêng cho dữ liệu cơ sở dữ liệu; Image và Audio được tải lên cũng sử dụng các persistent volume riêng gắn vào Backend, nhờ đó dữ liệu media không phụ thuộc vào vòng đời của container. TLS được kết thúc tại Nginx.

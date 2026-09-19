@@ -13,7 +13,9 @@ FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 
 RUN addgroup -S lifelab \
-    && adduser -S -G lifelab lifelab
+    && adduser -S -G lifelab lifelab \
+    && mkdir -p /app/data/images /app/data/audio \
+    && chown -R lifelab:lifelab /app/data
 
 COPY --from=build /workspace/target/*.jar /app/app.jar
 

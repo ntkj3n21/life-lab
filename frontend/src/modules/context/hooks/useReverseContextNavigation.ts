@@ -90,25 +90,50 @@ export function useReverseContextNavigation() {
             ) {
               if (
                 resolution.libraryImageId ===
-                null
+                  null
               ) {
                 return;
               }
 
-              clearActiveContext();
+              const targetImageId =
+                String(
+                  resolution.libraryImageId,
+                );
+
+              const currentContext =
+                useContextStore.getState()
+                  .activeContext;
+
+              const isSameActiveImage =
+                currentContext?.entityType ===
+                  "image" &&
+                currentContext.entityId ===
+                  targetImageId;
 
               /*
-               * Let Video workspace cleanup finish before
-               * the caller can link this Image Note.
-               */
-              await new Promise<void>(
-                (resolve) => {
-                  window.setTimeout(
-                    resolve,
-                    0,
-                  );
-                },
-              );
+              * Reverse navigation to the exact Image that is
+              * already active must preserve its Workspace context.
+              *
+              * Clearing it here would be incorrect when the route
+              * is already /images/:id because React Router may keep
+              * the same route mounted, leaving nothing to restore
+              * the cleared context.
+              *
+              * A transition from another source still clears first
+              * so stale Video/Audio/Image context cannot leak.
+              */
+              if (!isSameActiveImage) {
+                clearActiveContext();
+
+                await new Promise<void>(
+                  (resolve) => {
+                    window.setTimeout(
+                      resolve,
+                      0,
+                    );
+                  },
+                );
+              }
 
               navigate(
                 `/images/${resolution.libraryImageId}`,
@@ -123,25 +148,49 @@ export function useReverseContextNavigation() {
             ) {
               if (
                 resolution.libraryAudioId ===
-                null
+                  null
               ) {
                 return;
               }
 
-              clearActiveContext();
+              const targetAudioId =
+                String(
+                  resolution.libraryAudioId,
+                );
+
+              const currentContext =
+                useContextStore.getState()
+                  .activeContext;
+
+              const isSameActiveAudio =
+                currentContext?.entityType ===
+                  "audio" &&
+                currentContext.entityId ===
+                  targetAudioId;
 
               /*
-               * Settle Video workspace cleanup before an
-               * awaiting caller links the exact Audio Note.
-               */
-              await new Promise<void>(
-                (resolve) => {
-                  window.setTimeout(
-                    resolve,
-                    0,
-                  );
-                },
-              );
+              * Reverse navigation to the exact Audio source that is
+              * already active must preserve its Workspace context.
+              *
+              * The navigation state still carries the exact Note
+              * timestamp so the Audio player can seek without
+              * autoplaying.
+              *
+              * When switching from another source, clear first so
+              * stale context cannot leak into the new Audio source.
+              */
+              if (!isSameActiveAudio) {
+                clearActiveContext();
+
+                await new Promise<void>(
+                  (resolve) => {
+                    window.setTimeout(
+                      resolve,
+                      0,
+                    );
+                  },
+                );
+              }
 
               navigate(
                 `/audio/${resolution.libraryAudioId}`,

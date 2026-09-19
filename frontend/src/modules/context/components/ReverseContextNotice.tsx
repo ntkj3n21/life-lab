@@ -29,7 +29,7 @@ export function ReverseContextNotice() {
     <div
       role="status"
       aria-live="polite"
-      className="fixed bottom-4 right-4 z-40 w-[calc(100%-2rem)] max-w-sm rounded-2xl border border-(--border-strong) bg-(--surface) p-4 shadow-[var(--elevated-shadow)]"
+      className="fixed bottom-4 right-4 z-40 w-[calc(100%-2rem)] max-w-sm rounded-2xl border border-(--border-strong) bg-(--surface) p-4 shadow-(--elevated-shadow)"
     >
       <div className="flex items-start gap-3">
         <div

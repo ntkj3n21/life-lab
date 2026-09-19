@@ -83,9 +83,51 @@ docker compose --env-file .env.production -f docker-compose.prod.yml logs -f
 docker compose --env-file .env.production -f docker-compose.prod.yml down
 ```
 
-The PostgreSQL named volume is intentionally preserved.
+Normal `down` removes containers and networks but preserves Life Lab's named data volumes:
 
-To remove containers AND the database volume, use `down -v` only when the stored database is no longer needed.
+```
+lifelab_postgres_data
+lifelab_image_data
+lifelab_audio_data
+```
+
+Therefore PostgreSQL data and uploaded Image/Audio content survive normal container shutdown and recreation.
+
+Do not use `down -v` unless all persistent application data can be deleted. The `-v` option removes the database volume and uploaded-media volumes.
+
+## Persistent uploaded media
+
+Production stores uploaded media outside the backend container writable layer:
+
+```
+/app/data/images
+  ↑
+lifelab_image_data
+
+/app/data/audio
+  ↑
+lifelab_audio_data
+```
+
+The backend receives these paths through:
+
+```
+LIFELAB_IMAGE_STORAGE_PATH=/app/data/images
+LIFELAB_AUDIO_STORAGE_PATH=/app/data/audio
+```
+
+The directories are separate from PostgreSQL storage and survive backend restart or container recreation through Docker named volumes.
+
+The application-level default upload limits are:
+
+```
+Image: 10 MB
+Audio: 50 MB
+Multipart file parser: 52 MB
+Multipart request: 54 MB
+```
+
+The multipart limits are intentionally larger than the Audio application limit so normal media-specific validation can run before the global parser limit is reached.
 
 ## Request flow
 

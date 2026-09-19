@@ -530,7 +530,7 @@ export function TaskCard({
                 <div
                   ref={plannerActionsPanelRef}
                   id={plannerActionsId}
-                  className="mt-2 grid gap-1 rounded-xl border border-(--border) bg-(--panel-bg) p-2 shadow-[var(--elevated-shadow)] sm:grid-cols-2"
+                  className="mt-2 grid gap-1 rounded-xl border border-(--border) bg-(--panel-bg) p-2 shadow-(--elevated-shadow) sm:grid-cols-2"
                 >
                   {onOpenDetail && (
                     <button

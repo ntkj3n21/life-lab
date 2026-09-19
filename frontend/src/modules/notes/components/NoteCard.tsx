@@ -428,7 +428,7 @@ export function NoteCard({
                       id={workspaceActionsId}
                       aria-label={`Actions for Note ${note.id}`}
                       role="group"
-                      className="absolute right-0 z-20 mt-1 flex gap-1.5 rounded-xl border border-(--border) bg-(--panel-bg) p-1.5 shadow-[var(--elevated-shadow)]"
+                      className="absolute right-0 z-20 mt-1 flex gap-1.5 rounded-xl border border-(--border) bg-(--panel-bg) p-1.5 shadow-(--elevated-shadow)"
                     >
                       {onOpenDetail && (
                         <button

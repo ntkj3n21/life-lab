@@ -33,8 +33,15 @@ target/
 # Test coverage
 coverage/
 
-# Repomix generated snapshots
-repomix-*.xml
+# Local tool caches
+.gitnexus/
+
+# Generated inspection / snapshot files
+repomix-*
+project-tree.txt
+
+# Local source archives
+/project_code.zip
 
 # Temporary files
 *.tmp
