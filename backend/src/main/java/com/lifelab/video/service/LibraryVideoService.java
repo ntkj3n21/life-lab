@@ -332,7 +332,7 @@ public class LibraryVideoService {
         }
 
         List<Long> libraryVideoIds = videos.stream()
-                .map(LibraryVideo::getId)
+                .map(video -> video.getId())
                 .toList();
 
         /*
@@ -345,7 +345,7 @@ public class LibraryVideoService {
                         libraryVideoIds)
                 .stream()
                 .collect(Collectors.toMap(
-                        LibraryVideoWatchStatsProjection::getLibraryVideoId,
+                        stats -> stats.getLibraryVideoId(),
                         stats -> stats));
     }
 

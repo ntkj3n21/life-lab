@@ -137,7 +137,7 @@ public class ItemOrganizationService {
 
     public Page<NoteResponse> toNoteResponses(Page<Note> notes) {
         Map<Long, List<TagResponse>> tagsByNoteId = noteTagsByItemId(
-                notes.getContent().stream().map(Note::getId).toList());
+                notes.getContent().stream().map(note -> note.getId()).toList());
         return notes.map(note -> NoteResponse.from(
                 note,
                 tagsByNoteId.getOrDefault(note.getId(), List.of())));
@@ -145,7 +145,7 @@ public class ItemOrganizationService {
 
     public List<NoteResponse> toNoteResponses(List<Note> notes) {
         Map<Long, List<TagResponse>> tagsByNoteId = noteTagsByItemId(
-                notes.stream().map(Note::getId).toList());
+                notes.stream().map(task -> task.getId()).toList());
         return notes.stream()
                 .map(note -> NoteResponse.from(
                         note,
@@ -160,7 +160,7 @@ public class ItemOrganizationService {
 
     public Page<TaskResponse> toTaskResponses(Page<Task> tasks) {
         Map<Long, List<TagResponse>> tagsByTaskId = taskTagsByItemId(
-                tasks.getContent().stream().map(Task::getId).toList());
+                tasks.getContent().stream().map(task -> task.getId()).toList());
         return tasks.map(task -> TaskResponse.from(
                 task,
                 tagsByTaskId.getOrDefault(task.getId(), List.of())));
@@ -168,7 +168,7 @@ public class ItemOrganizationService {
 
     public List<TaskResponse> toTaskResponses(List<Task> tasks) {
         Map<Long, List<TagResponse>> tagsByTaskId = taskTagsByItemId(
-                tasks.stream().map(Task::getId).toList());
+                tasks.stream().map(task -> task.getId()).toList());
         return tasks.stream()
                 .map(task -> TaskResponse.from(
                         task,

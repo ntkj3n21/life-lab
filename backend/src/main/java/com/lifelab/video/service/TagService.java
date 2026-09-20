@@ -135,7 +135,7 @@ public class TagService {
                 .findAllByLibraryVideo_IdOrderByTag_NormalizedNameAscTag_IdAsc(
                         libraryVideoId)
                 .stream()
-                .map(LibraryVideoTag::getTag)
+                .map(libraryVideoTag -> libraryVideoTag.getTag())
                 .map(TagResponse::from)
                 .toList();
     }

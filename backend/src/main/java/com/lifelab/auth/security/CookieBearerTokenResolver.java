@@ -19,7 +19,7 @@ public class CookieBearerTokenResolver implements BearerTokenResolver {
         }
         return Arrays.stream(cookies)
                 .filter(cookie -> JwtCookieService.ACCESS_TOKEN_COOKIE_NAME.equals(cookie.getName()))
-                .map(Cookie::getValue)
+                .map(cookie -> cookie.getValue())
                 .filter(value -> value != null && !value.isBlank())
                 .findFirst()
                 .orElse(null);
