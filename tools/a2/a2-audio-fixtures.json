@@ -1,0 +1,130 @@
+﻿[
+    {
+        "fixtureKey":  "A2-AUD-001",
+        "title":  "Career Changes and Lifelong Learning",
+        "url":  "https://listenaminute.com/c/careers.mp3",
+        "sourcePage":  "https://listenaminute.com/c/careers.html",
+        "category":  "Career \u0026 Business",
+        "tags":  [
+                     "Career",
+                     "Learning"
+                 ],
+        "note":  "Bài nghe gợi ý rằng con đường nghề nghiệp có thể thay đổi theo thời gian. Việc tiếp tục học và thích nghi kỹ năng giúp người học chuẩn bị tốt hơn cho những thay đổi đó.",
+        "timestampSeconds":  0,
+        "taskTitle":  "Write two skills to strengthen for your target career",
+        "taskStatus":  "NOT_STARTED",
+        "deadlineClass":  "NO_DEADLINE"
+    },
+    {
+        "fixtureKey":  "A2-AUD-002",
+        "title":  "University Life and Study Balance",
+        "url":  "https://listenaminute.com/u/university.mp3",
+        "sourcePage":  "https://listenaminute.com/u/university.html",
+        "category":  "General Study",
+        "tags":  [
+                     "Study Skills",
+                     "Learning"
+                 ],
+        "note":  "Bài nghe dùng chủ đề đại học để suy nghĩ về việc học độc lập, cơ hội học tập và cách cân bằng trách nhiệm trong môi trường học tập.",
+        "timestampSeconds":  25,
+        "taskTitle":  null,
+        "taskStatus":  null,
+        "deadlineClass":  null
+    },
+    {
+        "fixtureKey":  "A2-AUD-003",
+        "title":  "Using Time Wisely",
+        "url":  "https://listenaminute.com/t/time.mp3",
+        "sourcePage":  "https://listenaminute.com/t/time.html",
+        "category":  "Personal Development",
+        "tags":  [
+                     "Time Management",
+                     "Study Skills"
+                 ],
+        "note":  "Bài nghe nhắc đến giá trị của thời gian và việc sử dụng thời gian có chủ đích. Đây là nguồn phù hợp để liên hệ với cách chia thời gian cho các nhiệm vụ quan trọng.",
+        "timestampSeconds":  0,
+        "taskTitle":  "Plan tomorrow using three priority time blocks",
+        "taskStatus":  "IN_PROGRESS",
+        "deadlineClass":  "TODAY"
+    },
+    {
+        "fixtureKey":  "A2-AUD-004",
+        "title":  "Managing Stress",
+        "url":  "https://listenaminute.com/s/stress.mp3",
+        "sourcePage":  "https://listenaminute.com/s/stress.html",
+        "category":  "Personal Development",
+        "tags":  [
+                     "Wellbeing",
+                     "Study Skills"
+                 ],
+        "note":  "Bài nghe dùng chủ đề stress để nhận diện áp lực trong cuộc sống hằng ngày. Có thể dùng để suy nghĩ về nguyên nhân gây căng thẳng và những thói quen giúp kiểm soát nó.",
+        "timestampSeconds":  35,
+        "taskTitle":  null,
+        "taskStatus":  null,
+        "deadlineClass":  null
+    },
+    {
+        "fixtureKey":  "A2-AUD-005",
+        "title":  "Social Networking and Privacy",
+        "url":  "https://listenaminute.com/s/social_networking.mp3",
+        "sourcePage":  "https://listenaminute.com/s/social_networking.html",
+        "category":  "Digital Life",
+        "tags":  [
+                     "Privacy",
+                     "Technology"
+                 ],
+        "note":  "Bài nghe về mạng xã hội tạo ngữ cảnh để cân nhắc lợi ích của kết nối trực tuyến cùng với việc kiểm soát thông tin cá nhân và quyền riêng tư.",
+        "timestampSeconds":  0,
+        "taskTitle":  "Review the privacy settings of one social account",
+        "taskStatus":  "NOT_STARTED",
+        "deadlineClass":  "UPCOMING"
+    },
+    {
+        "fixtureKey":  "A2-AUD-006",
+        "title":  "Business and Adaptation",
+        "url":  "https://listenaminute.com/b/business.mp3",
+        "sourcePage":  "https://listenaminute.com/b/business.html",
+        "category":  "Career \u0026 Business",
+        "tags":  [
+                     "Business",
+                     "Technology"
+                 ],
+        "note":  "Bài nghe dùng chủ đề kinh doanh để quan sát cách tổ chức và thị trường thay đổi. Có thể liên hệ với vai trò của công nghệ và khả năng thích nghi trong hoạt động kinh doanh.",
+        "timestampSeconds":  30,
+        "taskTitle":  "List two ways technology can change a business model",
+        "taskStatus":  "IN_PROGRESS",
+        "deadlineClass":  "UPCOMING"
+    },
+    {
+        "fixtureKey":  "A2-AUD-007",
+        "title":  "Tests and Study Preparation",
+        "url":  "https://listenaminute.com/t/tests.mp3",
+        "sourcePage":  "https://listenaminute.com/t/tests.html",
+        "category":  "General Study",
+        "tags":  [
+                     "Study Skills",
+                     "Learning"
+                 ],
+        "note":  "Bài nghe về các bài kiểm tra có thể dùng để xem lại cách chuẩn bị, ôn tập và quản lý áp lực trước khi kiểm tra thay vì chỉ học dồn vào phút cuối.",
+        "timestampSeconds":  40,
+        "taskTitle":  "Create a short revision checklist for the next test",
+        "taskStatus":  "NOT_STARTED",
+        "deadlineClass":  "TODAY"
+    },
+    {
+        "fixtureKey":  "A2-AUD-008",
+        "title":  "School and Learning Opportunities",
+        "url":  "https://listenaminute.com/s/school.mp3",
+        "sourcePage":  "https://listenaminute.com/s/school.html",
+        "category":  "General Study",
+        "tags":  [
+                     "Study Skills",
+                     "Learning"
+                 ],
+        "note":  "Bài nghe về trường học dùng để nhìn lại vai trò của môi trường học tập, giáo viên và cơ hội tiếp cận kiến thức trong quá trình học lâu dài.",
+        "timestampSeconds":  45,
+        "taskTitle":  null,
+        "taskStatus":  null,
+        "deadlineClass":  null
+    }
+]

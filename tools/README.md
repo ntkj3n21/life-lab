@@ -36,22 +36,17 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File tools/a1/Verify-A1.ps1 -
 
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File tools/a2/Reset-Seed-A2.ps1 -ReferenceDate 2026-08-27
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File tools/a2/Verify-A2.ps1 -ReferenceDate 2026-08-27
-
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File tools/a3/Reset-Seed-A3.ps1 -ReferenceDate 2026-08-27
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File tools/a3/Verify-A3.ps1 -ReferenceDate 2026-08-27
 ```
 
-The order is intentional: A2 reuses four A1 sources, and all fifteen A3 sources are shared with
-A2. Each reset deletes and recreates only its locked account's personal data. It does not truncate
+The order is intentional: A2 reuses four A1 sources. Each reset deletes and recreates only its locked account's personal data. It does not truncate
 personal tables or overwrite shared YouTube metadata.
 
 ## Accounts
 
-| Fixture | Email | Password | Purpose |
-| --- | --- | --- | --- |
-| A1 | `demo@lifelab.local` | `LifeLab@2026` | Curated main demo |
-| A2 | `scale@lifelab.local` | `LifeLab@2026` | Long-history and pagination volume |
-| A3 | `isolation@lifelab.local` | `LifeLab@2026` | Small multi-account isolation fixture |
+| Fixture | Email                     | Password       | Purpose                               |
+| ------- | ------------------------- | -------------- | ------------------------------------- |
+| A1      | `demo@lifelab.local`      | `LifeLab@2026` | Curated main demo                     |
+| A2      | `scale@lifelab.local`     | `LifeLab@2026` | Long-history and pagination volume    |
 
 ## Optional consistency checks
 
@@ -59,7 +54,6 @@ Validate locked artifacts without changing the database:
 
 ```powershell
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File tools/a2/Test-A2Artifacts.ps1
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File tools/a3/Test-A3Artifacts.ps1
 ```
 
 Run repeatability and isolation checks (these commands reset their own fixture account):
@@ -67,10 +61,8 @@ Run repeatability and isolation checks (these commands reset their own fixture a
 ```powershell
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File tools/a1/Test-A1Idempotence.ps1 -ReferenceDate 2026-08-27
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File tools/a2/Test-A2Idempotence.ps1 -ReferenceDate 2026-08-27
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File tools/a3/Test-A3Idempotence.ps1 -ReferenceDate 2026-08-27
 ```
 
-A3 gives the strongest cross-account check when both A1 and A2 already exist. If one is absent,
 the script reports that protected dataset as not tested rather than creating it automatically.
 
 ## Rebuild the derived A2 Note fixture

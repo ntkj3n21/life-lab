@@ -105,12 +105,41 @@ rows AS (
     JOIN demo ON demo.id = library.account_id
     JOIN youtube_videos youtube ON youtube.id = library.youtube_source_id
     UNION ALL
+    SELECT 'audio_source:' || source.storage_key || ':'
+        || source.origin || ':' || coalesce(source.original_filename, '') || ':'
+        || coalesce(source.media_type, '') || ':' || coalesce(source.size_bytes::text, '')
+    FROM audio_sources source
+    WHERE source.storage_key LIKE 'a1-audio-%'
+    UNION ALL
+    SELECT 'library_audio:' || source.storage_key || ':' || library.title || ':'
+        || library.added_at
+    FROM library_audio library
+    JOIN demo ON demo.id = library.account_id
+    JOIN audio_sources source ON source.id = library.audio_source_id
+    WHERE source.storage_key LIKE 'a1-audio-%'
+    UNION ALL
     SELECT 'note:' || youtube.youtube_video_id || ':' || note.content || ':'
         || coalesce(note.timestamp_seconds::text, '') || ':'
         || note.created_at || ':' || note.updated_at
     FROM notes note
     JOIN demo ON demo.id = note.account_id
     JOIN youtube_videos youtube ON youtube.id = note.youtube_source_id
+    UNION ALL
+    SELECT 'audio_note:' || source.storage_key || ':' || note.content || ':'
+        || note.timestamp_seconds || ':' || coalesce(category.normalized_name, '')
+    FROM notes note
+    JOIN demo ON demo.id = note.account_id
+    JOIN audio_sources source ON source.id = note.audio_source_id
+    LEFT JOIN categories category ON category.id = note.category_id
+    WHERE note.source_type = 'AUDIO'
+    UNION ALL
+    SELECT 'audio_note_tag:' || source.storage_key || ':' || tag.normalized_name
+    FROM note_tags relation
+    JOIN notes note ON note.id = relation.note_id
+    JOIN demo ON demo.id = note.account_id
+    JOIN audio_sources source ON source.id = note.audio_source_id
+    JOIN tags tag ON tag.id = relation.tag_id
+    WHERE note.source_type = 'AUDIO'
     UNION ALL
     SELECT 'task:' || task.source_status || ':' || task.title || ':'
         || coalesce(task.description, '') || ':' || task.status || ':'
@@ -120,7 +149,26 @@ rows AS (
     FROM tasks task
     JOIN demo ON demo.id = task.account_id
     LEFT JOIN notes source_note ON source_note.id = task.source_note_id
-    LEFT JOIN youtube_videos source_youtube ON source_youtube.id = source_note.youtube_source_id)
+    LEFT JOIN youtube_videos source_youtube ON source_youtube.id = source_note.youtube_source_id
+    UNION ALL
+    SELECT 'audio_task:' || source.storage_key || ':' || task.title || ':'
+        || task.status || ':' || coalesce(task.deadline::text, '') || ':'
+        || coalesce(category.normalized_name, '')
+    FROM tasks task
+    JOIN demo ON demo.id = task.account_id
+    JOIN notes source_note ON source_note.id = task.source_note_id
+    JOIN audio_sources source ON source.id = source_note.audio_source_id
+    LEFT JOIN categories category ON category.id = task.category_id
+    WHERE source_note.source_type = 'AUDIO'
+    UNION ALL
+    SELECT 'audio_task_tag:' || source.storage_key || ':' || tag.normalized_name
+    FROM task_tags relation
+    JOIN tasks task ON task.id = relation.task_id
+    JOIN demo ON demo.id = task.account_id
+    JOIN notes source_note ON source_note.id = task.source_note_id
+    JOIN audio_sources source ON source.id = source_note.audio_source_id
+    JOIN tags tag ON tag.id = relation.tag_id
+    WHERE source_note.source_type = 'AUDIO')
 SELECT md5(coalesce(string_agg(payload, E'\n' ORDER BY payload), '')) FROM rows;
 '@
 

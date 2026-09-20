@@ -1,0 +1,303 @@
+﻿[
+    {
+        "fixtureKey":  "A2-IMG-001",
+        "title":  "Database Normalization Overview",
+        "url":  "https://upload.wikimedia.org/wikipedia/commons/7/7b/Database_normalization.svg?utm_source=commons.wikimedia.org\u0026utm_campaign=imageinfo\u0026utm_content=original",
+        "sourcePage":  "https://commons.wikimedia.org/wiki/File:Database_normalization.svg",
+        "category":  "Database",
+        "tags":  [
+                     "Database",
+                     "Ôn tập"
+                 ],
+        "note":  "Sơ đồ dùng để ôn lại các mức chuẩn hóa cơ sở dữ liệu. Cần nhớ mục tiêu của normalization là giảm dư thừa và tránh các bất thường khi cập nhật dữ liệu.",
+        "taskTitle":  "Review database normalization forms",
+        "taskStatus":  "NOT_STARTED",
+        "deadlineClass":  "UPCOMING"
+    },
+    {
+        "fixtureKey":  "A2-IMG-002",
+        "title":  "OSI Model Layers",
+        "url":  "https://upload.wikimedia.org/wikipedia/commons/2/2b/Osi-model.png?utm_source=commons.wikimedia.org\u0026utm_campaign=imageinfo\u0026utm_content=original",
+        "sourcePage":  "https://commons.wikimedia.org/wiki/File:Osi-model.png",
+        "category":  "Computer Networks",
+        "tags":  [
+                     "Mạng máy tính",
+                     "Ôn tập"
+                 ],
+        "note":  "Sơ đồ OSI giúp hệ thống hóa bảy tầng mạng và vai trò của từng tầng. Cần phân biệt chức năng của Transport, Network và Data Link.",
+        "taskTitle":  "Review the OSI layers and their responsibilities",
+        "taskStatus":  "IN_PROGRESS",
+        "deadlineClass":  "TODAY"
+    },
+    {
+        "fixtureKey":  "A2-IMG-003",
+        "title":  "Network Topology Diagram",
+        "url":  "https://upload.wikimedia.org/wikipedia/commons/4/41/Network_topology_diagram.png?utm_source=commons.wikimedia.org\u0026utm_campaign=imageinfo\u0026utm_content=original",
+        "sourcePage":  "https://commons.wikimedia.org/wiki/File:Network_topology_diagram.png",
+        "category":  "Computer Networks",
+        "tags":  [
+                     "Mạng máy tính",
+                     "Sơ đồ"
+                 ],
+        "note":  "Ảnh minh họa cấu trúc topology mạng. Có thể dùng để so sánh cách thiết bị được kết nối và ảnh hưởng của topology đến khả năng quản trị mạng.",
+        "taskTitle":  null,
+        "taskStatus":  null,
+        "deadlineClass":  null
+    },
+    {
+        "fixtureKey":  "A2-IMG-004",
+        "title":  "Entity Relationship Examples",
+        "url":  "https://upload.wikimedia.org/wikipedia/commons/0/04/Entity_Relationship_Diagram_Examples.png?utm_source=commons.wikimedia.org\u0026utm_campaign=imageinfo\u0026utm_content=original",
+        "sourcePage":  "https://commons.wikimedia.org/wiki/File:Entity_Relationship_Diagram_Examples.png",
+        "category":  "Database",
+        "tags":  [
+                     "Database",
+                     "ERD",
+                     "Ôn tập"
+                 ],
+        "note":  "Các ví dụ quan hệ one-to-one, one-to-many và many-to-many giúp ôn lại cardinality khi thiết kế ERD.",
+        "taskTitle":  "Create one ERD example for each common cardinality",
+        "taskStatus":  "NOT_STARTED",
+        "deadlineClass":  "UPCOMING"
+    },
+    {
+        "fixtureKey":  "A2-IMG-005",
+        "title":  "MVC Architecture Diagram",
+        "url":  "https://upload.wikimedia.org/wikipedia/commons/1/19/Mvc-diagram.png?utm_source=commons.wikimedia.org\u0026utm_campaign=imageinfo\u0026utm_content=original",
+        "sourcePage":  "https://commons.wikimedia.org/wiki/File:Mvc-diagram.png",
+        "category":  "Software Engineering",
+        "tags":  [
+                     "MVC",
+                     "Kiến trúc phần mềm"
+                 ],
+        "note":  "Sơ đồ MVC dùng để ôn cách tách Model, View và Controller. Cần chú ý trách nhiệm của từng thành phần thay vì dồn logic nghiệp vụ vào Controller.",
+        "taskTitle":  "Compare MVC responsibilities with the current project structure",
+        "taskStatus":  "IN_PROGRESS",
+        "deadlineClass":  "UPCOMING"
+    },
+    {
+        "fixtureKey":  "A2-IMG-006",
+        "title":  "Cloud Computing Overview",
+        "url":  "https://upload.wikimedia.org/wikipedia/commons/9/9c/Cloud_computing.png?utm_source=commons.wikimedia.org\u0026utm_campaign=imageinfo\u0026utm_content=original",
+        "sourcePage":  "https://commons.wikimedia.org/wiki/File:Cloud_computing.png",
+        "category":  "Cloud \u0026 DevOps",
+        "tags":  [
+                     "Cloud",
+                     "DevOps"
+                 ],
+        "note":  "Ảnh tổng quan cloud computing dùng để phân biệt hạ tầng cục bộ với tài nguyên được cung cấp qua mạng và các mô hình dịch vụ trên cloud.",
+        "taskTitle":  null,
+        "taskStatus":  null,
+        "deadlineClass":  null
+    },
+    {
+        "fixtureKey":  "A2-IMG-007",
+        "title":  "Quicksort Execution Diagram",
+        "url":  "https://upload.wikimedia.org/wikipedia/commons/a/af/Quicksort-diagram.svg?utm_source=commons.wikimedia.org\u0026utm_campaign=imageinfo\u0026utm_content=original",
+        "sourcePage":  "https://commons.wikimedia.org/wiki/File:Quicksort-diagram.svg",
+        "category":  "Algorithms",
+        "tags":  [
+                     "Thuật toán",
+                     "Sorting"
+                 ],
+        "note":  "Sơ đồ mô tả quá trình quicksort trên một tập giá trị. Cần ôn vai trò của pivot, partition và trường hợp xấu nhất của thuật toán.",
+        "taskTitle":  "Trace one quicksort example by hand",
+        "taskStatus":  "NOT_STARTED",
+        "deadlineClass":  "TODAY"
+    },
+    {
+        "fixtureKey":  "A2-IMG-008",
+        "title":  "Dijkstra Algorithm Visualization",
+        "url":  "https://upload.wikimedia.org/wikipedia/commons/5/57/Dijkstra_Animation.gif?utm_source=commons.wikimedia.org\u0026utm_campaign=imageinfo\u0026utm_content=original",
+        "sourcePage":  "https://commons.wikimedia.org/wiki/File:Dijkstra_Animation.gif",
+        "category":  "Algorithms",
+        "tags":  [
+                     "Thuật toán",
+                     "Graph"
+                 ],
+        "note":  "Minh họa quá trình Dijkstra tìm đường đi ngắn nhất. Cần nhớ thuật toán giả định trọng số cạnh không âm.",
+        "taskTitle":  "Solve one shortest-path exercise with Dijkstra",
+        "taskStatus":  "NOT_STARTED",
+        "deadlineClass":  "UPCOMING"
+    },
+    {
+        "fixtureKey":  "A2-IMG-009",
+        "title":  "UML Class Diagram Example",
+        "url":  "https://upload.wikimedia.org/wikipedia/commons/3/34/UML_class_diagram_example.svg?utm_source=commons.wikimedia.org\u0026utm_campaign=imageinfo\u0026utm_content=original",
+        "sourcePage":  "https://commons.wikimedia.org/wiki/File:UML_class_diagram_example.svg",
+        "category":  "Software Engineering",
+        "tags":  [
+                     "UML",
+                     "Thiết kế hệ thống"
+                 ],
+        "note":  "Ví dụ class diagram dùng để ôn cách biểu diễn lớp, thuộc tính, phương thức và quan hệ giữa các lớp.",
+        "taskTitle":  null,
+        "taskStatus":  null,
+        "deadlineClass":  null
+    },
+    {
+        "fixtureKey":  "A2-IMG-010",
+        "title":  "Scrum Process Overview",
+        "url":  "https://upload.wikimedia.org/wikipedia/commons/f/f6/Processus_Scrum.svg?utm_source=commons.wikimedia.org\u0026utm_campaign=imageinfo\u0026utm_content=original",
+        "sourcePage":  "https://commons.wikimedia.org/wiki/File:Processus_Scrum.svg",
+        "category":  "Software Engineering",
+        "tags":  [
+                     "Scrum",
+                     "Quản lý dự án"
+                 ],
+        "note":  "Sơ đồ Scrum giúp ôn lại Product Backlog, Sprint và vòng lặp phát triển. Có thể dùng khi chuẩn bị phần quy trình phát triển phần mềm.",
+        "taskTitle":  "Summarize the Scrum workflow in five steps",
+        "taskStatus":  "NOT_STARTED",
+        "deadlineClass":  "UPCOMING"
+    },
+    {
+        "fixtureKey":  "A2-IMG-011",
+        "title":  "TCP/IP Model",
+        "url":  "https://upload.wikimedia.org/wikipedia/commons/e/e5/TCP-IP_Model_-_en.png?utm_source=commons.wikimedia.org\u0026utm_campaign=imageinfo\u0026utm_content=original",
+        "sourcePage":  "https://commons.wikimedia.org/wiki/File:TCP-IP_Model_-_en.png",
+        "category":  "Computer Networks",
+        "tags":  [
+                     "Mạng máy tính",
+                     "TCP/IP"
+                 ],
+        "note":  "Sơ đồ TCP/IP dùng để đối chiếu với mô hình OSI và ôn vai trò của các tầng Application, Transport, Internet và Network Access.",
+        "taskTitle":  "Compare the TCP/IP model with the OSI model",
+        "taskStatus":  "IN_PROGRESS",
+        "deadlineClass":  "UPCOMING"
+    },
+    {
+        "fixtureKey":  "A2-IMG-012",
+        "title":  "Docker Architecture",
+        "url":  "https://upload.wikimedia.org/wikipedia/commons/b/b4/ArquiteturaDocker.png?utm_source=commons.wikimedia.org\u0026utm_campaign=imageinfo\u0026utm_content=original",
+        "sourcePage":  "https://commons.wikimedia.org/wiki/File:ArquiteturaDocker.png",
+        "category":  "Cloud \u0026 DevOps",
+        "tags":  [
+                     "Docker",
+                     "DevOps"
+                 ],
+        "note":  "Sơ đồ kiến trúc Docker dùng để ôn mối quan hệ giữa client, daemon, image, container và registry.",
+        "taskTitle":  "Review Docker image, container and registry concepts",
+        "taskStatus":  "NOT_STARTED",
+        "deadlineClass":  "TODAY"
+    },
+    {
+        "fixtureKey":  "A2-IMG-013",
+        "title":  "Linked List Diagram",
+        "url":  "https://upload.wikimedia.org/wikipedia/commons/e/e0/LinkedList.png?utm_source=commons.wikimedia.org\u0026utm_campaign=imageinfo\u0026utm_content=original",
+        "sourcePage":  "https://commons.wikimedia.org/wiki/File:LinkedList.png",
+        "category":  "Data Structures",
+        "tags":  [
+                     "CTDL",
+                     "Linked List"
+                 ],
+        "note":  "Sơ đồ Linked List dùng để ôn cách các node liên kết với nhau thay vì lưu liên tiếp như mảng.",
+        "taskTitle":  null,
+        "taskStatus":  null,
+        "deadlineClass":  null
+    },
+    {
+        "fixtureKey":  "A2-IMG-014",
+        "title":  "Client-Server Model",
+        "url":  "https://upload.wikimedia.org/wikipedia/commons/6/69/Client-server_model.svg?utm_source=commons.wikimedia.org\u0026utm_campaign=imageinfo\u0026utm_content=original",
+        "sourcePage":  "https://commons.wikimedia.org/wiki/File:Client-server_model.svg",
+        "category":  "Software Engineering",
+        "tags":  [
+                     "Client-Server",
+                     "Kiến trúc phần mềm"
+                 ],
+        "note":  "Mô hình client-server minh họa client chủ động gửi request và server xử lý rồi trả response. Đây là nền tảng để hiểu kiến trúc web hiện đại.",
+        "taskTitle":  "Relate the client-server model to a React and Spring Boot application",
+        "taskStatus":  "IN_PROGRESS",
+        "deadlineClass":  "UPCOMING"
+    },
+    {
+        "fixtureKey":  "A2-IMG-015",
+        "title":  "Merge Sort Algorithm",
+        "url":  "https://upload.wikimedia.org/wikipedia/commons/e/e6/Merge_sort_algorithm_diagram.svg?utm_source=commons.wikimedia.org\u0026utm_campaign=imageinfo\u0026utm_content=original",
+        "sourcePage":  "https://commons.wikimedia.org/wiki/File:Merge_sort_algorithm_diagram.svg",
+        "category":  "Algorithms",
+        "tags":  [
+                     "Thuật toán",
+                     "Sorting"
+                 ],
+        "note":  "Sơ đồ merge sort minh họa chiến lược chia để trị: chia mảng thành các phần nhỏ rồi merge lại theo thứ tự.",
+        "taskTitle":  "Compare merge sort and quicksort complexity",
+        "taskStatus":  "NOT_STARTED",
+        "deadlineClass":  "UPCOMING"
+    },
+    {
+        "fixtureKey":  "A2-IMG-016",
+        "title":  "Queue Data Structure",
+        "url":  "https://upload.wikimedia.org/wikipedia/commons/5/52/Data_Queue.svg?utm_source=commons.wikimedia.org\u0026utm_campaign=imageinfo\u0026utm_content=original",
+        "sourcePage":  "https://commons.wikimedia.org/wiki/File:Data_Queue.svg",
+        "category":  "Data Structures",
+        "tags":  [
+                     "CTDL",
+                     "Queue"
+                 ],
+        "note":  "Queue hoạt động theo nguyên tắc FIFO. Cần liên hệ với các bài toán xử lý công việc theo thứ tự đến.",
+        "taskTitle":  null,
+        "taskStatus":  null,
+        "deadlineClass":  null
+    },
+    {
+        "fixtureKey":  "A2-IMG-017",
+        "title":  "Stack Data Structure",
+        "url":  "https://upload.wikimedia.org/wikipedia/commons/0/06/Stack_%28data_structure%29.svg?utm_source=commons.wikimedia.org\u0026utm_campaign=imageinfo\u0026utm_content=original",
+        "sourcePage":  "https://commons.wikimedia.org/wiki/File:Stack_(data_structure).svg",
+        "category":  "Data Structures",
+        "tags":  [
+                     "CTDL",
+                     "Stack"
+                 ],
+        "note":  "Stack hoạt động theo nguyên tắc LIFO. Có thể liên hệ với call stack, undo và các bài toán duyệt cấu trúc.",
+        "taskTitle":  "List three practical uses of a stack",
+        "taskStatus":  "NOT_STARTED",
+        "deadlineClass":  "NO_DEADLINE"
+    },
+    {
+        "fixtureKey":  "A2-IMG-018",
+        "title":  "Database Normal Forms Diagram",
+        "url":  "https://upload.wikimedia.org/wikipedia/commons/7/75/NormalFormDiagram.png?utm_source=commons.wikimedia.org\u0026utm_campaign=imageinfo\u0026utm_content=original",
+        "sourcePage":  "https://commons.wikimedia.org/wiki/File:NormalFormDiagram.png",
+        "category":  "Database",
+        "tags":  [
+                     "Database",
+                     "Normalization"
+                 ],
+        "note":  "Sơ đồ bổ sung cho phần normalization, phù hợp để đối chiếu giữa các normal form trong quá trình ôn cơ sở dữ liệu.",
+        "taskTitle":  null,
+        "taskStatus":  null,
+        "deadlineClass":  null
+    },
+    {
+        "fixtureKey":  "A2-IMG-019",
+        "title":  "Network Topologies Overview",
+        "url":  "https://upload.wikimedia.org/wikipedia/commons/9/97/NetworkTopologies.svg?utm_source=commons.wikimedia.org\u0026utm_campaign=imageinfo\u0026utm_content=original",
+        "sourcePage":  "https://commons.wikimedia.org/wiki/File:NetworkTopologies.svg",
+        "category":  "Computer Networks",
+        "tags":  [
+                     "Mạng máy tính",
+                     "Topology"
+                 ],
+        "note":  "Sơ đồ tổng hợp các dạng topology mạng để ôn nhanh trước khi làm bài tập hoặc kiểm tra.",
+        "taskTitle":  null,
+        "taskStatus":  null,
+        "deadlineClass":  null
+    },
+    {
+        "fixtureKey":  "A2-IMG-020",
+        "title":  "Cloud Computing Stack",
+        "url":  "https://upload.wikimedia.org/wikipedia/commons/3/3a/Cloud_Computing_Stack.svg?utm_source=commons.wikimedia.org\u0026utm_campaign=imageinfo\u0026utm_content=original",
+        "sourcePage":  "https://commons.wikimedia.org/wiki/File:Cloud_Computing_Stack.svg",
+        "category":  "Cloud \u0026 DevOps",
+        "tags":  [
+                     "Cloud",
+                     "Kiến trúc"
+                 ],
+        "note":  "Sơ đồ cloud stack giúp hình dung các lớp hạ tầng, nền tảng và ứng dụng. Có thể dùng để ôn sự khác nhau giữa IaaS, PaaS và SaaS.",
+        "taskTitle":  "Write a short comparison of IaaS, PaaS and SaaS",
+        "taskStatus":  "NOT_STARTED",
+        "deadlineClass":  "UPCOMING"
+    }
+]

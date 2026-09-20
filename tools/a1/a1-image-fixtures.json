@@ -1,0 +1,142 @@
+[
+  {
+    "fileName": "a1-img-01-origami-flower-reference.jpeg",
+    "title": "Origami Flower Reference",
+    "note": "Mẫu hoa giấy được lưu làm tài liệu tham khảo cho một hoạt động thủ công. Có thể xem lại cách phối màu và kiểu gấp khi cần.",
+    "category": "Personal Development",
+    "tags": ["Sáng tạo", "Xem lại"],
+    "taskTitle": null,
+    "taskStatus": null,
+    "deadlineClass": null
+  },
+  {
+    "fileName": "a1-img-02-philosophy-study-map.jpg",
+    "title": "Philosophy Study Mind Map",
+    "note": "Sơ đồ tổng hợp các nhóm nội dung trong môn Triết học Mác-Lênin. Nên dùng như bản đồ ôn tập và đối chiếu lại từng phần với giáo trình.",
+    "category": "General Study",
+    "tags": ["Triết học", "Ôn tập"],
+    "taskTitle": "Review the philosophy mind map before the next class",
+    "taskStatus": "NOT_STARTED",
+    "deadlineClass": "UPCOMING"
+  },
+  {
+    "fileName": "a1-img-03-pomodoro-technique.png",
+    "title": "Pomodoro Study Technique",
+    "note": "Có thể thử chia buổi học thành các phiên tập trung ngắn và thời gian nghỉ để giảm mất tập trung khi học lập trình.",
+    "category": "General Study",
+    "tags": ["Kỹ năng học", "Pomodoro"],
+    "taskTitle": null,
+    "taskStatus": null,
+    "deadlineClass": null
+  },
+  {
+    "fileName": "a1-img-04-english-tenses.jpg",
+    "title": "English Tenses Overview",
+    "note": "Cần phân biệt rõ nhóm thì hoàn thành và tiếp diễn; khi ôn nên tự viết ví dụ thay vì chỉ học công thức.",
+    "category": "English",
+    "tags": ["Tiếng Anh", "Ngữ pháp", "Ôn tập"],
+    "taskTitle": "Write example sentences for the main English tenses",
+    "taskStatus": "IN_PROGRESS",
+    "deadlineClass": "TODAY"
+  },
+  {
+    "fileName": "a1-img-05-life-lab-erd-v1.png",
+    "title": "Life Lab Database ERD - Earlier Design",
+    "note": "ERD này phản ánh thiết kế Life Lab ở giai đoạn trước. Cần đối chiếu với schema hiện tại vì V2 đã bổ sung Image, Audio và các chức năng tổ chức dữ liệu.",
+    "category": "Life Lab Project",
+    "tags": ["Database", "Đồ án", "Quan trọng"],
+    "taskTitle": "Update the Life Lab ERD to match the current V2 schema",
+    "taskStatus": "IN_PROGRESS",
+    "deadlineClass": "UPCOMING"
+  },
+  {
+    "fileName": "a1-img-06-ielts-30-day-roadmap.jpg",
+    "title": "30-Day IELTS Grammar Roadmap",
+    "note": "Lộ trình chia kiến thức ngữ pháp thành từng chủ đề theo ngày. Có thể dùng để ôn lại nền tảng IELTS theo từng bước nhỏ.",
+    "category": "English",
+    "tags": ["Tiếng Anh", "IELTS", "Quan trọng"],
+    "taskTitle": "Complete the first 7 days of IELTS grammar review",
+    "taskStatus": "NOT_STARTED",
+    "deadlineClass": "UPCOMING"
+  },
+  {
+    "fileName": "a1-img-07-life-lab-domain-model-v1.png",
+    "title": "Life Lab Domain Model - Earlier Design",
+    "note": "Mô hình miền cũ tập trung vào tài khoản, thư viện video, ghi chú, công việc, nhãn và phiên xem. Đây là tài liệu tham chiếu cần được đối chiếu với mô hình đa nguồn hiện tại.",
+    "category": "Life Lab Project",
+    "tags": ["Đồ án", "Database", "Xem lại"],
+    "taskTitle": null,
+    "taskStatus": null,
+    "deadlineClass": null
+  },
+  {
+    "fileName": "a1-img-08-helicopter-exhibit-reference.jpg",
+    "title": "Helicopter Exhibit - Research Reference",
+    "note": "Ảnh hiện vật trực thăng được lưu làm tài liệu tham khảo cho bài thuyết trình. Chưa ghi chi tiết kỹ thuật hoặc bối cảnh lịch sử cho đến khi kiểm tra nguồn đáng tin cậy.",
+    "category": "General Study",
+    "tags": ["Thuyết trình", "Nghiên cứu", "Xem lại"],
+    "taskTitle": "Research the helicopter exhibit before using it in the presentation",
+    "taskStatus": "NOT_STARTED",
+    "deadlineClass": "UPCOMING"
+  },
+  {
+    "fileName": "a1-img-09-priority-scheduling.png",
+    "title": "Priority Scheduling Example",
+    "note": "Ví dụ minh họa cách các tiến trình được sắp theo mức ưu tiên và biểu diễn bằng Gantt chart. Cần luyện lại cách xác định thứ tự chạy và tính waiting time.",
+    "category": "Computer Science",
+    "tags": ["Operating System", "Thuật toán", "Ôn tập"],
+    "taskTitle": "Solve one Priority Scheduling exercise without looking at the solution",
+    "taskStatus": "NOT_STARTED",
+    "deadlineClass": "TODAY"
+  },
+  {
+    "fileName": "a1-img-10-dinh-doc-lap-study-reference.jpg",
+    "title": "Dinh Doc Lap - Presentation Reference",
+    "note": "Ảnh tư liệu chuyến tham quan được lưu để chuẩn bị cho một bài thuyết trình môn học. Cần sử dụng giáo trình và các nguồn chính thống trước khi viết nội dung lịch sử.",
+    "category": "General Study",
+    "tags": ["Thuyết trình", "Nghiên cứu", "Quan trọng"],
+    "taskTitle": "Prepare presentation notes using course material and verified sources",
+    "taskStatus": "IN_PROGRESS",
+    "deadlineClass": "UPCOMING"
+  },
+  {
+    "fileName": "a1-img-11-life-lab-video-workspace.png",
+    "title": "Life Lab Video Workspace Demo",
+    "note": "Ảnh giao diện minh họa việc xem video, tạo Note theo timestamp và theo dõi Task trong cùng workspace. Có thể dùng làm hình minh họa cho phần cài đặt và kiểm thử của báo cáo.",
+    "category": "Life Lab Project",
+    "tags": ["Đồ án", "UI", "Báo cáo"],
+    "taskTitle": "Capture final V2 workspace screenshots for the report",
+    "taskStatus": "IN_PROGRESS",
+    "deadlineClass": "TODAY"
+  },
+  {
+    "fileName": "a1-img-12-human-heart-structure.jpg",
+    "title": "Human Heart Structure",
+    "note": "Sơ đồ giúp ôn lại các bộ phận chính của tim và hướng lưu thông máu. Cần nhớ vị trí các buồng tim, động mạch và tĩnh mạch lớn.",
+    "category": "General Study",
+    "tags": ["Sinh học", "Ôn tập"],
+    "taskTitle": null,
+    "taskStatus": null,
+    "deadlineClass": null
+  },
+  {
+    "fileName": "a1-img-13-life-lab-workflow-v1.png",
+    "title": "Life Lab Learning Workflow - V1",
+    "note": "Luồng thiết kế ban đầu mô tả Video → Timestamp → Note → Task → Daily Plan. Trong V2, nguồn học tập đã mở rộng sang Image và Audio nhưng chuỗi Note → Task → Daily Plan vẫn được giữ.",
+    "category": "Life Lab Project",
+    "tags": ["Đồ án", "Workflow", "Quan trọng"],
+    "taskTitle": "Update the Life Lab workflow diagram for V2 multisource support",
+    "taskStatus": "IN_PROGRESS",
+    "deadlineClass": "UPCOMING"
+  },
+  {
+    "fileName": "a1-img-14-network-topologies.jpg",
+    "title": "Common Network Topologies",
+    "note": "Cần nhớ đặc điểm của Bus, Star, Ring, Mesh, Tree và Hybrid; đặc biệt là cách cấu trúc kết nối ảnh hưởng đến khả năng mở rộng và xử lý sự cố.",
+    "category": "Computer Science",
+    "tags": ["Mạng máy tính", "Ôn tập"],
+    "taskTitle": "Compare Star, Ring and Mesh topology for the networking review",
+    "taskStatus": "NOT_STARTED",
+    "deadlineClass": "UPCOMING"
+  }
+]

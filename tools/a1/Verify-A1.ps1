@@ -41,6 +41,112 @@ if (-not (Test-Path -LiteralPath $noteFixturePath) -or -not (Test-Path -LiteralP
 $noteFixtures = @((ConvertFrom-Json -InputObject (Get-Content -Raw -Encoding UTF8 -LiteralPath $noteFixturePath)) | ForEach-Object { $_ })
 $taskFixtures = @((ConvertFrom-Json -InputObject (Get-Content -Raw -Encoding UTF8 -LiteralPath $taskFixturePath)) | ForEach-Object { $_ })
 if ($noteFixtures.Count -ne 96 -or $taskFixtures.Count -ne 125) { throw 'Durable semantic fixture counts are not 96 notes / 125 tasks.' }
+
+$imageFixturePath =
+    Join-Path $PSScriptRoot 'a1-image-fixtures.json'
+
+$imageFixtures = @(
+    (ConvertFrom-Json -InputObject (
+        Get-Content -Raw -Encoding UTF8 -LiteralPath $imageFixturePath
+    )) |
+    ForEach-Object { $_ }
+)
+
+$imageTaskFixtures = @(
+    $imageFixtures |
+    Where-Object {
+        -not [string]::IsNullOrWhiteSpace($_.taskTitle)
+    }
+)
+
+$imageNoteOnlyFixtures = @(
+    $imageFixtures |
+    Where-Object {
+        [string]::IsNullOrWhiteSpace($_.taskTitle)
+    }
+)
+
+if (
+    $imageFixtures.Count -ne 14 -or
+    $imageTaskFixtures.Count -ne 10 -or
+    $imageNoteOnlyFixtures.Count -ne 4
+) {
+    throw (
+        'Durable Image fixture counts are not ' +
+        '14 images / 10 tasks / 4 note-only images.'
+    )
+}
+
+$repoRoot =
+    (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
+
+$imageStoragePath =
+    Join-Path $repoRoot 'backend\data\images'
+
+$storedA1Images = @(
+    Get-ChildItem `
+        -LiteralPath $imageStoragePath `
+        -File |
+    Where-Object {
+        $_.Name -like 'a1-image-*'
+    }
+)
+
+if ($storedA1Images.Count -ne 14) {
+    throw "Expected 14 physical A1 Image files, found $($storedA1Images.Count)."
+}
+
+$audioFixturePath =
+    Join-Path $PSScriptRoot 'a1-audio-fixtures.json'
+
+$audioFixtures = @(
+    (ConvertFrom-Json -InputObject (
+        Get-Content -Raw -Encoding UTF8 -LiteralPath $audioFixturePath
+    )) |
+    ForEach-Object { $_ }
+)
+
+$audioTaskFixtures = @(
+    $audioFixtures |
+    Where-Object {
+        -not [string]::IsNullOrWhiteSpace($_.taskTitle)
+    }
+)
+
+$audioNoteOnlyFixtures = @(
+    $audioFixtures |
+    Where-Object {
+        [string]::IsNullOrWhiteSpace($_.taskTitle)
+    }
+)
+
+if (
+    $audioFixtures.Count -ne 13 -or
+    $audioTaskFixtures.Count -ne 9 -or
+    $audioNoteOnlyFixtures.Count -ne 4
+) {
+    throw (
+        'Durable Audio fixture counts are not ' +
+        '13 audio / 9 tasks / 4 note-only audio.'
+    )
+}
+
+$audioStoragePath =
+    Join-Path $repoRoot 'backend\data\audio'
+
+$storedA1Audio = @(
+    Get-ChildItem `
+        -LiteralPath $audioStoragePath `
+        -File |
+    Where-Object {
+        $_.Name -like 'a1-audio-*.mp3'
+    }
+)
+
+if ($storedA1Audio.Count -ne 13) {
+    throw "Expected 13 physical A1 Audio files, found $($storedA1Audio.Count)."
+}
+
 $expectedMetadataKeys = @('LIBRARY_07', 'LIBRARY_09', 'LIBRARY_11', 'LIBRARY_34')
 $expectedMetadataNoteKeys = @('a1-note-LIBRARY_07-1', 'a1-note-LIBRARY_09-1', 'a1-note-LIBRARY_09-2', 'a1-note-LIBRARY_11-1', 'a1-note-LIBRARY_34-1')
 $metadataFixtures = @($noteFixtures | Where-Object evidenceType -eq 'SOURCE_METADATA')
