@@ -1,6 +1,39 @@
 CREATE TEMP TABLE a2_checks(check_name text,expected text,actual text,passed boolean,details text);
 CREATE TEMP TABLE a2_account AS SELECT id FROM accounts WHERE lower(email)='scale@lifelab.local';
 
+-- The seven curated rows replace raw VTT snippets without changing Source or
+-- timestamp. Use the effective fixture text when resolving stable Note keys.
+UPDATE a2_expected_notes expected SET content=curated.note_content
+FROM a2_curated_video_note curated
+WHERE expected.fixture_key=curated.fixture_key AND expected.note_no=curated.note_no;
+
+CREATE TEMP TABLE a2_representative_matches AS
+WITH note_rank AS (
+    SELECT fixture_key,note_no,
+           dense_rank() OVER (ORDER BY fixture_key) AS source_rank
+    FROM a2_expected_notes
+)
+SELECT fixture.fixture_key,fixture.note_no,fixture.category_name,fixture.tag_names,
+       expected.content,expected.timestamp_seconds,source.youtube_video_id,
+       note.id AS note_id,category.name AS actual_category,
+       category.account_id AS category_account_id
+FROM a2_video_organization fixture
+JOIN a2_expected_notes expected USING(fixture_key,note_no)
+JOIN note_rank rank USING(fixture_key,note_no)
+JOIN a2_expected_sources source USING(fixture_key)
+LEFT JOIN youtube_videos video ON video.youtube_video_id=source.youtube_video_id
+LEFT JOIN library_videos library ON library.youtube_source_id=video.id
+    AND library.account_id=(SELECT id FROM a2_account)
+LEFT JOIN notes note ON note.account_id=(SELECT id FROM a2_account)
+    AND note.youtube_source_id=video.id
+    AND note.content=expected.content
+    AND note.timestamp_seconds IS NOT DISTINCT FROM expected.timestamp_seconds
+    AND note.created_at=GREATEST(
+        library.added_at+interval '2 days',
+        ((:'reference_date'::date::timestamp+time '12:00') AT TIME ZONE 'Asia/Ho_Chi_Minh')
+        - (30+((rank.source_rank*29+fixture.note_no*13)%650))*interval '1 day')
+LEFT JOIN categories category ON category.id=note.category_id;
+
 INSERT INTO a2_checks SELECT 'account_count','1',count(*)::text,count(*)=1,'locked A2 identity' FROM a2_account;
 INSERT INTO a2_checks SELECT 'library_count','80',count(*)::text,count(*)=80,'final current Library rows' FROM library_videos l JOIN a2_account a ON a.id=l.account_id;
 INSERT INTO a2_checks
@@ -187,6 +220,20 @@ WHERE
         AND (c,n,p) <> (25,10,5)
     );
 INSERT INTO a2_checks SELECT 'task_source_integrity','0',count(*)::text,count(*)=0,'same-account links and NULL source rules' FROM tasks t JOIN a2_account a ON a.id=t.account_id LEFT JOIN notes n ON n.id=t.source_note_id WHERE (t.source_status='HAS_SOURCE' AND(n.id IS NULL OR n.account_id<>t.account_id)) OR(t.source_status IN('INDEPENDENT','SOURCE_MISSING') AND t.source_note_id IS NOT NULL) OR(n.id IS NOT NULL AND n.created_at>t.created_at);
+INSERT INTO a2_checks SELECT 'independent_action_variety','38',count(DISTINCT title)::text,count(DISTINCT title)=38,
+    'long-term independent study actions use the curated 38-topic cycle'
+FROM tasks t JOIN a2_account a ON a.id=t.account_id WHERE t.source_status='INDEPENDENT';
+INSERT INTO a2_checks SELECT 'missing_source_action_variety','20',count(DISTINCT title)::text,count(DISTINCT title)=20,
+    'surviving missing-source Tasks retain 20 self-contained follow-ups'
+FROM tasks t JOIN a2_account a ON a.id=t.account_id WHERE t.source_status='SOURCE_MISSING';
+INSERT INTO a2_checks SELECT 'synthetic_task_copy','0',count(*)::text,count(*)=0,
+    'no internal generator or lifecycle language in Task titles/descriptions'
+FROM tasks t JOIN a2_account a ON a.id=t.account_id
+WHERE t.title LIKE 'Apply note insight:%'
+   OR t.title LIKE 'Independent learning action:%'
+   OR t.title LIKE 'Rebuild context:%'
+   OR t.description LIKE 'A standalone step in the long-term learning plan.%'
+   OR t.description LIKE 'The original Note was later removed;%';
 INSERT INTO a2_checks SELECT 'temp_notes_absent','0',count(*)::text,count(*)=0,'SOURCE_MISSING lifecycle temp Notes removed' FROM notes n JOIN a2_account a ON a.id=n.account_id WHERE content LIKE 'A2 temporary source lifecycle fixture %';
 
 WITH classified AS (
@@ -271,7 +318,7 @@ FROM (
     (
         SELECT
             expected.external_url,
-            expected.title
+            CASE WHEN expected.fixture_key = 'A2-IMG-003' THEN NULL ELSE expected.title END
         FROM a2_expected_images expected
 
         EXCEPT
@@ -302,7 +349,7 @@ FROM (
 
         SELECT
             expected.external_url,
-            expected.title
+            CASE WHEN expected.fixture_key = 'A2-IMG-003' THEN NULL ELSE expected.title END
         FROM a2_expected_images expected
     )
 ) difference;
@@ -801,7 +848,7 @@ FROM (
     (
         SELECT
             expected.external_url,
-            expected.title
+            CASE WHEN expected.fixture_key = 'A2-AUD-002' THEN NULL ELSE expected.title END
         FROM a2_expected_audio expected
 
         EXCEPT
@@ -832,7 +879,7 @@ FROM (
 
         SELECT
             expected.external_url,
-            expected.title
+            CASE WHEN expected.fixture_key = 'A2-AUD-002' THEN NULL ELSE expected.title END
         FROM a2_expected_audio expected
     )
 ) difference;
@@ -1320,5 +1367,355 @@ FROM (
         WHERE expected.task_title IS NOT NULL
     )
 ) difference;
+
+INSERT INTO a2_checks
+SELECT 'image_media_tag_links','41',count(*)::text,count(*)=41,'Image media Tag assignments'
+FROM library_image_tags link JOIN library_images library ON library.id=link.library_image_id
+JOIN a2_account account ON account.id=library.account_id;
+
+INSERT INTO a2_checks
+SELECT 'audio_media_tag_links','16',count(*)::text,count(*)=16,'Audio media Tag assignments'
+FROM library_audio_tags link JOIN library_audio library ON library.id=link.library_audio_id
+JOIN a2_account account ON account.id=library.account_id;
+
+INSERT INTO a2_checks
+SELECT 'image_media_tag_distribution','0',count(*)::text,count(*)=0,'exact Image fixture media Tags'
+FROM (
+    (SELECT expected.external_url, lower(btrim(fixture_tag.name)) AS tag_name
+     FROM a2_expected_images expected
+     CROSS JOIN LATERAL jsonb_array_elements_text(expected.tags_json) fixture_tag(name)
+     EXCEPT
+     SELECT source.external_url, tag.normalized_name
+     FROM library_image_tags link JOIN library_images library ON library.id=link.library_image_id
+     JOIN a2_account account ON account.id=library.account_id
+     JOIN image_sources source ON source.id=library.image_source_id
+     JOIN tags tag ON tag.id=link.tag_id AND tag.account_id=account.id)
+    UNION ALL
+    (SELECT source.external_url, tag.normalized_name
+     FROM library_image_tags link JOIN library_images library ON library.id=link.library_image_id
+     JOIN a2_account account ON account.id=library.account_id
+     JOIN image_sources source ON source.id=library.image_source_id
+     JOIN tags tag ON tag.id=link.tag_id
+     EXCEPT
+     SELECT expected.external_url, lower(btrim(fixture_tag.name))
+     FROM a2_expected_images expected
+     CROSS JOIN LATERAL jsonb_array_elements_text(expected.tags_json) fixture_tag(name))
+) difference;
+
+INSERT INTO a2_checks
+SELECT 'audio_media_tag_distribution','0',count(*)::text,count(*)=0,'exact Audio fixture media Tags'
+FROM (
+    (SELECT expected.external_url, lower(btrim(fixture_tag.name)) AS tag_name
+     FROM a2_expected_audio expected
+     CROSS JOIN LATERAL jsonb_array_elements_text(expected.tags_json) fixture_tag(name)
+     EXCEPT
+     SELECT source.external_url, tag.normalized_name
+     FROM library_audio_tags link JOIN library_audio library ON library.id=link.library_audio_id
+     JOIN a2_account account ON account.id=library.account_id
+     JOIN audio_sources source ON source.id=library.audio_source_id
+     JOIN tags tag ON tag.id=link.tag_id AND tag.account_id=account.id)
+    UNION ALL
+    (SELECT source.external_url, tag.normalized_name
+     FROM library_audio_tags link JOIN library_audio library ON library.id=link.library_audio_id
+     JOIN a2_account account ON account.id=library.account_id
+     JOIN audio_sources source ON source.id=library.audio_source_id
+     JOIN tags tag ON tag.id=link.tag_id
+     EXCEPT
+     SELECT expected.external_url, lower(btrim(fixture_tag.name))
+     FROM a2_expected_audio expected
+     CROSS JOIN LATERAL jsonb_array_elements_text(expected.tags_json) fixture_tag(name))
+) difference;
+
+INSERT INTO a2_checks
+SELECT 'media_tag_ownership_violations','0',count(*)::text,count(*)=0,'media Tags must belong to Library owner'
+FROM (
+    SELECT library.account_id, tag.account_id AS tag_account_id
+    FROM library_image_tags link JOIN library_images library ON library.id=link.library_image_id JOIN tags tag ON tag.id=link.tag_id
+    UNION ALL
+    SELECT library.account_id, tag.account_id
+    FROM library_audio_tags link JOIN library_audio library ON library.id=link.library_audio_id JOIN tags tag ON tag.id=link.tag_id
+    UNION ALL
+    SELECT library.account_id, tag.account_id
+    FROM library_video_tags link JOIN library_videos library ON library.id=link.library_video_id JOIN tags tag ON tag.id=link.tag_id
+) owned JOIN a2_account account ON account.id=owned.account_id
+WHERE owned.account_id<>owned.tag_account_id;
+
+INSERT INTO a2_checks
+SELECT 'multi_tag_images','>=1',count(*)::text,count(*)>=1,'positive multi-Tag Image filter data'
+FROM (SELECT library.id FROM library_images library JOIN a2_account account ON account.id=library.account_id
+      JOIN library_image_tags link ON link.library_image_id=library.id
+      GROUP BY library.id HAVING count(*)>=2) tagged;
+
+INSERT INTO a2_checks
+SELECT 'multi_tag_audio','>=1',count(*)::text,count(*)>=1,'positive multi-Tag Audio filter data'
+FROM (SELECT library.id FROM library_audio library JOIN a2_account account ON account.id=library.account_id
+      JOIN library_audio_tags link ON link.library_audio_id=library.id
+      GROUP BY library.id HAVING count(*)>=2) tagged;
+
+INSERT INTO a2_checks
+SELECT 'shared_media_tags','>=1',count(*)::text,count(*)>=1,'one account-owned Tag spans media types'
+FROM tags tag JOIN a2_account account ON account.id=tag.account_id
+WHERE EXISTS (SELECT 1 FROM library_image_tags link JOIN library_images library
+              ON library.id=link.library_image_id WHERE link.tag_id=tag.id AND library.account_id=account.id)
+  AND EXISTS (SELECT 1 FROM library_audio_tags link JOIN library_audio library
+              ON library.id=link.library_audio_id WHERE link.tag_id=tag.id AND library.account_id=account.id);
+
+INSERT INTO a2_checks
+SELECT 'normalized_media_description_marker','2',count(*)::text,count(*)=2,
+    'accent-insensitive/d-stroke partial search data'
+FROM (
+    SELECT library.personal_description AS description FROM library_images library JOIN a2_account account ON account.id=library.account_id
+    UNION ALL
+    SELECT library.personal_description FROM library_audio library JOIN a2_account account ON account.id=library.account_id
+) descriptions
+WHERE lifelab_search_normalize(descriptions.description) LIKE '%doi%';
+
+INSERT INTO a2_checks
+SELECT 'image_personal_metadata','0',count(*)::text,count(*)=0,'curated Image title/description and fallback'
+FROM library_images library JOIN a2_account account ON account.id=library.account_id
+JOIN image_sources source ON source.id=library.image_source_id
+JOIN a2_expected_images fixture ON fixture.external_url=source.external_url
+WHERE library.title IS DISTINCT FROM (CASE WHEN fixture.fixture_key='A2-IMG-003' THEN NULL ELSE fixture.title END)
+   OR library.personal_description IS DISTINCT FROM (CASE fixture.fixture_key
+       WHEN 'A2-IMG-001' THEN 'Sơ đồ chuẩn hóa cơ sở dữ liệu để đối chiếu các dạng chuẩn.'
+       WHEN 'A2-IMG-002' THEN 'Review the seven OSI layers before network exercises.'
+       ELSE NULL END);
+
+INSERT INTO a2_checks
+SELECT 'audio_personal_metadata','0',count(*)::text,count(*)=0,'curated Audio title/description and fallback'
+FROM library_audio library JOIN a2_account account ON account.id=library.account_id
+JOIN audio_sources source ON source.id=library.audio_source_id
+JOIN a2_expected_audio fixture ON fixture.external_url=source.external_url
+WHERE library.title IS DISTINCT FROM (CASE WHEN fixture.fixture_key='A2-AUD-002' THEN NULL ELSE fixture.title END)
+   OR library.personal_description IS DISTINCT FROM (CASE fixture.fixture_key
+       WHEN 'A2-AUD-001' THEN 'Đối chiếu định hướng nghề nghiệp và thói quen học suốt đời.'
+       WHEN 'A2-AUD-003' THEN 'Plan study time using three priority blocks.'
+       ELSE NULL END);
+
+INSERT INTO a2_checks
+SELECT 'video_personal_metadata','0',count(*)::text,count(*)=0,
+    'six intentional personal Video titles/descriptions; all others use Source fallback'
+FROM library_videos library JOIN a2_account account ON account.id=library.account_id
+JOIN youtube_videos source ON source.id=library.youtube_source_id
+JOIN a2_expected_sources expected ON expected.youtube_video_id=source.youtube_video_id
+LEFT JOIN a2_curated_video_metadata curated USING(fixture_key)
+WHERE library.custom_title IS DISTINCT FROM curated.custom_title
+   OR library.personal_description IS DISTINCT FROM curated.personal_description;
+
+INSERT INTO a2_checks
+SELECT 'curated_video_chains','0',count(*)::text,count(*)=0,
+    'seven source-grounded Video Note/Task chains, with exact timestamp or NULL'
+FROM a2_curated_video_note curated
+JOIN a2_expected_notes expected USING(fixture_key,note_no)
+JOIN a2_expected_sources fixture_source USING(fixture_key)
+LEFT JOIN youtube_videos source ON source.youtube_video_id=fixture_source.youtube_video_id
+LEFT JOIN notes note ON note.account_id=(SELECT id FROM a2_account)
+    AND note.youtube_source_id=source.id
+    AND ((expected.timestamp_seconds IS NOT NULL
+          AND note.timestamp_seconds=expected.timestamp_seconds)
+      OR (expected.timestamp_seconds IS NULL AND note.timestamp_seconds IS NULL
+          AND note.content=curated.note_content))
+LEFT JOIN tasks task ON task.account_id=(SELECT id FROM a2_account)
+    AND task.source_note_id=note.id
+LEFT JOIN categories note_category ON note_category.id=note.category_id
+LEFT JOIN categories task_category ON task_category.id=task.category_id
+WHERE note.id IS NULL OR task.id IS NULL
+   OR note.content IS DISTINCT FROM curated.note_content
+   OR task.title IS DISTINCT FROM curated.task_title
+   OR task.description IS DISTINCT FROM curated.task_description
+   OR task.source_status IS DISTINCT FROM 'HAS_SOURCE'
+   OR note_category.name IS DISTINCT FROM curated.category_name
+   OR task_category.name IS DISTINCT FROM curated.category_name
+   OR COALESCE((SELECT array_agg(tag.name::text ORDER BY tag.name) FROM note_tags link
+                JOIN tags tag ON tag.id=link.tag_id WHERE link.note_id=note.id),ARRAY[]::text[])
+      IS DISTINCT FROM curated.tag_names
+   OR COALESCE((SELECT array_agg(tag.name::text ORDER BY tag.name) FROM task_tags link
+                JOIN tags tag ON tag.id=link.tag_id WHERE link.task_id=task.id),ARRAY[]::text[])
+      IS DISTINCT FROM curated.tag_names;
+
+INSERT INTO a2_checks
+SELECT 'curated_video_source_identity','0',count(*)::text,count(*)=0,
+    'personal curation does not rewrite the six global Video Source identities'
+FROM a2_curated_video_metadata curated
+JOIN a2_expected_sources expected USING(fixture_key)
+LEFT JOIN youtube_videos source ON source.youtube_video_id=expected.youtube_video_id
+WHERE source.id IS NULL OR source.title IS DISTINCT FROM expected.title
+   OR source.source_url IS DISTINCT FROM expected.source_url;
+
+INSERT INTO a2_checks
+SELECT 'current_video_sources','80',count(*)::text,count(*)=80,
+    'current Video Library Source count'
+FROM library_videos library JOIN a2_account account ON account.id=library.account_id;
+
+INSERT INTO a2_checks
+SELECT 'current_video_sources_with_notes','70',count(*)::text,count(*)=70,
+    'current Sources with an existing A2 Video Note'
+FROM library_videos library JOIN a2_account account ON account.id=library.account_id
+WHERE EXISTS (SELECT 1 FROM notes note WHERE note.account_id=account.id
+    AND note.youtube_source_id=library.youtube_source_id);
+
+INSERT INTO a2_checks
+SELECT 'current_video_sources_without_notes','10',count(*)::text,count(*)=10,
+    'intentional saved-without-capture Sources'
+FROM library_videos library JOIN a2_account account ON account.id=library.account_id
+WHERE NOT EXISTS (SELECT 1 FROM notes note WHERE note.account_id=account.id
+    AND note.youtube_source_id=library.youtube_source_id);
+
+INSERT INTO a2_checks
+SELECT 'exact_no_note_sources','0',count(*)::text,count(*)=0,
+    'exact ten stable fixture keys have no A2 Note'
+FROM (
+    (SELECT fixture_key FROM a2_no_note_sources
+     EXCEPT
+     SELECT source.fixture_key FROM library_videos library
+     JOIN a2_account account ON account.id=library.account_id
+     JOIN youtube_videos video ON video.id=library.youtube_source_id
+     JOIN a2_expected_sources source ON source.youtube_video_id=video.youtube_video_id
+     WHERE NOT EXISTS (SELECT 1 FROM notes note WHERE note.account_id=account.id
+         AND note.youtube_source_id=library.youtube_source_id))
+    UNION ALL
+    (SELECT source.fixture_key FROM library_videos library
+     JOIN a2_account account ON account.id=library.account_id
+     JOIN youtube_videos video ON video.id=library.youtube_source_id
+     JOIN a2_expected_sources source ON source.youtube_video_id=video.youtube_video_id
+     WHERE NOT EXISTS (SELECT 1 FROM notes note WHERE note.account_id=account.id
+         AND note.youtube_source_id=library.youtube_source_id)
+     EXCEPT SELECT fixture_key FROM a2_no_note_sources)
+) mismatch;
+
+INSERT INTO a2_checks
+SELECT 'representative_manifest_rows','70',count(*)::text,count(*)=70,
+    'one explicit selected Note per note-bearing current Source'
+FROM a2_video_organization;
+
+INSERT INTO a2_checks
+SELECT 'representative_exact_matches','70',count(*)::text,count(*)=70,
+    'exact fixture key, Note number, Source, text, timestamp, Category and Tag set'
+FROM a2_representative_matches match
+WHERE match.note_id IS NOT NULL
+  AND match.actual_category=match.category_name
+  AND match.category_account_id=(SELECT id FROM a2_account)
+  AND coalesce((SELECT jsonb_agg(tag.name ORDER BY tag.name)
+                FROM note_tags link JOIN tags tag ON tag.id=link.tag_id
+                WHERE link.note_id=match.note_id),'[]'::jsonb)
+      = (SELECT jsonb_agg(name ORDER BY name)
+         FROM jsonb_array_elements_text(match.tag_names) names(name));
+
+INSERT INTO a2_checks
+SELECT 'representative_distinct_notes','70',count(DISTINCT note_id)::text,
+    count(DISTINCT note_id)=70,'stable fixture rows resolve to different Notes'
+FROM a2_representative_matches;
+
+INSERT INTO a2_checks
+SELECT 'representative_unmatched_keys','none',
+    coalesce(string_agg(fixture_key||'/'||note_no,',' ORDER BY fixture_key),'none'),
+    count(*)=0,'diagnostic stable keys for unresolved representative Notes'
+FROM a2_representative_matches WHERE note_id IS NULL;
+
+INSERT INTO a2_checks
+SELECT 'note_bearing_current_sources_with_organized_note','70',count(*)::text,
+    count(*)=70,'all 70 Sources with Notes have an organized Note'
+FROM library_videos library JOIN a2_account account ON account.id=library.account_id
+WHERE EXISTS (SELECT 1 FROM notes note WHERE note.account_id=account.id
+    AND note.youtube_source_id=library.youtube_source_id)
+  AND EXISTS (SELECT 1 FROM notes note WHERE note.account_id=account.id
+    AND note.youtube_source_id=library.youtube_source_id
+    AND note.category_id IS NOT NULL
+    AND EXISTS (SELECT 1 FROM note_tags link WHERE link.note_id=note.id));
+
+INSERT INTO a2_checks
+SELECT 'note_bearing_current_sources_without_organized_note','0',count(*)::text,
+    count(*)=0,'no note-bearing current Source lacks organization'
+FROM library_videos library JOIN a2_account account ON account.id=library.account_id
+WHERE EXISTS (SELECT 1 FROM notes note WHERE note.account_id=account.id
+    AND note.youtube_source_id=library.youtube_source_id)
+  AND NOT EXISTS (SELECT 1 FROM notes note WHERE note.account_id=account.id
+    AND note.youtube_source_id=library.youtube_source_id
+    AND note.category_id IS NOT NULL
+    AND EXISTS (SELECT 1 FROM note_tags link WHERE link.note_id=note.id));
+
+INSERT INTO a2_checks
+SELECT 'video_notes_total','240',count(*)::text,count(*)=240,
+    'current and historical Video Notes unchanged'
+FROM notes note JOIN a2_account account ON account.id=note.account_id
+WHERE note.youtube_source_id IS NOT NULL;
+
+INSERT INTO a2_checks
+SELECT 'organized_video_notes','>=70',count(*)::text,count(*)>=70,
+    'representative organization without a complete-history rewrite'
+FROM notes note JOIN a2_account account ON account.id=note.account_id
+WHERE note.youtube_source_id IS NOT NULL AND note.category_id IS NOT NULL
+  AND EXISTS (SELECT 1 FROM note_tags link WHERE link.note_id=note.id);
+
+INSERT INTO a2_checks
+SELECT 'unorganized_video_notes','>0',count(*)::text,count(*)>0,
+    'long-history Video Notes without Category or Tags remain'
+FROM notes note JOIN a2_account account ON account.id=note.account_id
+WHERE note.youtube_source_id IS NOT NULL AND note.category_id IS NULL
+  AND NOT EXISTS (SELECT 1 FROM note_tags link WHERE link.note_id=note.id);
+
+INSERT INTO a2_checks
+SELECT 'representative_linked_task_organization','0',count(*)::text,count(*)=0,
+    'existing linked Tasks share coherent Category and complete Tag set'
+FROM a2_representative_matches match
+JOIN tasks task ON task.source_note_id=match.note_id
+    AND task.account_id=(SELECT id FROM a2_account)
+    AND task.source_status='HAS_SOURCE'
+LEFT JOIN categories category ON category.id=task.category_id
+WHERE category.name IS DISTINCT FROM match.category_name
+   OR coalesce((SELECT jsonb_agg(tag.name ORDER BY tag.name)
+                FROM task_tags link JOIN tags tag ON tag.id=link.tag_id
+                WHERE link.task_id=task.id),'[]'::jsonb)
+      IS DISTINCT FROM (SELECT jsonb_agg(name ORDER BY name)
+                        FROM jsonb_array_elements_text(match.tag_names) names(name));
+
+INSERT INTO a2_checks
+SELECT 'representative_linked_tasks','46',count(*)::text,count(*)=46,
+    'existing HAS_SOURCE Tasks attached to the selected Video Notes'
+FROM a2_representative_matches match
+JOIN tasks task ON task.source_note_id=match.note_id
+    AND task.account_id=(SELECT id FROM a2_account)
+    AND task.source_status='HAS_SOURCE';
+
+INSERT INTO a2_checks
+SELECT 'all_note_tag_links','184',count(*)::text,count(*)=184,
+    'Video, Image and Audio Note-Tag links after representative curation'
+FROM note_tags link JOIN notes note ON note.id=link.note_id
+JOIN a2_account account ON account.id=note.account_id;
+
+INSERT INTO a2_checks
+SELECT 'organization_ownership_violations','0',count(*)::text,count(*)=0,
+    'all A2 Note/Task Categories and Tags belong to A2'
+FROM (
+    SELECT note.account_id owner_id,category.account_id relation_owner_id
+    FROM notes note JOIN a2_account account ON account.id=note.account_id
+    JOIN categories category ON category.id=note.category_id
+    UNION ALL
+    SELECT note.account_id,tag.account_id
+    FROM notes note JOIN a2_account account ON account.id=note.account_id
+    JOIN note_tags link ON link.note_id=note.id JOIN tags tag ON tag.id=link.tag_id
+    UNION ALL
+    SELECT task.account_id,category.account_id
+    FROM tasks task JOIN a2_account account ON account.id=task.account_id
+    JOIN categories category ON category.id=task.category_id
+    UNION ALL
+    SELECT task.account_id,tag.account_id
+    FROM tasks task JOIN a2_account account ON account.id=task.account_id
+    JOIN task_tags link ON link.task_id=task.id JOIN tags tag ON tag.id=link.tag_id
+) relations WHERE owner_id<>relation_owner_id;
+
+INSERT INTO a2_checks
+SELECT 'image_notes_without_category_or_tags','0',count(*)::text,count(*)=0,
+    'all 20 Image Notes retain organization'
+FROM notes note JOIN a2_account account ON account.id=note.account_id
+WHERE note.image_source_id IS NOT NULL AND
+    (note.category_id IS NULL OR NOT EXISTS (SELECT 1 FROM note_tags link WHERE link.note_id=note.id));
+
+INSERT INTO a2_checks
+SELECT 'audio_notes_without_category_or_tags','0',count(*)::text,count(*)=0,
+    'all 8 Audio Notes retain organization'
+FROM notes note JOIN a2_account account ON account.id=note.account_id
+WHERE note.audio_source_id IS NOT NULL AND
+    (note.category_id IS NULL OR NOT EXISTS (SELECT 1 FROM note_tags link WHERE link.note_id=note.id));
 
 SELECT check_name,expected,actual,passed,details FROM a2_checks ORDER BY check_name;

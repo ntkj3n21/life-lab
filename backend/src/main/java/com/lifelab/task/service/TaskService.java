@@ -129,10 +129,6 @@ public class TaskService {
 
         String keyword = SearchKeywordNormalizer.normalize(query);
 
-        if (keyword != null) {
-            specification =
-                    specification.and(TaskSpecifications.keywordContains(keyword));
-        }
 
         if (status != null) {
             specification =
@@ -196,8 +192,14 @@ public class TaskService {
                 Sort.by(direction, sortBy)
                         .and(Sort.by(direction, "id")));
 
-        Page<Task> tasks =
-                taskRepository.findAll(specification, pageRequest);
+        Page<Task> tasks = taskRepository.findAll(
+                keyword == null ? specification
+                        : specification.and(TaskSpecifications.keywordContains(keyword)),
+                pageRequest);
+        if (tasks.getTotalElements() == 0 && SearchKeywordNormalizer.eligibleForTypoFallback(keyword)) {
+            tasks = taskRepository.findAll(
+                    specification.and(TaskSpecifications.keywordTypoNear(keyword)), pageRequest);
+        }
 
         return PagedResponse.from(organizationService.toTaskResponses(tasks));
     }

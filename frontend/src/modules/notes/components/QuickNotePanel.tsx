@@ -16,6 +16,7 @@ import { useReverseContextNavigation } from "../../context/hooks/useReverseConte
 import type { Note, NoteDeleteImpact } from "../services/noteApi";
 import { NoteCard } from "./NoteCard";
 import { QuickNoteComposer } from "./QuickNoteComposer";
+import { WorkspaceNoteTagsEditor } from "./WorkspaceNoteTagsEditor";
 
 interface PendingNoteDelete {
   note: Note;
@@ -72,6 +73,8 @@ export function QuickNotePanel() {
 
   const updateNote = useNoteStore((state) => state.updateNote);
 
+  const updateOrganization = useNoteStore((state) => state.updateOrganization);
+
   const getDeleteImpact = useNoteStore((state) => state.getDeleteImpact);
 
   const deleteNote = useNoteStore((state) => state.deleteNote);
@@ -87,6 +90,11 @@ export function QuickNotePanel() {
   const [editingNoteId, setEditingNoteId] = useState<number | null>(null);
 
   const [editingContent, setEditingContent] = useState("");
+
+  const [editingTagsNoteId, setEditingTagsNoteId] = useState<number | null>(null);
+  const [editingTagsCurrent, setEditingTagsCurrent] = useState(false);
+
+  const [tagsErrorMessage, setTagsErrorMessage] = useState<string | null>(null);
 
   const [pendingDelete, setPendingDelete] = useState<PendingNoteDelete | null>(
     null,
@@ -139,6 +147,9 @@ export function QuickNotePanel() {
     setIncludeTimestamp(true);
     setEditingNoteId(null);
     setEditingContent("");
+    setEditingTagsNoteId(null);
+    setEditingTagsCurrent(false);
+    setTagsErrorMessage(null);
     setPendingDelete(null);
     setCreateError(null);
     setActionError(null);
@@ -245,6 +256,29 @@ export function QuickNotePanel() {
     }
   }
 
+  function handleManageTags(note: Note, current: boolean) {
+    setTagsErrorMessage(null);
+    setEditingTagsNoteId(note.id);
+    setEditingTagsCurrent(current);
+  }
+
+  async function handleSaveTags(note: Note, tagIds: number[], current: boolean) {
+    if (isMutating) return;
+    setTagsErrorMessage(null);
+
+    try {
+      await updateOrganization(note.id, note.category?.id ?? null, tagIds);
+      setEditingTagsNoteId(null);
+      requestAnimationFrame(() => {
+        document
+          .getElementById(`workspace-note-actions-${current ? "workspace-current" : "workspace-recent"}-${note.id}`)
+          ?.focus();
+      });
+    } catch (error) {
+      setTagsErrorMessage(getErrorMessage(error));
+    }
+  }
+
   async function handleDelete(note: Note) {
     if (isMutating || isPreparingDelete) {
       return;
@@ -287,6 +321,10 @@ export function QuickNotePanel() {
         handleCancelEdit();
       }
 
+      if (editingTagsNoteId === pendingDelete.note.id) {
+        setEditingTagsNoteId(null);
+      }
+
       setPendingDelete(null);
     } catch (error) {
       setDeleteErrorMessage(getErrorMessage(error));
@@ -312,9 +350,12 @@ export function QuickNotePanel() {
   }
 
   function renderNote(note: Note, current: boolean) {
+    const showTagsEditor =
+      editingTagsNoteId === note.id && editingTagsCurrent === current;
+
     return (
+      <div key={note.id}>
       <NoteCard
-        key={note.id}
         note={note}
         current={current}
         variant={current ? "workspace-current" : "workspace-recent"}
@@ -328,8 +369,28 @@ export function QuickNotePanel() {
         onDelete={handleDelete}
         onViewSource={handleViewSource}
         onCreateTask={handleCreateTask}
+        onManageTags={(selectedNote) => handleManageTags(selectedNote, current)}
         onOpenDetail={(noteId) => navigate(`/notes/${noteId}`)}
       />
+      {showTagsEditor && (
+        <WorkspaceNoteTagsEditor
+          key={`tags-${note.id}`}
+          note={note}
+          isBusy={isMutating}
+          errorMessage={tagsErrorMessage}
+          onSave={(tagIds) => handleSaveTags(note, tagIds, current)}
+          onCancel={() => {
+            setEditingTagsNoteId(null);
+            setTagsErrorMessage(null);
+            requestAnimationFrame(() => {
+              document
+                .getElementById(`workspace-note-actions-${current ? "workspace-current" : "workspace-recent"}-${note.id}`)
+                ?.focus();
+            });
+          }}
+        />
+      )}
+      </div>
     );
   }
 
@@ -450,19 +511,15 @@ export function QuickNotePanel() {
         title="Delete Note?"
         description={
           pendingDelete
-            ? "This will delete the selected Note. Its exact source history is handled according to the impact below."
+            ? "This deletes the Note. Linked Tasks remain, but can no longer open it. Saved media stays in your Library."
             : undefined
         }
         details={
           pendingDelete
             ? [
-                `${pendingDelete.impact.taskCountToMarkSourceMissing} linked task(s) will lose their Note source.`,
-                pendingDelete.impact.tasksPreserved
-                  ? "Linked tasks will be preserved."
-                  : "Linked tasks may be affected.",
-                pendingDelete.impact.sourcePreserved
-                  ? "The exact source will be preserved."
-                  : "The exact source may be affected.",
+                pendingDelete.impact.taskCountToMarkSourceMissing > 0
+                  ? `${pendingDelete.impact.taskCountToMarkSourceMissing} linked ${pendingDelete.impact.taskCountToMarkSourceMissing === 1 ? "Task remains" : "Tasks remain"}, but can no longer open this Note.`
+                  : "No linked Tasks are affected.",
               ]
             : []
         }

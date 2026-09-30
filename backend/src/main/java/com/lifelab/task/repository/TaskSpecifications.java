@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import org.springframework.data.jpa.domain.Specification;
 
+import com.lifelab.common.text.SearchExpressions;
 import com.lifelab.task.domain.Task;
 import com.lifelab.task.domain.TaskTag;
 import com.lifelab.task.domain.TaskStatus;
@@ -26,8 +27,14 @@ public final class TaskSpecifications {
 
     public static Specification<Task> keywordContains(String keyword) {
         return (root, query, builder) -> builder.or(
-                contains(builder.lower(root.get("title")), keyword, builder),
-                contains(builder.lower(root.get("description")), keyword, builder));
+                contains(root.get("title"), keyword, builder),
+                contains(root.get("description"), keyword, builder));
+    }
+
+    public static Specification<Task> keywordTypoNear(String keyword) {
+        return (root, query, builder) -> builder.or(
+                typoNear(root.get("title"), keyword, builder),
+                typoNear(root.get("description"), keyword, builder));
     }
 
     public static Specification<Task> hasStatus(TaskStatus status) {
@@ -99,7 +106,15 @@ public final class TaskSpecifications {
             Expression<String> expression,
             String keyword,
             jakarta.persistence.criteria.CriteriaBuilder builder) {
-        return builder.like(expression, "%" + escapeLike(keyword) + "%", '\\');
+        return builder.like(
+                SearchExpressions.normalized(expression, builder),
+                "%" + escapeLike(keyword) + "%", '\\');
+    }
+
+    private static Predicate typoNear(Expression<String> expression, String keyword,
+            jakarta.persistence.criteria.CriteriaBuilder builder) {
+        return builder.isTrue(builder.function(
+                "lifelab_search_typo_near", Boolean.class, expression, builder.literal(keyword)));
     }
 
     private static String escapeLike(String value) {

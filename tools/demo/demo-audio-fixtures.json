@@ -1,0 +1,110 @@
+[
+  {
+    "fixtureKey": "DEMO-AUD-001",
+    "url": "https://listenaminute.com/r/research.mp3",
+    "sourcePage": "https://listenaminute.com/r/research.html",
+    "provider": "Listen A Minute / Sean Banville",
+    "title": "Research and Its Value",
+    "description": "Short English listening on why research matters in technology, health and environmental questions.",
+    "category": "Research",
+    "tags": ["Research", "Listening", "English Practice"],
+    "note": "The lesson connects research with new products, health and environmental questions. I want to compare its broad examples with a specific research question for my project.",
+    "taskTitle": "Write a focused research question for the project"
+  },
+  {
+    "fixtureKey": "DEMO-AUD-002",
+    "url": "https://listenaminute.com/j/job_interviews.mp3",
+    "sourcePage": "https://listenaminute.com/j/job_interviews.html",
+    "provider": "Listen A Minute / Sean Banville",
+    "title": "Preparing for Job Interviews",
+    "description": "Listening practice about preparation, first impressions and discussing experience in an interview.",
+    "category": "Personal Development",
+    "tags": ["Career", "Speaking", "Listening"],
+    "note": "The speaker emphasizes preparation, arriving early and explaining experience. I should prepare a concrete example of project work and a question to ask at the end.",
+    "taskTitle": "Rehearse one project example for an interview"
+  },
+  {
+    "fixtureKey": "DEMO-AUD-003",
+    "url": "https://listenaminute.com/m/management.mp3",
+    "sourcePage": "https://listenaminute.com/m/management.html",
+    "provider": "Listen A Minute / Sean Banville",
+    "title": "Management and Fairness",
+    "description": "An opinion-led English lesson about management and how managers treat people.",
+    "category": "Communication",
+    "tags": ["Communication", "Project", "Listening"],
+    "note": "The speaker argues that management depends on treating people fairly, not just holding a title. I can use the lesson to reflect on how project responsibilities are shared.",
+    "taskTitle": "Clarify project responsibilities with the team"
+  },
+  {
+    "fixtureKey": "DEMO-AUD-004",
+    "url": "https://listenaminute.com/w/writing.mp3",
+    "sourcePage": "https://listenaminute.com/w/writing.html",
+    "provider": "Listen A Minute / Sean Banville",
+    "title": "English Writing Practice",
+    "description": "A short lesson contrasting speaking and writing and noting how digital tools help or hinder writing.",
+    "category": "English",
+    "tags": ["English Practice", "Writing", "Listening"],
+    "note": "The speaker sees writing as difficult even when speaking feels easier, and mentions spellcheck and translation tools. I should draft my own paragraph first, then use tools to review it.",
+    "taskTitle": "Draft and revise one English paragraph"
+  },
+  {
+    "fixtureKey": "DEMO-AUD-005",
+    "url": "https://listenaminute.com/s/software.mp3",
+    "sourcePage": "https://listenaminute.com/s/software.html",
+    "provider": "Listen A Minute / Sean Banville",
+    "title": "Everyday Software",
+    "description": "English listening on operating systems and the many everyday tasks software supports.",
+    "category": "Programming",
+    "tags": ["Programming", "Technology", "Listening"],
+    "note": "The lesson distinguishes the operating system from applications used for documents, media and the web. That gives me a simple way to explain software layers to a nontechnical audience.",
+    "taskTitle": "Explain operating systems and applications in two examples"
+  },
+  {
+    "fixtureKey": "DEMO-AUD-006",
+    "url": "https://listenaminute.com/l/leadership.mp3",
+    "sourcePage": "https://listenaminute.com/l/leadership.html",
+    "provider": "Listen A Minute / Sean Banville",
+    "title": "Leadership and Responsibility",
+    "description": "An English listening prompt about responsibility, respect and getting work done.",
+    "category": "Personal Development",
+    "tags": ["Leadership", "Communication", "Listening"],
+    "note": "The lesson contrasts responsible, respected leadership with control by fear. For team work, I want to focus on taking responsibility and making progress visible.",
+    "taskTitle": "Write one responsibility I can own in the team project"
+  },
+  {
+    "fixtureKey": "DEMO-AUD-007",
+    "url": "https://listenaminute.com/c/cyber_crime.mp3",
+    "sourcePage": "https://listenaminute.com/c/cyber_crime.html",
+    "provider": "Listen A Minute / Sean Banville",
+    "title": "Cyber Crime and Online Information",
+    "description": "Listening practice about cyber crime, phishing and care with personal information online.",
+    "category": "Computer Science",
+    "tags": ["Security", "Technology", "Listening"],
+    "note": "The lesson moves from large-scale cyber attacks to phishing faced by individuals. The practical takeaway is to think carefully before sharing private information online.",
+    "taskTitle": "Review the project's example of personal-data handling"
+  },
+  {
+    "fixtureKey": "DEMO-AUD-008",
+    "url": "https://listenaminute.com/k/knowledge.mp3",
+    "sourcePage": "https://listenaminute.com/k/knowledge.html",
+    "provider": "Listen A Minute / Sean Banville",
+    "title": "Building General Knowledge",
+    "description": "A short lesson about learning through reading, quizzes and the news.",
+    "category": "Computer Science",
+    "tags": ["Learning", "Study", "Listening"],
+    "note": "The speaker describes reading encyclopedias, watching quizzes and following the news to expand general knowledge. I should choose a repeatable learning habit, not aim to remember everything at once.",
+    "taskTitle": "Choose one weekly general-knowledge review habit"
+  },
+  {
+    "fixtureKey": "DEMO-AUD-009",
+    "url": "https://listenaminute.com/p/privacy.mp3",
+    "sourcePage": "https://listenaminute.com/p/privacy.html",
+    "provider": "Listen A Minute / Sean Banville",
+    "title": "Privacy in Digital Life",
+    "description": "English listening about personal information, online search and social-network visibility.",
+    "category": "Personal Development",
+    "tags": ["Privacy", "Security", "English Practice"],
+    "note": "The lesson warns that information shared online can spread beyond the intended audience. I should review which personal details are visible on one account.",
+    "taskTitle": "Review the visibility of one social profile"
+  }
+]

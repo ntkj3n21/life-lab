@@ -32,7 +32,6 @@ import {
   getNote,
   getNoteDeleteImpact,
   getNoteSourceLabel,
-  getNoteSourceRecordLabel,
   getNoteSourceTitle,
   updateNote,
   type Note,
@@ -360,13 +359,9 @@ export function NoteDetailPage() {
   const deleteDetails =
     deleteImpact
       ? [
-          `${deleteImpact.taskCountToMarkSourceMissing} linked task(s) will remain, but will no longer be linked to this Note.`,
-          deleteImpact.sourcePreserved
-            ? `The exact ${note ? getNoteSourceRecordLabel(note) : sourceLabel} source record will be preserved.`
-            : `The ${sourceLabel} source will not be preserved.`,
-          deleteImpact.tasksPreserved
-            ? "Linked Tasks are preserved."
-            : "Linked Tasks are not preserved.",
+          deleteImpact.taskCountToMarkSourceMissing > 0
+            ? `${deleteImpact.taskCountToMarkSourceMissing} linked ${deleteImpact.taskCountToMarkSourceMissing === 1 ? "Task remains" : "Tasks remain"}, but can no longer open this Note.`
+            : "No linked Tasks are affected.",
         ]
       : [];
 
@@ -675,7 +670,7 @@ export function NoteDetailPage() {
           deleteImpact !== null
         }
         title="Delete this Note?"
-        description="Deleting a Note does not delete Tasks created from it. Those Tasks are preserved but their original source becomes unavailable."
+        description="This deletes the Note. Linked Tasks remain, but can no longer open it. Saved media stays in your Library."
         details={deleteDetails}
         confirmLabel="Delete Note"
         isBusy={isMutating}

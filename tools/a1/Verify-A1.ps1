@@ -17,6 +17,7 @@ if ([string]::IsNullOrWhiteSpace($SnapshotPath)) {
 }
 
 . (Join-Path $PSScriptRoot 'A1-Database.ps1')
+. (Join-Path $PSScriptRoot 'A1-NoteOrganization.ps1')
 
 $snapshot = Get-Content -Raw -Encoding UTF8 -LiteralPath $SnapshotPath | ConvertFrom-Json
 $sources = @($snapshot.sources)
@@ -179,14 +180,25 @@ $coveredCurrentKeys = @($noteFixtures | Where-Object { $currentFixtureKeys -cont
 if ($coveredCurrentKeys.Count -ne 36) { throw "Expected Notes for all 36 current sources, found $($coveredCurrentKeys.Count)." }
 Write-Host "Semantic fixtures: notes=$($noteFixtures.Count), tasks=$($taskFixtures.Count), timestamped=$($timestampedFixtures.Count), metadata=$($metadataFixtures.Count)"
 $verificationSql = Join-Path $PSScriptRoot 'verify-a1.sql'
-$lines = Invoke-A1PsqlCapture -DatabaseConfig $databaseConfig -Arguments @(
-    '-q',
-    '-At',
-    '-F', '|',
-    '-v', "reference_date=$ReferenceDate",
-    '-v', "snapshot_ids=$snapshotIds",
-    '-f', $verificationSql
-)
+$organizationSql = Get-A1NoteOrganizationSql `
+    -VideoNotes $noteFixtures -VideoSources $sources `
+    -Images $imageFixtures -Audio $audioFixtures
+$temporarySql = Join-Path ([IO.Path]::GetTempPath()) "life-lab-a1-verify-$([guid]::NewGuid().ToString('N')).sql"
+[IO.File]::WriteAllText($temporarySql,
+    $organizationSql + [Environment]::NewLine +
+    (Get-Content -Raw -Encoding UTF8 -LiteralPath $verificationSql),
+    [Text.UTF8Encoding]::new($false))
+try {
+    $lines = Invoke-A1PsqlCapture -DatabaseConfig $databaseConfig -Arguments @(
+        '-q', '-At', '-F', '|',
+        '-v', "reference_date=$ReferenceDate",
+        '-v', "snapshot_ids=$snapshotIds",
+        '-f', $temporarySql
+    )
+}
+finally {
+    Remove-Item -LiteralPath $temporarySql -Force
+}
 
 $results = [System.Collections.Generic.List[object]]::new()
 foreach ($line in $lines) {

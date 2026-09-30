@@ -4,13 +4,20 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.lifelab.source.audio.domain.LibraryAudio;
 
-public interface LibraryAudioRepository extends JpaRepository<LibraryAudio, Long> {
+public interface LibraryAudioRepository extends JpaRepository<LibraryAudio, Long>, JpaSpecificationExecutor<LibraryAudio> {
+
+    @Override
+    @EntityGraph(attributePaths = "audioSource")
+    Page<LibraryAudio> findAll(Specification<LibraryAudio> specification, Pageable pageable);
 
     boolean existsByAccount_IdAndAudioSource_Id(
             Long accountId,

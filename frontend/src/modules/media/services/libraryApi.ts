@@ -4,6 +4,7 @@ import {
   apiPatch,
   apiPost,
 } from "../../../lib/api";
+import type { Tag } from "./tagApi";
 
 export type YouTubeAvailabilityStatus =
   | "AVAILABLE"
@@ -28,6 +29,7 @@ export interface LibraryVideo {
 
   customTitle: string | null;
   personalDescription: string | null;
+  tags: Tag[];
 
   addedAt: string;
   updatedAt: string;

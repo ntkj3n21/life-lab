@@ -13,6 +13,7 @@ import {
   getNotes,
   getVideoNotes,
   updateNote as updateNoteRequest,
+  updateNoteOrganization as updateNoteOrganizationRequest,
   type CreateNoteInput,
   type Note,
   type NoteDeleteImpact,
@@ -100,6 +101,12 @@ interface NoteStore {
     noteId: number,
     content: string,
   ) => Promise<Note>;
+
+  updateOrganization: (
+    noteId: number,
+    categoryId: number | null,
+    tagIds: number[],
+  ) => Promise<void>;
 
   getDeleteImpact: (
     noteId: number,
@@ -654,6 +661,45 @@ export const useNoteStore =
           set({
             isMutating: false,
           });
+        }
+      },
+
+      updateOrganization: async (noteId, categoryId, tagIds) => {
+        set({ isMutating: true, error: null });
+
+        try {
+          const organization = await updateNoteOrganizationRequest(noteId, {
+            categoryId,
+            tagIds,
+          });
+          const replaceOrganization = (notes: Note[]) =>
+            notes.map((note) =>
+              note.id === noteId
+                ? { ...note, category: organization.category, tags: organization.tags }
+                : note,
+            );
+
+          set((state) => ({
+            notes: replaceOrganization(state.notes),
+            videoNotes: Object.fromEntries(
+              Object.entries(state.videoNotes).map(([key, notes]) => [
+                key,
+                replaceOrganization(notes),
+              ]),
+            ) as Record<number, Note[]>,
+            workspaceNotes: Object.fromEntries(
+              Object.entries(state.workspaceNotes).map(([key, notes]) => [
+                key,
+                replaceOrganization(notes),
+              ]),
+            ) as Record<string, Note[]>,
+          }));
+        } catch (error) {
+          const apiError = toApiError(error);
+          set({ error: apiError });
+          throw apiError;
+        } finally {
+          set({ isMutating: false });
         }
       },
 

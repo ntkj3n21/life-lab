@@ -1,0 +1,124 @@
+note_key	category_name	tag_names
+a1-note-LIBRARY_01-1	Computer Science	Java
+a1-note-LIBRARY_01-2	Computer Science	Java
+a1-note-LIBRARY_01-3	Computer Science	Java;OOP
+a1-note-LIBRARY_01-4	Computer Science	Java;OOP
+a1-note-LIBRARY_01-5	Computer Science	Java;OOP
+a1-note-LIBRARY_02-1	Computer Science	C++;OOP
+a1-note-LIBRARY_02-2	Computer Science	C++;OOP
+a1-note-LIBRARY_02-3	Computer Science	C++;OOP
+a1-note-LIBRARY_02-4	Computer Science	C++;DSA
+a1-note-LIBRARY_03-1	General Study	DSA;Kỹ năng học
+a1-note-LIBRARY_03-2	General Study	DSA;Kỹ năng học
+a1-note-LIBRARY_04-1	Computer Science	C++;DSA
+a1-note-LIBRARY_04-2	Computer Science	C++;DSA
+a1-note-LIBRARY_04-3	Computer Science	C++;DSA
+a1-note-LIBRARY_04-4	Computer Science	C++;DSA
+a1-note-LIBRARY_04-5	Computer Science	C++
+a1-note-LIBRARY_05-1	General Study	Kỹ năng học
+a1-note-LIBRARY_06-1	Computer Science	UI;Backend
+a1-note-LIBRARY_06-2	Computer Science	Spring Boot;Backend
+a1-note-LIBRARY_06-3	Computer Science	Backend;Database
+a1-note-LIBRARY_06-4	General Study	Spring Boot;Kỹ năng học
+a1-note-LIBRARY_07-1	Computer Science	Spring Boot;REST API
+a1-note-LIBRARY_08-1	Computer Science	Database;SQL
+a1-note-LIBRARY_08-2	Computer Science	Database;SQL
+a1-note-LIBRARY_09-1	Computer Science	Database;SQL
+a1-note-LIBRARY_09-2	Computer Science	Database;SQL
+a1-note-LIBRARY_10-1	Computer Science	JavaScript
+a1-note-LIBRARY_10-2	Computer Science	JavaScript
+a1-note-LIBRARY_10-3	Computer Science	JavaScript
+a1-note-LIBRARY_10-4	Computer Science	JavaScript
+a1-note-LIBRARY_10-5	Computer Science	JavaScript
+a1-note-LIBRARY_11-1	Computer Science	React;React Hooks
+a1-note-LIBRARY_11-2	Computer Science	React;React Hooks
+a1-note-LIBRARY_12-1	Computer Science	TypeScript
+a1-note-LIBRARY_13-1	Computer Science	React;JavaScript
+a1-note-LIBRARY_13-2	Computer Science	React;REST API
+a1-note-LIBRARY_14-1	Computer Science	React;React Hooks
+a1-note-LIBRARY_14-2	Computer Science	React;React Hooks
+a1-note-LIBRARY_15-1	Computer Science	React;React Hooks
+a1-note-LIBRARY_16-1	Personal Development	Career;Giao tiếp
+a1-note-LIBRARY_16-2	Personal Development	Giao tiếp
+a1-note-LIBRARY_16-3	Personal Development	Thuyết trình
+a1-note-LIBRARY_16-4	Personal Development	Thuyết trình
+a1-note-LIBRARY_16-5	Personal Development	Giao tiếp;Thuyết trình
+a1-note-LIBRARY_17-1	Personal Development	Career;Đồ án
+a1-note-LIBRARY_17-2	Personal Development	Career
+a1-note-LIBRARY_17-3	Personal Development	Career
+a1-note-LIBRARY_18-1	Personal Development	Kỹ năng học
+a1-note-LIBRARY_18-2	Personal Development	Kỹ năng học
+a1-note-LIBRARY_19-1	Computer Science	Git
+a1-note-LIBRARY_19-2	Computer Science	Git
+a1-note-LIBRARY_20-1	General Study	Kỹ năng học;Ôn tập
+a1-note-LIBRARY_20-2	English	Từ vựng;Ngữ pháp
+a1-note-LIBRARY_21-1	English	Tiếng Anh;Từ vựng
+a1-note-LIBRARY_22-1	English	Tiếng Anh;Kỹ năng học
+a1-note-LIBRARY_22-2	English	Tiếng Anh;Kỹ năng học
+a1-note-LIBRARY_23-1	English	Tiếng Anh;Ngữ pháp
+a1-note-LIBRARY_23-2	English	Tiếng Anh;Giao tiếp
+a1-note-LIBRARY_24-1	English	Tiếng Anh;Phát âm
+a1-note-LIBRARY_24-2	English	Tiếng Anh;Từ vựng
+a1-note-LIBRARY_25-1	Personal Development	Kỹ năng học
+a1-note-LIBRARY_25-2	Personal Development	Kỹ năng học
+a1-note-LIBRARY_26-1	English	Tiếng Anh;Từ vựng
+a1-note-LIBRARY_26-2	English	Tiếng Anh;Từ vựng
+a1-note-LIBRARY_27-1	English	Tiếng Anh;Phát âm
+a1-note-LIBRARY_28-1	English	IELTS;Giao tiếp
+a1-note-LIBRARY_28-2	English	IELTS;Kỹ năng học
+a1-note-LIBRARY_29-1	English	Tiếng Anh;Giao tiếp
+a1-note-LIBRARY_29-2	English	Tiếng Anh;Giao tiếp
+a1-note-LIBRARY_29-3	English	Tiếng Anh;Giao tiếp
+a1-note-LIBRARY_29-4	English	Tiếng Anh;Giao tiếp
+a1-note-LIBRARY_30-1	English	Tiếng Anh;Kỹ năng học
+a1-note-LIBRARY_30-2	English	Tiếng Anh;Kỹ năng học
+a1-note-LIBRARY_30-3	English	Tiếng Anh;Thuyết trình
+a1-note-LIBRARY_30-4	English	Tiếng Anh;Giao tiếp
+a1-note-LIBRARY_30-5	English	Tiếng Anh;Kỹ năng học
+a1-note-LIBRARY_31-1	Computer Science	Git
+a1-note-LIBRARY_31-2	Computer Science	Docker
+a1-note-LIBRARY_31-3	Computer Science	Spring Boot;Database
+a1-note-LIBRARY_31-4	Computer Science	Spring Boot;REST API;Backend
+a1-note-LIBRARY_32-1	Computer Science	Security;Spring Boot
+a1-note-LIBRARY_32-2	Computer Science	Security;REST API
+a1-note-LIBRARY_32-3	Computer Science	Security;Spring Boot
+a1-note-LIBRARY_32-4	Computer Science	Security;Database
+a1-note-LIBRARY_32-5	Computer Science	Security;Backend
+a1-note-LIBRARY_33-1	Computer Science	Docker
+a1-note-LIBRARY_34-1	Computer Science	Database
+a1-note-LIBRARY_35-1	Computer Science	Testing
+a1-note-LIBRARY_35-2	Computer Science	Testing
+a1-note-LIBRARY_35-3	Computer Science	Testing
+a1-note-LIBRARY_35-4	Computer Science	Testing
+a1-note-LIBRARY_36-1	Computer Science	HTTP;Backend
+a1-note-LIBRARY_36-2	Computer Science	HTTP
+a1-note-LIBRARY_36-3	Computer Science	HTTP;Security
+a1-note-H1_GIT_TEAMWORK-1	Computer Science	Git;Giao tiếp
+a1-note-H1_GIT_TEAMWORK-2	Computer Science	Git
+a1-image-01	Personal Development	Sáng tạo;Xem lại
+a1-image-02	General Study	Triết học;Ôn tập
+a1-image-03	General Study	Kỹ năng học;Pomodoro
+a1-image-04	English	Tiếng Anh;Ngữ pháp;Ôn tập
+a1-image-05	Life Lab Project	Database;Đồ án;Quan trọng
+a1-image-06	English	Tiếng Anh;IELTS;Quan trọng
+a1-image-07	Life Lab Project	Đồ án;Database;Xem lại
+a1-image-08	General Study	Thuyết trình;Nghiên cứu;Xem lại
+a1-image-09	Computer Science	Operating System;Thuật toán;Ôn tập
+a1-image-10	General Study	Thuyết trình;Nghiên cứu;Quan trọng
+a1-image-11	Life Lab Project	Đồ án;UI;Báo cáo
+a1-image-12	General Study	Sinh học;Ôn tập
+a1-image-13	Life Lab Project	Đồ án;Workflow;Quan trọng
+a1-image-14	Computer Science	Mạng máy tính;Ôn tập
+a1-audio-01	Computer Science	Công nghệ
+a1-audio-02	General Study	Kỹ năng học;Quan trọng
+a1-audio-03	English	Tiếng Anh;Phát âm;Kỹ năng học
+a1-audio-04	Computer Science	Security
+a1-audio-05	General Study	Kỹ năng học
+a1-audio-06	English	Tiếng Anh;Kỹ năng học;Xem lại
+a1-audio-07	General Study	Kỹ năng học;Xem lại
+a1-audio-08	Computer Science	Công nghệ
+a1-audio-09	Computer Science	Database;SQL;Backend;Xem lại
+a1-audio-10	English	Tiếng Anh;Kỹ năng học;Xem lại
+a1-audio-11	Personal Development	Kỹ năng học
+a1-audio-12	Personal Development	Kỹ năng học;Career
+a1-audio-13	Personal Development	Kỹ năng học;Xem lại

@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.OffsetDateTime;
+import java.util.Set;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -179,6 +180,64 @@ class LibraryVideoTagApiIntegrationTest {
         JsonNode body = objectMapper.readTree(result.getResponse().getContentAsByteArray());
         assertThat(body.toString()).doesNotContain(
                 "normalizedName", "accountId", "\"account\"");
+    }
+
+    @Test
+    void paginatedLibraryIncludesOnlyOwnedAssignedTagsWithoutChangingMembership() throws Exception {
+        Account owner = createAccount("owner@example.com");
+        Account other = createAccount("other@example.com");
+        LibraryVideo first = createLibraryVideo(owner, createSource("page-tag-first"));
+        LibraryVideo second = createLibraryVideo(owner, createSource("page-tag-second"));
+        LibraryVideo foreign = createLibraryVideo(other, createSource("page-tag-foreign"));
+        Tag study = createTag(owner, "Study", "study");
+        Tag foreignTag = createTag(other, "Private", "private");
+        insertRelation(first.getId(), study.getId());
+        insertRelation(first.getId(), foreignTag.getId());
+        insertRelation(foreign.getId(), foreignTag.getId());
+        Cookie accessToken = login(owner.getEmail());
+
+        MvcResult firstPage = mockMvc.perform(get("/api/library/videos")
+                        .param("page", "0").param("size", "1")
+                        .cookie(accessToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.totalElements").value(2))
+                .andExpect(jsonPath("$.totalPages").value(2))
+                .andReturn();
+        MvcResult secondPage = mockMvc.perform(get("/api/library/videos")
+                        .param("page", "1").param("size", "1")
+                        .cookie(accessToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.totalElements").value(2))
+                .andReturn();
+
+        JsonNode firstItem = objectMapper.readTree(firstPage.getResponse().getContentAsByteArray())
+                .get("items").get(0);
+        JsonNode secondItem = objectMapper.readTree(secondPage.getResponse().getContentAsByteArray())
+                .get("items").get(0);
+        assertThat(Set.of(firstItem.get("id").longValue(), secondItem.get("id").longValue()))
+                .containsExactlyInAnyOrder(first.getId(), second.getId());
+        for (JsonNode item : new JsonNode[] {firstItem, secondItem}) {
+            JsonNode tags = item.get("tags");
+            if (item.get("id").longValue() == first.getId()) {
+                assertThat(tags.size()).isOne();
+                assertThat(tags.get(0).get("id").longValue()).isEqualTo(study.getId());
+            } else {
+                assertThat(tags.size()).isZero();
+            }
+            assertThat(item.toString()).doesNotContain("Private", "normalizedName", "accountId");
+        }
+
+        mockMvc.perform(get("/api/library/videos")
+                        .param("tagId", study.getId().toString())
+                        .cookie(accessToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.totalElements").value(1))
+                .andExpect(jsonPath("$.items[0].id").value(first.getId()))
+                .andExpect(jsonPath("$.items[0].tags[0].id").value(study.getId()));
+        mockMvc.perform(get("/api/library/videos")
+                        .param("tagId", foreignTag.getId().toString())
+                        .cookie(accessToken))
+                .andExpect(status().isNotFound());
     }
 
     @Test

@@ -6,15 +6,14 @@ import {
 import {
   type KeyboardEvent,
   useEffect,
+  useRef,
   useState,
 } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { ApiError } from "../../../lib/api";
 import { TaskCard } from "../components/TaskCard";
-import { TaskComposer } from "../components/TaskComposer";
 import {
-  createIndependentTask,
   deleteTask,
   getDailyPlan,
   updateTask,
@@ -31,12 +30,11 @@ interface PlanSectionProps {
   description: string;
   tasks: Task[];
   emptyText: string;
-  bounded?: boolean;
+  showHeader?: boolean;
   tone?:
     | "default"
     | "primary"
-    | "danger"
-    | "secondary";
+    | "danger";
 
   isMutating: boolean;
 
@@ -59,19 +57,7 @@ interface PlanSectionProps {
   ) => void;
 }
 
-type PlanGroup =
-  | "today"
-  | "overdue"
-  | "upcoming"
-  | "no-deadline"
-  | "completed";
-
-type SecondaryPlanGroup = Extract<
-  PlanGroup,
-  | "upcoming"
-  | "no-deadline"
-  | "completed"
->;
+type SecondaryPlanGroup = "upcoming" | "no-deadline" | "completed";
 
 function getErrorMessage(error: unknown) {
   if (error instanceof ApiError) {
@@ -81,45 +67,13 @@ function getErrorMessage(error: unknown) {
   return "Something went wrong.";
 }
 
-function formatPlannerDate(
-  calendarDate: string,
-) {
-  const match =
-    /^(\d{4})-(\d{2})-(\d{2})$/.exec(
-      calendarDate,
-    );
-
-  if (!match) {
-    return calendarDate;
-  }
-
-  const [, year, month, day] = match;
-  const date = new Date(
-    Date.UTC(
-      Number(year),
-      Number(month) - 1,
-      Number(day),
-    ),
-  );
-
-  return new Intl.DateTimeFormat(
-    "en-US",
-    {
-      weekday: "long",
-      month: "short",
-      day: "numeric",
-      timeZone: "UTC",
-    },
-  ).format(date);
-}
-
 function PlanSection({
   id,
   title,
   description,
   tasks,
   emptyText,
-  bounded = false,
+  showHeader = true,
   tone = "default",
   isMutating,
   onUpdate,
@@ -127,49 +81,64 @@ function PlanSection({
   onDelete,
   onOpenDetail,
 }: PlanSectionProps) {
+  const taskListRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (taskListRef.current) {
+      taskListRef.current.scrollTop = 0;
+    }
+  }, [tasks]);
+
   const sectionClassName =
     tone === "primary"
       ? "border-(--border-strong) bg-(--surface)"
       : tone === "danger"
         ? "border-(--danger-border) bg-(--danger-surface)"
-        : tone === "secondary"
-          ? "border-(--border) bg-(--surface-subtle)"
-          : "border-(--border) bg-(--app-bg)";
+        : "border-(--border) bg-(--app-bg)";
 
   return (
     <section
       id={id}
-      aria-labelledby={`${id}-title`}
-      className={`scroll-mt-4 rounded-xl border p-4 ${sectionClassName}`}
+      aria-labelledby={showHeader ? `${id}-title` : undefined}
+      aria-label={showHeader ? undefined : `${title} tasks`}
+      className={showHeader
+        ? `scroll-mt-4 rounded-xl border p-4 ${sectionClassName}`
+        : "min-w-0"}
     >
-      <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0">
-          <h2
-            id={`${id}-title`}
-            className={`font-medium ${
-              tone === "primary"
-                ? "text-base text-(--text-primary)"
-                : tone === "danger"
-                  ? "text-sm text-(--danger-text)"
-                  : "text-sm text-(--text-secondary)"
-            }`}
-          >
-            {title}
-          </h2>
+      {showHeader ? (
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <h2
+              id={`${id}-title`}
+              className={`font-medium ${
+                tone === "primary"
+                  ? "text-base text-(--text-primary)"
+                  : tone === "danger"
+                    ? "text-sm text-(--danger-text)"
+                    : "text-sm text-(--text-secondary)"
+              }`}
+            >
+              {title}
+            </h2>
 
-          {tasks.length > 0 && (
-            <p className="mt-1 text-xs leading-5 text-(--text-muted)">
-              {description}
-            </p>
-          )}
-        </div>
+            {tasks.length > 0 && (
+              <p className="mt-1 text-xs leading-5 text-(--text-muted)">
+                {description}
+              </p>
+            )}
+          </div>
 
-        <div className="flex shrink-0 items-center gap-2">
-          <span className="rounded-full border border-(--border) bg-(--surface) px-2 py-1 text-[10px] font-medium tabular-nums text-(--text-secondary)">
-            {tasks.length}
-          </span>
+          <div className="flex shrink-0 items-center gap-2">
+            <span className="rounded-full border border-(--border) bg-(--surface) px-2 py-1 text-[10px] font-medium tabular-nums text-(--text-secondary)">
+              {tasks.length}
+            </span>
+          </div>
         </div>
-      </div>
+      ) : tasks.length > 0 ? (
+        <p className="text-xs leading-5 text-(--text-muted)">
+          {description}
+        </p>
+      ) : null}
 
       {tasks.length === 0 ? (
         <p
@@ -180,29 +149,30 @@ function PlanSection({
         </p>
       ) : (
         <div
-          className={`mt-3 space-y-2 ${
-            bounded
-              ? "max-h-80 overflow-y-auto overscroll-contain pr-1"
-              : ""
-          }`}
+          ref={taskListRef}
+          role="region"
+          aria-label={`${title} tasks`}
+          tabIndex={0}
+          className="daily-plan-task-list mt-3 space-y-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)"
         >
           {tasks.map((task) => (
-            <TaskCard
-              key={task.id}
-              task={task}
-              variant="planner"
-              isMutating={
-                isMutating
-              }
-              onUpdate={onUpdate}
-              onStatusChange={
-                onStatusChange
-              }
-              onDelete={onDelete}
-              onOpenDetail={
-                onOpenDetail
-              }
-            />
+            <div key={task.id} className="daily-plan-task-row">
+              <TaskCard
+                task={task}
+                variant="planner"
+                isMutating={
+                  isMutating
+                }
+                onUpdate={onUpdate}
+                onStatusChange={
+                  onStatusChange
+                }
+                onDelete={onDelete}
+                onOpenDetail={
+                  onOpenDetail
+                }
+              />
+            </div>
           ))}
         </div>
       )}
@@ -247,28 +217,6 @@ export function DailyPlanPage() {
   const [
     notice,
     setNotice,
-  ] = useState<string | null>(
-    null,
-  );
-
-  const [
-    newTaskTitle,
-    setNewTaskTitle,
-  ] = useState("");
-
-  const [
-    newTaskDescription,
-    setNewTaskDescription,
-  ] = useState("");
-
-  const [
-    newTaskDeadline,
-    setNewTaskDeadline,
-  ] = useState("");
-
-  const [
-    createErrorMessage,
-    setCreateErrorMessage,
   ] = useState<string | null>(
     null,
   );
@@ -446,59 +394,6 @@ export function DailyPlanPage() {
     setIsMutating(false);
   }
 
-  async function handleCreateTask() {
-    const title =
-      newTaskTitle.trim();
-
-    if (
-      !title ||
-      isMutating
-    ) {
-      return;
-    }
-
-    setIsMutating(true);
-    setActionErrorMessage(null);
-    setCreateErrorMessage(null);
-    setNotice(null);
-
-    try {
-      await createIndependentTask({
-        title,
-        description:
-          newTaskDescription.trim() ||
-          null,
-        deadline:
-          newTaskDeadline || null,
-      });
-    } catch (error) {
-      setCreateErrorMessage(
-        getErrorMessage(error),
-      );
-      setIsMutating(false);
-      return;
-    }
-
-    setNewTaskTitle("");
-    setNewTaskDescription("");
-    setNewTaskDeadline("");
-
-    /*
-     * Daily Plan classification stays authoritative
-     * on the Backend. Never place the new Task into
-     * a date group locally.
-     */
-    const refreshed =
-      await reloadPlan();
-
-    setNotice(
-      refreshed
-        ? "Task created and Daily Plan regrouped."
-        : "Task created, but Daily Plan could not be refreshed.",
-    );
-    setIsMutating(false);
-  }
-
   const totalTasks =
     dailyPlan
       ? dailyPlan.overdue.length +
@@ -545,41 +440,6 @@ export function DailyPlanPage() {
                 "No completed Tasks.",
             }
       : null;
-
-  function navigateToPlanGroup(
-    group: PlanGroup,
-  ) {
-    if (
-      group === "upcoming" ||
-      group === "no-deadline" ||
-      group === "completed"
-    ) {
-      setSelectedSecondaryGroup(
-        group,
-      );
-
-      requestAnimationFrame(() => {
-        document
-          .getElementById(
-            "plan-secondary",
-          )
-          ?.scrollIntoView({
-            behavior: "smooth",
-            block: "start",
-          });
-      });
-      return;
-    }
-
-    document
-      .getElementById(
-        `plan-${group}`,
-      )
-      ?.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-  }
 
   function handleSecondaryTabKeyDown(
     event: KeyboardEvent<HTMLButtonElement>,
@@ -659,154 +519,23 @@ export function DailyPlanPage() {
               </p>
             )}
 
-            <button
-              type="button"
-              onClick={() => {
-                setActionErrorMessage(null);
-                setNotice(null);
-                void reloadPlan();
-              }}
-              disabled={
-                isLoading ||
-                isMutating
-              }
-              className="flex shrink-0 items-center justify-center gap-2 rounded-xl border border-(--border) px-3 py-2 text-sm text-(--text-secondary) transition hover:bg-(--surface) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              <RefreshCw
-                size={14}
-                className={
-                  isLoading
-                    ? "animate-spin"
-                    : ""
-                }
-                aria-hidden="true"
-              />
-              Refresh
-            </button>
           </div>
         </header>
-
-        {dailyPlan && (
-          <section className="mt-5 flex flex-wrap items-center justify-between gap-x-4 gap-y-1 rounded-xl border border-(--border) bg-(--surface) px-4 py-3 text-sm text-(--text-muted)">
-            <span className="flex items-center gap-2 font-medium text-(--text-primary)">
-              <CalendarDays size={15} aria-hidden="true" />
-              {formatPlannerDate(
-                dailyPlan.currentDate,
-              )}
-            </span>
-            <span className="text-(--text-muted)">{dailyPlan.timeZone}</span>
-          </section>
-        )}
-
-        {dailyPlan && (
-          <nav
-            aria-label="Daily Plan groups"
-            className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-5"
-          >
-            <button
-              type="button"
-              onClick={() =>
-                navigateToPlanGroup(
-                  "today",
-                )
-              }
-              className="flex min-h-11 items-center justify-between gap-2 rounded-xl border border-(--border-strong) bg-(--surface) px-3 text-sm font-medium text-(--text-primary) transition hover:bg-(--surface-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)"
-            >
-              Today
-              <span className="rounded-full bg-(--surface-active) px-2 py-0.5 text-[10px] text-(--text-secondary)">
-                {dailyPlan.today.length}
-              </span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() =>
-                navigateToPlanGroup(
-                  "overdue",
-                )
-              }
-              className="flex min-h-11 items-center justify-between gap-2 rounded-xl border border-(--danger-border) bg-(--danger-surface) px-3 text-sm font-medium text-(--danger-text) transition hover:border-(--border-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)"
-            >
-              Overdue
-              <span className="rounded-full bg-(--surface) px-2 py-0.5 text-[10px] text-(--text-muted)">
-                {dailyPlan.overdue.length}
-              </span>
-            </button>
-
-            {([
-              [
-                "upcoming",
-                "Upcoming",
-                dailyPlan.upcoming.length,
-              ],
-              [
-                "no-deadline",
-                "No deadline",
-                dailyPlan.noDeadline.length,
-              ],
-              [
-                "completed",
-                "Completed",
-                dailyPlan.completed.length,
-              ],
-            ] as const).map(
-              ([group, label, count]) => (
-                <button
-                  key={group}
-                  type="button"
-                  onClick={() =>
-                    navigateToPlanGroup(
-                      group,
-                    )
-                  }
-                  className="flex min-h-11 items-center justify-between gap-2 rounded-xl border border-(--border) bg-(--surface-subtle) px-3 text-sm text-(--text-secondary) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)"
-                >
-                  {label}
-                  <span className="rounded-full bg-(--surface) px-2 py-0.5 text-[10px] text-(--text-muted)">
-                    {count}
-                  </span>
-                </button>
-              ),
-            )}
-          </nav>
-        )}
-
-        <div className="mt-4">
-          <TaskComposer
-            title={newTaskTitle}
-            description={
-              newTaskDescription
-            }
-            deadline={
-              newTaskDeadline
-            }
-            isMutating={
-              isMutating
-            }
-            errorMessage={
-              createErrorMessage
-            }
-            onTitleChange={
-              setNewTaskTitle
-            }
-            onDescriptionChange={
-              setNewTaskDescription
-            }
-            onDeadlineChange={
-              setNewTaskDeadline
-            }
-            onCreate={
-              handleCreateTask
-            }
-          />
-        </div>
 
         {loadErrorMessage && (
           <div
             role="alert"
-            className="mt-4 rounded-xl border border-(--danger-border) bg-(--danger-surface) px-4 py-3 text-sm text-(--danger-text)"
+            className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-(--danger-border) bg-(--danger-surface) px-4 py-3 text-sm text-(--danger-text)"
           >
-            {loadErrorMessage}
+            <span>{loadErrorMessage}</span>
+            <button
+              type="button"
+              disabled={isLoading || isMutating}
+              onClick={() => void reloadPlan()}
+              className="flex min-h-9 items-center gap-1.5 rounded-lg border border-(--danger-border) px-3 text-xs font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:opacity-50"
+            >
+              <RefreshCw size={13} aria-hidden="true" /> Retry
+            </button>
           </div>
         )}
 
@@ -881,7 +610,6 @@ export function DailyPlanPage() {
                 tasks={dailyPlan.today}
                 emptyText="Nothing is due today."
                 tone="primary"
-                bounded
                 isMutating={
                   isMutating
                 }
@@ -912,7 +640,6 @@ export function DailyPlanPage() {
                 }
                 emptyText="No overdue Tasks."
                 tone="danger"
-                bounded
                 isMutating={
                   isMutating
                 }
@@ -1005,7 +732,11 @@ export function DailyPlanPage() {
                       }`}
                     >
                       {label}
-                      <span className="rounded-full bg-(--surface-hover) px-2 py-0.5 text-[10px] text-(--text-muted)">
+                      <span className={`rounded-full px-2 py-0.5 text-[10px] ${
+                        selectedSecondaryGroup === group
+                          ? "bg-(--surface-active) text-(--text-secondary)"
+                          : "bg-(--surface-hover) text-(--text-muted)"
+                      }`}>
                         {count}
                       </span>
                     </button>
@@ -1021,6 +752,7 @@ export function DailyPlanPage() {
                   className="mt-3"
                 >
                   <PlanSection
+                    key={selectedSecondaryGroup}
                     id={
                       selectedSecondaryPlan.id
                     }
@@ -1036,8 +768,7 @@ export function DailyPlanPage() {
                     emptyText={
                       selectedSecondaryPlan.emptyText
                     }
-                    tone="secondary"
-                    bounded
+                    showHeader={false}
                     isMutating={
                       isMutating
                     }

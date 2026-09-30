@@ -141,6 +141,48 @@ select {
   display: none;
 }
 
+.daily-plan-task-list {
+  max-height: min(55vh, 28rem);
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  padding-right: 0.25rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--text-faint) transparent;
+}
+
+.daily-plan-task-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.daily-plan-task-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.daily-plan-task-list::-webkit-scrollbar-thumb {
+  border-radius: 9999px;
+  background: var(--text-faint);
+}
+
+.daily-plan-task-list::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+.daily-plan-task-row {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 7.5rem;
+}
+
+.daily-plan-task-row:has([role="dialog"]) {
+  content-visibility: visible;
+  contain-intrinsic-size: none;
+}
+
+@media (min-width: 1024px) {
+  .daily-plan-task-list {
+    max-height: min(52vh, 32rem);
+  }
+}
+
 /* Khóa chặt viewport, ngăn trình duyệt tự tạo thanh cuộn ngoài cùng */
 html, body, #root {
   height: 100%;

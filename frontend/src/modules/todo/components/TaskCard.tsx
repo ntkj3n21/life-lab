@@ -466,7 +466,7 @@ export function TaskCard({
                     aria-hidden="true"
                   />
                 </button>
-              ) : (
+              ) : isWorkspace ? (
                 <button
                   type="button"
                   disabled={isMutating}
@@ -482,7 +482,7 @@ export function TaskCard({
                     aria-hidden="true"
                   />
                 </button>
-              )}
+              ) : null}
             </div>
 
             {(task.category ||
@@ -715,43 +715,9 @@ export function TaskCard({
               className={`flex flex-wrap items-center gap-2 border-t border-(--border) ${
                 isWorkspace
                   ? "mt-2 pt-2"
-                  : "mt-3 pt-3"
+                  : "mt-3 justify-end pt-3"
               }`}
             >
-              {onOpenDetail && (
-                <button
-                  type="button"
-                  disabled={isMutating}
-                  onClick={() =>
-                    onOpenDetail(
-                      task.id,
-                    )
-                  }
-                  aria-label={
-                    isWorkspace
-                      ? `Open task ${task.title} details`
-                      : undefined
-                  }
-                  className={
-                    isWorkspace
-                      ? "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-(--border) text-(--text-muted) hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40 xl:h-8 xl:w-8"
-                      : "flex shrink-0 items-center gap-1 rounded-lg border border-(--border) px-2 py-1.5 text-xs text-(--text-muted) hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
-                  }
-                  title={
-                    isWorkspace
-                      ? "Task details"
-                      : undefined
-                  }
-                >
-                  <Eye
-                    size={12}
-                    aria-hidden="true"
-                  />
-                  {!isWorkspace &&
-                    "Details"}
-                </button>
-              )}
-
               {task.sourceStatus ===
                 "HAS_SOURCE" && (
                 <button
@@ -768,7 +734,7 @@ export function TaskCard({
                   className={
                     isWorkspace
                       ? "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-(--border) text-(--text-muted) hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40 xl:h-8 xl:w-8"
-                      : "flex shrink-0 items-center gap-1 rounded-lg border border-(--border) px-2 py-1.5 text-xs text-(--text-muted) hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
+                      : "flex shrink-0 items-center gap-1 rounded-lg border border-(--border-strong) bg-(--surface) px-2 py-1.5 text-xs font-medium text-(--text-primary) hover:bg-(--surface-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
                   }
                   title="Go to source"
                 >
@@ -831,7 +797,7 @@ export function TaskCard({
                       .value as TaskStatus,
                   )
                 }
-                className={`rounded-lg border border-(--border) bg-(--app-bg) px-2 text-xs leading-5 text-(--text-secondary) outline-none focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40 ${
+                className={`rounded-lg border border-(--border-strong) bg-(--app-bg) px-2 text-xs font-medium leading-5 text-(--text-primary) outline-none focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40 ${
                   isWorkspace
                     ? "h-10 min-w-32 flex-1 py-1 xl:h-9"
                     : "h-9 w-auto min-w-32 max-w-full py-1"
@@ -849,6 +815,41 @@ export function TaskCard({
                   Completed
                 </option>
               </select>
+
+              {onOpenDetail && (
+                <button
+                  type="button"
+                  disabled={isMutating}
+                  onClick={() => onOpenDetail(task.id)}
+                  aria-label={
+                    isWorkspace
+                      ? `Open task ${task.title} details`
+                      : undefined
+                  }
+                  className={
+                    isWorkspace
+                      ? "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-(--border) text-(--text-muted) hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40 xl:h-8 xl:w-8"
+                      : "flex shrink-0 items-center gap-1 rounded-lg px-2 py-1.5 text-xs text-(--text-muted) hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
+                  }
+                  title={isWorkspace ? "Task details" : undefined}
+                >
+                  <Eye size={12} aria-hidden="true" />
+                  {!isWorkspace && "Details"}
+                </button>
+              )}
+
+              {!isWorkspace && (
+                <button
+                  type="button"
+                  disabled={isMutating}
+                  onClick={handleStartEditing}
+                  aria-label={`Edit task ${task.title}`}
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-(--border) text-(--text-muted) hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40 xl:h-8 xl:w-8"
+                  title="Edit task"
+                >
+                  <Pencil size={13} aria-hidden="true" />
+                </button>
+              )}
 
               <button
                 type="button"
@@ -881,8 +882,8 @@ export function TaskCard({
         title={`Delete task "${task.title}"?`}
         description={
           task.sourceStatus === "HAS_SOURCE"
-            ? "Deleting the Task does not delete its source Note or exact source record."
-            : "This will permanently delete the Task."
+            ? "This deletes the Task, not its Note or media."
+            : "This deletes the Task."
         }
         confirmLabel="Delete Task"
         isBusy={isMutating}

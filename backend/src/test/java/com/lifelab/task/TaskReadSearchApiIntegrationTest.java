@@ -738,6 +738,55 @@ class TaskReadSearchApiIntegrationTest {
         }
 
         @Test
+        void normalizedSearchAndTypoFallbackKeepTaskFiltersAndNormalMatchesAuthoritative() throws Exception {
+                Account owner = createAccount("task-discovery-owner@example.com");
+                Account other = createAccount("task-discovery-other@example.com");
+                Long categoryId = insertCategory(owner.getId(), "Learning", "learning");
+                Long otherCategoryId = insertCategory(owner.getId(), "Other", "other");
+                Long tagId = insertTag(owner.getId(), "Backend", "backend");
+                Long otherTagId = insertTag(owner.getId(), "Other", "other");
+                Long spring = insertTask(owner.getId(), null, "INDEPENDENT",
+                                "Đồ án Spring Boot", "Review Database API architecture",
+                                "IN_PROGRESS", LocalDate.of(2026, 8, 20), BASE_TIME);
+                Long react = insertTask(owner.getId(), null, "INDEPENDENT",
+                                "Lập trình JavaScript React", "Đối chiếu component",
+                                "NOT_STARTED", null, BASE_TIME.minusSeconds(1));
+                Long english = insertTask(owner.getId(), null, "INDEPENDENT",
+                                "Tiếng Anh Listening", null,
+                                "NOT_STARTED", null, BASE_TIME.minusSeconds(2));
+                Long literal = insertTask(owner.getId(), null, "INDEPENDENT",
+                                "sprng draft", null,
+                                "NOT_STARTED", null, BASE_TIME.minusSeconds(3));
+                organizeTask(spring, categoryId, tagId);
+                organizeTask(react, otherCategoryId, otherTagId);
+                insertTask(other.getId(), null, "INDEPENDENT", "Private Database", null,
+                                "IN_PROGRESS", LocalDate.of(2026, 8, 20), BASE_TIME);
+                Cookie token = login(owner.getEmail());
+
+                for (String query : new String[] {"SPRING", "databse", "architec"}) {
+                        assertThat(ids(getJson("/api/tasks?q=" + query
+                                        + "&categoryId=" + categoryId + "&tagId=" + tagId
+                                        + "&status=IN_PROGRESS&deadlineFrom=2026-08-20"
+                                        + "&deadlineTo=2026-08-20&sourceStatus=INDEPENDENT", token)))
+                                .containsExactly(spring);
+                }
+                assertThat(ids(getJsonWithQuery("do an", token))).containsExactly(spring);
+                for (String query : new String[] {"lap trinh", "javscript", "recat", "doi chieu"}) {
+                        assertThat(ids(getJsonWithQuery(query, token))).containsExactly(react);
+                }
+                assertThat(ids(getJsonWithQuery("tieng anh", token))).containsExactly(english);
+                assertThat(ids(getJsonWithQuery("sprng", token))).containsExactly(literal);
+                assertThat(ids(getJsonWithQuery("sng", token))).isEmpty();
+                assertThat(ids(getJsonWithQuery("private", token))).isEmpty();
+                assertThat(ids(getJsonWithQuery("zzzzzz", token))).isEmpty();
+                JsonNode firstPage = getJson("/api/tasks?q=do&size=1&page=0", token);
+                JsonNode secondPage = getJson("/api/tasks?q=do&size=1&page=1", token);
+                assertThat(firstPage.get("totalElements").longValue()).isEqualTo(2);
+                assertThat(ids(firstPage)).containsExactly(spring);
+                assertThat(ids(secondPage)).containsExactly(react);
+        }
+
+        @Test
         void organizationFiltersAreOwnershipSafeAndNewEnumsAndSortsAreValidated() throws Exception {
                 Account owner = createAccount("task-v2-validation-owner@example.com");
                 Account other = createAccount("task-v2-validation-other@example.com");

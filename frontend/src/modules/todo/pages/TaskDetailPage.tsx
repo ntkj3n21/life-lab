@@ -731,7 +731,7 @@ export function TaskDetailPage() {
               }`}
             >
               <p className="text-[11px] font-medium uppercase tracking-wide text-(--text-muted)">
-                Source context
+                Original context
               </p>
 
               {task.sourceStatus ===
@@ -880,7 +880,7 @@ export function TaskDetailPage() {
                     {formatTaskSourceLabel(task)}
                   </h2>
                   <p className="mt-2 text-sm leading-6 text-(--danger-text)">
-                    This Task was preserved after its original Note was deleted.
+                    The original Note was deleted. This Task remains.
                   </p>
                 </>
               ) : (
@@ -889,7 +889,7 @@ export function TaskDetailPage() {
                     {formatTaskSourceLabel(task)}
                   </h2>
                   <p className="mt-2 text-sm text-(--text-muted)">
-                    Created without a source note.
+                    Created without a Note.
                   </p>
                 </>
               )}
@@ -927,11 +927,8 @@ export function TaskDetailPage() {
         description={
           task?.sourceStatus ===
           "HAS_SOURCE"
-            ? sourceNote?.sourceType ===
-              "YOUTUBE"
-              ? "Deleting this Task does not delete its source Note or YouTube source."
-              : "Deleting this Task does not delete its source Note or exact source record."
-            : "This permanently deletes the Task."
+            ? "This deletes the Task, not its Note or media."
+            : "This deletes the Task."
         }
         confirmLabel="Delete Task"
         isBusy={isMutating}

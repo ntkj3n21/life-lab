@@ -25,6 +25,7 @@ if ([string]::IsNullOrWhiteSpace($AudioFixturePath)) {
 }
 
 . (Join-Path $PSScriptRoot 'A2-Database.ps1')
+. (Join-Path $PSScriptRoot 'A2-VideoOrganization.ps1')
 & (Join-Path $PSScriptRoot 'Test-A2Artifacts.ps1') -ArtifactDirectory $ArtifactDirectory -Quiet | Out-Null
 
 $snapshot = Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $ArtifactDirectory 'a2-source-snapshot.json') | ConvertFrom-Json
@@ -128,10 +129,12 @@ if (
 }
 
 $builder = [System.Text.StringBuilder]::new()
+[void]$builder.AppendLine((Get-A2VideoOrganizationSql `
+    -Sources $snapshot.sources -Notes $notes))
 [void]$builder.AppendLine(@'
-CREATE TEMP TABLE a2_expected_sources(fixture_key text primary key,role text,youtube_video_id text unique,duration_seconds integer,shared boolean,has_vtt boolean);
+CREATE TEMP TABLE a2_expected_sources(fixture_key text primary key,role text,youtube_video_id text unique,duration_seconds integer,shared boolean,has_vtt boolean,title text,source_url text);
 CREATE TEMP TABLE a2_expected_watch(fixture_key text primary key,valid_count integer,invalid_count integer);
-CREATE TEMP TABLE a2_expected_notes(fixture_key text,note_no integer,youtube_video_id text,timestamp_seconds integer,vtt_track text,cue_start_seconds integer,primary key(fixture_key,note_no));
+CREATE TEMP TABLE a2_expected_notes(fixture_key text,note_no integer,youtube_video_id text,content text,timestamp_seconds integer,vtt_track text,cue_start_seconds integer,primary key(fixture_key,note_no));
 CREATE TEMP TABLE a2_expected_links(fixture_key text,tag_name text,primary key(fixture_key,tag_name));
 CREATE TEMP TABLE a2_expected_images (
     fixture_key TEXT PRIMARY KEY,
@@ -160,12 +163,12 @@ CREATE TEMP TABLE a2_expected_audio (
 );
 '@)
 foreach ($s in $snapshot.sources) {
-    [void]$builder.AppendLine("INSERT INTO a2_expected_sources VALUES ($(ConvertTo-A2SqlLiteral $s.fixtureKey),$(ConvertTo-A2SqlLiteral $s.role),$(ConvertTo-A2SqlLiteral $s.youtubeVideoId),$([int]$s.durationSeconds),$(if($s.sharedWithA1){'true'}else{'false'}),$(if($s.hasVtt){'true'}else{'false'}));")
+    [void]$builder.AppendLine("INSERT INTO a2_expected_sources VALUES ($(ConvertTo-A2SqlLiteral $s.fixtureKey),$(ConvertTo-A2SqlLiteral $s.role),$(ConvertTo-A2SqlLiteral $s.youtubeVideoId),$([int]$s.durationSeconds),$(if($s.sharedWithA1){'true'}else{'false'}),$(if($s.hasVtt){'true'}else{'false'}),$(ConvertTo-A2SqlLiteral $s.title),$(ConvertTo-A2SqlLiteral $s.sourceUrl));")
 }
 foreach ($w in $watch) { [void]$builder.AppendLine("INSERT INTO a2_expected_watch VALUES ($(ConvertTo-A2SqlLiteral $w.fixture_key),$([int]$w.valid_sessions),$([int]$w.invalid_sessions));") }
 foreach ($n in $notes) {
     $timestamp = if ($n.timestamp_seconds -eq '') { 'NULL' }else { [int]$n.timestamp_seconds }; $track = if ($n.vtt_track -eq '') { 'NULL' }else { ConvertTo-A2SqlLiteral $n.vtt_track }; $cue = if ($n.cue_start_seconds -eq '') { 'NULL' }else { [int]$n.cue_start_seconds }
-    [void]$builder.AppendLine("INSERT INTO a2_expected_notes VALUES ($(ConvertTo-A2SqlLiteral $n.fixture_key),$([int]$n.note_no),$(ConvertTo-A2SqlLiteral $n.youtube_video_id),$timestamp,$track,$cue);")
+    [void]$builder.AppendLine("INSERT INTO a2_expected_notes VALUES ($(ConvertTo-A2SqlLiteral $n.fixture_key),$([int]$n.note_no),$(ConvertTo-A2SqlLiteral $n.youtube_video_id),$(ConvertTo-A2SqlLiteral $n.content),$timestamp,$track,$cue);")
 }
 foreach ($l in $links) { [void]$builder.AppendLine("INSERT INTO a2_expected_links VALUES ($(ConvertTo-A2SqlLiteral $l.fixture_key),$(ConvertTo-A2SqlLiteral $l.tag));") }
 
@@ -258,7 +261,8 @@ foreach ($audio in $audioFixtures) {
     )
 }
 
-$sql = $builder.ToString() + "`n" + (Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $PSScriptRoot 'verify-a2.sql'))
+$curatedSql = Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $PSScriptRoot 'a2-curated-video.sql')
+$sql = $builder.ToString() + "`n" + $curatedSql + "`n" + (Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $PSScriptRoot 'verify-a2.sql'))
 $temporarySql = Join-Path ([System.IO.Path]::GetTempPath()) "life-lab-a2-verify-$([guid]::NewGuid().ToString('N')).sql"
 [System.IO.File]::WriteAllText($temporarySql, $sql, [System.Text.UTF8Encoding]::new($false))
 $database = Get-A2DatabaseConfig -EnvFile $EnvFile

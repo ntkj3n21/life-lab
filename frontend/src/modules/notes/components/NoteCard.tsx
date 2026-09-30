@@ -68,6 +68,7 @@ interface NoteCardProps {
   onDelete: (note: Note) => Promise<void>;
   onViewSource: (noteId: number) => Promise<void>;
   onCreateTask?: (note: Note) => void;
+  onManageTags?: (note: Note) => void;
   onEditOrganization?: (
     note: Note,
   ) => void;
@@ -92,6 +93,7 @@ export function NoteCard({
   onDelete,
   onViewSource,
   onCreateTask,
+  onManageTags,
   onEditOrganization,
   isOrganizationDisabled = false,
   isCreatingTask = false,
@@ -396,6 +398,7 @@ export function NoteCard({
                     ref={
                       workspaceActionsTriggerRef
                     }
+                    id={`workspace-note-actions-${variant}-${note.id}`}
                     type="button"
                     disabled={isMutating}
                     aria-label={`${
@@ -495,6 +498,22 @@ export function NoteCard({
                         </button>
                       )}
 
+                      {onManageTags && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setWorkspaceActionsOpen(false);
+                            onManageTags(note);
+                          }}
+                          disabled={isMutating}
+                          aria-label={`Manage tags for Note ${note.id}`}
+                          className="flex h-10 w-10 items-center justify-center rounded-lg text-(--text-muted) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40 xl:h-8 xl:w-8"
+                          title="Manage tags"
+                        >
+                          <Tags size={14} aria-hidden="true" />
+                        </button>
+                      )}
+
                       <button
                         type="button"
                         onClick={() => {
@@ -575,25 +594,6 @@ export function NoteCard({
                 </div>
 
                 <div className="flex flex-wrap justify-end gap-2">
-                  {onOpenDetail && (
-                    <button
-                      type="button"
-                      onClick={() =>
-                        onOpenDetail(
-                          note.id,
-                        )
-                      }
-                      disabled={isMutating}
-                      className="flex items-center gap-1.5 rounded-lg border border-(--border) px-2 py-1 text-xs text-(--text-secondary) hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
-                    >
-                      <Eye
-                        size={12}
-                        aria-hidden="true"
-                      />
-                      Details
-                    </button>
-                  )}
-
                   <button
                     type="button"
                     onClick={() =>
@@ -602,7 +602,7 @@ export function NoteCard({
                       )
                     }
                     disabled={isMutating}
-                    className="rounded-lg border border-(--border) px-2 py-1 text-xs text-(--text-secondary) hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
+                    className="rounded-lg border border-(--border-strong) bg-(--surface) px-2 py-1 text-xs font-medium text-(--text-primary) hover:bg-(--surface-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
                   >
                     Go to {sourceLabel}
                   </button>
@@ -621,7 +621,7 @@ export function NoteCard({
                       aria-busy={
                         isCreatingTask
                       }
-                      className="flex items-center gap-1.5 rounded-lg border border-(--border) px-2 py-1 text-xs text-(--text-secondary) hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
+                      className="flex items-center gap-1.5 rounded-lg bg-(--primary-bg) px-2 py-1 text-xs font-medium text-(--primary-text) hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
                     >
                       <ListTodo
                         size={12}
@@ -645,13 +645,25 @@ export function NoteCard({
                         isMutating ||
                         isOrganizationDisabled
                       }
-                      className="flex items-center gap-1.5 rounded-lg border border-(--border) px-2 py-1 text-xs text-(--text-secondary) hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
+                      className="flex items-center gap-1.5 rounded-lg border border-(--border-strong) bg-(--surface) px-2 py-1 text-xs font-medium text-(--text-primary) hover:bg-(--surface-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
                     >
                       <FolderPen
                         size={12}
                         aria-hidden="true"
                       />
                       Organize
+                    </button>
+                  )}
+
+                  {onOpenDetail && (
+                    <button
+                      type="button"
+                      onClick={() => onOpenDetail(note.id)}
+                      disabled={isMutating}
+                      className="flex items-center gap-1.5 rounded-lg px-2 py-1 text-xs text-(--text-muted) hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
+                    >
+                      <Eye size={12} aria-hidden="true" />
+                      Details
                     </button>
                   )}
 

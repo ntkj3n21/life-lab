@@ -5,6 +5,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -37,6 +39,8 @@ import com.lifelab.source.audio.repository.AudioSourceRepository;
 import com.lifelab.source.audio.repository.LibraryAudioRepository;
 import com.lifelab.source.image.repository.ImageSourceRepository;
 import com.lifelab.source.image.repository.LibraryImageRepository;
+import com.lifelab.video.domain.Tag;
+import com.lifelab.video.repository.TagRepository;
 
 import jakarta.servlet.http.Cookie;
 import tools.jackson.databind.JsonNode;
@@ -92,6 +96,9 @@ class SourceLibraryApiIntegrationTest {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    private TagRepository tagRepository;
 
     private final Path storagePath = Path.of("target/test-image-storage").toAbsolutePath();
     private final Path audioStoragePath = Path.of("target/test-audio-storage").toAbsolutePath();
@@ -519,6 +526,223 @@ class SourceLibraryApiIntegrationTest {
 
         assertThat(imageSourceRepository.count()).isZero();
         assertThat(audioSourceRepository.count()).isZero();
+    }
+
+    @Test
+    void imagePersonalMetadataSearchTagsAndFiltersRemainOwned() throws Exception {
+        Account owner = createAccount("image-owner@example.com");
+        Account other = createAccount("image-other@example.com");
+        Cookie ownerToken = login(owner.getEmail());
+        Cookie otherToken = login(other.getEmail());
+        CsrfExchange ownerCsrf = fetchCsrf(ownerToken);
+        CsrfExchange otherCsrf = fetchCsrf(otherToken);
+        JsonNode image = responseBody(postJson("/api/library/images/url",
+                "{\"url\":\"https://example.com/first.png\"}", ownerToken, ownerCsrf)
+                .andExpect(status().isCreated()).andReturn());
+        JsonNode second = responseBody(postJson("/api/library/images/url",
+                "{\"url\":\"https://example.com/second.png\"}", ownerToken, ownerCsrf)
+                .andExpect(status().isCreated()).andReturn());
+        long imageId = image.get("id").longValue();
+        long sourceId = image.get("sourceId").longValue();
+        Tag ownedTag = tagRepository.saveAndFlush(Tag.create(owner, "Research", "research", OffsetDateTime.now()));
+        Tag foreignTag = tagRepository.saveAndFlush(Tag.create(other, "Private", "private", OffsetDateTime.now()));
+
+        mockMvc.perform(patch("/api/library/images/{id}", imageId)
+                        .cookie(ownerToken, ownerCsrf.cookie())
+                        .header(ownerCsrf.headerName(), ownerCsrf.token())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"title\":\"Phân tích thuật toán Đặc biệt\",\"personalDescription\":\"Ghi chú nghiên cứu\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value("Phân tích thuật toán Đặc biệt"))
+                .andExpect(jsonPath("$.personalDescription").value("Ghi chú nghiên cứu"));
+        assertThat(imageSourceRepository.findById(sourceId).orElseThrow().getExternalUrl())
+                .isEqualTo("https://example.com/first.png");
+        mockMvc.perform(patch("/api/library/images/{id}", imageId)
+                        .cookie(otherToken, otherCsrf.cookie())
+                        .header(otherCsrf.headerName(), otherCsrf.token())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"title\":\"Stolen\"}"))
+                .andExpect(status().isNotFound());
+        mockMvc.perform(put("/api/library/images/{id}/tags/{tagId}", imageId, ownedTag.getId())
+                        .cookie(ownerToken, ownerCsrf.cookie())
+                        .header(ownerCsrf.headerName(), ownerCsrf.token()))
+                .andExpect(status().isNoContent());
+        mockMvc.perform(put("/api/library/images/{id}/tags/{tagId}", imageId, ownedTag.getId())
+                        .cookie(ownerToken, ownerCsrf.cookie())
+                        .header(ownerCsrf.headerName(), ownerCsrf.token()))
+                .andExpect(status().isNoContent());
+        assertThat(jdbcTemplate.queryForObject("SELECT count(*) FROM library_image_tags WHERE library_image_id = ?", Integer.class, imageId)).isEqualTo(1);
+        mockMvc.perform(put("/api/library/images/{id}/tags/{tagId}", imageId, foreignTag.getId())
+                        .cookie(ownerToken, ownerCsrf.cookie())
+                        .header(ownerCsrf.headerName(), ownerCsrf.token()))
+                .andExpect(status().isNotFound());
+        mockMvc.perform(get("/api/library/images").queryParam("q", "phan tich")
+                        .cookie(ownerToken))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.totalElements").value(1))
+                .andExpect(jsonPath("$.items[0].id").value(imageId));
+        mockMvc.perform(get("/api/library/images").queryParam("q", "DAC BIET")
+                        .cookie(ownerToken))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.totalElements").value(1));
+        mockMvc.perform(get("/api/library/images").queryParam("q", "nghien cuu")
+                        .cookie(ownerToken))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.totalElements").value(1));
+        mockMvc.perform(get("/api/library/images").queryParam("q", "research")
+                        .cookie(ownerToken))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.totalElements").value(1));
+        mockMvc.perform(get("/api/library/images").queryParam("q", "not-found")
+                        .cookie(ownerToken))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.totalElements").value(0));
+        mockMvc.perform(get("/api/library/images").queryParam("q", "phan tich")
+                        .cookie(otherToken))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.totalElements").value(0));
+        mockMvc.perform(get("/api/library/images").queryParam("tagId", ownedTag.getId().toString())
+                        .cookie(ownerToken))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.totalElements").value(1))
+                .andExpect(jsonPath("$.items[0].tags[0].id").value(ownedTag.getId()));
+        mockMvc.perform(get("/api/library/images").queryParam("tagId", foreignTag.getId().toString())
+                        .cookie(ownerToken)).andExpect(status().isNotFound());
+        jdbcTemplate.update("INSERT INTO notes (account_id, source_type, image_source_id, content, created_at, updated_at) VALUES (?, 'IMAGE', ?, 'Image note', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)", owner.getId(), sourceId);
+        mockMvc.perform(get("/api/library/images").queryParam("hasNotes", "true")
+                        .queryParam("origin", "EXTERNAL").cookie(ownerToken))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.totalElements").value(1))
+                .andExpect(jsonPath("$.items[0].id").value(imageId));
+        mockMvc.perform(get("/api/library/images").queryParam("tagId", ownedTag.getId().toString())
+                        .queryParam("hasNotes", "true").queryParam("origin", "EXTERNAL").cookie(ownerToken))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.totalElements").value(1));
+        mockMvc.perform(get("/api/library/images").queryParam("tagId", ownedTag.getId().toString())
+                        .queryParam("hasNotes", "false").cookie(ownerToken))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.totalElements").value(0));
+        mockMvc.perform(get("/api/library/images").queryParam("hasNotes", "false")
+                        .cookie(ownerToken))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.items[0].id").value(second.get("id").longValue()));
+        jdbcTemplate.update("UPDATE library_images SET added_at = ? WHERE id = ?",
+                OffsetDateTime.parse("2024-01-01T00:00:00Z"), imageId);
+        jdbcTemplate.update("UPDATE library_images SET added_at = ? WHERE id = ?",
+                OffsetDateTime.parse("2025-01-01T00:00:00Z"), second.get("id").longValue());
+        mockMvc.perform(get("/api/library/images").queryParam("addedFrom", "2024-01-01")
+                        .queryParam("addedTo", "2024-01-01").cookie(ownerToken))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.totalElements").value(1))
+                .andExpect(jsonPath("$.items[0].id").value(imageId));
+        mockMvc.perform(get("/api/library/images").queryParam("sortBy", "addedAt")
+                        .queryParam("sortDirection", "asc").cookie(ownerToken))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.items[0].id").value(imageId));
+        mockMvc.perform(get("/api/library/images").queryParam("sortBy", "title")
+                        .queryParam("sortDirection", "asc").cookie(ownerToken))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.items[0].id").value(second.get("id").longValue()));
+        mockMvc.perform(delete("/api/library/images/{id}/tags/{tagId}", imageId, ownedTag.getId())
+                        .cookie(ownerToken, ownerCsrf.cookie())
+                        .header(ownerCsrf.headerName(), ownerCsrf.token()))
+                .andExpect(status().isNoContent());
+        mockMvc.perform(get("/api/library/images").queryParam("tagId", ownedTag.getId().toString())
+                        .cookie(ownerToken)).andExpect(jsonPath("$.totalElements").value(0));
+        mockMvc.perform(put("/api/library/images/{id}/tags/{tagId}", imageId, ownedTag.getId())
+                        .cookie(ownerToken, ownerCsrf.cookie())
+                        .header(ownerCsrf.headerName(), ownerCsrf.token()))
+                .andExpect(status().isNoContent());
+        mockMvc.perform(get("/api/tags/{id}/delete-impact", ownedTag.getId()).cookie(ownerToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.libraryImageCountToDetach").value(1))
+                .andExpect(jsonPath("$.libraryImagesPreserved").value(true));
+        mockMvc.perform(delete("/api/tags/{id}", ownedTag.getId())
+                        .cookie(ownerToken, ownerCsrf.cookie())
+                        .header(ownerCsrf.headerName(), ownerCsrf.token()))
+                .andExpect(status().isNoContent());
+        mockMvc.perform(get("/api/library/images/{id}", imageId).cookie(ownerToken))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.tags").isEmpty());
+    }
+
+    @Test
+    void audioPersonalMetadataSearchTagsDatesAndSortingRemainOwned() throws Exception {
+        Account owner = createAccount("audio-owner@example.com");
+        Account other = createAccount("audio-other@example.com");
+        Cookie token = login(owner.getEmail());
+        Cookie otherToken = login(other.getEmail());
+        CsrfExchange csrf = fetchCsrf(token);
+        CsrfExchange otherCsrf = fetchCsrf(otherToken);
+        JsonNode first = responseBody(postJson("/api/library/audio/url",
+                "{\"url\":\"https://example.com/one.mp3\"}", token, csrf)
+                .andExpect(status().isCreated()).andReturn());
+        JsonNode second = responseBody(postJson("/api/library/audio/url",
+                "{\"url\":\"https://example.com/two.mp3\"}", token, csrf)
+                .andExpect(status().isCreated()).andReturn());
+        long firstId = first.get("id").longValue();
+        long sourceId = first.get("sourceId").longValue();
+        Tag ownedTag = tagRepository.saveAndFlush(Tag.create(owner, "Lecture", "lecture", OffsetDateTime.now()));
+        Tag foreignTag = tagRepository.saveAndFlush(Tag.create(other, "Private", "private", OffsetDateTime.now()));
+        mockMvc.perform(patch("/api/library/audio/{id}", firstId)
+                        .cookie(token, csrf.cookie()).header(csrf.headerName(), csrf.token())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"title\":\"Đường đi ngắn nhất\",\"personalDescription\":\"Phân tích thuật toán\"}"))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.personalDescription").value("Phân tích thuật toán"));
+        assertThat(audioSourceRepository.findById(sourceId).orElseThrow().getExternalUrl())
+                .isEqualTo("https://example.com/one.mp3");
+        mockMvc.perform(patch("/api/library/audio/{id}", firstId)
+                        .cookie(otherToken, otherCsrf.cookie()).header(otherCsrf.headerName(), otherCsrf.token())
+                        .contentType(MediaType.APPLICATION_JSON).content("{\"title\":\"Stolen\"}"))
+                .andExpect(status().isNotFound());
+        mockMvc.perform(put("/api/library/audio/{id}/tags/{tagId}", firstId, ownedTag.getId())
+                        .cookie(token, csrf.cookie()).header(csrf.headerName(), csrf.token()))
+                .andExpect(status().isNoContent());
+        mockMvc.perform(put("/api/library/audio/{id}/tags/{tagId}", firstId, ownedTag.getId())
+                        .cookie(token, csrf.cookie()).header(csrf.headerName(), csrf.token()))
+                .andExpect(status().isNoContent());
+        assertThat(jdbcTemplate.queryForObject("SELECT count(*) FROM library_audio_tags WHERE library_audio_id = ?", Integer.class, firstId)).isEqualTo(1);
+        mockMvc.perform(put("/api/library/audio/{id}/tags/{tagId}", firstId, foreignTag.getId())
+                        .cookie(token, csrf.cookie()).header(csrf.headerName(), csrf.token()))
+                .andExpect(status().isNotFound());
+        for (String query : new String[] {"duong di", "DUONG DI", "thuat toan", "one.mp3", "lecture"}) {
+            mockMvc.perform(get("/api/library/audio").queryParam("q", query).cookie(token))
+                    .andExpect(status().isOk()).andExpect(jsonPath("$.totalElements").value(1))
+                    .andExpect(jsonPath("$.items[0].id").value(firstId));
+        }
+        mockMvc.perform(get("/api/library/audio").queryParam("q", "duong di").cookie(otherToken))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.totalElements").value(0));
+        mockMvc.perform(get("/api/library/audio").queryParam("tagId", ownedTag.getId().toString()).cookie(token))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.totalElements").value(1));
+        mockMvc.perform(get("/api/library/audio").queryParam("tagId", foreignTag.getId().toString()).cookie(token))
+                .andExpect(status().isNotFound());
+        jdbcTemplate.update("INSERT INTO notes (account_id, source_type, audio_source_id, content, created_at, updated_at) VALUES (?, 'AUDIO', ?, 'Audio note', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)", owner.getId(), sourceId);
+        mockMvc.perform(get("/api/library/audio").queryParam("hasNotes", "true")
+                        .queryParam("origin", "EXTERNAL").cookie(token))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.totalElements").value(1))
+                .andExpect(jsonPath("$.items[0].id").value(firstId));
+        mockMvc.perform(get("/api/library/audio").queryParam("tagId", ownedTag.getId().toString())
+                        .queryParam("hasNotes", "true").queryParam("origin", "EXTERNAL").cookie(token))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.totalElements").value(1));
+        mockMvc.perform(get("/api/library/audio").queryParam("tagId", ownedTag.getId().toString())
+                        .queryParam("hasNotes", "false").cookie(token))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.totalElements").value(0));
+        jdbcTemplate.update("UPDATE library_audio SET added_at = ? WHERE id = ?",
+                OffsetDateTime.parse("2024-01-01T00:00:00Z"), firstId);
+        jdbcTemplate.update("UPDATE library_audio SET added_at = ? WHERE id = ?",
+                OffsetDateTime.parse("2025-01-01T00:00:00Z"), second.get("id").longValue());
+        mockMvc.perform(get("/api/library/audio").queryParam("addedFrom", "2024-01-01")
+                        .queryParam("addedTo", "2024-01-01").cookie(token))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.totalElements").value(1))
+                .andExpect(jsonPath("$.items[0].id").value(firstId));
+        mockMvc.perform(get("/api/library/audio").queryParam("sortBy", "addedAt")
+                        .queryParam("sortDirection", "asc").cookie(token))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.items[0].id").value(firstId));
+        mockMvc.perform(get("/api/library/audio").queryParam("sortBy", "title")
+                        .queryParam("sortDirection", "asc").cookie(token))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.items[0].id").value(second.get("id").longValue()));
+        mockMvc.perform(delete("/api/library/audio/{id}/tags/{tagId}", firstId, ownedTag.getId())
+                        .cookie(token, csrf.cookie()).header(csrf.headerName(), csrf.token()))
+                .andExpect(status().isNoContent());
+        mockMvc.perform(get("/api/library/audio").queryParam("tagId", ownedTag.getId().toString()).cookie(token))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.totalElements").value(0));
+        mockMvc.perform(put("/api/library/audio/{id}/tags/{tagId}", firstId, ownedTag.getId())
+                        .cookie(token, csrf.cookie()).header(csrf.headerName(), csrf.token()))
+                .andExpect(status().isNoContent());
+        mockMvc.perform(get("/api/tags/{id}/delete-impact", ownedTag.getId()).cookie(token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.libraryAudioCountToDetach").value(1))
+                .andExpect(jsonPath("$.libraryAudioPreserved").value(true));
+        mockMvc.perform(delete("/api/tags/{id}", ownedTag.getId())
+                        .cookie(token, csrf.cookie()).header(csrf.headerName(), csrf.token()))
+                .andExpect(status().isNoContent());
+        mockMvc.perform(get("/api/library/audio/{id}", firstId).cookie(token))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.tags").isEmpty());
     }
 
     private Account createAccount(String email) {

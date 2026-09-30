@@ -2,7 +2,6 @@ import {
   ImagePlus,
   LoaderCircle,
   Plus,
-  RefreshCw,
   Search,
   Trash2,
   Upload,
@@ -21,8 +20,14 @@ import { ContextSummary } from "../../../components/context/ContextSummary";
 import { ConfirmDialog } from "../../../components/ui/ConfirmDialog";
 import { ApiError } from "../../../lib/api";
 import { useContextStore } from "../../../stores/contextStore";
+import { useTagStore } from "../../../stores/tagStore";
 import { LibraryMediaNavigation } from "../../media/components/LibraryMediaNavigation";
 import { LibraryPagination } from "../../media/components/LibraryPagination";
+import { MediaLibraryFilters } from "../../media/components/MediaLibraryFilters";
+import { DEFAULT_MEDIA_FILTER, hasRestrictiveMediaFilters, type MediaFilter } from "../../media/components/mediaFilterState";
+import { MediaLibraryItemDetails } from "../../media/components/MediaLibraryItemDetails";
+import { TagManagerDialog } from "../../media/components/TagManagerDialog";
+import { useDebouncedSearch } from "../../media/hooks/useDebouncedSearch";
 import { ImagePreview } from "../components/ImagePreview";
 import {
   addExternalImage,
@@ -30,6 +35,9 @@ import {
   getLibraryImage,
   getLibraryImageTitle,
   removeLibraryImage,
+  updateLibraryImage,
+  attachTagToImage,
+  detachTagFromImage,
   uploadImage,
   type LibraryImage,
 } from "../services/imageApi";
@@ -106,6 +114,8 @@ export function ImageLibraryPage() {
 
   const uploadInputRef = useRef<HTMLInputElement | null>(null);
 
+  const listRequestId = useRef(0);
+
   const [images, setImages] = useState<LibraryImage[]>([]);
 
   const [activeImage, setActiveImage] = useState<LibraryImage | null>(null);
@@ -124,7 +134,12 @@ export function ImageLibraryPage() {
 
   const [searchText, setSearchText] = useState("");
 
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, commitSearch] = useDebouncedSearch(searchText);
+
+  const [filters, setFilters] = useState<MediaFilter>(DEFAULT_MEDIA_FILTER);
+
+  const tags = useTagStore((state) => state.tags);
+  const loadTags = useTagStore((state) => state.loadTags);
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -145,6 +160,8 @@ export function ImageLibraryPage() {
   const [activeLoadError, setActiveLoadError] = useState<string | null>(null);
 
   const [actionError, setActionError] = useState<string | null>(null);
+  const [urlError, setUrlError] = useState<string | null>(null);
+  const [uploadError, setUploadError] = useState<string | null>(null);
 
   const [isAddPanelOpen, setIsAddPanelOpen] = useState(false);
 
@@ -154,9 +171,15 @@ export function ImageLibraryPage() {
 
   const setActiveContext = useContextStore((state) => state.setActiveContext);
 
+  useEffect(() => {
+    void loadTags().catch(() => {});
+  }, [loadTags]);
+
   const loadImages = useCallback(
     async (targetPage: number) => {
       await Promise.resolve();
+
+      const requestId = ++listRequestId.current;
 
       setIsLoading(true);
       setLoadError(null);
@@ -166,7 +189,10 @@ export function ImageLibraryPage() {
           page: targetPage,
           size: PAGE_SIZE,
           q: searchQuery || undefined,
+          ...filters,
         });
+
+        if (requestId !== listRequestId.current) return;
 
         if (
           targetPage > 0 &&
@@ -184,12 +210,12 @@ export function ImageLibraryPage() {
 
         setTotalElements(response.totalElements);
       } catch (error) {
-        setLoadError(getErrorMessage(error));
+        if (requestId === listRequestId.current) setLoadError(getErrorMessage(error));
       } finally {
-        setIsLoading(false);
+        if (requestId === listRequestId.current) setIsLoading(false);
       }
     },
-    [searchQuery],
+    [searchQuery, filters],
   );
 
   useEffect(() => {
@@ -336,13 +362,50 @@ export function ImageLibraryPage() {
     event.preventDefault();
 
     setPage(0);
-    setSearchQuery(searchText.trim());
+    commitSearch(searchText);
   }
 
   function handleClearSearch() {
     setSearchText("");
-    setSearchQuery("");
+    commitSearch("");
+    listRequestId.current += 1;
     setPage(0);
+  }
+
+  function changeFilters(next: MediaFilter) {
+    listRequestId.current += 1;
+    setFilters(next);
+    setPage(0);
+  }
+
+  async function saveDetails(id: number, input: { title: string | null; personalDescription: string | null }) {
+    const updated = await updateLibraryImage(id, input);
+    setImages((current) => current.map((image) => image.id === id ? updated : image));
+    if (validRouteImageId === id) {
+      setActiveImage(updated);
+      const context = useContextStore.getState().activeContext;
+      if (context?.entityType === "image" && context.entityId === String(id)) {
+        setActiveContext({ ...context, title: getWorkspaceTitle(updated) });
+      }
+    }
+    await loadImages(page);
+  }
+
+  async function changeItemTag(id: number, tagId: number, attach: boolean) {
+    if (attach) await attachTagToImage(id, tagId);
+    else await detachTagFromImage(id, tagId);
+    const updated = await getLibraryImage(id);
+    setImages((current) => current.map((image) => image.id === id ? updated : image));
+    if (validRouteImageId === id) setActiveImage(updated);
+    await loadImages(page);
+  }
+
+  function handleCatalogChange(change: { type: "created" | "renamed" | "deleted"; tag: { id: number } }) {
+    if (change.type === "deleted" && filters.tagIds?.includes(change.tag.id)) {
+      changeFilters({ ...filters, tagIds: filters.tagIds.filter((id) => id !== change.tag.id) });
+    } else {
+      void loadImages(page);
+    }
   }
 
   async function handleAddUrl(event: FormEvent<HTMLFormElement>) {
@@ -355,7 +418,7 @@ export function ImageLibraryPage() {
     }
 
     setIsAddingUrl(true);
-    setActionError(null);
+    setUrlError(null);
 
     try {
       await addExternalImage({
@@ -373,7 +436,7 @@ export function ImageLibraryPage() {
         setPage(0);
       }
     } catch (error) {
-      setActionError(getErrorMessage(error));
+      setUrlError(getErrorMessage(error));
     } finally {
       setIsAddingUrl(false);
     }
@@ -385,7 +448,7 @@ export function ImageLibraryPage() {
     }
 
     setIsUploading(true);
-    setActionError(null);
+    setUploadError(null);
 
     try {
       await uploadImage(file, uploadTitle.trim() || null);
@@ -400,7 +463,7 @@ export function ImageLibraryPage() {
         setPage(0);
       }
     } catch (error) {
-      setActionError(getErrorMessage(error));
+      setUploadError(getErrorMessage(error));
     } finally {
       setIsUploading(false);
 
@@ -504,8 +567,7 @@ export function ImageLibraryPage() {
                 </h3>
 
                 <p className="mt-2 text-sm leading-6 text-(--text-secondary)">
-                  Choose an image from your Library to start studying and taking
-                  notes.
+                  Choose an image from your Library to view it and take notes.
                 </p>
 
                 {images[0] && (
@@ -515,7 +577,7 @@ export function ImageLibraryPage() {
                     className="mx-auto mt-5 flex items-center gap-2 rounded-xl bg-(--primary-bg) px-4 py-2 text-sm font-medium text-(--primary-text) hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)"
                   >
                     <ImagePlus size={16} aria-hidden="true" />
-                    Open first image
+                    Open an image
                   </button>
                 )}
               </div>
@@ -537,7 +599,7 @@ export function ImageLibraryPage() {
                 </h3>
 
                 <p className="mt-2 text-sm leading-6 text-(--text-secondary)">
-                  Loading the saved image context.
+                  Loading image...
                 </p>
               </div>
             </div>
@@ -602,6 +664,16 @@ export function ImageLibraryPage() {
                 </div>
 
                 <div className="flex w-full items-center justify-end gap-1 sm:w-auto sm:shrink-0">
+                  {activeImage.origin === "EXTERNAL" && activeImage.url && (
+                    <a
+                      href={activeImage.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex h-10 shrink-0 items-center rounded-lg px-2.5 text-xs font-medium text-(--text-secondary) hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) sm:h-8"
+                    >
+                      Open original
+                    </a>
+                  )}
                   <button
                     type="button"
                     onClick={() => {
@@ -639,37 +711,6 @@ export function ImageLibraryPage() {
                   />
                 </div>
 
-                <div className="mt-3 flex flex-col gap-2 rounded-xl border border-(--border) bg-(--surface) p-3 text-sm sm:flex-row sm:items-center sm:justify-between">
-                  <div className="min-w-0 text-(--text-muted)">
-                    Added {formatDate(activeImage.addedAt)}
-                    {activeImage.origin === "UPLOAD" &&
-                      activeImage.originalFilename && (
-                        <>
-                          <span className="mx-2" aria-hidden="true">
-                            ·
-                          </span>
-
-                          <span
-                            title={activeImage.originalFilename}
-                            className="text-(--text-secondary)"
-                          >
-                            File: {activeImage.originalFilename}
-                          </span>
-                        </>
-                      )}
-                  </div>
-
-                  {activeImage.origin === "EXTERNAL" && activeImage.url && (
-                    <a
-                      href={activeImage.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="shrink-0 text-sm font-medium text-(--text-secondary) underline-offset-4 hover:text-(--text-primary) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)"
-                    >
-                      Open original
-                    </a>
-                  )}
-                </div>
               </div>
             </>
           ) : null}
@@ -694,7 +735,7 @@ export function ImageLibraryPage() {
               </h2>
 
               <p className="mt-1 text-sm text-(--text-muted)">
-                Your saved image study sources.
+                Your saved images.
               </p>
             </div>
 
@@ -709,6 +750,8 @@ export function ImageLibraryPage() {
                 type="button"
                 onClick={() => {
                   setActionError(null);
+                  setUrlError(null);
+                  setUploadError(null);
 
                   setIsAddPanelOpen((open) => !open);
                 }}
@@ -716,7 +759,7 @@ export function ImageLibraryPage() {
                 aria-controls="library-add-image-panel"
                 aria-label={isAddPanelOpen ? "Close add image" : "Add image"}
                 title={isAddPanelOpen ? "Close" : "Add image"}
-                className="flex h-10 items-center justify-center gap-1.5 rounded-lg border border-(--border) px-2.5 text-xs font-medium text-(--text-secondary) transition-colors hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) sm:h-8"
+                className="flex min-h-10 items-center justify-center gap-1.5 rounded-lg bg-(--primary-bg) px-3 text-xs font-medium text-(--primary-text) transition-colors hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)"
               >
                 {isAddPanelOpen ? (
                   <X size={14} aria-hidden="true" />
@@ -724,32 +767,18 @@ export function ImageLibraryPage() {
                   <Plus size={14} aria-hidden="true" />
                 )}
 
-                <span className="hidden sm:inline">
+                <span>
                   {isAddPanelOpen ? "Close" : "Add image"}
                 </span>
               </button>
 
-              <button
-                type="button"
-                onClick={() => void loadImages(page)}
-                disabled={isLoading}
-                aria-label="Refresh image library"
-                title="Refresh image library"
-                className="flex h-10 w-10 items-center justify-center rounded-lg border border-(--border) text-(--text-muted) transition-colors hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50 sm:h-8 sm:w-8"
-              >
-                <RefreshCw
-                  size={14}
-                  className={isLoading ? "animate-spin" : undefined}
-                  aria-hidden="true"
-                />
-              </button>
             </div>
           </div>
           <form
             onSubmit={handleSearch}
-            className="mb-4 flex flex-col gap-2 sm:flex-row"
+            className="mb-4 flex flex-wrap items-center gap-2"
           >
-            <div className="flex min-w-0 flex-1 items-center gap-2 rounded-lg border border-(--border) bg-(--app-bg) px-3 focus-within:border-(--border-strong) focus-within:ring-2 focus-within:ring-(--focus)">
+            <div className="flex min-w-[12rem] flex-1 items-center gap-2 rounded-lg border border-(--border) bg-(--app-bg) px-3 focus-within:border-(--border-strong) focus-within:ring-2 focus-within:ring-(--focus)">
               <Search
                 size={14}
                 className="shrink-0 text-(--text-muted)"
@@ -763,18 +792,18 @@ export function ImageLibraryPage() {
               <input
                 id="image-library-search"
                 value={searchText}
-                onChange={(event) => setSearchText(event.target.value)}
+                onChange={(event) => {
+                  listRequestId.current += 1;
+                  setSearchText(event.target.value);
+                  setPage(0);
+                }}
                 placeholder="Search images..."
                 className="min-w-0 flex-1 bg-transparent py-2 text-sm outline-none placeholder:text-(--text-faint)"
               />
             </div>
 
-            <button
-              type="submit"
-              className="min-h-10 rounded-lg border border-(--border) px-3 text-xs font-medium text-(--text-secondary) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) sm:min-h-9"
-            >
-              Search
-            </button>
+            <MediaLibraryFilters media="image" tags={tags} applied={filters} onChange={changeFilters} />
+            <TagManagerDialog onChange={handleCatalogChange} />
 
             {(searchText || searchQuery) && (
               <button
@@ -791,125 +820,65 @@ export function ImageLibraryPage() {
               id="library-add-image-panel"
               className="mb-3 rounded-xl border border-(--border) bg-(--app-bg) p-3"
             >
-              <div className="mb-3">
-                <h3 className="text-sm font-medium text-(--text-primary)">
-                  Add image
-                </h3>
-
-                <p className="mt-1 text-xs text-(--text-muted)">
-                  Add an image by URL or upload a JPG, PNG, or WEBP file from
-                  your device.
-                </p>
-              </div>
-
-              <div className="mt-3 border-t border-(--border) pt-3">
-                <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_auto]">
-                  <form
-                    onSubmit={handleAddUrl}
-                    className="grid min-w-0 gap-2 lg:grid-cols-[minmax(0,1fr)_minmax(180px,0.4fr)_auto]"
-                  >
-                    <label htmlFor="image-url" className="sr-only">
-                      External image URL
-                    </label>
-
-                    <input
-                      id="image-url"
-                      type="url"
-                      value={url}
-                      onChange={(event) => setUrl(event.target.value)}
-                      disabled={isAddingUrl || isUploading}
-                      placeholder="https://example.com/image.jpg"
-                      className="min-w-0 flex-1 rounded-lg border border-(--border) bg-(--surface) px-3 py-2 text-sm outline-none placeholder:text-(--text-faint) focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:opacity-50"
-                    />
-
-                    <label htmlFor="image-title" className="sr-only">
-                      Image title
-                    </label>
-
-                    <input
-                      id="image-title"
-                      value={externalTitle}
-                      onChange={(event) => setExternalTitle(event.target.value)}
-                      disabled={isAddingUrl || isUploading}
-                      maxLength={255}
-                      placeholder="Optional title"
-                      className="min-w-0 flex-1 rounded-lg border border-(--border) bg-(--surface) px-3 py-2 text-sm outline-none placeholder:text-(--text-faint) focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:opacity-50"
-                    />
-
-                    <button
-                      type="submit"
-                      disabled={!url.trim() || isAddingUrl || isUploading}
-                      className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg bg-(--primary-bg) px-3 text-xs font-medium text-(--primary-text) transition hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50 sm:min-h-9"
-                    >
-                      {isAddingUrl ? (
-                        <LoaderCircle
-                          size={14}
-                          className="animate-spin"
-                          aria-hidden="true"
-                        />
-                      ) : (
-                        <ImagePlus size={14} aria-hidden="true" />
-                      )}
-                      Add URL
-                    </button>
-                  </form>
-
-                  <div className="grid gap-2 sm:grid-cols-[minmax(180px,1fr)_auto]">
-                    <label htmlFor="image-upload-title" className="sr-only">
-                      Image title
-                    </label>
-
+              <h3 className="text-sm font-medium text-(--text-primary)">Add image</h3>
+              <section aria-labelledby="image-upload-heading" className="mt-3">
+                <h4 id="image-upload-heading" className="text-xs font-medium text-(--text-secondary)">Upload from device</h4>
+                <p className="mt-1 text-xs text-(--text-muted)">Supported formats: JPG, PNG, WebP.</p>
+                <div className="mt-2 grid min-w-0 gap-2 sm:grid-cols-[minmax(0,1fr)_auto]">
+                  <div>
+                    <label htmlFor="image-upload-title" className="mb-1 block text-xs text-(--text-secondary)">Title for uploaded image (optional)</label>
                     <input
                       id="image-upload-title"
                       value={uploadTitle}
                       onChange={(event) => setUploadTitle(event.target.value)}
                       disabled={isAddingUrl || isUploading}
                       maxLength={255}
-                      placeholder="Optional title"
-                      className="min-w-0 rounded-lg border border-(--border) bg-(--surface) px-3 py-2 text-sm outline-none placeholder:text-(--text-faint) focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:opacity-50"
+                      className="w-full min-w-0 rounded-lg border border-(--border) bg-(--surface) px-3 py-2 text-sm outline-none focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:opacity-50"
                     />
-
-                    <div>
-                      <input
-                        ref={uploadInputRef}
-                        id="image-upload"
-                        type="file"
-                        accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp"
-                        disabled={isAddingUrl || isUploading}
-                        onChange={(event) =>
-                          void handleUpload(event.target.files?.[0])
-                        }
-                        className="hidden"
-                      />
-
-                      <button
-                        type="button"
-                        onClick={() => uploadInputRef.current?.click()}
-                        disabled={isAddingUrl || isUploading}
-                        className="inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-lg border border-(--border) px-3 text-xs text-(--text-secondary) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50 sm:min-h-9"
-                      >
-                        {isUploading ? (
-                          <LoaderCircle
-                            size={14}
-                            className="animate-spin"
-                            aria-hidden="true"
-                          />
-                        ) : (
-                          <Upload size={14} aria-hidden="true" />
-                        )}
-
-                        {isUploading ? "Uploading..." : "Upload image"}
-                      </button>
-                    </div>
+                  </div>
+                  <div className="flex items-end">
+                    <input
+                      ref={uploadInputRef}
+                      id="image-upload"
+                      type="file"
+                      accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp"
+                      aria-label="Choose image to upload"
+                      disabled={isAddingUrl || isUploading}
+                      onChange={(event) => void handleUpload(event.target.files?.[0])}
+                      className="hidden"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => uploadInputRef.current?.click()}
+                      disabled={isAddingUrl || isUploading}
+                      className="inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-lg bg-(--primary-bg) px-3 text-xs font-medium text-(--primary-text) transition hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      {isUploading ? <LoaderCircle size={14} className="animate-spin" aria-hidden="true" /> : <Upload size={14} aria-hidden="true" />}
+                      {isUploading ? "Uploading..." : "Upload image"}
+                    </button>
                   </div>
                 </div>
+                {uploadError && <p role="alert" className="mt-2 text-sm text-(--danger-text)">{uploadError}</p>}
+              </section>
 
-                {actionError && (
-                  <p role="alert" className="mt-3 text-sm text-(--danger-text)">
-                    {actionError}
-                  </p>
-                )}
-              </div>
+              <details className="mt-4 border-t border-(--border) pt-3 group">
+                <summary className="min-h-9 cursor-pointer text-xs font-medium text-(--text-secondary) outline-none focus-visible:ring-2 focus-visible:ring-(--focus)">Add from URL</summary>
+                <form onSubmit={handleAddUrl} className="mt-2 grid min-w-0 gap-2 sm:grid-cols-2">
+                  <div>
+                    <label htmlFor="image-url" className="mb-1 block text-xs text-(--text-secondary)">Image URL</label>
+                    <input id="image-url" type="url" value={url} onChange={(event) => setUrl(event.target.value)} disabled={isAddingUrl || isUploading} placeholder="https://example.com/image.jpg" className="w-full min-w-0 rounded-lg border border-(--border) bg-(--surface) px-3 py-2 text-sm outline-none focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:opacity-50" />
+                  </div>
+                  <div>
+                    <label htmlFor="image-title" className="mb-1 block text-xs text-(--text-secondary)">Title for URL image (optional)</label>
+                    <input id="image-title" value={externalTitle} onChange={(event) => setExternalTitle(event.target.value)} disabled={isAddingUrl || isUploading} maxLength={255} className="w-full min-w-0 rounded-lg border border-(--border) bg-(--surface) px-3 py-2 text-sm outline-none focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:opacity-50" />
+                  </div>
+                  <button type="submit" disabled={!url.trim() || isAddingUrl || isUploading} className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-(--border) px-3 text-xs font-medium text-(--text-secondary) transition hover:bg-(--surface-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50 sm:col-span-2 sm:justify-self-start">
+                    {isAddingUrl ? <LoaderCircle size={14} className="animate-spin" aria-hidden="true" /> : <ImagePlus size={14} aria-hidden="true" />}
+                    {isAddingUrl ? "Adding..." : "Add image from URL"}
+                  </button>
+                  {urlError && <p role="alert" className="text-sm text-(--danger-text) sm:col-span-2">{urlError}</p>}
+                </form>
+              </details>
             </div>
           )}
 
@@ -948,21 +917,27 @@ export function ImageLibraryPage() {
               />
 
               <h3 className="mt-3 text-sm font-medium text-(--text-primary)">
-                No images yet
+                {totalElements === 0 && !searchQuery && !hasRestrictiveMediaFilters(filters) ? "No images yet" : "No matching images"}
               </h3>
 
               <p className="mt-1 text-sm text-(--text-muted)">
-                Add an image by URL or upload a JPG, PNG, or WEBP file from your
-                device.
+                {totalElements === 0 && !searchQuery && !hasRestrictiveMediaFilters(filters)
+                  ? "Add an image by URL or upload a JPG, PNG, or WEBP file from your device."
+                  : "Try changing your search or filters."}
               </p>
 
               <button
                 type="button"
-                onClick={() => setIsAddPanelOpen(true)}
+                onClick={() => {
+                  if (searchQuery || hasRestrictiveMediaFilters(filters)) {
+                    handleClearSearch();
+                    changeFilters(DEFAULT_MEDIA_FILTER);
+                  } else setIsAddPanelOpen(true);
+                }}
                 className="mt-4 inline-flex min-h-9 items-center justify-center gap-2 rounded-lg border border-(--border) px-3 text-xs font-medium text-(--text-secondary) transition hover:bg-(--surface-hover) hover:text-(--text-primary)"
               >
                 <Plus size={14} aria-hidden="true" />
-                Add image
+                {searchQuery || hasRestrictiveMediaFilters(filters) ? "Clear search and filters" : "Add image"}
               </button>
             </div>
           ) : (
@@ -1035,25 +1010,20 @@ export function ImageLibraryPage() {
                         )}
                       </div>
 
-                      <div className="mt-3 flex items-center justify-between gap-2">
-                        <span className="min-w-0 truncate text-[11px] text-(--text-muted)">
-                          Added {formatDate(image.addedAt)}
-                        </span>
-
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setActionError(null);
-
-                            setRemovingImage(image);
-                          }}
-                          aria-label={`Remove ${title} from Library`}
-                          title="Remove from Library"
-                          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-(--text-muted) transition-colors hover:bg-(--danger-surface) hover:text-(--danger-text) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) sm:h-7 sm:w-7"
-                        >
-                          <Trash2 size={14} aria-hidden="true" />
-                        </button>
-                      </div>
+                      <MediaLibraryItemDetails
+                        media="image"
+                        item={image}
+                        displayTitle={title}
+                        addedLabel={`Added ${formatDate(image.addedAt)}`}
+                        catalog={tags}
+                        onSave={saveDetails}
+                        onAttach={(id, tagId) => changeItemTag(id, tagId, true)}
+                        onDetach={(id, tagId) => changeItemTag(id, tagId, false)}
+                        onRemove={() => {
+                          setActionError(null);
+                          setRemovingImage(image);
+                        }}
+                      />
                     </div>
                   </article>
                 );
@@ -1073,7 +1043,7 @@ export function ImageLibraryPage() {
       <ConfirmDialog
         open={removingImage !== null}
         title="Remove this image from Library?"
-        description="This removes only the Library entry. Existing Notes and Tasks keep their exact source context."
+        description="This removes only the Library entry. Existing Notes and Tasks are not deleted."
         confirmLabel="Remove from Library"
         isBusy={isRemoving}
         errorMessage={actionError}

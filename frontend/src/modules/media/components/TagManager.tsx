@@ -14,6 +14,8 @@ import {
 
 import { ConfirmDialog } from "../../../components/ui/ConfirmDialog";
 import { useTagStore } from "../../../stores/tagStore";
+import { TagFinderInput } from "./TagFinder";
+import { useTagFinder } from "./tagFinding";
 import type {
   Tag,
   TagDeleteImpact,
@@ -35,17 +37,20 @@ export type TagManagerChange =
     };
 
 interface TagManagerProps {
+  variant?: "default" | "compact";
   onChange?: (
     change: TagManagerChange,
   ) => void;
 }
 
 export function TagManager({
+  variant = "default",
   onChange,
 }: TagManagerProps = {}) {
   const tags = useTagStore(
     (state) => state.tags,
   );
+  const { tagSearch, setTagSearch, visibleTags } = useTagFinder(tags);
 
   const isLoading = useTagStore(
     (state) => state.isLoading,
@@ -270,9 +275,9 @@ export function TagManager({
           isLoading ||
           controlsBusy
         }
-        className="rounded-xl border border-(--border) bg-(--app-bg) p-3"
+        className={variant === "compact" ? "min-w-0" : "rounded-xl border border-(--border) bg-(--app-bg) p-3"}
       >
-        <div className="flex items-center justify-between gap-3">
+        {variant !== "compact" && <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <TagIcon
               size={15}
@@ -294,9 +299,9 @@ export function TagManager({
           <span className="rounded-full bg-(--surface) px-2 py-1 text-xs text-(--text-muted)">
             {tags.length}
           </span>
-        </div>
+        </div>}
 
-        <div className="mt-3 flex min-w-0 gap-2">
+        <div className={`${variant === "compact" ? "" : "mt-3"} flex min-w-0 gap-2`}>
           <label
             htmlFor="manager-new-tag"
             className="sr-only"
@@ -346,6 +351,8 @@ export function TagManager({
           </button>
         </div>
 
+        {tags.length > 0 && <div className="mt-3"><TagFinderInput value={tagSearch} onChange={setTagSearch} disabled={controlsBusy} /></div>}
+        {tags.length > 0 && visibleTags.length === 0 && <p className="text-xs text-(--text-muted)">No matching tags.</p>}
         {isLoading &&
         tags.length === 0 ? (
           <div
@@ -370,8 +377,8 @@ export function TagManager({
             No tags yet.
           </p>
         ) : (
-          <div className="mt-3 space-y-2">
-            {tags.map((tag) => {
+          <div className={variant === "compact" ? "mt-3 max-h-[40vh] divide-y divide-(--border) overflow-y-auto" : "mt-3 space-y-2"}>
+            {visibleTags.map((tag) => {
               const isEditing =
                 editingTagId ===
                 tag.id;
@@ -379,7 +386,7 @@ export function TagManager({
               return (
                 <div
                   key={tag.id}
-                  className="flex items-center gap-2 rounded-lg border border-(--border) bg-(--surface) p-2"
+                  className={variant === "compact" ? "flex min-w-0 items-center gap-2 py-1.5 pr-1" : "flex items-center gap-2 rounded-lg border border-(--border) bg-(--surface) p-2"}
                 >
                   {isEditing ? (
                     <>
@@ -543,6 +550,8 @@ export function TagManager({
           pendingDelete
             ? [
                 `${pendingDelete.impact.libraryVideoCountToDetach} video link(s) will be detached.`,
+                `${pendingDelete.impact.libraryImageCountToDetach} image link(s) will be detached.`,
+                `${pendingDelete.impact.libraryAudioCountToDetach} audio link(s) will be detached.`,
                 `${pendingDelete.impact.noteCountToDetach} Note link(s) will be detached.`,
                 `${pendingDelete.impact.taskCountToDetach} Task link(s) will be detached.`,
                 pendingDelete.impact.libraryVideosPreserved

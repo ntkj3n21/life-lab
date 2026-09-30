@@ -173,6 +173,19 @@ class LibraryVideoKeywordSearchApiIntegrationTest {
     }
 
     @Test
+    void searchNormalizesVietnameseAccentsAndDStrokeWithoutChangingVideoFilters() throws Exception {
+        Account owner = createAccount("vietnamese-video@example.com");
+        LibraryVideo video = createVideo(owner, "vietnamese-study",
+                "Phân tích thuật toán Đặc biệt", null, null, null, OffsetDateTime.now());
+        Cookie accessToken = login(owner.getEmail());
+
+        assertSingleMatch(accessToken, "phan tich", video.getId());
+        assertSingleMatch(accessToken, "THUAT TOAN", video.getId());
+        assertSingleMatch(accessToken, "dac biet", video.getId());
+        assertSingleMatch(accessToken, "thuật toán", video.getId());
+    }
+
+    @Test
     void nonmatchingAndCrossAccountDataProduceEmptyScopedPage() throws Exception {
         Account owner = createAccount("owner@example.com");
         Account other = createAccount("other@example.com");

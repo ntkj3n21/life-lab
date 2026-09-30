@@ -13,6 +13,8 @@ import com.lifelab.auth.repository.AccountRepository;
 import com.lifelab.common.exception.UnauthenticatedException;
 import com.lifelab.common.persistence.DatabaseConstraintMatcher;
 import com.lifelab.note.repository.NoteTagRepository;
+import com.lifelab.source.image.repository.LibraryImageTagRepository;
+import com.lifelab.source.audio.repository.LibraryAudioTagRepository;
 import com.lifelab.task.repository.TaskTagRepository;
 import com.lifelab.video.domain.LibraryVideo;
 import com.lifelab.video.domain.LibraryVideoTag;
@@ -38,6 +40,8 @@ public class TagService {
     private final TagRepository tagRepository;
     private final LibraryVideoRepository libraryVideoRepository;
     private final LibraryVideoTagRepository libraryVideoTagRepository;
+    private final LibraryImageTagRepository libraryImageTagRepository;
+    private final LibraryAudioTagRepository libraryAudioTagRepository;
     private final NoteTagRepository noteTagRepository;
     private final TaskTagRepository taskTagRepository;
     private final TagNameNormalizer tagNameNormalizer;
@@ -48,6 +52,8 @@ public class TagService {
             TagRepository tagRepository,
             LibraryVideoRepository libraryVideoRepository,
             LibraryVideoTagRepository libraryVideoTagRepository,
+            LibraryImageTagRepository libraryImageTagRepository,
+            LibraryAudioTagRepository libraryAudioTagRepository,
             NoteTagRepository noteTagRepository,
             TaskTagRepository taskTagRepository,
             TagNameNormalizer tagNameNormalizer,
@@ -56,6 +62,8 @@ public class TagService {
         this.tagRepository = tagRepository;
         this.libraryVideoRepository = libraryVideoRepository;
         this.libraryVideoTagRepository = libraryVideoTagRepository;
+        this.libraryImageTagRepository = libraryImageTagRepository;
+        this.libraryAudioTagRepository = libraryAudioTagRepository;
         this.noteTagRepository = noteTagRepository;
         this.taskTagRepository = taskTagRepository;
         this.tagNameNormalizer = tagNameNormalizer;
@@ -192,6 +200,10 @@ public class TagService {
                 noteTagRepository.countByTag_Id(tag.getId()),
                 taskTagRepository.countByTag_Id(tag.getId()),
                 true,
+                true,
+                true,
+                libraryImageTagRepository.countByTag_Id(tag.getId()),
+                libraryAudioTagRepository.countByTag_Id(tag.getId()),
                 true,
                 true);
     }

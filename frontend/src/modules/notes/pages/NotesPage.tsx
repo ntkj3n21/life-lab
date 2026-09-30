@@ -14,18 +14,13 @@ import { useLayoutStore } from "../../../stores/layoutStore";
 import { useTagStore } from "../../../stores/tagStore";
 import { useWorkspaceStore } from "../../../stores/workspaceStore";
 import { useReverseContextNavigation } from "../../context/hooks/useReverseContextNavigation";
-import {
-  TagManager,
-  type TagManagerChange,
-} from "../../media/components/TagManager";
-import {
-  CategoryManager,
-  type CategoryManagerChange,
-} from "../../organization/components/CategoryManager";
+import type { TagManagerChange } from "../../media/components/TagManager";
+import type { CategoryManagerChange } from "../../organization/components/CategoryManager";
+import { CategoryScopeRow } from "../../organization/components/CategoryScopeRow";
+import { OrganizationManagerDialog } from "../../organization/components/OrganizationManagerDialog";
 import {
   deleteNote as deleteNoteRequest,
   getNoteDeleteImpact,
-  getNoteSourceRecordLabel,
   getNotes,
   updateNote as updateNoteRequest,
   updateNoteOrganization,
@@ -106,6 +101,7 @@ export function NotesPage() {
   const [searchText, setSearchText] = useState("");
 
   const [appliedQuery, setAppliedQuery] = useState("");
+  const searchGenerationRef = useRef(0);
 
   const [filters, setFilters] = useState<AppliedNoteFilters>(DEFAULT_FILTERS);
 
@@ -154,7 +150,21 @@ export function NotesPage() {
   }, [loadCategories, loadTags]);
 
   useEffect(() => {
+    const timer = window.setTimeout(() => {
+      const query = searchText.trim();
+      if (query !== appliedQuery) {
+        searchGenerationRef.current += 1;
+        setIsLoading(true);
+        setPage(0);
+        setAppliedQuery(query);
+      }
+    }, 350);
+    return () => window.clearTimeout(timer);
+  }, [searchText, appliedQuery]);
+
+  useEffect(() => {
     let cancelled = false;
+    const generation = searchGenerationRef.current;
 
     void getNotes({
       page,
@@ -167,7 +177,7 @@ export function NotesPage() {
       sortDirection: filters.sortDirection,
     })
       .then((response) => {
-        if (cancelled) {
+        if (cancelled || generation !== searchGenerationRef.current) {
           return;
         }
 
@@ -177,14 +187,14 @@ export function NotesPage() {
         setLoadErrorMessage(null);
       })
       .catch((error: unknown) => {
-        if (cancelled) {
+        if (cancelled || generation !== searchGenerationRef.current) {
           return;
         }
 
         setLoadErrorMessage(getErrorMessage(error));
       })
       .finally(() => {
-        if (!cancelled) {
+        if (!cancelled && generation === searchGenerationRef.current) {
           setIsLoading(false);
         }
       });
@@ -222,8 +232,10 @@ export function NotesPage() {
 
   async function reloadNotesAfterMutation(preferredPage: number) {
     const targetPage = Math.max(0, preferredPage);
+    const generation = searchGenerationRef.current;
 
     const response = await getNotes(buildNoteQuery(targetPage));
+    if (generation !== searchGenerationRef.current) return;
 
     const normalizedPage =
       response.totalPages === 0
@@ -249,30 +261,8 @@ export function NotesPage() {
     setTotalPages(response.totalPages);
   }
 
-  async function reloadNotesOnDemand(
-    targetPage: number,
-    targetFilters = filters,
-    targetSearch = appliedQuery,
-  ) {
-    setIsLoading(true);
-    setLoadErrorMessage(null);
-
-    try {
-      const response = await getNotes(
-        buildNoteQuery(targetPage, targetFilters, targetSearch),
-      );
-
-      setNotes(response.items);
-      setTotalElements(response.totalElements);
-      setTotalPages(response.totalPages);
-    } catch (error) {
-      setLoadErrorMessage(getErrorMessage(error));
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
   function applyFilterChange(nextFilters: AppliedNoteFilters) {
+    searchGenerationRef.current += 1;
     setLoadErrorMessage(null);
     setActionErrorMessage(null);
     setOrganizationErrorMessage(null);
@@ -285,39 +275,41 @@ export function NotesPage() {
   function handleApplyFilters(nextFilters: AppliedNoteFilters) {
     applyFilterChange({
       ...nextFilters,
+      categoryId: filters.categoryId,
       tagIds: [...nextFilters.tagIds],
     });
   }
 
+  function handleCategoryScopeChange(categoryId: number | undefined) {
+    if (categoryId === filters.categoryId) return;
+    applyFilterChange({ ...filters, categoryId });
+  }
+
   function handleSearchSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-
     const nextQuery = searchText.trim();
-
     setLoadErrorMessage(null);
     setActionErrorMessage(null);
-
-    /*
-     * React does not rerun the data-loading effect
-     * when both page and appliedQuery keep the same
-     * values. Reload explicitly in that case instead
-     * of setting isLoading and leaving the page stuck.
-     */
-    if (page === 0 && nextQuery === appliedQuery) {
-      void reloadNotesOnDemand(0, filters, nextQuery);
-      return;
-    }
-
+    if (page === 0 && nextQuery === appliedQuery) return;
+    searchGenerationRef.current += 1;
     setIsLoading(true);
-
     setPage(0);
     setAppliedQuery(nextQuery);
+  }
+
+  function handleSearchTextChange(value: string) {
+    setSearchText(value);
+    if (!value.trim() && (appliedQuery || page !== 0)) {
+      searchGenerationRef.current += 1;
+      setIsLoading(true);
+      setPage(0);
+      setAppliedQuery("");
+    }
   }
 
   function handleClearFilters() {
     const appliedAlreadyClear =
       !appliedQuery &&
-      filters.categoryId === undefined &&
       filters.tagIds.length === 0 &&
       filters.hasTimestamp === undefined &&
       filters.sortBy === DEFAULT_FILTERS.sortBy &&
@@ -333,10 +325,11 @@ export function NotesPage() {
       return;
     }
 
+    searchGenerationRef.current += 1;
     setIsLoading(true);
     setPage(0);
     setAppliedQuery("");
-    setFilters(DEFAULT_FILTERS);
+    setFilters({ ...DEFAULT_FILTERS, categoryId: filters.categoryId });
   }
 
   function handlePageChange(nextPage: number) {
@@ -349,6 +342,7 @@ export function NotesPage() {
       return;
     }
 
+    searchGenerationRef.current += 1;
     setIsLoading(true);
     setLoadErrorMessage(null);
     setActionErrorMessage(null);
@@ -641,6 +635,9 @@ export function NotesPage() {
     filters.tagIds.length > 0 ||
     filters.hasTimestamp !== undefined,
   );
+  const hasNarrowingFilters = Boolean(
+    appliedQuery || filters.tagIds.length > 0 || filters.hasTimestamp !== undefined,
+  );
 
   const organizationLoadError =
     (!hasLoadedCategories ? categoryError?.message : null) ??
@@ -649,13 +646,9 @@ export function NotesPage() {
 
   const deleteDetails = pendingDelete
     ? [
-        `${pendingDelete.impact.taskCountToMarkSourceMissing} linked task(s) will remain, but will no longer be linked to this Note.`,
-        pendingDelete.impact.sourcePreserved
-          ? `The exact ${getNoteSourceRecordLabel(pendingDelete.note)} source record will be preserved.`
-          : `The ${getNoteSourceRecordLabel(pendingDelete.note)} source will not be preserved.`,
-        pendingDelete.impact.tasksPreserved
-          ? "Linked Tasks are preserved."
-          : "Linked Tasks are not preserved.",
+        pendingDelete.impact.taskCountToMarkSourceMissing > 0
+          ? `${pendingDelete.impact.taskCountToMarkSourceMissing} linked ${pendingDelete.impact.taskCountToMarkSourceMissing === 1 ? "Task remains" : "Tasks remain"}, but can no longer open this Note.`
+          : "No linked Tasks are affected.",
       ]
     : [];
 
@@ -668,7 +661,7 @@ export function NotesPage() {
               <h1 className="text-2xl font-semibold">Notes</h1>
 
               <p className="mt-1 max-w-2xl text-sm leading-6 text-(--text-secondary)">
-                Capture and revisit learning context without losing its source.
+                Keep your notes connected to where they came from.
               </p>
             </div>
 
@@ -681,15 +674,25 @@ export function NotesPage() {
           </div>
         </header>
 
+        <CategoryScopeRow
+          categories={categories}
+          selectedId={filters.categoryId}
+          onSelect={handleCategoryScopeChange}
+        />
+
         <NoteFilters
+          toolbarAction={
+            <OrganizationManagerDialog
+              onCategoryChange={handleCategoryChange}
+              onTagChange={handleTagChange}
+            />
+          }
           searchText={searchText}
           filters={filters}
-          categories={categories}
           tags={tags}
-          categoriesLoading={categoriesLoading}
           tagsLoading={tagsLoading}
           isLoading={isLoading}
-          onSearchTextChange={setSearchText}
+          onSearchTextChange={handleSearchTextChange}
           onSearch={handleSearchSubmit}
           onApplyFilters={handleApplyFilters}
         />
@@ -702,18 +705,6 @@ export function NotesPage() {
             Organization options could not be loaded: {organizationLoadError}
           </div>
         )}
-
-        <details className="mt-4 rounded-xl border border-(--border) bg-(--surface)">
-          <summary className="cursor-pointer px-4 py-3 text-sm font-medium text-(--text-secondary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)">
-            Manage categories and tags
-          </summary>
-
-          <div className="grid gap-3 border-t border-(--border) p-3 md:grid-cols-2">
-            <CategoryManager onChange={handleCategoryChange} />
-
-            <TagManager onChange={handleTagChange} />
-          </div>
-        </details>
 
         {loadErrorMessage && (
           <div
@@ -761,16 +752,18 @@ export function NotesPage() {
               />
 
               <h2 className="mt-3 text-sm font-medium text-(--text-secondary)">
-                {hasResultFilters ? "No matching Notes" : "No Notes yet"}
+                {hasNarrowingFilters ? "No matching Notes" : filters.categoryId !== undefined ? "No Notes in this Category" : "No Notes yet"}
               </h2>
 
               <p className="mt-2 max-w-md text-xs leading-5 text-(--text-muted)">
-                {hasResultFilters
-                  ? "No Notes match the current server-side filters. Change or clear the filter conditions."
-                  : "Notes created from a Video Workspace will appear here."}
+                {hasNarrowingFilters
+                  ? "Try changing or clearing your filters."
+                  : filters.categoryId !== undefined
+                    ? "Choose another Category or All to browse your Notes."
+                  : "Notes you create from videos, images, or audio will appear here."}
               </p>
 
-              {hasResultFilters && (
+              {hasNarrowingFilters && (
                 <button
                   type="button"
                   onClick={handleClearFilters}
@@ -874,7 +867,7 @@ export function NotesPage() {
       <ConfirmDialog
         open={pendingDelete !== null}
         title="Delete this Note?"
-        description="This removes the Note itself. Life Lab preserves historical source integrity according to the Note deletion rules."
+        description="This deletes the Note. Saved media stays in your Library."
         details={deleteDetails}
         confirmLabel="Delete Note"
         isBusy={isMutating}

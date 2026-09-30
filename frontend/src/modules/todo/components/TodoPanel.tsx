@@ -88,6 +88,17 @@ export function TodoPanel() {
   const recentRequestId = useRef(0);
   const currentSourceRequestId = useRef(0);
   const previousActiveSourceKey = useRef(activeSourceKey);
+  const titleInputRef = useRef<HTMLInputElement | null>(null);
+  const previousExplicitNoteId = useRef<number | null>(null);
+  const createInFlight = useRef(false);
+
+  useEffect(() => {
+    const explicitNoteId = linkedNoteKind === "explicit" ? linkedNote?.id ?? null : null;
+    if (explicitNoteId !== null && explicitNoteId !== previousExplicitNoteId.current) {
+      titleInputRef.current?.focus();
+    }
+    previousExplicitNoteId.current = explicitNoteId;
+  }, [linkedNote?.id, linkedNoteKind]);
 
   const currentSourceNotes =
     activeSourceKey === null ? [] : (workspaceNotes[activeSourceKey] ?? []);
@@ -253,7 +264,8 @@ export function TodoPanel() {
   }
 
   async function handleCreate() {
-    if (!title.trim() || isMutating) return;
+    if (!title.trim() || isMutating || createInFlight.current) return;
+    createInFlight.current = true;
     clearError();
     setComposerErrorMessage(null);
 
@@ -301,6 +313,8 @@ export function TodoPanel() {
       await refreshTaskSections();
     } catch (error) {
       setComposerErrorMessage(getErrorMessage(error));
+    } finally {
+      createInFlight.current = false;
     }
   }
 
@@ -403,6 +417,7 @@ export function TodoPanel() {
         onSelectNote={handleSelectNote}
         onUnlinkNote={handleUnlinkNote}
         onCreate={handleCreate}
+        titleInputRef={titleInputRef}
       />
 
       {taskActionError && (

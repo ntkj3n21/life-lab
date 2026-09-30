@@ -1,6 +1,7 @@
-import { apiDelete, apiGet, apiPost, apiPostMultipart } from "../../../lib/api";
+import { apiDelete, apiGet, apiPatch, apiPost, apiPostMultipart, apiPut } from "../../../lib/api";
 
 import type { PagedResponse } from "../../media/services/libraryApi";
+import type { Tag } from "../../media/services/tagApi";
 
 export type ImageOrigin = "EXTERNAL" | "UPLOAD";
 
@@ -13,6 +14,8 @@ export interface LibraryImage {
   mediaType: string | null;
   sizeBytes: number | null;
   title: string | null;
+  personalDescription: string | null;
+  tags: Tag[];
   addedAt: string;
 }
 
@@ -20,6 +23,18 @@ export interface ImageLibraryQuery {
   page?: number;
   size?: number;
   q?: string;
+  tagIds?: number[];
+  hasNotes?: boolean;
+  origin?: ImageOrigin;
+  addedFrom?: string;
+  addedTo?: string;
+  sortBy?: "addedAt" | "title";
+  sortDirection?: "asc" | "desc";
+}
+
+export interface UpdateLibraryImageInput {
+  title: string | null;
+  personalDescription: string | null;
 }
 
 export interface CreateExternalImageInput {
@@ -42,6 +57,14 @@ export function getImageLibrary(query: ImageLibraryQuery = {}) {
     params.set("q", query.q.trim());
   }
 
+  query.tagIds?.forEach((tagId) => params.append("tagId", String(tagId)));
+  if (query.hasNotes !== undefined) params.set("hasNotes", String(query.hasNotes));
+  if (query.origin) params.set("origin", query.origin);
+  if (query.addedFrom) params.set("addedFrom", query.addedFrom);
+  if (query.addedTo) params.set("addedTo", query.addedTo);
+  if (query.sortBy) params.set("sortBy", query.sortBy);
+  if (query.sortDirection) params.set("sortDirection", query.sortDirection);
+
   const queryString = params.toString();
 
   return apiGet<PagedResponse<LibraryImage>>(
@@ -51,6 +74,22 @@ export function getImageLibrary(query: ImageLibraryQuery = {}) {
 
 export function getLibraryImage(imageId: number) {
   return apiGet<LibraryImage>(`/api/library/images/${imageId}`);
+}
+
+export function updateLibraryImage(imageId: number, input: UpdateLibraryImageInput) {
+  return apiPatch<LibraryImage, UpdateLibraryImageInput>(`/api/library/images/${imageId}`, input);
+}
+
+export function getLibraryImageTags(imageId: number) {
+  return apiGet<Tag[]>(`/api/library/images/${imageId}/tags`);
+}
+
+export function attachTagToImage(imageId: number, tagId: number) {
+  return apiPut<void>(`/api/library/images/${imageId}/tags/${tagId}`);
+}
+
+export function detachTagFromImage(imageId: number, tagId: number) {
+  return apiDelete(`/api/library/images/${imageId}/tags/${tagId}`);
 }
 
 export function addExternalImage(input: CreateExternalImageInput) {

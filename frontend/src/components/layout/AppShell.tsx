@@ -4,9 +4,11 @@ import {
 } from "react-router-dom";
 import {
   useCallback,
+  useLayoutEffect,
   useState,
 } from "react";
 
+import { useContextStore } from "../../stores/contextStore";
 import { MobileNavigation } from "./MobileNavigation";
 import { RightPanel } from "./RightPanel";
 import { Sidebar } from "./Sidebar";
@@ -43,6 +45,34 @@ export function AppShell() {
     pathname.startsWith(
       "/library/",
     );
+
+  const routeSourceType =
+    pathname.startsWith("/library/")
+      ? "video"
+      : pathname.startsWith("/images/")
+        ? "image"
+        : pathname.startsWith("/audio/")
+          ? "audio"
+          : null;
+  const routeSourceId = routeSourceType ? pathname.split("/")[2] : null;
+
+  // Media detail pages resolve their next source asynchronously. Keep an exact
+  // reverse-navigation context, but clear a previous route's source before
+  // Right Workspace can paint it under the new media mode.
+  useLayoutEffect(() => {
+    if (!isLibraryWorkspace) return;
+
+    const context = useContextStore.getState().activeContext;
+
+    if (
+      context &&
+      (!routeSourceType ||
+        context.entityType !== routeSourceType ||
+        context.entityId !== routeSourceId)
+    ) {
+      useContextStore.getState().clearActiveContext();
+    }
+  }, [pathname, isLibraryWorkspace, routeSourceType, routeSourceId]);
 
   const showFocusPresentation =
     isFocusMode &&
@@ -83,16 +113,18 @@ export function AppShell() {
         <MobileNavigation />
 
         <section className="relative flex min-h-0 flex-1 overflow-hidden">
-          <Outlet
-            context={
-              {
-                isFocusMode:
-                  showFocusPresentation,
-                enterFocusMode,
-                exitFocusMode,
-              } satisfies AppShellOutletContext
-            }
-          />
+          <div id="library-main-pane" className="relative flex min-h-0 min-w-0 flex-1 overflow-hidden">
+            <Outlet
+              context={
+                {
+                  isFocusMode:
+                    showFocusPresentation,
+                  enterFocusMode,
+                  exitFocusMode,
+                } satisfies AppShellOutletContext
+              }
+            />
+          </div>
 
           {isLibraryWorkspace && (
             <RightPanel

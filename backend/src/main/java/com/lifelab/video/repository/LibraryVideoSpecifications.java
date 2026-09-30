@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.lifelab.note.domain.Note;
+import com.lifelab.common.text.SearchExpressions;
 import com.lifelab.video.domain.LibraryVideo;
 import com.lifelab.video.domain.LibraryVideoTag;
 import com.lifelab.watch.domain.WatchSession;
@@ -36,12 +37,12 @@ public final class LibraryVideoSpecifications {
             Root<LibraryVideoTag> relation = tagMatch.from(LibraryVideoTag.class);
             tagMatch.select(builder.literal(1)).where(
                     builder.equal(relation.get("libraryVideo"), root),
-                    contains(builder.lower(relation.get("tag").get("name")), keyword, builder));
+                    contains(searchText(relation.get("tag").get("name"), builder), keyword, builder));
             return builder.or(
-                    contains(lowerOrEmpty(source.get("title"), builder), keyword, builder),
-                    contains(lowerOrEmpty(source.get("channelName"), builder), keyword, builder),
-                    contains(lowerOrEmpty(root.get("customTitle"), builder), keyword, builder),
-                    contains(lowerOrEmpty(root.get("personalDescription"), builder), keyword, builder),
+                    contains(searchText(source.get("title"), builder), keyword, builder),
+                    contains(searchText(source.get("channelName"), builder), keyword, builder),
+                    contains(searchText(root.get("customTitle"), builder), keyword, builder),
+                    contains(searchText(root.get("personalDescription"), builder), keyword, builder),
                     builder.exists(tagMatch));
         };
     }
@@ -285,8 +286,8 @@ public final class LibraryVideoSpecifications {
         return lastWatch;
     }
 
-    private static Expression<String> lowerOrEmpty(Path<String> value, jakarta.persistence.criteria.CriteriaBuilder builder) {
-        return builder.lower(builder.coalesce(value, ""));
+    private static Expression<String> searchText(Path<String> value, jakarta.persistence.criteria.CriteriaBuilder builder) {
+        return SearchExpressions.normalized(value, builder);
     }
 
     private static Predicate contains(

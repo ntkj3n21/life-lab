@@ -1,6 +1,7 @@
-import { apiDelete, apiGet, apiPost, apiPostMultipart } from "../../../lib/api";
+import { apiDelete, apiGet, apiPatch, apiPost, apiPostMultipart, apiPut } from "../../../lib/api";
 
 import type { PagedResponse } from "../../media/services/libraryApi";
+import type { Tag } from "../../media/services/tagApi";
 
 export type AudioOrigin = "EXTERNAL" | "UPLOAD";
 
@@ -13,6 +14,8 @@ export interface LibraryAudio {
   mediaType: string | null;
   sizeBytes: number | null;
   title: string | null;
+  personalDescription: string | null;
+  tags: Tag[];
   addedAt: string;
 }
 
@@ -20,6 +23,18 @@ export interface AudioLibraryQuery {
   page?: number;
   size?: number;
   q?: string;
+  tagIds?: number[];
+  hasNotes?: boolean;
+  origin?: AudioOrigin;
+  addedFrom?: string;
+  addedTo?: string;
+  sortBy?: "addedAt" | "title";
+  sortDirection?: "asc" | "desc";
+}
+
+export interface UpdateLibraryAudioInput {
+  title: string | null;
+  personalDescription: string | null;
 }
 
 export interface CreateAudioInput {
@@ -42,6 +57,14 @@ export function getAudioLibrary(query: AudioLibraryQuery = {}) {
     params.set("q", query.q.trim());
   }
 
+  query.tagIds?.forEach((tagId) => params.append("tagId", String(tagId)));
+  if (query.hasNotes !== undefined) params.set("hasNotes", String(query.hasNotes));
+  if (query.origin) params.set("origin", query.origin);
+  if (query.addedFrom) params.set("addedFrom", query.addedFrom);
+  if (query.addedTo) params.set("addedTo", query.addedTo);
+  if (query.sortBy) params.set("sortBy", query.sortBy);
+  if (query.sortDirection) params.set("sortDirection", query.sortDirection);
+
   const queryString = params.toString();
 
   return apiGet<PagedResponse<LibraryAudio>>(
@@ -51,6 +74,22 @@ export function getAudioLibrary(query: AudioLibraryQuery = {}) {
 
 export function getLibraryAudio(audioId: number) {
   return apiGet<LibraryAudio>(`/api/library/audio/${audioId}`);
+}
+
+export function updateLibraryAudio(audioId: number, input: UpdateLibraryAudioInput) {
+  return apiPatch<LibraryAudio, UpdateLibraryAudioInput>(`/api/library/audio/${audioId}`, input);
+}
+
+export function getLibraryAudioTags(audioId: number) {
+  return apiGet<Tag[]>(`/api/library/audio/${audioId}/tags`);
+}
+
+export function attachTagToAudio(audioId: number, tagId: number) {
+  return apiPut<void>(`/api/library/audio/${audioId}/tags/${tagId}`);
+}
+
+export function detachTagFromAudio(audioId: number, tagId: number) {
+  return apiDelete(`/api/library/audio/${audioId}/tags/${tagId}`);
 }
 
 export function addAudioUrl(input: CreateAudioInput) {

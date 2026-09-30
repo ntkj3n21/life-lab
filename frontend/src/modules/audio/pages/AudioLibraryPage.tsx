@@ -2,7 +2,6 @@ import {
   Headphones,
   LoaderCircle,
   Plus,
-  RefreshCw,
   Search,
   Trash2,
   Upload,
@@ -26,8 +25,14 @@ import { ContextSummary } from "../../../components/context/ContextSummary";
 import { ConfirmDialog } from "../../../components/ui/ConfirmDialog";
 import { ApiError } from "../../../lib/api";
 import { useContextStore } from "../../../stores/contextStore";
+import { useTagStore } from "../../../stores/tagStore";
 import { LibraryMediaNavigation } from "../../media/components/LibraryMediaNavigation";
 import { LibraryPagination } from "../../media/components/LibraryPagination";
+import { MediaLibraryFilters } from "../../media/components/MediaLibraryFilters";
+import { DEFAULT_MEDIA_FILTER, hasRestrictiveMediaFilters, type MediaFilter } from "../../media/components/mediaFilterState";
+import { MediaLibraryItemDetails } from "../../media/components/MediaLibraryItemDetails";
+import { TagManagerDialog } from "../../media/components/TagManagerDialog";
+import { useDebouncedSearch } from "../../media/hooks/useDebouncedSearch";
 import { AudioPlayer } from "../components/AudioPlayer";
 import {
   addAudioUrl,
@@ -36,6 +41,9 @@ import {
   getLibraryAudio,
   getLibraryAudioTitle,
   removeLibraryAudio,
+  updateLibraryAudio,
+  attachTagToAudio,
+  detachTagFromAudio,
   uploadAudio,
   type LibraryAudio,
 } from "../services/audioApi";
@@ -119,6 +127,8 @@ export function AudioLibraryPage() {
 
   const uploadInputRef = useRef<HTMLInputElement | null>(null);
 
+  const listRequestId = useRef(0);
+
   const playerRef = useRef<HTMLAudioElement | null>(null);
 
   const [items, setItems] = useState<LibraryAudio[]>([]);
@@ -143,7 +153,12 @@ export function AudioLibraryPage() {
 
   const [searchText, setSearchText] = useState("");
 
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, commitSearch] = useDebouncedSearch(searchText);
+
+  const [filters, setFilters] = useState<MediaFilter>(DEFAULT_MEDIA_FILTER);
+
+  const tags = useTagStore((state) => state.tags);
+  const loadTags = useTagStore((state) => state.loadTags);
 
   const [shuffleEnabled, setShuffleEnabled] = useState(false);
 
@@ -166,6 +181,8 @@ export function AudioLibraryPage() {
   const [loadError, setLoadError] = useState<string | null>(null);
 
   const [actionError, setActionError] = useState<string | null>(null);
+  const [urlError, setUrlError] = useState<string | null>(null);
+  const [uploadError, setUploadError] = useState<string | null>(null);
 
   const [isAddPanelOpen, setIsAddPanelOpen] = useState(false);
 
@@ -175,9 +192,15 @@ export function AudioLibraryPage() {
 
   const setActiveContext = useContextStore((state) => state.setActiveContext);
 
+  useEffect(() => {
+    void loadTags().catch(() => {});
+  }, [loadTags]);
+
   const loadAudio = useCallback(
     async (targetPage: number) => {
       await Promise.resolve();
+
+      const requestId = ++listRequestId.current;
 
       setIsLoading(true);
       setLoadError(null);
@@ -187,7 +210,10 @@ export function AudioLibraryPage() {
           page: targetPage,
           size: PAGE_SIZE,
           q: searchQuery || undefined,
+          ...filters,
         });
+
+        if (requestId !== listRequestId.current) return;
 
         if (
           targetPage > 0 &&
@@ -205,12 +231,12 @@ export function AudioLibraryPage() {
 
         setTotalElements(response.totalElements);
       } catch (error) {
-        setLoadError(getErrorMessage(error));
+        if (requestId === listRequestId.current) setLoadError(getErrorMessage(error));
       } finally {
-        setIsLoading(false);
+        if (requestId === listRequestId.current) setIsLoading(false);
       }
     },
-    [searchQuery],
+    [searchQuery, filters],
   );
 
   useEffect(() => {
@@ -353,13 +379,50 @@ export function AudioLibraryPage() {
     event.preventDefault();
 
     setPage(0);
-    setSearchQuery(searchText.trim());
+    commitSearch(searchText);
   }
 
   function handleClearSearch() {
     setSearchText("");
-    setSearchQuery("");
+    commitSearch("");
+    listRequestId.current += 1;
     setPage(0);
+  }
+
+  function changeFilters(next: MediaFilter) {
+    listRequestId.current += 1;
+    setFilters(next);
+    setPage(0);
+  }
+
+  async function saveDetails(id: number, input: { title: string | null; personalDescription: string | null }) {
+    const updated = await updateLibraryAudio(id, input);
+    setItems((current) => current.map((audio) => audio.id === id ? updated : audio));
+    if (validRouteAudioId === id) {
+      setActiveAudio(updated);
+      const context = useContextStore.getState().activeContext;
+      if (context?.entityType === "audio" && context.entityId === String(id)) {
+        setActiveContext({ ...context, title: getWorkspaceTitle(updated) });
+      }
+    }
+    await loadAudio(page);
+  }
+
+  async function changeItemTag(id: number, tagId: number, attach: boolean) {
+    if (attach) await attachTagToAudio(id, tagId);
+    else await detachTagFromAudio(id, tagId);
+    const updated = await getLibraryAudio(id);
+    setItems((current) => current.map((audio) => audio.id === id ? updated : audio));
+    if (validRouteAudioId === id) setActiveAudio(updated);
+    await loadAudio(page);
+  }
+
+  function handleCatalogChange(change: { type: "created" | "renamed" | "deleted"; tag: { id: number } }) {
+    if (change.type === "deleted" && filters.tagIds?.includes(change.tag.id)) {
+      changeFilters({ ...filters, tagIds: filters.tagIds.filter((id) => id !== change.tag.id) });
+    } else {
+      void loadAudio(page);
+    }
   }
 
   async function handleAdd(event: FormEvent<HTMLFormElement>) {
@@ -372,7 +435,7 @@ export function AudioLibraryPage() {
     }
 
     setIsAdding(true);
-    setActionError(null);
+    setUrlError(null);
 
     try {
       await addAudioUrl({
@@ -390,7 +453,7 @@ export function AudioLibraryPage() {
         setPage(0);
       }
     } catch (error) {
-      setActionError(getErrorMessage(error));
+      setUrlError(getErrorMessage(error));
     } finally {
       setIsAdding(false);
     }
@@ -402,7 +465,7 @@ export function AudioLibraryPage() {
     }
 
     setIsUploading(true);
-    setActionError(null);
+    setUploadError(null);
 
     try {
       await uploadAudio(file, uploadTitle.trim() || null);
@@ -417,7 +480,7 @@ export function AudioLibraryPage() {
         setPage(0);
       }
     } catch (error) {
-      setActionError(getErrorMessage(error));
+      setUploadError(getErrorMessage(error));
     } finally {
       setIsUploading(false);
 
@@ -504,6 +567,7 @@ export function AudioLibraryPage() {
         page: targetPage,
         size: PAGE_SIZE,
         q: searchQuery || undefined,
+        ...filters,
       });
 
       const targetAudio =
@@ -582,6 +646,7 @@ export function AudioLibraryPage() {
         page: randomPage,
         size: PAGE_SIZE,
         q: searchQuery || undefined,
+        ...filters,
       });
 
       const candidates = response.items.filter(
@@ -707,7 +772,7 @@ export function AudioLibraryPage() {
                 </h3>
 
                 <p className="mt-2 text-sm leading-6 text-(--text-secondary)">
-                  Choose an audio source from your Library to start listening
+                  Choose audio from your Library to start listening
                   and taking notes.
                 </p>
 
@@ -718,7 +783,7 @@ export function AudioLibraryPage() {
                     className="mx-auto mt-5 flex items-center gap-2 rounded-xl bg-(--primary-bg) px-4 py-2 text-sm font-medium text-(--primary-text) hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)"
                   >
                     <Headphones size={16} aria-hidden="true" />
-                    Open first audio
+                    Open an audio item
                   </button>
                 )}
               </div>
@@ -740,7 +805,7 @@ export function AudioLibraryPage() {
                 </h3>
 
                 <p className="mt-2 text-sm leading-6 text-(--text-secondary)">
-                  Loading the saved audio context.
+                  Loading audio...
                 </p>
               </div>
             </div>
@@ -805,6 +870,16 @@ export function AudioLibraryPage() {
                 </div>
 
                 <div className="flex w-full items-center justify-end gap-1 sm:w-auto sm:shrink-0">
+                  {activeAudio.origin === "EXTERNAL" && activeAudio.url && (
+                    <a
+                      href={activeAudio.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex h-10 shrink-0 items-center rounded-lg px-2.5 text-xs font-medium text-(--text-secondary) hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) sm:h-8"
+                    >
+                      Open original
+                    </a>
+                  )}
                   <button
                     type="button"
                     onClick={() => {
@@ -860,37 +935,6 @@ export function AudioLibraryPage() {
                   </div>
                 </div>
 
-                <div className="mt-3 flex flex-col gap-2 rounded-xl border border-(--border) bg-(--surface) p-3 text-sm sm:flex-row sm:items-center sm:justify-between">
-                  <div className="min-w-0 text-(--text-muted)">
-                    Added {formatDate(activeAudio.addedAt)}
-                    {activeAudio.origin === "UPLOAD" &&
-                      activeAudio.originalFilename && (
-                        <>
-                          <span className="mx-2" aria-hidden="true">
-                            ·
-                          </span>
-
-                          <span
-                            title={activeAudio.originalFilename}
-                            className="text-(--text-secondary)"
-                          >
-                            File: {activeAudio.originalFilename}
-                          </span>
-                        </>
-                      )}
-                  </div>
-
-                  {activeAudio.origin === "EXTERNAL" && activeAudio.url && (
-                    <a
-                      href={activeAudio.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="shrink-0 text-sm font-medium text-(--text-secondary) underline-offset-4 hover:text-(--text-primary) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)"
-                    >
-                      Open original
-                    </a>
-                  )}
-                </div>
               </div>
             </>
           ) : null}
@@ -915,7 +959,7 @@ export function AudioLibraryPage() {
               </h2>
 
               <p className="mt-1 text-sm text-(--text-muted)">
-                Your saved audio study sources.
+                Your saved audio.
               </p>
             </div>
 
@@ -930,6 +974,8 @@ export function AudioLibraryPage() {
                 type="button"
                 onClick={() => {
                   setActionError(null);
+                  setUrlError(null);
+                  setUploadError(null);
 
                   setIsAddPanelOpen((open) => !open);
                 }}
@@ -937,7 +983,7 @@ export function AudioLibraryPage() {
                 aria-controls="library-add-audio-panel"
                 aria-label={isAddPanelOpen ? "Close add audio" : "Add audio"}
                 title={isAddPanelOpen ? "Close" : "Add audio"}
-                className="flex h-10 items-center justify-center gap-1.5 rounded-lg border border-(--border) px-2.5 text-xs font-medium text-(--text-secondary) transition-colors hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) sm:h-8"
+                className="flex min-h-10 items-center justify-center gap-1.5 rounded-lg bg-(--primary-bg) px-3 text-xs font-medium text-(--primary-text) transition-colors hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)"
               >
                 {isAddPanelOpen ? (
                   <X size={14} aria-hidden="true" />
@@ -945,33 +991,19 @@ export function AudioLibraryPage() {
                   <Plus size={14} aria-hidden="true" />
                 )}
 
-                <span className="hidden sm:inline">
+                <span>
                   {isAddPanelOpen ? "Close" : "Add"}
                 </span>
               </button>
 
-              <button
-                type="button"
-                onClick={() => void loadAudio(page)}
-                disabled={isLoading}
-                aria-label="Refresh audio library"
-                title="Refresh audio library"
-                className="flex h-10 w-10 items-center justify-center rounded-lg border border-(--border) text-(--text-muted) transition-colors hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50 sm:h-8 sm:w-8"
-              >
-                <RefreshCw
-                  size={14}
-                  className={isLoading ? "animate-spin" : undefined}
-                  aria-hidden="true"
-                />
-              </button>
             </div>
           </div>
 
           <form
             onSubmit={handleSearch}
-            className="mb-4 flex flex-col gap-2 sm:flex-row"
+            className="mb-4 flex flex-wrap items-center gap-2"
           >
-            <div className="flex min-w-0 flex-1 items-center gap-2 rounded-lg border border-(--border) bg-(--app-bg) px-3 focus-within:border-(--border-strong) focus-within:ring-2 focus-within:ring-(--focus)">
+            <div className="flex min-w-[12rem] flex-1 items-center gap-2 rounded-lg border border-(--border) bg-(--app-bg) px-3 focus-within:border-(--border-strong) focus-within:ring-2 focus-within:ring-(--focus)">
               <Search
                 size={14}
                 className="shrink-0 text-(--text-muted)"
@@ -985,18 +1017,18 @@ export function AudioLibraryPage() {
               <input
                 id="audio-library-search"
                 value={searchText}
-                onChange={(event) => setSearchText(event.target.value)}
+                onChange={(event) => {
+                  listRequestId.current += 1;
+                  setSearchText(event.target.value);
+                  setPage(0);
+                }}
                 placeholder="Search audio..."
                 className="min-w-0 flex-1 bg-transparent py-2 text-sm outline-none placeholder:text-(--text-faint)"
               />
             </div>
 
-            <button
-              type="submit"
-              className="min-h-10 rounded-lg border border-(--border) px-3 text-xs font-medium text-(--text-secondary) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) sm:min-h-9"
-            >
-              Search
-            </button>
+            <MediaLibraryFilters media="audio" tags={tags} applied={filters} onChange={changeFilters} />
+            <TagManagerDialog onChange={handleCatalogChange} />
 
             {(searchText || searchQuery) && (
               <button
@@ -1014,141 +1046,44 @@ export function AudioLibraryPage() {
               id="library-add-audio-panel"
               className="mb-3 rounded-xl border border-(--border) bg-(--app-bg) p-3"
             >
-              <div className="mb-3">
-                <h3 className="text-sm font-medium text-(--text-primary)">
-                  Add audio
-                </h3>
-
-                <p className="mt-1 text-xs text-(--text-muted)">
-                  Paste a direct HTTP(S) audio URL below, or upload an MP3 file
-                  from your device.
-                </p>
-              </div>
-
-              <form
-                onSubmit={handleAdd}
-                className="grid gap-2 lg:grid-cols-[minmax(0,1fr)_minmax(180px,0.4fr)_auto]"
-              >
-                <label htmlFor="audio-url" className="sr-only">
-                  Direct audio URL
-                </label>
-
-                <input
-                  id="audio-url"
-                  type="url"
-                  value={url}
-                  onChange={(event) => setUrl(event.target.value)}
-                  onKeyDown={(event) => {
-                    if (event.key === "Escape") {
-                      closeAddPanelAndRestoreFocus();
-                    }
-                  }}
-                  disabled={isAdding || isUploading}
-                  autoFocus
-                  placeholder="https://example.com/audio.mp3"
-                  className="min-w-0 rounded-lg border border-(--border) bg-(--surface) px-3 py-2 text-sm outline-none placeholder:text-(--text-faint) focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:opacity-50"
-                />
-
-                <label htmlFor="audio-title" className="sr-only">
-                  Optional title
-                </label>
-
-                <input
-                  id="audio-title"
-                  value={title}
-                  onChange={(event) => setTitle(event.target.value)}
-                  disabled={isAdding || isUploading}
-                  placeholder="Optional title"
-                  maxLength={255}
-                  className="min-w-0 rounded-lg border border-(--border) bg-(--surface) px-3 py-2 text-sm outline-none placeholder:text-(--text-faint) focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:opacity-50"
-                />
-
-                <button
-                  type="submit"
-                  disabled={!url.trim() || isAdding || isUploading}
-                  className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg bg-(--primary-bg) px-3 text-xs font-medium text-(--primary-text) transition hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50 sm:min-h-9"
-                >
-                  {isAdding ? (
-                    <LoaderCircle
-                      size={14}
-                      className="animate-spin"
-                      aria-hidden="true"
-                    />
-                  ) : (
-                    <Plus size={14} aria-hidden="true" />
-                  )}
-                  Add audio
-                </button>
-              </form>
-
-              <div className="mt-3 border-t border-(--border) pt-3">
-                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                  <div className="min-w-0">
-                    <p className="text-xs font-medium text-(--text-secondary)">
-                      Upload from device
-                    </p>
-
-                    <p className="mt-1 text-xs text-(--text-muted)">
-                      Add a local MP3 file to your Audio Library.
-                    </p>
+              <h3 className="text-sm font-medium text-(--text-primary)">Add audio</h3>
+              <section aria-labelledby="audio-upload-heading" className="mt-3">
+                <h4 id="audio-upload-heading" className="text-xs font-medium text-(--text-secondary)">Upload from device</h4>
+                <p className="mt-1 text-xs text-(--text-muted)">MP3 supported.</p>
+                <div className="mt-2 grid min-w-0 gap-2 sm:grid-cols-[minmax(0,1fr)_auto]">
+                  <div>
+                    <label htmlFor="audio-upload-title" className="mb-1 block text-xs text-(--text-secondary)">Title for uploaded audio (optional)</label>
+                    <input id="audio-upload-title" value={uploadTitle} onChange={(event) => setUploadTitle(event.target.value)} disabled={isAdding || isUploading} maxLength={255} className="w-full min-w-0 rounded-lg border border-(--border) bg-(--surface) px-3 py-2 text-sm outline-none focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:opacity-50" />
                   </div>
-
-                  <div className="grid gap-2 sm:grid-cols-[minmax(180px,1fr)_auto]">
-                    <label htmlFor="audio-upload-title" className="sr-only">
-                      Audio title
-                    </label>
-
-                    <input
-                      id="audio-upload-title"
-                      value={uploadTitle}
-                      onChange={(event) => setUploadTitle(event.target.value)}
-                      disabled={isAdding || isUploading}
-                      maxLength={255}
-                      placeholder="Optional title"
-                      className="min-w-0 rounded-lg border border-(--border) bg-(--surface) px-3 py-2 text-sm outline-none placeholder:text-(--text-faint) focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:opacity-50"
-                    />
-
-                    <div>
-                      <input
-                        ref={uploadInputRef}
-                        id="audio-upload"
-                        type="file"
-                        accept="audio/mpeg,.mp3"
-                        disabled={isAdding || isUploading}
-                        onChange={(event) =>
-                          void handleUpload(event.target.files?.[0])
-                        }
-                        className="hidden"
-                      />
-
-                      <button
-                        type="button"
-                        onClick={() => uploadInputRef.current?.click()}
-                        disabled={isAdding || isUploading}
-                        className="inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-lg border border-(--border) px-3 text-xs text-(--text-secondary) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50 sm:min-h-9"
-                      >
-                        {isUploading ? (
-                          <LoaderCircle
-                            size={14}
-                            className="animate-spin"
-                            aria-hidden="true"
-                          />
-                        ) : (
-                          <Upload size={14} aria-hidden="true" />
-                        )}
-
-                        {isUploading ? "Uploading..." : "Upload MP3"}
-                      </button>
-                    </div>
+                  <div className="flex items-end">
+                    <input ref={uploadInputRef} id="audio-upload" type="file" accept="audio/mpeg,.mp3" aria-label="Choose audio to upload" disabled={isAdding || isUploading} onChange={(event) => void handleUpload(event.target.files?.[0])} className="hidden" />
+                    <button type="button" onClick={() => uploadInputRef.current?.click()} disabled={isAdding || isUploading} className="inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-lg bg-(--primary-bg) px-3 text-xs font-medium text-(--primary-text) transition hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50">
+                      {isUploading ? <LoaderCircle size={14} className="animate-spin" aria-hidden="true" /> : <Upload size={14} aria-hidden="true" />}
+                      {isUploading ? "Uploading..." : "Upload audio"}
+                    </button>
                   </div>
                 </div>
-              </div>
+                {uploadError && <p role="alert" className="mt-2 text-sm text-(--danger-text)">{uploadError}</p>}
+              </section>
 
-              {actionError && (
-                <p role="alert" className="mt-3 text-sm text-(--danger-text)">
-                  {actionError}
-                </p>
-              )}
+              <details className="mt-4 border-t border-(--border) pt-3 group">
+                <summary className="min-h-9 cursor-pointer text-xs font-medium text-(--text-secondary) outline-none focus-visible:ring-2 focus-visible:ring-(--focus)">Add from URL</summary>
+                <form onSubmit={handleAdd} className="mt-2 grid min-w-0 gap-2 sm:grid-cols-2">
+                  <div>
+                    <label htmlFor="audio-url" className="mb-1 block text-xs text-(--text-secondary)">Audio URL</label>
+                    <input id="audio-url" type="url" value={url} onChange={(event) => setUrl(event.target.value)} onKeyDown={(event) => { if (event.key === "Escape") closeAddPanelAndRestoreFocus(); }} disabled={isAdding || isUploading} placeholder="https://example.com/audio.mp3" className="w-full min-w-0 rounded-lg border border-(--border) bg-(--surface) px-3 py-2 text-sm outline-none focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:opacity-50" />
+                  </div>
+                  <div>
+                    <label htmlFor="audio-title" className="mb-1 block text-xs text-(--text-secondary)">Title for URL audio (optional)</label>
+                    <input id="audio-title" value={title} onChange={(event) => setTitle(event.target.value)} disabled={isAdding || isUploading} maxLength={255} className="w-full min-w-0 rounded-lg border border-(--border) bg-(--surface) px-3 py-2 text-sm outline-none focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:opacity-50" />
+                  </div>
+                  <button type="submit" disabled={!url.trim() || isAdding || isUploading} className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-(--border) px-3 text-xs font-medium text-(--text-secondary) transition hover:bg-(--surface-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50 sm:col-span-2 sm:justify-self-start">
+                    {isAdding ? <LoaderCircle size={14} className="animate-spin" aria-hidden="true" /> : <Plus size={14} aria-hidden="true" />}
+                    {isAdding ? "Adding..." : "Add audio from URL"}
+                  </button>
+                  {urlError && <p role="alert" className="text-sm text-(--danger-text) sm:col-span-2">{urlError}</p>}
+                </form>
+              </details>
             </div>
           )}
 
@@ -1180,19 +1115,26 @@ export function AudioLibraryPage() {
               className="mt-4 rounded-2xl border border-dashed border-(--border) bg-(--app-bg) p-8 text-center"
             >
               <p className="text-sm font-medium text-(--text-secondary)">
-                Your Audio Library is empty
+                {totalElements === 0 && !searchQuery && !hasRestrictiveMediaFilters(filters) ? "No saved audio yet" : "No matching audio"}
               </p>
 
               <p className="mt-1 text-sm text-(--text-muted)">
-                Add your first audio source by URL or upload an MP3 file.
+                {totalElements === 0 && !searchQuery && !hasRestrictiveMediaFilters(filters)
+                  ? "Add audio by URL or upload an MP3 file."
+                  : "Try changing your search or filters."}
               </p>
 
               <button
                 type="button"
-                onClick={() => setIsAddPanelOpen(true)}
+                onClick={() => {
+                  if (searchQuery || hasRestrictiveMediaFilters(filters)) {
+                    handleClearSearch();
+                    changeFilters(DEFAULT_MEDIA_FILTER);
+                  } else setIsAddPanelOpen(true);
+                }}
                 className="mt-4 rounded-lg bg-(--primary-bg) px-3 py-2 text-xs font-medium text-(--primary-text) transition hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)"
               >
-                Add your first audio
+                {searchQuery || hasRestrictiveMediaFilters(filters) ? "Clear search and filters" : "Add audio"}
               </button>
             </div>
           ) : (
@@ -1277,25 +1219,20 @@ export function AudioLibraryPage() {
                         </p>
                       )}
 
-                      <div className="mt-3 flex items-center justify-between gap-2">
-                        <span className="min-w-0 truncate text-[11px] text-(--text-muted)">
-                          Added {formatDate(audio.addedAt)}
-                        </span>
-
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setActionError(null);
-
-                            setRemovingAudio(audio);
-                          }}
-                          aria-label={`Remove ${displayTitle} from Library`}
-                          title="Remove from Library"
-                          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-(--text-muted) transition-colors hover:bg-(--danger-surface) hover:text-(--danger-text) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) sm:h-7 sm:w-7"
-                        >
-                          <Trash2 size={14} aria-hidden="true" />
-                        </button>
-                      </div>
+                      <MediaLibraryItemDetails
+                        media="audio"
+                        item={audio}
+                        displayTitle={displayTitle}
+                        addedLabel={`Added ${formatDate(audio.addedAt)}`}
+                        catalog={tags}
+                        onSave={saveDetails}
+                        onAttach={(id, tagId) => changeItemTag(id, tagId, true)}
+                        onDetach={(id, tagId) => changeItemTag(id, tagId, false)}
+                        onRemove={() => {
+                          setActionError(null);
+                          setRemovingAudio(audio);
+                        }}
+                      />
                     </div>
                   </article>
                 );

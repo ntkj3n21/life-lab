@@ -1,28 +1,21 @@
 import {
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
   ListTodo,
   LoaderCircle,
   Plus,
 } from "lucide-react";
-import {
-  type FormEvent,
-  useEffect,
-  useState,
-} from "react";
+import { type FormEvent, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { ApiError } from "../../../lib/api";
 import { useCategoryStore } from "../../../stores/categoryStore";
 import { useTagStore } from "../../../stores/tagStore";
-import {
-  TagManager,
-  type TagManagerChange,
-} from "../../media/components/TagManager";
-import {
-  CategoryManager,
-  type CategoryManagerChange,
-} from "../../organization/components/CategoryManager";
+import type { TagManagerChange } from "../../media/components/TagManager";
+import type { CategoryManagerChange } from "../../organization/components/CategoryManager";
+import { CategoryScopeRow } from "../../organization/components/CategoryScopeRow";
+import { OrganizationManagerDialog } from "../../organization/components/OrganizationManagerDialog";
 import {
   createIndependentTask,
   deleteTask,
@@ -41,22 +34,13 @@ import { TaskCard } from "../components/TaskCard";
 import { TaskFilters } from "../components/TaskFilters";
 import { TaskOrganizationEditor } from "../components/TaskOrganizationEditor";
 
-type StatusFilter =
-  | ""
-  | TaskStatus;
+type StatusFilter = "" | TaskStatus;
 
-type SourceStatusFilter =
-  | ""
-  | TaskSourceStatus;
+type SourceStatusFilter = "" | TaskSourceStatus;
 
-type TaskSortBy = NonNullable<
-  TaskQuery["sortBy"]
->;
+type TaskSortBy = NonNullable<TaskQuery["sortBy"]>;
 
-type TaskSortDirection =
-  NonNullable<
-    TaskQuery["sortDirection"]
-  >;
+type TaskSortDirection = NonNullable<TaskQuery["sortDirection"]>;
 
 interface AppliedFilters {
   query: string;
@@ -94,186 +78,83 @@ function getErrorMessage(error: unknown) {
 export function TasksPage() {
   const navigate = useNavigate();
 
-  const categories =
-    useCategoryStore(
-      (state) => state.categories,
-    );
-  const loadCategories =
-    useCategoryStore(
-      (state) =>
-        state.loadCategories,
-    );
-  const categoriesLoading =
-    useCategoryStore(
-      (state) => state.isLoading,
-    );
-  const hasLoadedCategories =
-    useCategoryStore(
-      (state) =>
-        state.hasLoadedCategories,
-    );
-  const categoryError =
-    useCategoryStore(
-      (state) => state.error,
-    );
-
-  const tags = useTagStore(
-    (state) => state.tags,
+  const categories = useCategoryStore((state) => state.categories);
+  const loadCategories = useCategoryStore((state) => state.loadCategories);
+  const categoriesLoading = useCategoryStore((state) => state.isLoading);
+  const hasLoadedCategories = useCategoryStore(
+    (state) => state.hasLoadedCategories,
   );
-  const loadTags = useTagStore(
-    (state) => state.loadTags,
-  );
-  const tagsLoading = useTagStore(
-    (state) => state.isLoading,
-  );
-  const hasLoadedTags = useTagStore(
-    (state) => state.hasLoadedTags,
-  );
-  const tagError = useTagStore(
-    (state) => state.error,
-  );
+  const categoryError = useCategoryStore((state) => state.error);
 
-  const [
-    tasks,
-    setTasks,
-  ] = useState<Task[]>([]);
+  const tags = useTagStore((state) => state.tags);
+  const loadTags = useTagStore((state) => state.loadTags);
+  const tagsLoading = useTagStore((state) => state.isLoading);
+  const hasLoadedTags = useTagStore((state) => state.hasLoadedTags);
+  const tagError = useTagStore((state) => state.error);
 
-  const [
-    page,
-    setPage,
-  ] = useState(0);
+  const [tasks, setTasks] = useState<Task[]>([]);
 
-  const [
-    totalElements,
-    setTotalElements,
-  ] = useState(0);
+  const [page, setPage] = useState(0);
 
-  const [
-    totalPages,
-    setTotalPages,
-  ] = useState(0);
+  const [totalElements, setTotalElements] = useState(0);
 
-  const [
-    searchText,
-    setSearchText,
-  ] = useState("");
+  const [totalPages, setTotalPages] = useState(0);
 
-  const [
-    statusFilter,
-    setStatusFilter,
-  ] =
-    useState<StatusFilter>("");
+  const [searchText, setSearchText] = useState("");
+  const searchGenerationRef = useRef(0);
 
-  const [
-    deadlineFrom,
-    setDeadlineFrom,
-  ] = useState("");
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>("");
 
-  const [
-    deadlineTo,
-    setDeadlineTo,
-  ] = useState("");
+  const [deadlineFrom, setDeadlineFrom] = useState("");
 
-  const [
-    categoryId,
-    setCategoryId,
-  ] = useState<number | undefined>(
-    undefined,
-  );
+  const [deadlineTo, setDeadlineTo] = useState("");
 
-  const [
-    tagIds,
-    setTagIds,
-  ] = useState<number[]>([]);
+  const [categoryId, setCategoryId] = useState<number | undefined>(undefined);
 
-  const [
-    sourceStatusFilter,
-    setSourceStatusFilter,
-  ] = useState<SourceStatusFilter>(
-    "",
-  );
+  const [tagIds, setTagIds] = useState<number[]>([]);
 
-  const [
-    sortBy,
-    setSortBy,
-  ] = useState<TaskSortBy>(
-    "createdAt",
-  );
+  const [sourceStatusFilter, setSourceStatusFilter] =
+    useState<SourceStatusFilter>("");
 
-  const [
-    sortDirection,
-    setSortDirection,
-  ] = useState<TaskSortDirection>(
-    "desc",
-  );
+  const [sortBy, setSortBy] = useState<TaskSortBy>("createdAt");
 
-  const [
-    appliedFilters,
-    setAppliedFilters,
-  ] =
-    useState<AppliedFilters>(
-      EMPTY_FILTERS,
-    );
+  const [sortDirection, setSortDirection] = useState<TaskSortDirection>("desc");
 
-  const [
-    title,
-    setTitle,
-  ] = useState("");
+  const [appliedFilters, setAppliedFilters] =
+    useState<AppliedFilters>(EMPTY_FILTERS);
 
-  const [
-    description,
-    setDescription,
-  ] = useState("");
+  const [title, setTitle] = useState("");
 
-  const [
-    deadline,
-    setDeadline,
-  ] = useState("");
-
-  const [
-    isLoading,
-    setIsLoading,
-  ] = useState(true);
-
-  const [
-    isMutating,
-    setIsMutating,
-  ] = useState(false);
-
-  const [
-    loadErrorMessage,
-    setLoadErrorMessage,
-  ] = useState<string | null>(
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const createTriggerRef = useRef<HTMLButtonElement | null>(null);
+  const createTitleRef = useRef<HTMLInputElement | null>(null);
+  const [createErrorMessage, setCreateErrorMessage] = useState<string | null>(
     null,
   );
 
-  const [
-    actionErrorMessage,
-    setActionErrorMessage,
-  ] = useState<string | null>(
+  const [description, setDescription] = useState("");
+
+  const [deadline, setDeadline] = useState("");
+
+  const [isLoading, setIsLoading] = useState(true);
+
+  const [isMutating, setIsMutating] = useState(false);
+
+  const [loadErrorMessage, setLoadErrorMessage] = useState<string | null>(null);
+
+  const [actionErrorMessage, setActionErrorMessage] = useState<string | null>(
     null,
   );
 
-  const [
-    organizationErrorMessage,
-    setOrganizationErrorMessage,
-  ] = useState<string | null>(
-    null,
-  );
+  const [organizationErrorMessage, setOrganizationErrorMessage] = useState<
+    string | null
+  >(null);
 
-  const [
-    editingOrganizationTaskId,
-    setEditingOrganizationTaskId,
-  ] = useState<number | null>(
-    null,
-  );
+  const [editingOrganizationTaskId, setEditingOrganizationTaskId] = useState<
+    number | null
+  >(null);
 
-  const [
-    notice,
-    setNotice,
-  ] = useState<string | null>(
-    null,
-  );
+  const [notice, setNotice] = useState<string | null>(null);
 
   useEffect(() => {
     void loadCategories().catch(() => {
@@ -283,103 +164,74 @@ export function TasksPage() {
     void loadTags().catch(() => {
       // tagStore keeps error.
     });
-  }, [
-    loadCategories,
-    loadTags,
-  ]);
+  }, [loadCategories, loadTags]);
 
-  function buildQuery(
-    targetPage: number,
-    filters = appliedFilters,
-  ): TaskQuery {
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      const query = searchText.trim();
+      if (query !== appliedFilters.query) {
+        searchGenerationRef.current += 1;
+        setIsLoading(true);
+        setPage(0);
+        setAppliedFilters((current) => ({ ...current, query }));
+      }
+    }, 350);
+    return () => window.clearTimeout(timer);
+  }, [searchText, appliedFilters.query]);
+
+  function buildQuery(targetPage: number, filters = appliedFilters): TaskQuery {
     return {
       page: targetPage,
       size: PAGE_SIZE,
-      q:
-        filters.query ||
-        undefined,
-      status:
-        filters.status ||
-        undefined,
-      deadlineFrom:
-        filters.deadlineFrom ||
-        undefined,
-      deadlineTo:
-        filters.deadlineTo ||
-        undefined,
-      categoryId:
-        filters.categoryId,
-      tagIds:
-        filters.tagIds.length > 0
-          ? filters.tagIds
-          : undefined,
-      sourceStatus:
-        filters.sourceStatus ||
-        undefined,
+      q: filters.query || undefined,
+      status: filters.status || undefined,
+      deadlineFrom: filters.deadlineFrom || undefined,
+      deadlineTo: filters.deadlineTo || undefined,
+      categoryId: filters.categoryId,
+      tagIds: filters.tagIds.length > 0 ? filters.tagIds : undefined,
+      sourceStatus: filters.sourceStatus || undefined,
       sortBy: filters.sortBy,
-      sortDirection:
-        filters.sortDirection,
+      sortDirection: filters.sortDirection,
     };
   }
 
   useEffect(() => {
     let cancelled = false;
+    const generation = searchGenerationRef.current;
 
     void getTasks({
       page,
       size: PAGE_SIZE,
-      q:
-        appliedFilters.query ||
-        undefined,
-      status:
-        appliedFilters.status ||
-        undefined,
-      deadlineFrom:
-        appliedFilters.deadlineFrom ||
-        undefined,
-      deadlineTo:
-        appliedFilters.deadlineTo ||
-        undefined,
-      categoryId:
-        appliedFilters.categoryId,
+      q: appliedFilters.query || undefined,
+      status: appliedFilters.status || undefined,
+      deadlineFrom: appliedFilters.deadlineFrom || undefined,
+      deadlineTo: appliedFilters.deadlineTo || undefined,
+      categoryId: appliedFilters.categoryId,
       tagIds:
-        appliedFilters.tagIds
-          .length > 0
-          ? appliedFilters.tagIds
-          : undefined,
-      sourceStatus:
-        appliedFilters.sourceStatus ||
-        undefined,
-      sortBy:
-        appliedFilters.sortBy,
-      sortDirection:
-        appliedFilters.sortDirection,
+        appliedFilters.tagIds.length > 0 ? appliedFilters.tagIds : undefined,
+      sourceStatus: appliedFilters.sourceStatus || undefined,
+      sortBy: appliedFilters.sortBy,
+      sortDirection: appliedFilters.sortDirection,
     })
       .then((response) => {
-        if (cancelled) {
+        if (cancelled || generation !== searchGenerationRef.current) {
           return;
         }
 
         setTasks(response.items);
-        setTotalElements(
-          response.totalElements,
-        );
-        setTotalPages(
-          response.totalPages,
-        );
+        setTotalElements(response.totalElements);
+        setTotalPages(response.totalPages);
         setLoadErrorMessage(null);
       })
       .catch((error: unknown) => {
-        if (cancelled) {
+        if (cancelled || generation !== searchGenerationRef.current) {
           return;
         }
 
-        setLoadErrorMessage(
-          getErrorMessage(error),
-        );
+        setLoadErrorMessage(getErrorMessage(error));
       })
       .finally(() => {
-        if (!cancelled) {
+        if (!cancelled && generation === searchGenerationRef.current) {
           setIsLoading(false);
         }
       });
@@ -387,17 +239,11 @@ export function TasksPage() {
     return () => {
       cancelled = true;
     };
-  }, [
-    page,
-    appliedFilters,
-  ]);
+  }, [page, appliedFilters]);
 
-  async function reloadPage(
-    preferredPage: number,
-    showLoading = true,
-  ) {
-    const targetPage =
-      Math.max(0, preferredPage);
+  async function reloadPage(preferredPage: number, showLoading = true) {
+    const targetPage = Math.max(0, preferredPage);
+    const generation = searchGenerationRef.current;
 
     if (showLoading) {
       setIsLoading(true);
@@ -405,18 +251,13 @@ export function TasksPage() {
     setLoadErrorMessage(null);
 
     try {
-      const response =
-        await getTasks(
-          buildQuery(targetPage),
-        );
+      const response = await getTasks(buildQuery(targetPage));
+      if (generation !== searchGenerationRef.current) return;
 
       const normalizedPage =
         response.totalPages === 0
           ? 0
-          : Math.min(
-              targetPage,
-              response.totalPages - 1,
-            );
+          : Math.min(targetPage, response.totalPages - 1);
 
       /*
        * A mutation can remove the final result from
@@ -424,81 +265,49 @@ export function TasksPage() {
        * page is no longer valid, load the new final
        * page instead of leaving "Page 2 of 1".
        */
-      if (
-        normalizedPage !==
-        targetPage
-      ) {
-        const normalizedResponse =
-          await getTasks(
-            buildQuery(
-              normalizedPage,
-            ),
-          );
+      if (normalizedPage !== targetPage) {
+        const normalizedResponse = await getTasks(buildQuery(normalizedPage));
+        if (generation !== searchGenerationRef.current) return;
 
-        setTasks(
-          normalizedResponse.items,
-        );
-        setPage(
-          normalizedResponse.page,
-        );
-        setTotalElements(
-          normalizedResponse.totalElements,
-        );
-        setTotalPages(
-          normalizedResponse.totalPages,
-        );
+        setTasks(normalizedResponse.items);
+        setPage(normalizedResponse.page);
+        setTotalElements(normalizedResponse.totalElements);
+        setTotalPages(normalizedResponse.totalPages);
         setLoadErrorMessage(null);
         return;
       }
 
       setTasks(response.items);
       setPage(response.page);
-      setTotalElements(
-        response.totalElements,
-      );
-      setTotalPages(
-        response.totalPages,
-      );
+      setTotalElements(response.totalElements);
+      setTotalPages(response.totalPages);
       setLoadErrorMessage(null);
     } catch (error) {
-      setLoadErrorMessage(
-        getErrorMessage(error),
-      );
+      setLoadErrorMessage(getErrorMessage(error));
       throw error;
     } finally {
-      if (showLoading) {
+      if (showLoading && generation === searchGenerationRef.current) {
         setIsLoading(false);
       }
     }
   }
 
-  function handleApplyFilters(
-    event:
-      FormEvent<HTMLFormElement>,
-  ) {
+  function handleApplyFilters(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    if (
-      deadlineFrom &&
-      deadlineTo &&
-      deadlineFrom > deadlineTo
-    ) {
-      setActionErrorMessage(
-        "Deadline from must be on or before deadline to.",
-      );
+    if (deadlineFrom && deadlineTo && deadlineFrom > deadlineTo) {
+      setActionErrorMessage("Deadline from must be on or before deadline to.");
       return;
     }
 
     const nextFilters = {
-      query:
-        searchText.trim(),
+      query: searchText.trim(),
       status: statusFilter,
       deadlineFrom,
       deadlineTo,
       categoryId,
       tagIds,
-      sourceStatus:
-        sourceStatusFilter,
+      sourceStatus: sourceStatusFilter,
       sortBy,
       sortDirection,
     };
@@ -509,18 +318,36 @@ export function TasksPage() {
     setEditingOrganizationTaskId(null);
     setNotice(null);
     setIsLoading(true);
+    searchGenerationRef.current += 1;
     setPage(0);
-    setAppliedFilters(
-      nextFilters,
-    );
+    setAppliedFilters(nextFilters);
+  }
+
+  function handleSearchTextChange(value: string) {
+    setSearchText(value);
+    if (!value.trim() && appliedFilters.query) {
+      searchGenerationRef.current += 1;
+      setIsLoading(true);
+      setPage(0);
+      setAppliedFilters((current) => ({ ...current, query: "" }));
+    }
+  }
+
+  function handleSearchImmediate() {
+    const query = searchText.trim();
+    if (query === appliedFilters.query && page === 0) return;
+    searchGenerationRef.current += 1;
+    setIsLoading(true);
+    setPage(0);
+    setAppliedFilters((current) => ({ ...current, query }));
   }
 
   function handleClearFilters() {
+    searchGenerationRef.current += 1;
     setSearchText("");
     setStatusFilter("");
     setDeadlineFrom("");
     setDeadlineTo("");
-    setCategoryId(undefined);
     setTagIds([]);
     setSourceStatusFilter("");
     setSortBy("createdAt");
@@ -534,13 +361,26 @@ export function TasksPage() {
     setPage(0);
     setAppliedFilters({
       ...EMPTY_FILTERS,
+      categoryId: appliedFilters.categoryId,
       tagIds: [],
     });
   }
 
-  function handlePageChange(
-    nextPage: number,
-  ) {
+  function handleCategoryScopeChange(nextCategoryId: number | undefined) {
+    if (nextCategoryId === appliedFilters.categoryId) return;
+    searchGenerationRef.current += 1;
+    setCategoryId(nextCategoryId);
+    setEditingOrganizationTaskId(null);
+    setOrganizationErrorMessage(null);
+    setLoadErrorMessage(null);
+    setActionErrorMessage(null);
+    setNotice(null);
+    setIsLoading(true);
+    setPage(0);
+    setAppliedFilters({ ...appliedFilters, categoryId: nextCategoryId });
+  }
+
+  function handlePageChange(nextPage: number) {
     if (
       isLoading ||
       nextPage < 0 ||
@@ -550,6 +390,7 @@ export function TasksPage() {
       return;
     }
 
+    searchGenerationRef.current += 1;
     setLoadErrorMessage(null);
     setActionErrorMessage(null);
     setNotice(null);
@@ -558,38 +399,27 @@ export function TasksPage() {
   }
 
   async function handleCreateTask() {
-    const trimmedTitle =
-      title.trim();
+    const trimmedTitle = title.trim();
 
-    if (
-      !trimmedTitle ||
-      isMutating
-    ) {
+    if (!trimmedTitle || isMutating) {
       return;
     }
 
-    const input:
-      CreateTaskInput = {
-        title: trimmedTitle,
-        description:
-          description.trim() ||
-          null,
-        deadline:
-          deadline || null,
-      };
+    const input: CreateTaskInput = {
+      title: trimmedTitle,
+      description: description.trim() || null,
+      deadline: deadline || null,
+    };
 
     setIsMutating(true);
     setActionErrorMessage(null);
+    setCreateErrorMessage(null);
     setNotice(null);
 
     try {
-      await createIndependentTask(
-        input,
-      );
+      await createIndependentTask(input);
     } catch (error) {
-      setActionErrorMessage(
-        getErrorMessage(error),
-      );
+      setCreateErrorMessage(getErrorMessage(error));
       setIsMutating(false);
       return;
     }
@@ -597,25 +427,22 @@ export function TasksPage() {
     setTitle("");
     setDescription("");
     setDeadline("");
+    setIsCreateOpen(false);
 
     try {
       await reloadPage(0);
-      setNotice(
-        "Independent Task created.",
-      );
+      setNotice("Independent Task created.");
     } catch {
       setLoadErrorMessage(
         "Task created, but the Task list could not be refreshed.",
       );
     } finally {
       setIsMutating(false);
+      requestAnimationFrame(() => createTriggerRef.current?.focus());
     }
   }
 
-  async function handleUpdate(
-    taskId: number,
-    input: UpdateTaskInput,
-  ) {
+  async function handleUpdate(taskId: number, input: UpdateTaskInput) {
     if (isMutating) {
       return;
     }
@@ -625,15 +452,9 @@ export function TasksPage() {
     setNotice(null);
 
     try {
-      await updateTask(
-        taskId,
-        input,
-      );
-
+      await updateTask(taskId, input);
     } catch (error) {
-      setActionErrorMessage(
-        getErrorMessage(error),
-      );
+      setActionErrorMessage(getErrorMessage(error));
       setIsMutating(false);
       throw error;
     }
@@ -645,9 +466,7 @@ export function TasksPage() {
        * search/deadline filter. Reload from Backend.
        */
       await reloadPage(page);
-      setNotice(
-        "Task updated.",
-      );
+      setNotice("Task updated.");
     } catch {
       setLoadErrorMessage(
         "Task updated, but the Task list could not be refreshed.",
@@ -657,10 +476,7 @@ export function TasksPage() {
     }
   }
 
-  async function handleStatusChange(
-    taskId: number,
-    status: TaskStatus,
-  ) {
+  async function handleStatusChange(taskId: number, status: TaskStatus) {
     if (isMutating) {
       return;
     }
@@ -670,15 +486,9 @@ export function TasksPage() {
     setNotice(null);
 
     try {
-      await updateTaskStatus(
-        taskId,
-        status,
-      );
-
+      await updateTaskStatus(taskId, status);
     } catch (error) {
-      setActionErrorMessage(
-        getErrorMessage(error),
-      );
+      setActionErrorMessage(getErrorMessage(error));
       setIsMutating(false);
       return;
     }
@@ -691,9 +501,7 @@ export function TasksPage() {
        * must remain authoritative as well.
        */
       await reloadPage(page);
-      setNotice(
-        "Task status updated.",
-      );
+      setNotice("Task status updated.");
     } catch {
       setLoadErrorMessage(
         "Task status updated, but the Task list could not be refreshed.",
@@ -703,9 +511,7 @@ export function TasksPage() {
     }
   }
 
-  async function handleDelete(
-    taskId: number,
-  ) {
+  async function handleDelete(taskId: number) {
     if (isMutating) {
       return;
     }
@@ -717,9 +523,7 @@ export function TasksPage() {
     try {
       await deleteTask(taskId);
     } catch (error) {
-      setActionErrorMessage(
-        getErrorMessage(error),
-      );
+      setActionErrorMessage(getErrorMessage(error));
       setIsMutating(false);
       throw error;
     }
@@ -736,12 +540,8 @@ export function TasksPage() {
     }
   }
 
-  function handleStartOrganizationEdit(
-    task: Task,
-  ) {
-    setEditingOrganizationTaskId(
-      task.id,
-    );
+  function handleStartOrganizationEdit(task: Task) {
+    setEditingOrganizationTaskId(task.id);
     setOrganizationErrorMessage(null);
   }
 
@@ -759,47 +559,34 @@ export function TasksPage() {
     setNotice(null);
 
     try {
-      const organization =
-        await updateTaskOrganization(
-          taskId,
-          {
-            categoryId:
-              nextCategoryId,
-            tagIds: nextTagIds,
-          },
-        );
+      const organization = await updateTaskOrganization(taskId, {
+        categoryId: nextCategoryId,
+        tagIds: nextTagIds,
+      });
 
       setTasks((current) =>
         current.map((task) =>
           task.id === taskId
             ? {
                 ...task,
-                category:
-                  organization.category,
-                tags:
-                  organization.tags,
+                category: organization.category,
+                tags: organization.tags,
               }
             : task,
         ),
       );
-      setEditingOrganizationTaskId(
-        null,
-      );
+      setEditingOrganizationTaskId(null);
 
       try {
         await reloadPage(page, false);
-        setNotice(
-          "Task organization updated.",
-        );
+        setNotice("Task organization updated.");
       } catch {
         setLoadErrorMessage(
           "Task organization updated, but the Task list could not be refreshed.",
         );
       }
     } catch (error) {
-      setOrganizationErrorMessage(
-        getErrorMessage(error),
-      );
+      setOrganizationErrorMessage(getErrorMessage(error));
     } finally {
       setIsMutating(false);
     }
@@ -808,16 +595,12 @@ export function TasksPage() {
   function refreshAfterCatalogChange() {
     setEditingOrganizationTaskId(null);
 
-    void reloadPage(page, false).catch(
-      () => {
-        // reloadPage keeps the load error.
-      },
-    );
+    void reloadPage(page, false).catch(() => {
+      // reloadPage keeps the load error.
+    });
   }
 
-  function handleCategoryChange(
-    change: CategoryManagerChange,
-  ) {
+  function handleCategoryChange(change: CategoryManagerChange) {
     if (change.type === "created") {
       return;
     }
@@ -825,12 +608,10 @@ export function TasksPage() {
     if (change.type === "renamed") {
       setTasks((current) =>
         current.map((task) =>
-          task.category?.id ===
-          change.category.id
+          task.category?.id === change.category.id
             ? {
                 ...task,
-                category:
-                  change.category,
+                category: change.category,
               }
             : task,
         ),
@@ -841,8 +622,7 @@ export function TasksPage() {
 
     setTasks((current) =>
       current.map((task) =>
-        task.category?.id ===
-        change.category.id
+        task.category?.id === change.category.id
           ? {
               ...task,
               category: null,
@@ -852,12 +632,11 @@ export function TasksPage() {
     );
 
     const categoryWasSelected =
-      categoryId ===
-        change.category.id ||
-      appliedFilters.categoryId ===
-        change.category.id;
+      categoryId === change.category.id ||
+      appliedFilters.categoryId === change.category.id;
 
     if (categoryWasSelected) {
+      searchGenerationRef.current += 1;
       const nextFilters = {
         ...appliedFilters,
         categoryId: undefined,
@@ -874,9 +653,7 @@ export function TasksPage() {
     refreshAfterCatalogChange();
   }
 
-  function handleTagChange(
-    change: TagManagerChange,
-  ) {
+  function handleTagChange(change: TagManagerChange) {
     if (change.type === "created") {
       return;
     }
@@ -886,9 +663,7 @@ export function TasksPage() {
         current.map((task) => ({
           ...task,
           tags: task.tags.map((tag) =>
-            tag.id === change.tag.id
-              ? change.tag
-              : tag,
+            tag.id === change.tag.id ? change.tag : tag,
           ),
         })),
       );
@@ -899,30 +674,20 @@ export function TasksPage() {
     setTasks((current) =>
       current.map((task) => ({
         ...task,
-        tags: task.tags.filter(
-          (tag) =>
-            tag.id !== change.tag.id,
-        ),
+        tags: task.tags.filter((tag) => tag.id !== change.tag.id),
       })),
     );
 
-    const nextDraftTagIds =
-      tagIds.filter(
-        (tagId) =>
-          tagId !== change.tag.id,
-      );
-    const nextAppliedTagIds =
-      appliedFilters.tagIds.filter(
-        (tagId) =>
-          tagId !== change.tag.id,
-      );
+    const nextDraftTagIds = tagIds.filter((tagId) => tagId !== change.tag.id);
+    const nextAppliedTagIds = appliedFilters.tagIds.filter(
+      (tagId) => tagId !== change.tag.id,
+    );
     const tagWasSelected =
-      nextDraftTagIds.length !==
-        tagIds.length ||
-      nextAppliedTagIds.length !==
-        appliedFilters.tagIds.length;
+      nextDraftTagIds.length !== tagIds.length ||
+      nextAppliedTagIds.length !== appliedFilters.tagIds.length;
 
     if (tagWasSelected) {
+      searchGenerationRef.current += 1;
       setTagIds(nextDraftTagIds);
       setEditingOrganizationTaskId(null);
       setPage(0);
@@ -937,217 +702,243 @@ export function TasksPage() {
     refreshAfterCatalogChange();
   }
 
-  const hasAppliedFilters =
-    Boolean(
-      appliedFilters.query ||
-      appliedFilters.status ||
-      appliedFilters
-        .deadlineFrom ||
-      appliedFilters.deadlineTo ||
-      appliedFilters.categoryId !==
-        undefined ||
-      appliedFilters.tagIds.length > 0 ||
-      appliedFilters.sourceStatus,
-    );
+  const hasAppliedFilters = Boolean(
+    appliedFilters.query ||
+    appliedFilters.status ||
+    appliedFilters.deadlineFrom ||
+    appliedFilters.deadlineTo ||
+    appliedFilters.categoryId !== undefined ||
+    appliedFilters.tagIds.length > 0 ||
+    appliedFilters.sourceStatus,
+  );
+  const hasNarrowingFilters = Boolean(
+    appliedFilters.query ||
+    appliedFilters.status ||
+    appliedFilters.deadlineFrom ||
+    appliedFilters.deadlineTo ||
+    appliedFilters.tagIds.length > 0 ||
+    appliedFilters.sourceStatus,
+  );
 
-  const hasChangedFilterControls =
-    Boolean(
-      searchText ||
-      statusFilter ||
-      deadlineFrom ||
-      deadlineTo ||
-      categoryId !== undefined ||
-      tagIds.length > 0 ||
-      sourceStatusFilter ||
-      sortBy !== "createdAt" ||
-      sortDirection !== "desc" ||
-      hasAppliedFilters ||
-      appliedFilters.sortBy !==
-        "createdAt" ||
-      appliedFilters.sortDirection !==
-        "desc",
-    );
+  const hasChangedFilterControls = Boolean(
+    searchText ||
+    statusFilter ||
+    deadlineFrom ||
+    deadlineTo ||
+    tagIds.length > 0 ||
+    sourceStatusFilter ||
+    sortBy !== "createdAt" ||
+    sortDirection !== "desc" ||
+    hasNarrowingFilters ||
+    appliedFilters.sortBy !== "createdAt" ||
+    appliedFilters.sortDirection !== "desc",
+  );
 
   const organizationLoadError =
-    (!hasLoadedCategories
-      ? categoryError?.message
-      : null) ??
-    (!hasLoadedTags
-      ? tagError?.message
-      : null) ??
+    (!hasLoadedCategories ? categoryError?.message : null) ??
+    (!hasLoadedTags ? tagError?.message : null) ??
     null;
 
   return (
     <main className="min-w-0 flex-1 overflow-y-auto p-4 sm:p-6">
-      <div className="mx-auto max-w-6xl">
+      <div className="mx-auto max-w-5xl">
         <header className="border-b border-(--border) pb-5">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <h1 className="text-2xl font-semibold">
-                Tasks
-              </h1>
+          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end sm:justify-between">
+            <div className="min-w-0">
+              <h1 className="text-2xl font-semibold">Tasks</h1>
 
               <p className="mt-1 max-w-2xl text-sm leading-6 text-(--text-secondary)">
-                Turn learning context into clear, actionable work.
+                Turn your notes into tasks you can act on.
               </p>
             </div>
 
-            <p className="w-fit rounded-full border border-(--border) bg-(--surface) px-3 py-1.5 text-xs font-medium text-(--text-secondary)">
-              {totalElements}{" "}
-              {hasAppliedFilters
-                ? `result${totalElements === 1 ? "" : "s"}`
-                : `task${totalElements === 1 ? "" : "s"}`}
-            </p>
-          </div>
-        </header>
-
-        <section className="mt-5 rounded-xl border border-(--border) bg-(--app-bg) p-4">
-          <div className="flex items-center gap-2">
-            <Plus
-              size={16}
-              className="text-(--text-muted)"
-              aria-hidden="true"
-            />
-
-            <div>
-              <h2 className="text-sm font-medium text-(--text-secondary)">
-                Create independent Task
-              </h2>
-
-            </div>
-          </div>
-
-          <div className="mt-4 grid gap-2 lg:grid-cols-[1fr_1.2fr_auto]">
-            <div>
-              <label
-                htmlFor="global-task-title"
-                className="sr-only"
-              >
-                Task title
-              </label>
-
-              <input
-                id="global-task-title"
-                value={title}
-                maxLength={255}
-                disabled={isMutating}
-                onChange={(event) =>
-                  setTitle(
-                    event.target.value,
-                  )
-                }
-                placeholder="Task title"
-                className="w-full rounded-xl border border-(--border) bg-(--surface) px-3 py-2.5 text-sm outline-none placeholder:text-(--text-faint) focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
-              />
-            </div>
-
-            <div>
-              <label
-                htmlFor="global-task-description"
-                className="sr-only"
-              >
-                Task description
-              </label>
-
-              <input
-                id="global-task-description"
-                value={description}
-                disabled={isMutating}
-                onChange={(event) =>
-                  setDescription(
-                    event.target.value,
-                  )
-                }
-                placeholder="Description (optional)"
-                className="w-full rounded-xl border border-(--border) bg-(--surface) px-3 py-2.5 text-sm outline-none placeholder:text-(--text-faint) focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
-              />
-            </div>
-
-            <div className="flex gap-2">
-              <label
-                htmlFor="global-task-deadline"
-                className="sr-only"
-              >
-                Task deadline
-              </label>
-
-              <input
-                id="global-task-deadline"
-                type="date"
-                value={deadline}
-                disabled={isMutating}
-                onChange={(event) =>
-                  setDeadline(
-                    event.target.value,
-                  )
-                }
-                className="min-w-0 rounded-xl border border-(--border) bg-(--surface) px-3 py-2.5 text-sm text-(--text-secondary) outline-none focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
-              />
-
+            <div className="flex flex-wrap items-center gap-2 sm:shrink-0">
+              <p className="w-fit rounded-full border border-(--border) bg-(--surface) px-3 py-1.5 text-xs font-medium text-(--text-secondary)">
+                {totalElements}{" "}
+                {hasAppliedFilters
+                  ? `result${totalElements === 1 ? "" : "s"}`
+                  : `task${totalElements === 1 ? "" : "s"}`}
+              </p>
               <button
+                ref={createTriggerRef}
                 type="button"
-                disabled={
-                  isMutating ||
-                  !title.trim()
-                }
-                onClick={() =>
-                  void handleCreateTask()
-                }
-                className="shrink-0 rounded-xl bg-(--primary-bg) px-4 py-2.5 text-sm font-medium text-(--primary-text) transition hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
+                disabled={isMutating}
+                aria-expanded={isCreateOpen}
+                aria-controls="tasks-create-task"
+                onClick={() => {
+                  if (isCreateOpen) {
+                    setIsCreateOpen(false);
+                    setTitle("");
+                    setDescription("");
+                    setDeadline("");
+                    setCreateErrorMessage(null);
+                  } else {
+                    setIsCreateOpen(true);
+                    requestAnimationFrame(() => createTitleRef.current?.focus());
+                  }
+                }}
+                className="inline-flex min-h-10 items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-(--primary-bg) px-4 text-sm font-medium text-(--primary-text) transition hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
               >
-                {isMutating
-                  ? "Saving..."
-                  : "Create"}
+                <Plus size={16} aria-hidden="true" /> Add task
               </button>
             </div>
           </div>
-        </section>
+          {isCreateOpen && (
+            <form
+              id="tasks-create-task"
+              aria-label="Add independent task"
+              aria-busy={isMutating}
+              onSubmit={(event) => {
+                event.preventDefault();
+                void handleCreateTask();
+              }}
+              onKeyDown={(event) => {
+                if (event.key === "Escape" && !isMutating) {
+                  setIsCreateOpen(false);
+                  setTitle("");
+                  setDescription("");
+                  setDeadline("");
+                  setCreateErrorMessage(null);
+                  requestAnimationFrame(() =>
+                    createTriggerRef.current?.focus(),
+                  );
+                }
+              }}
+              className="mt-4 rounded-xl border border-(--border) bg-(--app-bg) p-4"
+            >
+              <div className="grid gap-2 sm:grid-cols-[1fr_auto]">
+                <div>
+                  <label htmlFor="global-task-title" className="sr-only">
+                    Task title
+                  </label>
+
+                  <input
+                    ref={createTitleRef}
+                    id="global-task-title"
+                    value={title}
+                    maxLength={255}
+                    disabled={isMutating}
+                    onChange={(event) => setTitle(event.target.value)}
+                    aria-required="true"
+                    aria-invalid={Boolean(createErrorMessage)}
+                    placeholder="Task title"
+                    className="w-full rounded-xl border border-(--border) bg-(--surface) px-3 py-2.5 text-sm outline-none placeholder:text-(--text-faint) focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={isMutating || !title.trim()}
+                  className="min-h-10 rounded-xl bg-(--primary-bg) px-4 text-sm font-medium text-(--primary-text) transition hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {isMutating ? "Saving..." : "Add"}
+                </button>
+              </div>
+
+              <details className="group mt-2">
+                <summary className="flex min-h-10 cursor-pointer list-none items-center gap-1.5 rounded-lg px-2 text-xs text-(--text-muted) hover:bg-(--surface-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)">
+                  <ChevronDown
+                    size={14}
+                    className="transition-transform group-open:rotate-180"
+                    aria-hidden="true"
+                  />
+                  More options
+                </summary>
+                <div className="mt-2 grid gap-2 sm:grid-cols-2">
+                  <div>
+                    <label
+                      htmlFor="global-task-description"
+                      className="sr-only"
+                    >
+                      Task description
+                    </label>
+
+                    <input
+                      id="global-task-description"
+                      value={description}
+                      disabled={isMutating}
+                      onChange={(event) => setDescription(event.target.value)}
+                      placeholder="Description (optional)"
+                      className="w-full rounded-xl border border-(--border) bg-(--surface) px-3 py-2.5 text-sm outline-none placeholder:text-(--text-faint) focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="global-task-deadline" className="sr-only">
+                      Task deadline
+                    </label>
+
+                    <input
+                      id="global-task-deadline"
+                      type="date"
+                      value={deadline}
+                      disabled={isMutating}
+                      onChange={(event) => setDeadline(event.target.value)}
+                      className="min-w-0 rounded-xl border border-(--border) bg-(--surface) px-3 py-2.5 text-sm text-(--text-secondary) outline-none focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
+                    />
+                  </div>
+                </div>
+              </details>
+              {createErrorMessage && (
+                <p role="alert" className="mt-2 text-xs text-(--danger-text)">
+                  {createErrorMessage}
+                </p>
+              )}
+              <button
+                type="button"
+                disabled={isMutating}
+                onClick={() => {
+                  setIsCreateOpen(false);
+                  setTitle("");
+                  setDescription("");
+                  setDeadline("");
+                  setCreateErrorMessage(null);
+                  requestAnimationFrame(() =>
+                    createTriggerRef.current?.focus(),
+                  );
+                }}
+                className="mt-2 min-h-10 rounded-lg px-3 text-xs text-(--text-muted) hover:bg-(--surface-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:opacity-40"
+              >
+                Cancel
+              </button>
+            </form>
+          )}
+        </header>
+
+        <CategoryScopeRow
+          categories={categories}
+          selectedId={appliedFilters.categoryId}
+          onSelect={handleCategoryScopeChange}
+        />
 
         <TaskFilters
+          toolbarAction={
+            <OrganizationManagerDialog
+              onCategoryChange={handleCategoryChange}
+              onTagChange={handleTagChange}
+            />
+          }
           searchText={searchText}
           status={statusFilter}
           deadlineFrom={deadlineFrom}
           deadlineTo={deadlineTo}
-          categoryId={categoryId}
           tagIds={tagIds}
-          sourceStatus={
-            sourceStatusFilter
-          }
+          sourceStatus={sourceStatusFilter}
           sortBy={sortBy}
           sortDirection={sortDirection}
-          categories={categories}
           tags={tags}
-          categoriesLoading={
-            categoriesLoading
-          }
           tagsLoading={tagsLoading}
           isLoading={isLoading}
-          canClear={
-            hasChangedFilterControls
-          }
-          onSearchTextChange={
-            setSearchText
-          }
-          onStatusChange={
-            setStatusFilter
-          }
-          onDeadlineFromChange={
-            setDeadlineFrom
-          }
-          onDeadlineToChange={
-            setDeadlineTo
-          }
-          onCategoryChange={
-            setCategoryId
-          }
+          canClear={hasChangedFilterControls}
+          onSearchTextChange={handleSearchTextChange}
+          onSearchImmediate={handleSearchImmediate}
+          onStatusChange={setStatusFilter}
+          onDeadlineFromChange={setDeadlineFrom}
+          onDeadlineToChange={setDeadlineTo}
           onTagIdsChange={setTagIds}
-          onSourceStatusChange={
-            setSourceStatusFilter
-          }
+          onSourceStatusChange={setSourceStatusFilter}
           onSortByChange={setSortBy}
-          onSortDirectionChange={
-            setSortDirection
-          }
+          onSortDirectionChange={setSortDirection}
           onApply={handleApplyFilters}
           onClear={handleClearFilters}
         />
@@ -1160,22 +951,6 @@ export function TasksPage() {
             Organization options could not be loaded: {organizationLoadError}
           </div>
         )}
-
-        <details className="mt-4 rounded-xl border border-(--border) bg-(--surface)">
-          <summary className="cursor-pointer px-4 py-3 text-sm font-medium text-(--text-secondary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)">
-            Manage categories and tags
-          </summary>
-          <div className="grid gap-3 border-t border-(--border) p-3 md:grid-cols-2">
-            <CategoryManager
-              onChange={
-                handleCategoryChange
-              }
-            />
-            <TagManager
-              onChange={handleTagChange}
-            />
-          </div>
-        </details>
 
         {loadErrorMessage && (
           <div
@@ -1232,18 +1007,22 @@ export function TasksPage() {
               />
 
               <h2 className="mt-3 text-sm font-medium text-(--text-secondary)">
-                {hasAppliedFilters
+                {hasNarrowingFilters
                   ? "No matching Tasks"
-                  : "No Tasks yet"}
+                  : appliedFilters.categoryId !== undefined
+                    ? "No Tasks in this Category"
+                    : "No Tasks yet"}
               </h2>
 
               <p className="mt-2 max-w-md text-xs leading-5 text-(--text-muted)">
-                {hasAppliedFilters
-                  ? "No Task matches the current search and filter conditions."
-                  : "Create an independent Task here, or create one from a Note to preserve source context."}
+                {hasNarrowingFilters
+                  ? "Try changing or clearing your filters."
+                  : appliedFilters.categoryId !== undefined
+                    ? "Choose another Category or All to browse your Tasks."
+                    : "Create a Task here, or make one from a Note to keep its origin."}
               </p>
 
-              {hasAppliedFilters && (
+              {hasNarrowingFilters && (
                 <button
                   type="button"
                   onClick={handleClearFilters}
@@ -1260,52 +1039,28 @@ export function TasksPage() {
               <div key={task.id}>
                 <TaskCard
                   task={task}
-                  isMutating={
-                    isMutating
-                  }
-                  onUpdate={
-                    handleUpdate
-                  }
-                  onStatusChange={
-                    handleStatusChange
-                  }
-                  onDelete={
-                    handleDelete
-                  }
-                  onOpenDetail={(
-                    taskId,
-                  ) =>
-                    navigate(
-                      `/tasks/${taskId}`,
-                    )
-                  }
-                  onEditOrganization={
-                    handleStartOrganizationEdit
-                  }
+                  isMutating={isMutating}
+                  onUpdate={handleUpdate}
+                  onStatusChange={handleStatusChange}
+                  onDelete={handleDelete}
+                  onOpenDetail={(taskId) => navigate(`/tasks/${taskId}`)}
+                  onEditOrganization={handleStartOrganizationEdit}
                   isOrganizationDisabled={
                     categoriesLoading ||
                     tagsLoading ||
-                    Boolean(
-                      organizationLoadError,
-                    )
+                    Boolean(organizationLoadError)
                   }
                 />
 
-                {editingOrganizationTaskId ===
-                  task.id && (
+                {editingOrganizationTaskId === task.id && (
                   <TaskOrganizationEditor
                     key={`organization-${task.id}`}
                     task={task}
                     categories={categories}
                     tags={tags}
                     isBusy={isMutating}
-                    errorMessage={
-                      organizationErrorMessage
-                    }
-                    onSave={(
-                      nextCategoryId,
-                      nextTagIds,
-                    ) =>
+                    errorMessage={organizationErrorMessage}
+                    onSave={(nextCategoryId, nextTagIds) =>
                       handleSaveOrganization(
                         task.id,
                         nextCategoryId,
@@ -1314,12 +1069,8 @@ export function TasksPage() {
                     }
                     onCancel={() => {
                       if (!isMutating) {
-                        setEditingOrganizationTaskId(
-                          null,
-                        );
-                        setOrganizationErrorMessage(
-                          null,
-                        );
+                        setEditingOrganizationTaskId(null);
+                        setOrganizationErrorMessage(null);
                       }
                     }}
                   />
@@ -1329,62 +1080,38 @@ export function TasksPage() {
           </div>
         )}
 
-        {!isLoading &&
-          !loadErrorMessage &&
-          totalPages > 1 && (
-            <nav
-              aria-label="Tasks pagination"
-              className="mt-6 flex items-center justify-between border-t border-(--border) pt-4"
-            >
-              <p className="text-xs text-(--text-muted)">
-                Page {page + 1} of{" "}
-                {totalPages}
-              </p>
+        {!isLoading && !loadErrorMessage && totalPages > 1 && (
+          <nav
+            aria-label="Tasks pagination"
+            className="mt-6 flex items-center justify-between border-t border-(--border) pt-4"
+          >
+            <p className="text-xs text-(--text-muted)">
+              Page {page + 1} of {totalPages}
+            </p>
 
-              <div className="flex gap-2">
-                <button
-                  type="button"
-                  disabled={
-                    page <= 0 ||
-                    isLoading
-                  }
-                  onClick={() =>
-                    handlePageChange(
-                      page - 1,
-                    )
-                  }
-                  aria-label="Previous Tasks page"
-                  className="flex h-9 w-9 items-center justify-center rounded-xl border border-(--border) text-(--text-secondary) transition hover:bg-(--surface) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
-                >
-                  <ChevronLeft
-                    size={16}
-                    aria-hidden="true"
-                  />
-                </button>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                disabled={page <= 0 || isLoading}
+                onClick={() => handlePageChange(page - 1)}
+                aria-label="Previous Tasks page"
+                className="flex h-9 w-9 items-center justify-center rounded-xl border border-(--border) text-(--text-secondary) transition hover:bg-(--surface) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                <ChevronLeft size={16} aria-hidden="true" />
+              </button>
 
-                <button
-                  type="button"
-                  disabled={
-                    page + 1 >=
-                      totalPages ||
-                    isLoading
-                  }
-                  onClick={() =>
-                    handlePageChange(
-                      page + 1,
-                    )
-                  }
-                  aria-label="Next Tasks page"
-                  className="flex h-9 w-9 items-center justify-center rounded-xl border border-(--border) text-(--text-secondary) transition hover:bg-(--surface) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
-                >
-                  <ChevronRight
-                    size={16}
-                    aria-hidden="true"
-                  />
-                </button>
-              </div>
-            </nav>
-          )}
+              <button
+                type="button"
+                disabled={page + 1 >= totalPages || isLoading}
+                onClick={() => handlePageChange(page + 1)}
+                aria-label="Next Tasks page"
+                className="flex h-9 w-9 items-center justify-center rounded-xl border border-(--border) text-(--text-secondary) transition hover:bg-(--surface) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                <ChevronRight size={16} aria-hidden="true" />
+              </button>
+            </div>
+          </nav>
+        )}
       </div>
     </main>
   );

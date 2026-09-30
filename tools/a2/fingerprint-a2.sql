@@ -144,7 +144,8 @@ personal_rows AS (
             coalesce(image.original_filename, '<NULL>'),
             coalesce(image.media_type, '<NULL>'),
             coalesce(image.size_bytes::text, '<NULL>'),
-            l.title,
+            coalesce(l.title, '<NULL>'),
+            coalesce(l.personal_description, '<NULL>'),
             l.added_at
         )
     FROM library_images l
@@ -167,7 +168,8 @@ personal_rows AS (
             coalesce(audio.original_filename, '<NULL>'),
             coalesce(audio.media_type, '<NULL>'),
             coalesce(audio.size_bytes::text, '<NULL>'),
-            l.title,
+            coalesce(l.title, '<NULL>'),
+            coalesce(l.personal_description, '<NULL>'),
             l.added_at
         )
     FROM library_audio l
@@ -230,6 +232,32 @@ personal_rows AS (
       ON y.id = l.youtube_source_id
     JOIN tags tag
       ON tag.id = link.tag_id
+
+    UNION ALL
+
+    SELECT
+        a.scope,
+        concat_ws('|', 'LIB_IMAGE_TAG', lower(a.email),
+            coalesce(image.external_url, 'UPLOAD:' || image.storage_key),
+            tag.normalized_name)
+    FROM library_image_tags link
+    JOIN library_images l ON l.id=link.library_image_id
+    JOIN account_scope a ON a.id=l.account_id
+    JOIN image_sources image ON image.id=l.image_source_id
+    JOIN tags tag ON tag.id=link.tag_id
+
+    UNION ALL
+
+    SELECT
+        a.scope,
+        concat_ws('|', 'LIB_AUDIO_TAG', lower(a.email),
+            coalesce(audio.external_url, 'UPLOAD:' || audio.storage_key),
+            tag.normalized_name)
+    FROM library_audio_tags link
+    JOIN library_audio l ON l.id=link.library_audio_id
+    JOIN account_scope a ON a.id=l.account_id
+    JOIN audio_sources audio ON audio.id=l.audio_source_id
+    JOIN tags tag ON tag.id=link.tag_id
 
     UNION ALL
 

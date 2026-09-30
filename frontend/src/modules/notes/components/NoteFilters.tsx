@@ -5,13 +5,15 @@ import {
 } from "lucide-react";
 import {
   type FormEvent,
+  type ReactNode,
   useId,
   useState,
 } from "react";
 
 import { FilterDialogShell } from "../../../components/ui/FilterDialogShell";
 import type { Tag } from "../../media/services/tagApi";
-import type { Category } from "../../organization/services/categoryApi";
+import { TagFinderInput } from "../../media/components/TagFinder";
+import { useTagFinder } from "../../media/components/tagFinding";
 
 export interface NoteFilterValues {
   categoryId?: number;
@@ -24,11 +26,10 @@ export interface NoteFilterValues {
 interface NoteFiltersProps {
   searchText: string;
   filters: NoteFilterValues;
-  categories: Category[];
   tags: Tag[];
-  categoriesLoading: boolean;
   tagsLoading: boolean;
   isLoading: boolean;
+  toolbarAction?: ReactNode;
 
   onSearchTextChange: (
     value: string,
@@ -64,16 +65,16 @@ function cloneFilters(
 export function NoteFilters({
   searchText,
   filters,
-  categories,
   tags,
-  categoriesLoading,
   tagsLoading,
   isLoading,
+  toolbarAction,
   onSearchTextChange,
   onSearch,
   onApplyFilters,
 }: NoteFiltersProps) {
   const dialogId = useId();
+  const { tagSearch, setTagSearch, visibleTags } = useTagFinder(tags);
 
   const [
     showFilters,
@@ -103,9 +104,10 @@ export function NoteFilters({
   }
 
   function handleResetDraft() {
-    setDraftFilters(
-      cloneFilters(DEFAULT_FILTERS),
-    );
+    setDraftFilters({
+      ...cloneFilters(DEFAULT_FILTERS),
+      categoryId: filters.categoryId,
+    });
   }
 
   function handleApplyFilters() {
@@ -186,9 +188,9 @@ export function NoteFilters({
     >
       <form
         onSubmit={onSearch}
-        className="flex flex-col gap-2 sm:flex-row"
+        className="flex flex-col gap-2 sm:flex-row sm:flex-wrap"
       >
-        <div className="flex min-w-0 flex-1 items-center gap-2 rounded-xl border border-(--border) bg-(--app-bg) px-3 transition focus-within:border-(--border-strong) focus-within:ring-2 focus-within:ring-(--focus)">
+        <div className="flex min-w-0 flex-1 items-center gap-2 rounded-xl border border-(--border) bg-(--app-bg) px-3 transition focus-within:border-(--border-strong) focus-within:ring-2 focus-within:ring-(--focus) sm:min-w-48">
           <Search
             size={16}
             className="shrink-0 text-(--text-muted)"
@@ -205,7 +207,6 @@ export function NoteFilters({
           <input
             id="global-note-search"
             value={searchText}
-            disabled={isLoading}
             onChange={(event) =>
               onSearchTextChange(
                 event.target.value,
@@ -223,14 +224,6 @@ export function NoteFilters({
             />
           )}
         </div>
-
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="min-h-10 rounded-lg bg-(--primary-bg) px-4 py-2 text-sm font-medium text-(--primary-text) transition hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          Search
-        </button>
 
         <button
           type="button"
@@ -252,6 +245,7 @@ export function NoteFilters({
 
           Filters
         </button>
+        {toolbarAction}
       </form>
 
       <FilterDialogShell
@@ -269,67 +263,10 @@ export function NoteFilters({
           Primary filters
         </p>
 
-        <div className="grid gap-3 sm:grid-cols-2">
+        <div className="grid gap-3">
           <fieldset className="rounded-xl border border-(--border) bg-(--surface-subtle) p-3">
             <legend className="px-1 text-xs font-medium text-(--text-secondary)">
-              Organization
-            </legend>
-
-            <label
-              htmlFor="note-category-filter"
-              className="mb-1.5 block text-[11px] font-medium text-(--text-muted)"
-            >
-              Category
-            </label>
-
-            <select
-              id="note-category-filter"
-              value={
-                draftFilters.categoryId ??
-                ""
-              }
-              disabled={
-                isLoading ||
-                categoriesLoading
-              }
-              onChange={(event) =>
-                setDraftFilters(
-                  (current) => ({
-                    ...current,
-                    categoryId:
-                      event.target.value
-                        ? Number(
-                            event.target
-                              .value,
-                          )
-                        : undefined,
-                  }),
-                )
-              }
-              className={
-                selectClassName
-              }
-            >
-              <option value="">
-                All categories
-              </option>
-
-              {categories.map(
-                (category) => (
-                  <option
-                    key={category.id}
-                    value={category.id}
-                  >
-                    {category.name}
-                  </option>
-                ),
-              )}
-            </select>
-          </fieldset>
-
-          <fieldset className="rounded-xl border border-(--border) bg-(--surface-subtle) p-3">
-            <legend className="px-1 text-xs font-medium text-(--text-secondary)">
-              Source context
+              Source
             </legend>
 
             <label
@@ -399,8 +336,10 @@ export function NoteFilters({
             </p>
           ) : (
             <>
+              <TagFinderInput value={tagSearch} onChange={setTagSearch} disabled={isLoading} />
+              {visibleTags.length === 0 && <p className="text-xs text-(--text-muted)">No matching tags.</p>}
               <div className="flex max-h-36 flex-wrap gap-2 overflow-y-auto">
-                {tags.map((tag) => {
+                {visibleTags.map((tag) => {
                   const checked =
                     draftFilters.tagIds.includes(
                       tag.id,
@@ -440,7 +379,7 @@ export function NoteFilters({
               </div>
 
               <p className="mt-2 text-[10px] leading-4 text-(--text-muted)">
-                Multiple selected tags match Notes with any selected tag.
+                Notes with any selected tag will be shown.
               </p>
             </>
           )}

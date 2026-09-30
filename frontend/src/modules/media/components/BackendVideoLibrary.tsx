@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { ExternalLink, Plus, RefreshCw, Search, X } from "lucide-react";
+import { ExternalLink, Plus, Search, X } from "lucide-react";
 
 import { ConfirmDialog } from "../../../components/ui/ConfirmDialog";
 import { useLibraryStore } from "../../../stores/libraryStore";
@@ -24,7 +24,8 @@ import { LibraryPagination } from "./LibraryPagination";
 import { LibraryMediaNavigation } from "./LibraryMediaNavigation";
 import { LibraryVideoCard } from "./LibraryVideoCard";
 import { LibraryViewModes, type LibraryViewMode } from "./LibraryViewModes";
-import { TagManager } from "./TagManager";
+import { useDebouncedSearch } from "../hooks/useDebouncedSearch";
+import type { TagManagerChange } from "./TagManager";
 
 interface BackendVideoLibraryProps {
   activeVideoId?: number;
@@ -68,8 +69,8 @@ const LIBRARY_FIELD_LABELS: Record<string, string> = {
   page: "Page",
   size: "Page size",
   youtubeUrl: "YouTube URL",
-  customTitle: "Custom title",
-  personalDescription: "Personal description",
+  customTitle: "Title",
+  personalDescription: "Description",
 };
 
 function getLibraryFieldLabel(field: string) {
@@ -321,6 +322,8 @@ export function BackendVideoLibrary({
 
   const loadLibrary = useLibraryStore((state) => state.loadLibrary);
 
+  const invalidateLibraryRequests = useLibraryStore((state) => state.invalidateLibraryRequests);
+
   const updateVideo = useLibraryStore((state) => state.updateVideo);
 
   const getDeleteImpact = useLibraryStore((state) => state.getDeleteImpact);
@@ -334,6 +337,8 @@ export function BackendVideoLibrary({
   const loadTags = useTagStore((state) => state.loadTags);
 
   const [searchText, setSearchText] = useState("");
+
+  const [debouncedSearch, commitSearch] = useDebouncedSearch(searchText);
 
   const [selectedTagIds, setSelectedTagIds] = useState<number[]>([]);
 
@@ -406,6 +411,16 @@ export function BackendVideoLibrary({
   useEffect(() => {
     onNavigationQueryChange(applyViewMode(appliedQuery, viewMode));
   }, [appliedQuery, viewMode, onNavigationQueryChange]);
+
+  useEffect(() => {
+    if (debouncedSearch === (appliedQuery.q ?? "")) return;
+    const timer = window.setTimeout(() => {
+      const nextQuery = { ...appliedQuery, q: debouncedSearch || undefined };
+      setAppliedQuery(nextQuery);
+      void loadLibrary({ page: 0, size, ...applyViewMode(nextQuery, viewMode) }).catch(() => {});
+    }, 0);
+    return () => window.clearTimeout(timer);
+  }, [debouncedSearch, appliedQuery, loadLibrary, size, viewMode]);
 
   function buildAppliedQuery(
     targetPage: number,
@@ -518,6 +533,7 @@ export function BackendVideoLibrary({
       return;
     }
 
+    setAppliedQuery(draft.query);
     try {
       await loadLibrary({
         page: 0,
@@ -525,7 +541,6 @@ export function BackendVideoLibrary({
         ...applyViewMode(draft.query, viewMode),
       });
 
-      setAppliedQuery(draft.query);
       setShowAdvancedFilters(false);
     } catch {
       // libraryStore keeps error.
@@ -536,23 +551,7 @@ export function BackendVideoLibrary({
     setActiveMenuVideoId(null);
     clearError();
     setValidationMessage(null);
-
-    const nextQuery = {
-      ...appliedQuery,
-      q: searchText.trim() || undefined,
-    };
-
-    try {
-      await loadLibrary({
-        page: 0,
-        size,
-        ...applyViewMode(nextQuery, viewMode),
-      });
-
-      setAppliedQuery(nextQuery);
-    } catch {
-      // libraryStore keeps error.
-    }
+    commitSearch(searchText);
   }
 
   function initializeFilterDraft(query: AppliedLibraryQuery) {
@@ -598,6 +597,8 @@ export function BackendVideoLibrary({
   async function resetFilters() {
     setActiveMenuVideoId(null);
     setSearchText("");
+    commitSearch("");
+    invalidateLibraryRequests();
     setSelectedTagIds([]);
     setMinDurationSeconds("");
     setMaxDurationSeconds("");
@@ -613,6 +614,8 @@ export function BackendVideoLibrary({
 
     clearError();
 
+    setAppliedQuery(DEFAULT_APPLIED_QUERY);
+
     try {
       await loadLibrary({
         page: 0,
@@ -620,7 +623,6 @@ export function BackendVideoLibrary({
         ...applyViewMode(DEFAULT_APPLIED_QUERY, viewMode),
       });
 
-      setAppliedQuery(DEFAULT_APPLIED_QUERY);
     } catch {
       // libraryStore keeps error.
     }
@@ -659,6 +661,7 @@ export function BackendVideoLibrary({
             q: undefined,
           };
           setSearchText("");
+          commitSearch("");
           break;
 
         case "minDurationSeconds":
@@ -733,6 +736,8 @@ export function BackendVideoLibrary({
     setValidationMessage(null);
     clearError();
 
+    setAppliedQuery(nextQuery);
+
     try {
       await loadLibrary({
         page: 0,
@@ -740,7 +745,6 @@ export function BackendVideoLibrary({
         ...applyViewMode(nextQuery, viewMode),
       });
 
-      setAppliedQuery(nextQuery);
     } catch {
       // libraryStore keeps error.
     }
@@ -779,6 +783,30 @@ export function BackendVideoLibrary({
     clearError();
 
     await updateVideo(libraryVideoId, input);
+    await loadLibrary(buildAppliedQuery(page));
+  }
+
+  async function handleVideoTagsChanged() {
+    try {
+      await loadLibrary(buildAppliedQuery(page));
+      const nextTotalPages = useLibraryStore.getState().totalPages;
+      if (page > 0 && page >= nextTotalPages) {
+        await loadLibrary(buildAppliedQuery(Math.max(0, nextTotalPages - 1)));
+      }
+    } catch {
+      // libraryStore keeps the load error.
+    }
+  }
+
+  function handleTagManagerChange(change: TagManagerChange) {
+    if (change.type === "deleted" && appliedQuery.tagIds?.includes(change.tag.id)) {
+      const next = { ...appliedQuery, tagIds: appliedQuery.tagIds.filter((id) => id !== change.tag.id) };
+      setSelectedTagIds(next.tagIds);
+      setAppliedQuery(next);
+      void loadLibrary({ page: 0, size, ...applyViewMode(next, viewMode) }).catch(() => {});
+    } else {
+      void loadLibrary(buildAppliedQuery(page)).catch(() => {});
+    }
   }
 
   async function handleDeleteVideo(video: LibraryVideo) {
@@ -835,15 +863,6 @@ export function BackendVideoLibrary({
       await loadLibrary(buildAppliedQuery(nextPage));
     } catch {
       // libraryStore keeps error.
-    }
-  }
-
-  async function handleRefresh() {
-    setActiveMenuVideoId(null);
-    try {
-      await Promise.all([loadLibrary(buildAppliedQuery(page)), loadTags(true)]);
-    } catch {
-      // stores keep errors.
     }
   }
 
@@ -915,7 +934,7 @@ export function BackendVideoLibrary({
           </h4>
 
           <p className="mt-1 text-sm text-(--text-muted)">
-            Your saved YouTube study sources.
+            Your saved videos.
           </p>
         </div>
 
@@ -937,7 +956,7 @@ export function BackendVideoLibrary({
                 : "Find or add YouTube video"
             }
             title={isAddFormOpen ? "Close" : "Find or add video"}
-            className="flex h-10 items-center justify-center gap-1.5 rounded-lg border border-(--border) px-2.5 text-xs font-medium text-(--text-secondary) transition-colors hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) sm:h-8"
+            className="flex min-h-10 items-center justify-center gap-1.5 rounded-lg bg-(--primary-bg) px-3 text-xs font-medium text-(--primary-text) transition-colors hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)"
           >
             {isAddFormOpen ? (
               <X size={14} aria-hidden="true" />
@@ -945,25 +964,11 @@ export function BackendVideoLibrary({
               <Plus size={14} aria-hidden="true" />
             )}
 
-            <span className="hidden sm:inline">
+            <span>
               {isAddFormOpen ? "Close" : "Find / Add"}
             </span>
           </button>
 
-          <button
-            type="button"
-            onClick={() => void handleRefresh()}
-            disabled={isLoading}
-            aria-label="Refresh library"
-            title="Refresh library"
-            className="flex h-10 w-10 items-center justify-center rounded-lg border border-(--border) text-(--text-muted) transition-colors hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50 sm:h-8 sm:w-8"
-          >
-            <RefreshCw
-              size={14}
-              className={isLoading ? "animate-spin" : undefined}
-              aria-hidden="true"
-            />
-          </button>
         </div>
       </div>
 
@@ -1070,7 +1075,10 @@ export function BackendVideoLibrary({
         validationMessage={validationMessage}
         errorMessage={showAdvancedFilters ? error?.message : null}
         appliedFilters={appliedFilterItems}
-        onSearchTextChange={setSearchText}
+        onSearchTextChange={(value) => {
+          invalidateLibraryRequests();
+          setSearchText(value);
+        }}
         onApplySearch={applySearch}
         onToggleTag={toggleTag}
         onMinDurationSecondsChange={setMinDurationSeconds}
@@ -1089,17 +1097,8 @@ export function BackendVideoLibrary({
         onResetDraft={resetFilterDraft}
         onClearAll={resetFilters}
         onRemoveAppliedFilter={removeAppliedFilter}
+        onTagManagerChange={handleTagManagerChange}
       />
-
-      <details className="mt-4">
-        <summary className="cursor-pointer select-none rounded-lg text-sm text-(--text-secondary) outline-none hover:text-(--text-primary) focus-visible:ring-2 focus-visible:ring-(--focus)">
-          Manage tags
-        </summary>
-
-        <div className="mt-3">
-          <TagManager />
-        </div>
-      </details>
 
       {error && (
         <div
@@ -1135,14 +1134,14 @@ export function BackendVideoLibrary({
         >
           <p className="text-sm font-medium text-(--text-secondary)">
             {isTrulyEmptyLibrary
-              ? "Your Library is empty"
+              ? "No saved videos yet"
               : "No matching videos"}
           </p>
 
           <p className="mt-1 text-sm text-(--text-muted)">
             {isTrulyEmptyLibrary
-              ? "Add your first YouTube video to start building your saved study sources."
-              : "Try changing your search, filters, or Library view to find different videos."}
+              ? "Find a YouTube video to add to your Library."
+              : "Try changing your search or filters."}
           </p>
 
           {isTrulyEmptyLibrary ? (
@@ -1152,7 +1151,7 @@ export function BackendVideoLibrary({
                 onClick={() => setIsAddFormOpen(true)}
                 className="rounded-lg bg-(--primary-bg) px-3 py-2 text-xs font-medium text-(--primary-text) transition hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)"
               >
-                Find or add your first video
+                Find or add a video
               </button>
             </div>
           ) : hasActiveFilters ? (
@@ -1192,6 +1191,7 @@ export function BackendVideoLibrary({
                   current === video.id ? null : current,
                 )
               }
+              onTagsChanged={() => void handleVideoTagsChanged()}
             />
           ))}
         </div>
@@ -1208,10 +1208,10 @@ export function BackendVideoLibrary({
         open={pendingDelete !== null}
         title={
           pendingDelete
-            ? `Delete "${getLibraryVideoDisplayTitle(
+            ? `Remove "${getLibraryVideoDisplayTitle(
                 pendingDelete.video,
               )}" from your Library?`
-            : "Delete video from Library?"
+            : "Remove video from Library?"
         }
         description="This removes the personal Library entry, its watch history, and its assigned tags. Notes and Tasks are preserved; exact YouTube source preservation is shown below."
         details={

@@ -30,6 +30,8 @@
 
     loadLibrary: (query?: LibraryQuery) => Promise<void>;
 
+    invalidateLibraryRequests: () => void;
+
     addVideo: (youtubeUrl: string) => Promise<LibraryVideo>;
 
     ensureVideo: (
@@ -79,10 +81,13 @@
     error: null as ApiError | null,
   };
 
+  let latestLibraryRequest = 0;
+
   export const useLibraryStore = create<LibraryStore>((set, get) => ({
     ...initialState,
 
     loadLibrary: async (query = {}) => {
+      const requestId = ++latestLibraryRequest;
       set({
         isLoading: true,
         hasLoadError: false,
@@ -98,6 +103,8 @@
           ...query,
         });
 
+        if (requestId !== latestLibraryRequest) return;
+
         set({
           videos: response.items,
           page: response.page,
@@ -107,6 +114,7 @@
           hasLoaded: true,
         });
       } catch (error) {
+        if (requestId !== latestLibraryRequest) return;
         const apiError = toApiError(error);
 
         set({
@@ -116,10 +124,13 @@
 
         throw apiError;
       } finally {
-        set({
-          isLoading: false,
-        });
+        if (requestId === latestLibraryRequest) set({ isLoading: false });
       }
+    },
+
+    invalidateLibraryRequests: () => {
+      latestLibraryRequest += 1;
+      set({ isLoading: false });
     },
 
     addVideo: async (youtubeUrl) => {
@@ -300,6 +311,7 @@
     },
 
     reset: () => {
+      latestLibraryRequest += 1;
       set({
         ...initialState,
       });

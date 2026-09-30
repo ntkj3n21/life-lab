@@ -4,6 +4,10 @@ import { useId } from "react";
 import { FilterDialogShell } from "../../../components/ui/FilterDialogShell";
 import type { LibraryQuery } from "../services/libraryApi";
 import type { Tag } from "../services/tagApi";
+import { TagManagerDialog } from "./TagManagerDialog";
+import type { TagManagerChange } from "./TagManager";
+import { TagFinderInput } from "./TagFinder";
+import { useTagFinder } from "./tagFinding";
 
 export type BooleanFilter = "" | "true" | "false";
 
@@ -79,6 +83,7 @@ interface LibraryFiltersProps {
   onResetDraft: () => void;
   onClearAll: () => Promise<void>;
   onRemoveAppliedFilter: (filterId: string) => Promise<void>;
+  onTagManagerChange: (change: TagManagerChange) => void;
 }
 
 const inputClassName =
@@ -123,7 +128,9 @@ export function LibraryFilters({
   onResetDraft,
   onClearAll,
   onRemoveAppliedFilter,
+  onTagManagerChange,
 }: LibraryFiltersProps) {
+  const { tagSearch, setTagSearch, visibleTags } = useTagFinder(tags);
   const dialogId = useId();
 
   const dialogFooter = (
@@ -168,8 +175,8 @@ export function LibraryFilters({
   );
   return (
     <div aria-busy={isLoading} className="mt-4">
-      <div className="flex items-center gap-2">
-        <div className="flex min-w-0 flex-1 items-center gap-2 rounded-lg border border-(--border) bg-(--app-bg) px-3 transition focus-within:border-(--border-strong) focus-within:ring-2 focus-within:ring-(--focus)">
+      <div className="flex flex-wrap items-center gap-2">
+        <div className="flex min-w-[12rem] flex-1 items-center gap-2 rounded-lg border border-(--border) bg-(--app-bg) px-3 transition focus-within:border-(--border-strong) focus-within:ring-2 focus-within:ring-(--focus)">
           <Search
             size={15}
             className="shrink-0 text-(--text-muted)"
@@ -183,7 +190,6 @@ export function LibraryFilters({
           <input
             id="library-search"
             value={searchText}
-            disabled={isLoading}
             onChange={(event) => onSearchTextChange(event.target.value)}
             onKeyDown={(event) => {
               if (event.key === "Enter") {
@@ -191,7 +197,7 @@ export function LibraryFilters({
               }
             }}
             placeholder="Search library..."
-            className="min-w-0 flex-1 bg-transparent py-2.5 text-sm outline-none placeholder:text-(--text-faint) disabled:cursor-not-allowed disabled:opacity-50"
+            className="min-w-0 flex-1 bg-transparent py-2.5 text-sm outline-none placeholder:text-(--text-faint)"
           />
 
           {isLoading && (
@@ -218,6 +224,7 @@ export function LibraryFilters({
           <SlidersHorizontal size={14} aria-hidden="true" />
           Filters
         </button>
+        <TagManagerDialog onChange={onTagManagerChange} />
       </div>
 
       {appliedFilters.length > 0 && (
@@ -253,6 +260,7 @@ export function LibraryFilters({
 
       <FilterDialogShell
         open={showAdvancedFilters}
+        withinMainPane
         dialogId={dialogId}
         title="Library filters"
         description="Refine the current Library results. Changes apply only when you confirm them."
@@ -283,9 +291,8 @@ export function LibraryFilters({
             role="status"
             className="rounded-xl border border-(--border) bg-(--surface) px-3 py-2 text-xs leading-5 text-(--text-muted)"
           >
-            The current Library view controls watch status and sort order.
-            Keyword, date, duration, tag, and Note filters still combine with
-            this view.
+            This view sets watch status and sort order. Your other filters
+            narrow the videos shown here.
           </p>
         )}
 
@@ -293,7 +300,7 @@ export function LibraryFilters({
           Primary filters
         </p>
 
-        <div className="grid gap-3 xl:grid-cols-2">
+        <div className="grid gap-3 @2xl:grid-cols-2">
           <fieldset className="rounded-xl border border-(--border) bg-(--surface-subtle) p-3">
             <legend className="px-1 text-xs font-medium text-(--text-secondary)">
               Personal tags
@@ -303,8 +310,10 @@ export function LibraryFilters({
               <p className="text-xs text-(--text-muted)">No tags available.</p>
             ) : (
               <>
+                <TagFinderInput value={tagSearch} onChange={setTagSearch} disabled={isLoading} />
+                {visibleTags.length === 0 && <p className="text-xs text-(--text-muted)">No matching tags.</p>}
                 <div className="flex max-h-32 flex-wrap gap-2 overflow-y-auto">
-                  {tags.map((tag) => {
+                  {visibleTags.map((tag) => {
                     const checked = selectedTagIds.includes(tag.id);
 
                     return (
@@ -331,8 +340,8 @@ export function LibraryFilters({
                 </div>
 
                 <p className="mt-2 text-[10px] leading-4 text-(--text-muted)">
-                  Multiple selected tags are matched with OR. Tag filtering is
-                  combined with other filter groups using AND.
+                  Videos with any selected tag will be shown, alongside your
+                  other filters.
                 </p>
               </>
             )}
@@ -343,7 +352,7 @@ export function LibraryFilters({
               Activity and Notes
             </legend>
 
-            <div className="grid gap-2 sm:grid-cols-2">
+            <div className="grid gap-2 @md:grid-cols-2">
               <div>
                 <label
                   htmlFor="library-watched-filter"
@@ -403,13 +412,13 @@ export function LibraryFilters({
             />
           </summary>
 
-          <div className="grid gap-3 border-t border-(--border) p-3 lg:grid-cols-3">
+          <div className="grid gap-3 border-t border-(--border) p-3 @3xl:grid-cols-3">
             <fieldset className="rounded-xl border border-(--border) bg-(--surface-subtle) p-3">
               <legend className="px-1 text-xs font-medium text-(--text-secondary)">
                 Duration
               </legend>
 
-              <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+              <div className="grid gap-2 @md:grid-cols-2 @3xl:grid-cols-1">
                 <div>
                   <label
                     htmlFor="library-duration-min"
@@ -465,7 +474,7 @@ export function LibraryFilters({
                 YouTube published date
               </legend>
 
-              <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+              <div className="grid gap-2 @md:grid-cols-2 @3xl:grid-cols-1">
                 <div>
                   <label
                     htmlFor="library-published-from"
@@ -513,7 +522,7 @@ export function LibraryFilters({
                 Added to Life Lab
               </legend>
 
-              <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+              <div className="grid gap-2 @md:grid-cols-2 @3xl:grid-cols-1">
                 <div>
                   <label
                     htmlFor="library-added-from"
@@ -559,7 +568,7 @@ export function LibraryFilters({
             Sort
           </legend>
 
-          <div className="grid gap-2 sm:grid-cols-2">
+          <div className="grid gap-2 @md:grid-cols-2">
             <div>
               <label
                 htmlFor="library-sort-by"

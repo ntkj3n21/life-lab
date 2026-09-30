@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import org.springframework.data.jpa.domain.Specification;
 
+import com.lifelab.common.text.SearchExpressions;
 import com.lifelab.note.domain.Note;
 import com.lifelab.note.domain.NoteTag;
 
@@ -28,15 +29,33 @@ public final class NoteSpecifications {
             var imageSource = root.join("imageSource", JoinType.LEFT);
             var audioSource = root.join("audioSource", JoinType.LEFT);
             return builder.or(
-                    contains(builder.lower(root.get("content")), keyword, builder),
-                    contains(builder.lower(youtubeSource.get("title")), keyword, builder),
-                    contains(builder.lower(youtubeSource.get("channelName")), keyword, builder),
-                    contains(builder.lower(youtubeSource.get("youtubeVideoId")), keyword, builder),
-                    contains(builder.lower(youtubeSource.get("sourceUrl")), keyword, builder),
-                    contains(builder.lower(imageSource.get("externalUrl")), keyword, builder),
-                    contains(builder.lower(imageSource.get("originalFilename")), keyword, builder),
-                    contains(builder.lower(audioSource.get("externalUrl")), keyword, builder),
-                    contains(builder.lower(audioSource.get("originalFilename")), keyword, builder));
+                    contains(root.get("content"), keyword, builder),
+                    contains(youtubeSource.get("title"), keyword, builder),
+                    contains(youtubeSource.get("channelName"), keyword, builder),
+                    contains(youtubeSource.get("youtubeVideoId"), keyword, builder),
+                    contains(youtubeSource.get("sourceUrl"), keyword, builder),
+                    contains(imageSource.get("externalUrl"), keyword, builder),
+                    contains(imageSource.get("originalFilename"), keyword, builder),
+                    contains(audioSource.get("externalUrl"), keyword, builder),
+                    contains(audioSource.get("originalFilename"), keyword, builder));
+        };
+    }
+
+    public static Specification<Note> keywordTypoNear(String keyword) {
+        return (root, query, builder) -> {
+            var youtubeSource = root.join("youtubeSource", JoinType.LEFT);
+            var imageSource = root.join("imageSource", JoinType.LEFT);
+            var audioSource = root.join("audioSource", JoinType.LEFT);
+            return builder.or(
+                    typoNear(root.get("content"), keyword, builder),
+                    typoNear(youtubeSource.get("title"), keyword, builder),
+                    typoNear(youtubeSource.get("channelName"), keyword, builder),
+                    typoNear(youtubeSource.get("youtubeVideoId"), keyword, builder),
+                    typoNear(youtubeSource.get("sourceUrl"), keyword, builder),
+                    typoNear(imageSource.get("externalUrl"), keyword, builder),
+                    typoNear(imageSource.get("originalFilename"), keyword, builder),
+                    typoNear(audioSource.get("externalUrl"), keyword, builder),
+                    typoNear(audioSource.get("originalFilename"), keyword, builder));
         };
     }
 
@@ -66,7 +85,15 @@ public final class NoteSpecifications {
             Expression<String> expression,
             String keyword,
             jakarta.persistence.criteria.CriteriaBuilder builder) {
-        return builder.like(expression, "%" + escapeLike(keyword) + "%", '\\');
+        return builder.like(
+                SearchExpressions.normalized(expression, builder),
+                "%" + escapeLike(keyword) + "%", '\\');
+    }
+
+    private static Predicate typoNear(Expression<String> expression, String keyword,
+            jakarta.persistence.criteria.CriteriaBuilder builder) {
+        return builder.isTrue(builder.function(
+                "lifelab_search_typo_near", Boolean.class, expression, builder.literal(keyword)));
     }
 
     private static String escapeLike(String value) {

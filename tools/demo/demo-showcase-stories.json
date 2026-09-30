@@ -1,0 +1,14 @@
+[
+  {"storyKey":"VIDEO-JAVA-SCANNER","sourceType":"YOUTUBE","sourceFixtureKey":"LIBRARY_01","category":"Programming","tags":["Java","Programming","Study"],"taskStatus":"NOT_STARTED","deadlineClass":"OVERDUE"},
+  {"storyKey":"VIDEO-ENGLISH-VOCAB","sourceType":"YOUTUBE","sourceFixtureKey":"LIBRARY_21","category":"English","tags":["Vocabulary","English Practice","Study"],"taskStatus":"IN_PROGRESS","deadlineClass":"TODAY"},
+  {"storyKey":"VIDEO-TYPESCRIPT","sourceType":"YOUTUBE","sourceFixtureKey":"LIBRARY_12","category":"Programming","tags":["TypeScript","Frontend","Study"],"taskStatus":"NOT_STARTED","deadlineClass":"UPCOMING"},
+  {"storyKey":"VIDEO-TESTING","sourceType":"YOUTUBE","sourceFixtureKey":"LIBRARY_35","category":"Software Design","tags":["Testing","Review","Programming"],"taskStatus":"COMPLETED","deadlineClass":"NO_DEADLINE"},
+  {"storyKey":"IMAGE-ERD","sourceType":"IMAGE","sourceFixtureKey":"A1-IMG-005","category":"Data Systems","tags":["Database","Project","Architecture"],"taskStatus":"IN_PROGRESS","deadlineClass":"UPCOMING","taskTitle":"Update the Life Lab ERD to match the current schema"},
+  {"storyKey":"IMAGE-TENSES","sourceType":"IMAGE","sourceFixtureKey":"A1-IMG-004","category":"English","tags":["Grammar","English Practice","Study"],"taskStatus":"NOT_STARTED","deadlineClass":"TODAY"},
+  {"storyKey":"IMAGE-CLIENT-SERVER","sourceType":"IMAGE","sourceFixtureKey":"A2-IMG-014","category":"Software Design","tags":["Architecture","Backend","Frontend"],"taskStatus":"NOT_STARTED","deadlineClass":"NO_DEADLINE"},
+  {"storyKey":"IMAGE-POSTGRES-ARCH","sourceType":"IMAGE","sourceFixtureKey":"DEMO-IMG-011","category":"Data Systems","tags":["PostgreSQL","Database","Architecture"],"taskStatus":"NOT_STARTED","deadlineClass":"UPCOMING"},
+  {"storyKey":"AUDIO-DATABASE-CHOICE","sourceType":"AUDIO","sourceFixtureKey":"A1-AUD-009","category":"Data Systems","tags":["Database","Backend","Listening"],"taskStatus":"NOT_STARTED","deadlineClass":"TODAY"},
+  {"storyKey":"AUDIO-SPEAKING","sourceType":"AUDIO","sourceFixtureKey":"A1-AUD-003","category":"English","tags":["English Practice","Speaking","Listening"],"taskStatus":"IN_PROGRESS","deadlineClass":"OVERDUE"},
+  {"storyKey":"AUDIO-UNIVERSITY","sourceType":"AUDIO","sourceFixtureKey":"A2-AUD-002","category":"Productivity","tags":["Study","Learning","Listening"],"taskStatus":"NOT_STARTED","deadlineClass":"NO_DEADLINE","taskTitle":"Write a study-balance reflection after the university lesson"},
+  {"storyKey":"AUDIO-WRITING","sourceType":"AUDIO","sourceFixtureKey":"DEMO-AUD-004","category":"English","tags":["English Practice","Writing","Listening"],"taskStatus":"COMPLETED","deadlineClass":"NO_DEADLINE"}
+]

@@ -42,10 +42,10 @@
   {
     "fileName": "a1-img-05-life-lab-erd-v1.png",
     "title": "Life Lab Database ERD - Earlier Design",
-    "note": "ERD này phản ánh thiết kế Life Lab ở giai đoạn trước. Cần đối chiếu với schema hiện tại vì V2 đã bổ sung Image, Audio và các chức năng tổ chức dữ liệu.",
+    "note": "ERD này phản ánh thiết kế Life Lab ở giai đoạn trước. Cần đối chiếu với schema V3 hiện tại vì Image, Audio và các quan hệ tổ chức đã được bổ sung.",
     "category": "Life Lab Project",
     "tags": ["Database", "Đồ án", "Quan trọng"],
-    "taskTitle": "Update the Life Lab ERD to match the current V2 schema",
+    "taskTitle": "Compare the saved ERD with the current V3 schema",
     "taskStatus": "IN_PROGRESS",
     "deadlineClass": "UPCOMING"
   },
@@ -105,7 +105,7 @@
     "note": "Ảnh giao diện minh họa việc xem video, tạo Note theo timestamp và theo dõi Task trong cùng workspace. Có thể dùng làm hình minh họa cho phần cài đặt và kiểm thử của báo cáo.",
     "category": "Life Lab Project",
     "tags": ["Đồ án", "UI", "Báo cáo"],
-    "taskTitle": "Capture final V2 workspace screenshots for the report",
+    "taskTitle": "Compare the saved workspace screenshot with the current V3 capture flow",
     "taskStatus": "IN_PROGRESS",
     "deadlineClass": "TODAY"
   },
@@ -122,10 +122,10 @@
   {
     "fileName": "a1-img-13-life-lab-workflow-v1.png",
     "title": "Life Lab Learning Workflow - V1",
-    "note": "Luồng thiết kế ban đầu mô tả Video → Timestamp → Note → Task → Daily Plan. Trong V2, nguồn học tập đã mở rộng sang Image và Audio nhưng chuỗi Note → Task → Daily Plan vẫn được giữ.",
+    "note": "Luồng thiết kế ban đầu mô tả Video → Timestamp → Note → Task → Daily Plan. Trong V3, Video, Image và Audio đều dẫn tới Note → Task → Daily Plan, nhưng chỉ nguồn hỗ trợ thời gian mới có timestamp.",
     "category": "Life Lab Project",
     "tags": ["Đồ án", "Workflow", "Quan trọng"],
-    "taskTitle": "Update the Life Lab workflow diagram for V2 multisource support",
+    "taskTitle": "Update the workflow diagram for the current V3 media flow",
     "taskStatus": "IN_PROGRESS",
     "deadlineClass": "UPCOMING"
   },

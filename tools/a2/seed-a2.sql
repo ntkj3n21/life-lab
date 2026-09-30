@@ -22,6 +22,20 @@ BEGIN
  END IF;
 END $$;
 
+DO $$
+BEGIN
+ IF (SELECT count(*) FROM a2_curated_video_metadata)<>6
+ OR (SELECT count(*) FROM a2_curated_video_note)<>7
+ OR EXISTS (SELECT 1 FROM a2_curated_video_note curated
+            LEFT JOIN a2_note_fixtures fixture USING(fixture_key,note_no)
+            WHERE fixture.fixture_key IS NULL)
+ THEN RAISE EXCEPTION 'A2 curated Video fixture preflight failed'; END IF;
+END $$;
+
+UPDATE a2_note_fixtures fixture SET content=curated.note_content
+FROM a2_curated_video_note curated
+WHERE fixture.fixture_key=curated.fixture_key AND fixture.note_no=curated.note_no;
+
 -- Delete only personal data owned by the locked A2 account.
 DELETE FROM tasks WHERE account_id IN (SELECT id FROM accounts WHERE lower(email)='scale@lifelab.local');
 DELETE FROM notes WHERE account_id IN (SELECT id FROM accounts WHERE lower(email)='scale@lifelab.local');
@@ -124,10 +138,11 @@ CREATE TEMP TABLE a2_library_map(fixture_key text primary key,library_video_id b
 WITH inserted AS (
  INSERT INTO library_videos(account_id,youtube_source_id,custom_title,personal_description,added_at,updated_at)
  SELECT a.id,t.youtube_source_id,
-   CASE WHEN s.role='CURRENT_LIBRARY' AND s.library_order%5=0 THEN 'Study focus: '||s.title ELSE NULL END,
-   CASE WHEN s.role='CURRENT_LIBRARY' AND s.library_order%10 IN(1,2,3) THEN 'Revisit the key ideas and connect them to the current learning project.' ELSE NULL END,
+   curated.custom_title,
+   curated.personal_description,
    t.added_at,t.added_at+((coalesce(s.library_order,90)*7)%48)*interval '1 hour'
  FROM a2_source_timeline t JOIN a2_snapshot_sources s USING(fixture_key)
+ LEFT JOIN a2_curated_video_metadata curated USING(fixture_key)
  CROSS JOIN accounts a WHERE lower(a.email)='scale@lifelab.local'
  RETURNING id,youtube_source_id,added_at)
 INSERT INTO a2_library_map
@@ -209,12 +224,18 @@ INSERT INTO library_images (
   account_id,
   image_source_id,
   title,
+  personal_description,
   added_at
 )
 SELECT
   account.id,
   source.id,
-  fixture.title,
+  CASE WHEN fixture.fixture_key = 'A2-IMG-003' THEN NULL ELSE fixture.title END,
+  CASE fixture.fixture_key
+    WHEN 'A2-IMG-001' THEN 'Sơ đồ chuẩn hóa cơ sở dữ liệu để đối chiếu các dạng chuẩn.'
+    WHEN 'A2-IMG-002' THEN 'Review the seven OSI layers before network exercises.'
+    ELSE NULL
+  END,
   (
     :'reference_date'::date::timestamp
     + time '12:00'
@@ -266,8 +287,9 @@ BEGIN
       ON fixture.fixture_key = map.fixture_key
     JOIN library_images library
       ON library.id = map.library_image_id
-    WHERE library.title IS DISTINCT FROM fixture.title
-       OR btrim(library.title) = ''
+    WHERE library.title IS DISTINCT FROM
+            (CASE WHEN fixture.fixture_key = 'A2-IMG-003' THEN NULL ELSE fixture.title END)
+       OR (library.title IS NOT NULL AND btrim(library.title) = '')
   ) THEN
     RAISE EXCEPTION
       'A2 Image Library title validation failed';
@@ -365,12 +387,18 @@ INSERT INTO library_audio (
     account_id,
     audio_source_id,
     title,
+    personal_description,
     added_at
 )
 SELECT
     account.id,
     source.id,
-    fixture.title,
+    CASE WHEN fixture.fixture_key = 'A2-AUD-002' THEN NULL ELSE fixture.title END,
+    CASE fixture.fixture_key
+        WHEN 'A2-AUD-001' THEN 'Đối chiếu định hướng nghề nghiệp và thói quen học suốt đời.'
+        WHEN 'A2-AUD-003' THEN 'Plan study time using three priority blocks.'
+        ELSE NULL
+    END,
     config.reference_instant
         - interval '18 days'
         + right(fixture.fixture_key, 3)::integer * interval '1 day'
@@ -438,8 +466,9 @@ BEGIN
           ON library.id = map.library_audio_id
         WHERE library.account_id <> account_id_value
            OR library.audio_source_id <> map.audio_source_id
-           OR library.title IS DISTINCT FROM fixture.title
-           OR btrim(library.title) = ''
+           OR library.title IS DISTINCT FROM
+                (CASE WHEN fixture.fixture_key = 'A2-AUD-002' THEN NULL ELSE fixture.title END)
+           OR (library.title IS NOT NULL AND btrim(library.title) = '')
     ) THEN
         RAISE EXCEPTION
             'A2 Audio Library mapping validation failed';
@@ -913,10 +942,12 @@ WITH desired AS (
  note_order AS (SELECT n.*,row_number() OVER(ORDER BY s.role DESC,n.fixture_key,n.note_no) rn,count(*) OVER() total FROM a2_note_map n JOIN a2_snapshot_sources s USING(fixture_key)),
  inserted AS (
  INSERT INTO tasks(account_id,source_note_id,source_status,title,description,status,deadline,created_at,updated_at)
- SELECT a.id,n.note_id,'HAS_SOURCE','Apply note insight: '||left(f.content,150),
-  'Turn the linked learning note into a concrete follow-up action.',d.status,NULL,
+ SELECT a.id,n.note_id,'HAS_SOURCE',
+  'Work an example from '||left(regexp_replace(split_part(s.title,' | ',1),'^#[0-9]+\.\s*',''),190),
+  'Use the saved Note as the starting point and work through one example from this lesson.',d.status,NULL,
   n.created_at+interval '1 day'+(d.ordinal%18)*interval '1 hour',n.created_at+interval '1 day'+(d.ordinal%18)*interval '1 hour'
  FROM numbered d JOIN note_order n ON n.rn=((d.ordinal-1)%n.total)+1 JOIN a2_note_fixtures f USING(fixture_key,note_no)
+ JOIN a2_snapshot_sources s USING(fixture_key)
  CROSS JOIN accounts a WHERE lower(a.email)='scale@lifelab.local' RETURNING id,source_status,status)
 INSERT INTO a2_task_inserted SELECT * FROM inserted;
 
@@ -927,9 +958,26 @@ WITH desired AS (
  numbered AS (SELECT d.*,row_number() OVER(ORDER BY status,task_no) ordinal FROM desired d),
  inserted AS (
  INSERT INTO tasks(account_id,source_note_id,source_status,title,description,status,deadline,created_at,updated_at)
- SELECT a.id,NULL,'INDEPENDENT','Independent learning action: '||
-  (ARRAY['Review backend patterns','Practice data structures','Refine frontend interaction','Summarize database concepts','Plan the next study session'])[((d.ordinal-1)%5)+1],
-  'A standalone step in the long-term learning plan.',d.status,NULL,
+ SELECT a.id,NULL,'INDEPENDENT',
+  (ARRAY[
+    'Review Java variable declarations','Practice a loop exercise','Compare array and ArrayList use',
+    'Write one Java class from scratch','Review object initialization','Practice access modifiers',
+    'Explain encapsulation in plain language','Solve a sorting exercise','Trace a graph traversal',
+    'Practice SQL joins','Review database normalization','Draw a small ERD',
+    'Write a REST API example','Review HTTP status codes','Check request validation rules',
+    'Practice Spring Boot controller tests','Review Service-layer responsibilities',
+    'Check account-scoped query examples','Practice pagination ordering','Review authentication flow',
+    'Write a React state example','Review React Hooks behavior','Practice a DOM event handler',
+    'Compare promise and async/await','Refine a frontend form interaction',
+    'Review Docker image basics','Practice a local deployment checklist',
+    'Write a technical vocabulary card','Practice explaining an API in English',
+    'Plan next week’s backend study','Review open questions from class',
+    'Update the project learning log','Check progress on database exercises',
+    'Rehearse a short architecture explanation','Prepare questions for the next lab',
+    'Summarize a recent Java lesson','Review unfinished coding exercises',
+    'Plan the next study session'
+  ])[((d.ordinal-1)%38)+1],
+  NULL,d.status,NULL,
   c.reference_instant-((1+(d.ordinal*31)%700)||' days')::interval,c.reference_instant-((1+(d.ordinal*31)%700)||' days')::interval
  FROM numbered d CROSS JOIN accounts a CROSS JOIN a2_config c WHERE lower(a.email)='scale@lifelab.local' RETURNING id,source_status,status)
 INSERT INTO a2_task_inserted SELECT * FROM inserted;
@@ -952,9 +1000,30 @@ WITH desired AS (
  numbered AS (SELECT d.*,row_number() OVER(ORDER BY status,task_no) ordinal FROM desired d),
  inserted AS (
  INSERT INTO tasks(account_id,source_note_id,source_status,title,description,status,deadline,created_at,updated_at)
- SELECT a.id,n.id,'HAS_SOURCE','Rebuild context: '||
- (ARRAY['review the core concept','retrace the implementation idea','recheck the worked example','summarize the learning outcome','connect the missing source to current work','practice the underlying technique','document the remaining question','validate the remembered approach'])[((d.ordinal-1)%8)+1],
- 'The original Note was later removed; preserve the learning action and reconstruct only known context.',d.status,NULL,n.created_at+interval '1 day',n.created_at+interval '1 day'
+ SELECT a.id,n.id,'HAS_SOURCE',
+ (ARRAY[
+   'Write down one unresolved concept from the earlier lesson',
+   'Recreate a worked example from memory',
+   'Check the implementation steps from class',
+   'Summarize the last lecture in three points',
+   'Relate an earlier lesson to the current project',
+   'Practice the technique from last week’s class',
+   'Record an open question for the next study session',
+   'Test the approach remembered from the earlier exercise',
+   'Compare two examples from the same topic',
+   'Explain a difficult concept to a classmate',
+   'Check the solution to an unfinished exercise',
+   'Write one practical example for the study notes',
+   'Review the key terms from the previous unit',
+   'Draft a question for the next lab session',
+   'Revisit an earlier coding mistake',
+   'List the remaining steps in a class exercise',
+   'Check understanding with a small test case',
+   'Summarize what changed after the last review',
+   'Practice explaining the idea without notes',
+   'Plan one follow-up exercise for the next session'
+  ])[((d.ordinal-1)%20)+1],
+ NULL,d.status,NULL,n.created_at+interval '1 day',n.created_at+interval '1 day'
  FROM numbered d JOIN a2_temp_notes n ON n.rn=d.ordinal CROSS JOIN accounts a WHERE lower(a.email)='scale@lifelab.local'
  RETURNING id,status)
 SELECT * FROM inserted;
@@ -1673,8 +1742,8 @@ CROSS JOIN a2_config config
 WHERE lower(account.email) = 'scale@lifelab.local'
 ON CONFLICT (account_id, normalized_name) DO NOTHING;
 
--- Audio fixture Tags are all new relative to the existing A2 taxonomy,
--- but still use normalized-name conflict handling for idempotence.
+-- Eight Audio Tag names are new; Ôn tập already exists in Image organization.
+-- Keep normalized-name conflict handling so both media use one personal catalog.
 WITH audio_tag_names AS (
     SELECT DISTINCT
         btrim(fixture_tag.tag_name) AS tag_name
@@ -1846,7 +1915,7 @@ BEGIN
                       fixture.tags_json::jsonb
                   ) fixture_tag(tag_name)
           )
-    ) <> 8 THEN
+    ) <> 9 THEN
         RAISE EXCEPTION
             'A2 Audio Tag resolution failed';
     END IF;
@@ -2010,6 +2079,147 @@ END
 $$;
 
 -- Final lifecycle removes all historical Library rows; Notes and linked Tasks survive.
+-- Media assignments use the same personal catalog as Note/Task organization.
+INSERT INTO library_image_tags (library_image_id, tag_id)
+SELECT image_map.library_image_id, tag.id
+FROM a2_image_map image_map
+JOIN a2_image_fixtures fixture ON fixture.fixture_key = image_map.fixture_key
+CROSS JOIN LATERAL jsonb_array_elements_text(fixture.tags_json::jsonb) fixture_tag(name)
+JOIN accounts account ON lower(account.email) = 'scale@lifelab.local'
+JOIN tags tag ON tag.account_id = account.id
+    AND tag.normalized_name = lower(btrim(fixture_tag.name));
+
+INSERT INTO library_audio_tags (library_audio_id, tag_id)
+SELECT audio_map.library_audio_id, tag.id
+FROM a2_audio_map audio_map
+JOIN a2_audio_fixtures fixture ON fixture.fixture_key = audio_map.fixture_key
+CROSS JOIN LATERAL jsonb_array_elements_text(fixture.tags_json::jsonb) fixture_tag(name)
+JOIN accounts account ON lower(account.email) = 'scale@lifelab.local'
+JOIN tags tag ON tag.account_id = account.id
+    AND tag.normalized_name = lower(btrim(fixture_tag.name));
+
+-- Curated Video examples retain their exact Note IDs and source relationships.
+DO $$
+BEGIN
+ IF (SELECT count(*) FROM a2_curated_video_note curated
+     JOIN a2_note_map map USING(fixture_key,note_no)
+     JOIN tasks task ON task.source_note_id=map.note_id AND task.source_status='HAS_SOURCE')<>7
+ THEN RAISE EXCEPTION 'A2 curated Video Note/Task links are incomplete'; END IF;
+END $$;
+
+UPDATE notes note SET category_id=category.id
+FROM a2_curated_video_note curated
+JOIN a2_note_map map USING(fixture_key,note_no)
+JOIN accounts account ON lower(account.email)='scale@lifelab.local'
+JOIN categories category ON category.account_id=account.id
+    AND category.name=curated.category_name
+WHERE note.id=map.note_id AND note.account_id=account.id;
+
+UPDATE tasks task SET
+    title=curated.task_title,
+    description=curated.task_description,
+    category_id=category.id
+FROM a2_curated_video_note curated
+JOIN a2_note_map map USING(fixture_key,note_no)
+JOIN accounts account ON lower(account.email)='scale@lifelab.local'
+LEFT JOIN categories category ON category.account_id=account.id
+    AND category.name=curated.category_name
+WHERE task.source_note_id=map.note_id AND task.account_id=account.id
+    AND task.source_status='HAS_SOURCE';
+
+INSERT INTO note_tags (note_id,tag_id)
+SELECT map.note_id,tag.id
+FROM a2_curated_video_note curated
+JOIN a2_note_map map USING(fixture_key,note_no)
+CROSS JOIN LATERAL unnest(curated.tag_names) tag_name(name)
+JOIN accounts account ON lower(account.email)='scale@lifelab.local'
+JOIN tags tag ON tag.account_id=account.id AND tag.name=tag_name.name;
+
+INSERT INTO task_tags (task_id,tag_id)
+SELECT task.id,tag.id
+FROM a2_curated_video_note curated
+JOIN a2_note_map map USING(fixture_key,note_no)
+JOIN tasks task ON task.source_note_id=map.note_id AND task.source_status='HAS_SOURCE'
+CROSS JOIN LATERAL unnest(curated.tag_names) tag_name(name)
+JOIN accounts account ON lower(account.email)='scale@lifelab.local'
+JOIN tags tag ON tag.account_id=account.id AND tag.name=tag_name.name
+WHERE task.account_id=account.id;
+
+-- One reviewed existing Note per note-bearing current Video Source. The ten
+-- current Sources without captures remain untouched, as does older history.
+DO $$
+BEGIN
+ IF (SELECT count(*) FROM a2_video_organization)<>70
+ OR (SELECT count(*) FROM a2_video_organization fixture
+     JOIN a2_note_map map USING(fixture_key,note_no))<>70
+ OR EXISTS (
+     SELECT 1 FROM a2_video_organization fixture
+     JOIN accounts account ON lower(account.email)='scale@lifelab.local'
+     LEFT JOIN categories category ON category.account_id=account.id
+         AND category.name=fixture.category_name
+     WHERE category.id IS NULL)
+ OR EXISTS (
+     SELECT 1 FROM a2_video_organization fixture
+     CROSS JOIN LATERAL jsonb_array_elements_text(fixture.tag_names) expected(name)
+     JOIN accounts account ON lower(account.email)='scale@lifelab.local'
+     LEFT JOIN tags tag ON tag.account_id=account.id AND tag.name=expected.name
+     WHERE tag.id IS NULL)
+ THEN RAISE EXCEPTION 'A2 representative Video organization preflight failed'; END IF;
+END $$;
+
+UPDATE notes note SET category_id=category.id
+FROM a2_video_organization fixture
+JOIN a2_note_map map USING(fixture_key,note_no)
+JOIN accounts account ON lower(account.email)='scale@lifelab.local'
+JOIN categories category ON category.account_id=account.id
+    AND category.name=fixture.category_name
+WHERE note.id=map.note_id AND note.account_id=account.id;
+
+INSERT INTO note_tags (note_id,tag_id)
+SELECT map.note_id,tag.id
+FROM a2_video_organization fixture
+JOIN a2_note_map map USING(fixture_key,note_no)
+CROSS JOIN LATERAL jsonb_array_elements_text(fixture.tag_names) expected(name)
+JOIN accounts account ON lower(account.email)='scale@lifelab.local'
+JOIN tags tag ON tag.account_id=account.id AND tag.name=expected.name
+ON CONFLICT DO NOTHING;
+
+UPDATE tasks task SET category_id=category.id
+FROM a2_video_organization fixture
+JOIN a2_note_map map USING(fixture_key,note_no)
+JOIN accounts account ON lower(account.email)='scale@lifelab.local'
+JOIN categories category ON category.account_id=account.id
+    AND category.name=fixture.category_name
+WHERE task.source_note_id=map.note_id AND task.account_id=account.id
+    AND task.source_status='HAS_SOURCE';
+
+INSERT INTO task_tags (task_id,tag_id)
+SELECT task.id,tag.id
+FROM a2_video_organization fixture
+JOIN a2_note_map map USING(fixture_key,note_no)
+JOIN tasks task ON task.source_note_id=map.note_id AND task.source_status='HAS_SOURCE'
+CROSS JOIN LATERAL jsonb_array_elements_text(fixture.tag_names) expected(name)
+JOIN accounts account ON lower(account.email)='scale@lifelab.local'
+JOIN tags tag ON tag.account_id=account.id AND tag.name=expected.name
+WHERE task.account_id=account.id
+ON CONFLICT DO NOTHING;
+
+DO $$
+BEGIN
+ IF EXISTS (
+   SELECT 1 FROM a2_video_organization fixture
+   JOIN a2_note_map map USING(fixture_key,note_no)
+   JOIN notes note ON note.id=map.note_id
+   LEFT JOIN categories category ON category.id=note.category_id
+   WHERE category.name IS DISTINCT FROM fixture.category_name
+      OR coalesce((SELECT jsonb_agg(tag.name ORDER BY tag.name)
+                   FROM note_tags link JOIN tags tag ON tag.id=link.tag_id
+                   WHERE link.note_id=note.id),'[]'::jsonb)
+         IS DISTINCT FROM (SELECT jsonb_agg(name ORDER BY name)
+                           FROM jsonb_array_elements_text(fixture.tag_names) names(name))
+ ) THEN RAISE EXCEPTION 'A2 representative Note organization mismatch'; END IF;
+END $$;
+
 DELETE FROM library_videos l USING a2_library_map m,a2_snapshot_sources s
 WHERE l.id=m.library_video_id AND m.fixture_key=s.fixture_key AND s.role='HISTORICAL';
 

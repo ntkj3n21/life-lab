@@ -10,7 +10,7 @@
     "taskStatus": null,
     "deadlineClass": null,
     "category": "Computer Science",
-    "tags": ["Kỹ năng học"]
+    "tags": ["Công nghệ"]
   },
   {
     "audioNo": 2,
@@ -57,7 +57,7 @@
     "title": "Learning",
     "sourceUrl": "https://www.listenaminute.com/l/learning.html",
     "noteContent": "Học là một quá trình suốt đời và diễn ra cả ngoài trường học; học thực sự không chỉ là ghi nhớ nội dung trong sách.",
-    "timestampSeconds": 35,
+    "timestampSeconds": null,
     "taskTitle": null,
     "taskStatus": null,
     "deadlineClass": null,
@@ -101,7 +101,7 @@
     "taskStatus": null,
     "deadlineClass": null,
     "category": "Computer Science",
-    "tags": ["Career"]
+    "tags": ["Công nghệ"]
   },
   {
     "audioNo": 9,

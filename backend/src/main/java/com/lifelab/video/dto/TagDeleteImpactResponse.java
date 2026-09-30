@@ -7,5 +7,9 @@ public record TagDeleteImpactResponse(
         long taskCountToDetach,
         boolean libraryVideosPreserved,
         boolean notesPreserved,
-        boolean tasksPreserved) {
+        boolean tasksPreserved,
+        long libraryImageCountToDetach,
+        long libraryAudioCountToDetach,
+        boolean libraryImagesPreserved,
+        boolean libraryAudioPreserved) {
 }

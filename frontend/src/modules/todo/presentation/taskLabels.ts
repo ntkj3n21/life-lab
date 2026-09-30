@@ -11,11 +11,11 @@ export function formatTaskSourceLabel(
 ) {
   switch (task.sourceStatus) {
     case "HAS_SOURCE":
-      return "Created from note";
+      return "From note";
     case "SOURCE_MISSING":
-      return "Source note unavailable";
+      return "Note unavailable";
     case "INDEPENDENT":
-      return "Independent task";
+      return "Independent";
   }
 }
 

@@ -4,8 +4,25 @@ SELECT 'account_count','1',count(*)::text,count(*)=1,'A1 account' FROM a1
 UNION ALL SELECT 'library_count','36',count(*)::text,count(*)=36,'current Library rows' FROM library_videos l JOIN a1 ON a1.id=l.account_id
 UNION ALL SELECT 'global_source_count','37',count(*)::text,count(*)=37,'locked globals present' FROM youtube_videos y JOIN ids ON ids.youtube_video_id=y.youtube_video_id
 UNION ALL SELECT 'h1_absent_library','0',count(*)::text,count(*)=0,'H1 historical' FROM current_sources WHERE youtube_video_id='-XsRLyKV9_k'
-UNION ALL SELECT 'tag_count','38',count(*)::text,count(*)=38,'A1 tags' FROM tags t JOIN a1 ON a1.id=t.account_id
+UNION ALL SELECT 'tag_count','43',count(*)::text,count(*)=43,'A1 tags' FROM tags t JOIN a1 ON a1.id=t.account_id
 UNION ALL SELECT 'tag_link_count','100',count(*)::text,count(*)=100,'A1 tag links' FROM library_video_tags r JOIN library_videos l ON l.id=r.library_video_id JOIN a1 ON a1.id=l.account_id
+UNION ALL SELECT 'video_custom_titles','10',count(*)::text,count(*)=10,
+    'intentional personal Video titles; remaining cards use Source title fallback'
+FROM library_videos library JOIN a1 ON a1.id=library.account_id WHERE library.custom_title IS NOT NULL
+UNION ALL SELECT 'video_personal_descriptions','14',count(*)::text,count(*)=14,
+    'student-specific Video descriptions'
+FROM library_videos library JOIN a1 ON a1.id=library.account_id WHERE library.personal_description IS NOT NULL
+UNION ALL SELECT 'untagged_video','1',count(*)::text,count(*)=1,
+    'a current Video can remain untagged'
+FROM library_videos library JOIN a1 ON a1.id=library.account_id
+WHERE NOT EXISTS (SELECT 1 FROM library_video_tags link WHERE link.library_video_id=library.id)
+UNION ALL SELECT 'video_personal_metadata_identity','1',count(*)::text,count(*)=1,
+    'REST API study title and description belong to the A1 Library membership'
+FROM library_videos library JOIN a1 ON a1.id=library.account_id
+JOIN youtube_videos source ON source.id=library.youtube_source_id
+WHERE source.youtube_video_id='L-ZrZwvNsuo'
+  AND library.custom_title='REST API cho đồ án Life Lab'
+  AND library.personal_description='Tham khảo cách tổ chức REST API và phân lớp backend rõ ràng.'
 UNION ALL SELECT 'watch_count','160',count(*)::text,count(*)=160,'watch sessions' FROM watch_sessions s JOIN library_videos l ON l.id=s.library_video_id JOIN a1 ON a1.id=l.account_id
 UNION ALL SELECT 'valid_watch_count','117',count(*)::text,count(*)=117,'VALID sessions' FROM watch_sessions s JOIN library_videos l ON l.id=s.library_video_id JOIN a1 ON a1.id=l.account_id WHERE s.validity_status='VALID'
 UNION ALL SELECT 'invalid_watch_count','43',count(*)::text,count(*)=43,'INVALID sessions' FROM watch_sessions s JOIN library_videos l ON l.id=s.library_video_id JOIN a1 ON a1.id=l.account_id WHERE s.validity_status='INVALID'
@@ -24,6 +41,13 @@ UNION ALL SELECT 'task_count','144',count(*)::text,count(*)=144,'semantic Tasks'
 UNION ALL SELECT 'has_source_count','79',count(*)::text,count(*)=79,'HAS_SOURCE' FROM tasks t JOIN a1 ON a1.id=t.account_id WHERE t.source_status='HAS_SOURCE'
 UNION ALL SELECT 'independent_count','50',count(*)::text,count(*)=50,'INDEPENDENT' FROM tasks t JOIN a1 ON a1.id=t.account_id WHERE t.source_status='INDEPENDENT'
 UNION ALL SELECT 'source_missing_count','15',count(*)::text,count(*)=15,'SOURCE_MISSING' FROM tasks t JOIN a1 ON a1.id=t.account_id WHERE t.source_status='SOURCE_MISSING'
+UNION ALL SELECT 'synthetic_task_copy','0',count(*)::text,count(*)=0,
+    'independent and surviving missing-source Tasks read as standalone work'
+FROM tasks t JOIN a1 ON a1.id=t.account_id
+WHERE t.title ~ '\([0-9]+\)$'
+   OR t.title LIKE 'Complete work after losing the source Note%'
+   OR t.description LIKE 'Independent work in the personal study%'
+   OR t.description LIKE 'The Task remains independently actionable%'
 UNION ALL SELECT 'status_not_started','55',count(*)::text,count(*)=55,'status' FROM tasks t JOIN a1 ON a1.id=t.account_id WHERE t.status='NOT_STARTED'
 UNION ALL SELECT 'status_in_progress','43',count(*)::text,count(*)=43,'status' FROM tasks t JOIN a1 ON a1.id=t.account_id WHERE t.status='IN_PROGRESS'
 UNION ALL SELECT 'status_completed','46',count(*)::text,count(*)=46,'status' FROM tasks t JOIN a1 ON a1.id=t.account_id WHERE t.status='COMPLETED'
@@ -282,9 +306,9 @@ WHERE n.source_type = 'AUDIO'
 
 UNION ALL SELECT
 		'audio_timestamp_positive_count',
-		'10',
+		'9',
 		count(*)::text,
-		count(*) = 10,
+		count(*) = 9,
 		'AUDIO positive timestamps'
 FROM notes n
 JOIN a1 ON a1.id = n.account_id
@@ -293,9 +317,9 @@ WHERE n.source_type = 'AUDIO'
 
 UNION ALL SELECT
 		'audio_timestamp_null_count',
-		'0',
+		'1',
 		count(*)::text,
-		count(*) = 0,
+		count(*) = 1,
 		'AUDIO null timestamps'
 FROM notes n
 JOIN a1 ON a1.id = n.account_id
@@ -374,5 +398,238 @@ FROM task_tags tt
 JOIN tasks t ON t.id = tt.task_id
 JOIN notes n ON n.id = t.source_note_id
 JOIN a1 ON a1.id = t.account_id
-WHERE n.source_type = 'AUDIO';
+WHERE n.source_type = 'AUDIO'
+
+UNION ALL SELECT 'image_media_tag_links','35',count(*)::text,count(*)=35,
+    'Image Library uses personal Tags'
+FROM library_image_tags link JOIN library_images library ON library.id=link.library_image_id
+JOIN a1 ON a1.id=library.account_id
+UNION ALL SELECT 'audio_media_tag_links','25',count(*)::text,count(*)=25,
+    'Audio Library uses personal Tags'
+FROM library_audio_tags link JOIN library_audio library ON library.id=link.library_audio_id
+JOIN a1 ON a1.id=library.account_id
+UNION ALL SELECT 'untagged_image','1',count(*)::text,count(*)=1,
+    'origami reference is intentionally untagged at Library level'
+FROM library_images library JOIN image_sources source ON source.id=library.image_source_id
+JOIN a1 ON a1.id=library.account_id
+WHERE source.storage_key='a1-image-01.jpg'
+  AND NOT EXISTS (SELECT 1 FROM library_image_tags link WHERE link.library_image_id=library.id)
+UNION ALL SELECT 'untagged_audio','1',count(*)::text,count(*)=1,
+    'Learning audio is intentionally untagged at Library level'
+FROM library_audio library JOIN audio_sources source ON source.id=library.audio_source_id
+JOIN a1 ON a1.id=library.account_id
+WHERE source.storage_key='a1-audio-05.mp3'
+  AND NOT EXISTS (SELECT 1 FROM library_audio_tags link WHERE link.library_audio_id=library.id)
+UNION ALL SELECT 'v3_image_review_chains','3',count(*)::text,count(*)=3,
+    'earlier design screenshots lead to current-V3 comparison work'
+FROM (VALUES
+    ('a1-image-05.png','Compare the saved ERD with the current V3 schema'),
+    ('a1-image-11.png','Compare the saved workspace screenshot with the current V3 capture flow'),
+    ('a1-image-13.png','Update the workflow diagram for the current V3 media flow')
+) expected(storage_key,task_title)
+JOIN image_sources source ON source.storage_key=expected.storage_key
+JOIN notes note ON note.image_source_id=source.id AND note.account_id=(SELECT id FROM a1)
+JOIN tasks task ON task.source_note_id=note.id AND task.account_id=(SELECT id FROM a1)
+    AND task.title=expected.task_title AND task.source_status='HAS_SOURCE'
+UNION ALL SELECT 'media_tag_ownership_violations','0',count(*)::text,count(*)=0,
+    'every media Tag belongs to its Library owner'
+FROM (
+    SELECT library.account_id, tag.account_id AS tag_account_id
+    FROM library_image_tags link JOIN library_images library ON library.id=link.library_image_id
+    JOIN tags tag ON tag.id=link.tag_id
+    UNION ALL
+    SELECT library.account_id, tag.account_id
+    FROM library_audio_tags link JOIN library_audio library ON library.id=link.library_audio_id
+    JOIN tags tag ON tag.id=link.tag_id
+    UNION ALL
+    SELECT library.account_id, tag.account_id
+    FROM library_video_tags link JOIN library_videos library ON library.id=link.library_video_id
+    JOIN tags tag ON tag.id=link.tag_id
+) owned JOIN a1 ON a1.id=owned.account_id
+WHERE owned.account_id<>owned.tag_account_id
+UNION ALL SELECT 'multi_tag_images','>=1',count(*)::text,count(*)>=1,
+    'at least one Image has multiple Tags'
+FROM (SELECT library.id FROM library_images library JOIN a1 ON a1.id=library.account_id
+      JOIN library_image_tags link ON link.library_image_id=library.id
+      GROUP BY library.id HAVING count(*)>=2) tagged
+UNION ALL SELECT 'multi_tag_audio','>=1',count(*)::text,count(*)>=1,
+    'at least one Audio item has multiple Tags'
+FROM (SELECT library.id FROM library_audio library JOIN a1 ON a1.id=library.account_id
+      JOIN library_audio_tags link ON link.library_audio_id=library.id
+      GROUP BY library.id HAVING count(*)>=2) tagged
+UNION ALL SELECT 'shared_media_tags','>=1',count(*)::text,count(*)>=1,
+    'one personal Tag spans media types'
+FROM tags tag JOIN a1 ON a1.id=tag.account_id
+WHERE EXISTS (SELECT 1 FROM library_video_tags link JOIN library_videos library
+              ON library.id=link.library_video_id WHERE link.tag_id=tag.id AND library.account_id=a1.id)
+  AND EXISTS (SELECT 1 FROM library_image_tags link JOIN library_images library
+              ON library.id=link.library_image_id WHERE link.tag_id=tag.id AND library.account_id=a1.id)
+UNION ALL SELECT 'image_personal_descriptions','2',count(*)::text,count(*)=2,
+    'curated Image descriptions'
+FROM library_images library JOIN a1 ON a1.id=library.account_id
+WHERE library.personal_description IS NOT NULL
+UNION ALL SELECT 'audio_personal_descriptions','2',count(*)::text,count(*)=2,
+    'curated Audio descriptions'
+FROM library_audio library JOIN a1 ON a1.id=library.account_id
+WHERE library.personal_description IS NOT NULL
+UNION ALL SELECT 'image_fallback_title','1',count(*)::text,count(*)=1,
+    'one Image uses the source filename fallback'
+FROM library_images library JOIN a1 ON a1.id=library.account_id WHERE library.title IS NULL
+UNION ALL SELECT 'audio_fallback_title','1',count(*)::text,count(*)=1,
+    'one Audio item uses the source filename fallback'
+FROM library_audio library JOIN a1 ON a1.id=library.account_id WHERE library.title IS NULL
+UNION ALL SELECT 'image_personal_metadata_identity','0',count(*)::text,count(*)=0,
+    'exact Image title and description fixture intent'
+FROM library_images library JOIN a1 ON a1.id=library.account_id
+JOIN image_sources source ON source.id=library.image_source_id
+WHERE (source.storage_key='a1-image-01.jpg' AND
+       (library.title IS NOT NULL OR library.personal_description IS NOT NULL))
+   OR (source.storage_key='a1-image-02.jpg' AND
+       (library.title IS DISTINCT FROM 'Philosophy Study Mind Map' OR
+        library.personal_description IS DISTINCT FROM
+        'Sơ đồ Triết học: đối chiếu các chủ đề trước buổi ôn tập.'))
+UNION ALL SELECT 'audio_personal_metadata_identity','0',count(*)::text,count(*)=0,
+    'exact Audio title and description fixture intent'
+FROM library_audio library JOIN a1 ON a1.id=library.account_id
+JOIN audio_sources source ON source.id=library.audio_source_id
+WHERE (source.storage_key='a1-audio-01.mp3' AND (library.title IS NOT NULL OR library.personal_description IS NOT NULL))
+   OR (source.storage_key='a1-audio-02.mp3' AND
+       (library.title IS DISTINCT FROM 'Education' OR library.personal_description IS DISTINCT FROM
+        'Đối chiếu cơ hội giáo dục và thói quen học suốt đời.'))
+UNION ALL SELECT 'normalized_description_marker','2',count(*)::text,count(*)=2,
+    'Vietnamese accent and d-stroke search markers'
+FROM (
+    SELECT library.personal_description AS description FROM library_images library JOIN a1 ON a1.id=library.account_id
+    UNION ALL
+    SELECT library.personal_description FROM library_audio library JOIN a1 ON a1.id=library.account_id
+) descriptions
+WHERE lifelab_search_normalize(descriptions.description) LIKE '%doi chieu%'
+UNION ALL SELECT 'image_media_tag_identity','1',count(*)::text,count(*)=1,
+    'Philosophy study image keeps its review Tag'
+FROM library_image_tags link JOIN library_images library ON library.id=link.library_image_id
+JOIN image_sources source ON source.id=library.image_source_id
+JOIN tags tag ON tag.id=link.tag_id JOIN a1 ON a1.id=library.account_id
+WHERE source.storage_key='a1-image-02.jpg' AND tag.normalized_name=lower('Ôn tập')
+UNION ALL SELECT 'audio_media_tag_identity','1',count(*)::text,count(*)=1,
+    'Education audio keeps its important Tag'
+FROM library_audio_tags link JOIN library_audio library ON library.id=link.library_audio_id
+JOIN audio_sources source ON source.id=library.audio_source_id
+JOIN tags tag ON tag.id=link.tag_id JOIN a1 ON a1.id=library.account_id
+WHERE source.storage_key='a1-audio-02.mp3' AND tag.normalized_name=lower('Quan trọng')
+UNION ALL SELECT 'media_zero_result_marker','0',count(*)::text,count(*)=0,
+    'known zero-result Library query'
+FROM (
+    SELECT coalesce(library.title,source.original_filename) AS title, library.personal_description AS description
+    FROM library_images library JOIN image_sources source ON source.id=library.image_source_id JOIN a1 ON a1.id=library.account_id
+    UNION ALL
+    SELECT coalesce(library.title,source.original_filename),library.personal_description
+    FROM library_audio library JOIN audio_sources source ON source.id=library.audio_source_id JOIN a1 ON a1.id=library.account_id
+) media
+WHERE lifelab_search_normalize(media.title || ' ' || coalesce(media.description,'')) LIKE '%no matching media 2026%';
+
+WITH a1 AS (SELECT id FROM accounts WHERE lower(email)='demo@lifelab.local'),
+matched AS (
+    SELECT fixture.*, note.id AS note_id, note.account_id AS note_account_id,
+           category.name AS actual_category, category.account_id AS category_account_id
+    FROM a1_expected_organization fixture
+    LEFT JOIN youtube_videos video ON fixture.source_kind='VIDEO'
+        AND video.youtube_video_id=fixture.source_identity
+    LEFT JOIN image_sources image ON fixture.source_kind='IMAGE'
+        AND image.storage_key=fixture.source_identity
+    LEFT JOIN audio_sources audio ON fixture.source_kind='AUDIO'
+        AND audio.storage_key=fixture.source_identity
+    LEFT JOIN notes note ON note.account_id=(SELECT id FROM a1)
+        AND note.content=fixture.content
+        AND note.timestamp_seconds IS NOT DISTINCT FROM fixture.timestamp_seconds
+        AND ((fixture.source_kind='VIDEO' AND note.youtube_source_id=video.id)
+          OR (fixture.source_kind='IMAGE' AND note.image_source_id=image.id)
+          OR (fixture.source_kind='AUDIO' AND note.audio_source_id=audio.id))
+    LEFT JOIN categories category ON category.id=note.category_id
+)
+SELECT 'manifest_rows','123',count(*)::text,count(*)=123,'explicit stable-key Note organization'
+FROM a1_expected_organization
+UNION ALL SELECT 'manifest_exact_matches','123',count(*)::text,count(*)=123,
+    'exact Source, Note content, timestamp, Category and complete Tag set'
+FROM matched
+WHERE note_id IS NOT NULL AND actual_category=category_name
+  AND category_account_id=(SELECT id FROM a1)
+  AND coalesce((SELECT jsonb_agg(tag.name ORDER BY tag.name)
+                FROM note_tags link JOIN tags tag ON tag.id=link.tag_id
+                WHERE link.note_id=matched.note_id),'[]'::jsonb)
+      = (SELECT jsonb_agg(name ORDER BY name)
+         FROM jsonb_array_elements_text(matched.tag_names) names(name))
+UNION ALL SELECT 'manifest_distinct_notes','123',count(DISTINCT note_id)::text,
+    count(DISTINCT note_id)=123,'no manifest key aliases another Note'
+FROM matched
+UNION ALL SELECT 'video_note_count','96',count(*)::text,count(*)=96,
+    'current and historical Video Notes'
+FROM notes note JOIN a1 ON a1.id=note.account_id
+WHERE note.youtube_source_id IS NOT NULL
+UNION ALL SELECT 'note_tag_links','225',count(*)::text,count(*)=225,
+    'exact A1 Video, Image and Audio Note-Tag links'
+FROM note_tags link JOIN notes note ON note.id=link.note_id
+JOIN a1 ON a1.id=note.account_id
+UNION ALL SELECT 'categorized_notes','123',count(*)::text,count(*)=123,
+    'all A1 Notes have Category'
+FROM notes note JOIN a1 ON a1.id=note.account_id WHERE note.category_id IS NOT NULL
+UNION ALL SELECT 'notes_without_category','0',count(*)::text,count(*)=0,
+    'no A1 Note lacks Category'
+FROM notes note JOIN a1 ON a1.id=note.account_id WHERE note.category_id IS NULL
+UNION ALL SELECT 'tagged_notes','123',count(*)::text,count(*)=123,
+    'all A1 Notes have at least one Tag'
+FROM notes note JOIN a1 ON a1.id=note.account_id
+WHERE EXISTS (SELECT 1 FROM note_tags link WHERE link.note_id=note.id)
+UNION ALL SELECT 'notes_without_tags','0',count(*)::text,count(*)=0,
+    'no A1 Note lacks Tags'
+FROM notes note JOIN a1 ON a1.id=note.account_id
+WHERE NOT EXISTS (SELECT 1 FROM note_tags link WHERE link.note_id=note.id)
+UNION ALL SELECT 'categorized_video_notes','96',count(*)::text,count(*)=96,
+    'all Video Notes have Category'
+FROM notes note JOIN a1 ON a1.id=note.account_id
+WHERE note.youtube_source_id IS NOT NULL AND note.category_id IS NOT NULL
+UNION ALL SELECT 'tagged_video_notes','96',count(*)::text,count(*)=96,
+    'all Video Notes have Tag'
+FROM notes note JOIN a1 ON a1.id=note.account_id
+WHERE note.youtube_source_id IS NOT NULL
+  AND EXISTS (SELECT 1 FROM note_tags link WHERE link.note_id=note.id)
+UNION ALL SELECT 'categorized_image_notes','14',count(*)::text,count(*)=14,
+    'all Image Notes have Category'
+FROM notes note JOIN a1 ON a1.id=note.account_id
+WHERE note.image_source_id IS NOT NULL AND note.category_id IS NOT NULL
+UNION ALL SELECT 'tagged_image_notes','14',count(*)::text,count(*)=14,
+    'all Image Notes have Tag'
+FROM notes note JOIN a1 ON a1.id=note.account_id
+WHERE note.image_source_id IS NOT NULL
+  AND EXISTS (SELECT 1 FROM note_tags link WHERE link.note_id=note.id)
+UNION ALL SELECT 'categorized_audio_notes','13',count(*)::text,count(*)=13,
+    'all Audio Notes have Category'
+FROM notes note JOIN a1 ON a1.id=note.account_id
+WHERE note.audio_source_id IS NOT NULL AND note.category_id IS NOT NULL
+UNION ALL SELECT 'tagged_audio_notes','13',count(*)::text,count(*)=13,
+    'all Audio Notes have Tag'
+FROM notes note JOIN a1 ON a1.id=note.account_id
+WHERE note.audio_source_id IS NOT NULL
+  AND EXISTS (SELECT 1 FROM note_tags link WHERE link.note_id=note.id)
+UNION ALL SELECT 'note_category_ownership','0',count(*)::text,count(*)=0,
+    'every Note Category belongs to A1'
+FROM notes note JOIN a1 ON a1.id=note.account_id
+JOIN categories category ON category.id=note.category_id
+WHERE category.account_id<>note.account_id
+UNION ALL SELECT 'note_tag_ownership','0',count(*)::text,count(*)=0,
+    'every Note Tag belongs to A1'
+FROM notes note JOIN a1 ON a1.id=note.account_id
+JOIN note_tags link ON link.note_id=note.id JOIN tags tag ON tag.id=link.tag_id
+WHERE tag.account_id<>note.account_id
+UNION ALL SELECT 'duplicate_note_tag_links','0',count(*)::text,count(*)=0,
+    'no duplicate Note/Tag pair'
+FROM (SELECT link.note_id,link.tag_id FROM note_tags link
+      JOIN notes note ON note.id=link.note_id JOIN a1 ON a1.id=note.account_id
+      GROUP BY link.note_id,link.tag_id HAVING count(*)>1) duplicates
+UNION ALL SELECT 'organized_has_source_tasks','79',count(*)::text,count(*)=79,
+    'all exact-source Tasks have coherent organization'
+FROM tasks task JOIN a1 ON a1.id=task.account_id
+JOIN notes note ON note.id=task.source_note_id
+WHERE task.source_status='HAS_SOURCE' AND task.category_id=note.category_id
+  AND task.category_id IS NOT NULL
+  AND EXISTS (SELECT 1 FROM task_tags link WHERE link.task_id=task.id);
 ROLLBACK;

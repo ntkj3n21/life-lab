@@ -5,6 +5,7 @@ import {
 } from "lucide-react";
 import {
   type FormEvent,
+  type ReactNode,
   useId,
   useRef,
   useState,
@@ -12,7 +13,8 @@ import {
 
 import { FilterDialogShell } from "../../../components/ui/FilterDialogShell";
 import type { Tag } from "../../media/services/tagApi";
-import type { Category } from "../../organization/services/categoryApi";
+import { TagFinderInput } from "../../media/components/TagFinder";
+import { useTagFinder } from "../../media/components/tagFinding";
 import type {
   TaskSourceStatus,
   TaskStatus,
@@ -22,7 +24,6 @@ interface TaskFilterSnapshot {
   status: "" | TaskStatus;
   deadlineFrom: string;
   deadlineTo: string;
-  categoryId?: number;
   tagIds: number[];
   sourceStatus: "" | TaskSourceStatus;
   sortBy:
@@ -37,7 +38,6 @@ interface TaskFiltersProps {
   status: "" | TaskStatus;
   deadlineFrom: string;
   deadlineTo: string;
-  categoryId?: number;
   tagIds: number[];
   sourceStatus: "" | TaskSourceStatus;
   sortBy:
@@ -45,12 +45,11 @@ interface TaskFiltersProps {
     | "updatedAt"
     | "deadline";
   sortDirection: "asc" | "desc";
-  categories: Category[];
   tags: Tag[];
-  categoriesLoading: boolean;
   tagsLoading: boolean;
   isLoading: boolean;
   canClear: boolean;
+  toolbarAction?: ReactNode;
 
   onSearchTextChange: (
     value: string,
@@ -66,10 +65,6 @@ interface TaskFiltersProps {
 
   onDeadlineToChange: (
     value: string,
-  ) => void;
-
-  onCategoryChange: (
-    categoryId: number | undefined,
   ) => void;
 
   onTagIdsChange: (
@@ -96,6 +91,7 @@ interface TaskFiltersProps {
   onApply: (
     event: FormEvent<HTMLFormElement>,
   ) => void;
+  onSearchImmediate: () => void;
 
   onClear: () => void;
 }
@@ -108,29 +104,28 @@ export function TaskFilters({
   status,
   deadlineFrom,
   deadlineTo,
-  categoryId,
   tagIds,
   sourceStatus,
   sortBy,
   sortDirection,
-  categories,
   tags,
-  categoriesLoading,
   tagsLoading,
   isLoading,
   canClear,
+  toolbarAction,
   onSearchTextChange,
   onStatusChange,
   onDeadlineFromChange,
   onDeadlineToChange,
-  onCategoryChange,
   onTagIdsChange,
   onSourceStatusChange,
   onSortByChange,
   onSortDirectionChange,
   onApply,
+  onSearchImmediate,
 }: TaskFiltersProps) {
   const dialogId = useId();
+  const { tagSearch, setTagSearch, visibleTags } = useTagFinder(tags);
 
   const [
     showFilters,
@@ -153,7 +148,6 @@ export function TaskFilters({
       status,
       deadlineFrom,
       deadlineTo,
-      categoryId,
       tagIds: [...tagIds],
       sourceStatus,
       sortBy,
@@ -181,10 +175,6 @@ export function TaskFilters({
 
     onDeadlineToChange(
       snapshot.deadlineTo,
-    );
-
-    onCategoryChange(
-      snapshot.categoryId,
     );
 
     onTagIdsChange([
@@ -218,7 +208,6 @@ export function TaskFilters({
     onStatusChange("");
     onDeadlineFromChange("");
     onDeadlineToChange("");
-    onCategoryChange(undefined);
     onTagIdsChange([]);
     onSourceStatusChange("");
     onSortByChange("createdAt");
@@ -317,8 +306,8 @@ export function TaskFilters({
       onSubmit={handleSubmit}
       className="mt-4"
     >
-      <div className="flex flex-col gap-2 sm:flex-row">
-        <div className="flex min-w-0 flex-1 items-center gap-2 rounded-xl border border-(--border) bg-(--app-bg) px-3 transition focus-within:border-(--border-strong) focus-within:ring-2 focus-within:ring-(--focus)">
+      <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
+        <div className="flex min-w-0 flex-1 items-center gap-2 rounded-xl border border-(--border) bg-(--app-bg) px-3 transition focus-within:border-(--border-strong) focus-within:ring-2 focus-within:ring-(--focus) sm:min-w-48">
           <Search
             size={15}
             className="shrink-0 text-(--text-muted)"
@@ -335,12 +324,17 @@ export function TaskFilters({
           <input
             id="global-task-search"
             value={searchText}
-            disabled={isLoading}
             onChange={(event) =>
               onSearchTextChange(
                 event.target.value,
               )
             }
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                event.preventDefault();
+                onSearchImmediate();
+              }
+            }}
             placeholder="Search title or description..."
             className="min-w-0 flex-1 bg-transparent py-2.5 text-sm outline-none placeholder:text-(--text-faint) disabled:cursor-not-allowed disabled:opacity-50"
           />
@@ -353,14 +347,6 @@ export function TaskFilters({
             />
           )}
         </div>
-
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="min-h-10 rounded-lg bg-(--primary-bg) px-4 py-2 text-sm font-medium text-(--primary-text) transition hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          Search
-        </button>
 
         <button
           type="button"
@@ -384,6 +370,7 @@ export function TaskFilters({
 
           Filters
         </button>
+        {toolbarAction}
       </div>
 
       <FilterDialogShell
@@ -412,7 +399,7 @@ export function TaskFilters({
           Primary filters
         </p>
 
-        <div className="grid gap-3 md:grid-cols-3">
+        <div className="grid gap-3 md:grid-cols-2">
           <fieldset className="rounded-xl border border-(--border) bg-(--surface-subtle) p-3">
             <legend className="px-1 text-xs font-medium text-(--text-secondary)">
               Status
@@ -468,7 +455,7 @@ export function TaskFilters({
               htmlFor="global-task-source-status"
               className="mb-1.5 block text-[11px] font-medium text-(--text-muted)"
             >
-              Source status
+              Origin
             </label>
 
             <select
@@ -488,7 +475,7 @@ export function TaskFilters({
               }
             >
               <option value="">
-                All sources
+                All origins
               </option>
 
               <option value="INDEPENDENT">
@@ -496,70 +483,15 @@ export function TaskFilters({
               </option>
 
               <option value="HAS_SOURCE">
-                Has source
+                From note
               </option>
 
               <option value="SOURCE_MISSING">
-                Source missing
+                Note unavailable
               </option>
             </select>
           </fieldset>
 
-          <fieldset className="rounded-xl border border-(--border) bg-(--surface-subtle) p-3">
-            <legend className="px-1 text-xs font-medium text-(--text-secondary)">
-              Organization
-            </legend>
-
-            <label
-              htmlFor="global-task-category"
-              className="mb-1.5 block text-[11px] font-medium text-(--text-muted)"
-            >
-              Category
-            </label>
-
-            <select
-              id="global-task-category"
-              value={
-                categoryId ?? ""
-              }
-              disabled={
-                isLoading ||
-                categoriesLoading
-              }
-              onChange={(event) =>
-                onCategoryChange(
-                  event.target.value
-                    ? Number(
-                        event.target
-                          .value,
-                      )
-                    : undefined,
-                )
-              }
-              className={
-                inputClassName
-              }
-            >
-              <option value="">
-                All categories
-              </option>
-
-              {categories.map(
-                (category) => (
-                  <option
-                    key={
-                      category.id
-                    }
-                    value={
-                      category.id
-                    }
-                  >
-                    {category.name}
-                  </option>
-                ),
-              )}
-            </select>
-          </fieldset>
         </div>
 
         <fieldset className="rounded-xl border border-(--border) bg-(--surface-subtle) p-3">
@@ -578,8 +510,10 @@ export function TaskFilters({
             </p>
           ) : (
             <>
+              <TagFinderInput value={tagSearch} onChange={setTagSearch} disabled={isLoading} />
+              {visibleTags.length === 0 && <p className="text-xs text-(--text-muted)">No matching tags.</p>}
               <div className="flex max-h-36 flex-wrap gap-2 overflow-y-auto">
-                {tags.map((tag) => {
+                {visibleTags.map((tag) => {
                   const checked =
                     tagIds.includes(
                       tag.id,
@@ -619,7 +553,7 @@ export function TaskFilters({
               </div>
 
               <p className="mt-2 text-[10px] leading-4 text-(--text-muted)">
-                Multiple selected tags match Tasks with any selected tag.
+                Tasks with any selected tag will be shown.
               </p>
             </>
           )}

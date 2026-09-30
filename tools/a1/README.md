@@ -1,7 +1,9 @@
-# A1 demo pilot tooling
+# A1 canonical V3 demo tooling
 
 This directory contains explicitly invoked development/evaluation tooling for the
-single `demo@lifelab.local` pilot account. Nothing here runs during normal Spring
+single `demo@lifelab.local` account. A1 is the compact, curated student-learning
+workspace; A2 supplies longer-term regression diversity. The archived
+`tools/demo` scale-validation account is not canonical. Nothing here runs during normal Spring
 Boot startup.
 
 ## Prerequisites
@@ -96,6 +98,15 @@ selection; they do not change the subtitle harvest's technical availability audi
 LIBRARY_09 has technically usable but semantically corrupted captions, so its two
 Notes use study intentions supported only by the source title. Their timestamps,
 VTT tracks and cue starts are NULL, and their evidence text is the snapshot title.
+
+`a1-note-organization.tsv` is the explicit, human-reviewable organization map for
+all 123 Notes (96 Video, 14 Image, 13 Audio). The reset applies its Video rows,
+keeps Image/Audio fixture organization aligned with it, and organizes linked
+HAS_SOURCE Tasks without changing their source, status, or deadline. The read-only
+verifier compares every stable Note key's exact Source, content, timestamp,
+Category, and complete Tag set against the manifest. A1 intentionally has no
+unorganized Notes; unorganized history remains an A2 regression scenario.
+
 The builder changes only linked Task titles/descriptions, not links, statuses or
 deadlines. Rebuild the durable artifacts after editing reviewed overrides.
 

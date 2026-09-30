@@ -4,13 +4,20 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.lifelab.source.image.domain.LibraryImage;
 
-public interface LibraryImageRepository extends JpaRepository<LibraryImage, Long> {
+public interface LibraryImageRepository extends JpaRepository<LibraryImage, Long>, JpaSpecificationExecutor<LibraryImage> {
+
+    @Override
+    @EntityGraph(attributePaths = "imageSource")
+    Page<LibraryImage> findAll(Specification<LibraryImage> specification, Pageable pageable);
 
     boolean existsByAccount_IdAndImageSource_Id(
             Long accountId,

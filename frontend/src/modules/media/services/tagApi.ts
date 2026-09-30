@@ -25,6 +25,10 @@ export interface TagDeleteImpact {
   libraryVideosPreserved: boolean;
   notesPreserved: boolean;
   tasksPreserved: boolean;
+  libraryImageCountToDetach: number;
+  libraryAudioCountToDetach: number;
+  libraryImagesPreserved: boolean;
+  libraryAudioPreserved: boolean;
 }
 
 export function getTags() {

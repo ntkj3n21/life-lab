@@ -210,6 +210,72 @@ class NoteApiIntegrationTest {
     }
 
     @Test
+    void normalizedSearchAndBoundedTypoFallbackRespectFiltersAndOwnership() throws Exception {
+        Account owner = createAccount("note-discovery-owner@example.com");
+        Account other = createAccount("note-discovery-other@example.com");
+        YouTubeVideo source = createSource("note-discovery-source", YouTubeAvailabilityStatus.AVAILABLE);
+        Long categoryId = insertCategory(owner.getId(), "Learning", "learning");
+        Long otherCategoryId = insertCategory(owner.getId(), "Other", "other");
+        Long tagId = insertTag(owner.getId(), "Backend", "backend");
+        Long otherTagId = insertTag(owner.getId(), "Frontend", "frontend");
+        Long spring = insertNote(owner.getId(), source.getId(),
+                "Đồ án Spring Boot Database API", 0, BASE_TIME);
+        Long react = insertNote(owner.getId(), source.getId(),
+                "Lập trình JavaScript React", null, BASE_TIME.minusSeconds(1));
+        Long english = insertNote(owner.getId(), source.getId(),
+                "Đối chiếu Tiếng Anh", null, BASE_TIME.minusSeconds(2));
+        Long literal = insertNote(owner.getId(), source.getId(),
+                "sprng draft", null, BASE_TIME.minusSeconds(3));
+        organizeNote(spring, categoryId, tagId);
+        organizeNote(react, categoryId, otherTagId);
+        organizeNote(english, otherCategoryId, otherTagId);
+        organizeNote(literal, otherCategoryId, otherTagId);
+        insertNote(other.getId(), source.getId(), "Private Database", null, BASE_TIME);
+        Cookie token = login(owner.getEmail());
+
+        for (String query : new String[] {"do an", "SPRING", "databse"}) {
+            mockMvc.perform(get("/api/notes").param("q", query)
+                            .param("categoryId", categoryId.toString())
+                            .param("tagId", tagId.toString())
+                            .param("hasTimestamp", "true").cookie(token))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.totalElements").value(1))
+                    .andExpect(jsonPath("$.items[0].id").value(spring));
+        }
+        for (String query : new String[] {"lap trinh", "javscript", "recat"}) {
+            mockMvc.perform(get("/api/notes").param("q", query)
+                            .param("categoryId", categoryId.toString())
+                            .param("tagId", otherTagId.toString()).cookie(token))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.items[0].id").value(react));
+        }
+        for (String query : new String[] {"doi chieu", "tieng anh"}) {
+            mockMvc.perform(get("/api/notes").param("q", query).cookie(token))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.items[0].id").value(english));
+        }
+        mockMvc.perform(get("/api/notes").param("q", "sprng").cookie(token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.totalElements").value(1))
+                .andExpect(jsonPath("$.items[0].id").value(literal));
+        mockMvc.perform(get("/api/notes").param("q", "sng").cookie(token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.totalElements").value(0));
+        mockMvc.perform(get("/api/notes").param("q", "private").cookie(token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.totalElements").value(0));
+        mockMvc.perform(get("/api/notes").param("q", "do")
+                        .param("size", "1").param("page", "0").cookie(token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.totalElements").value(2))
+                .andExpect(jsonPath("$.items[0].id").value(spring));
+        mockMvc.perform(get("/api/notes").param("q", "do")
+                        .param("size", "1").param("page", "1").cookie(token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items[0].id").value(english));
+    }
+
+    @Test
     void organizationTimestampSourceSearchSortingAndFilteredPaginationCompose() throws Exception {
         Account owner = createAccount("note-v2-owner@example.com");
         Account other = createAccount("note-v2-other@example.com");

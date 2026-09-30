@@ -179,7 +179,7 @@ export function Sidebar() {
             </h1>
 
             <p className="truncate text-xs text-(--text-muted)">
-              Study workspace
+              Workspace
             </p>
           </div>
         )}

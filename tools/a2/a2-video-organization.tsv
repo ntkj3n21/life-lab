@@ -1,0 +1,71 @@
+fixture_key	note_no	category_name	tag_names
+A2_LIB_001	1	Software Engineering	Java
+A2_LIB_002	1	Software Engineering	Java
+A2_LIB_003	2	Software Engineering	Java
+A2_LIB_004	2	Data Structures	Java;Collections
+A2_LIB_006	1	Software Engineering	Java;OOP
+A2_LIB_007	1	Software Engineering	Java;OOP
+A2_LIB_008	2	Software Engineering	Java;OOP
+A2_LIB_009	2	Software Engineering	Java;OOP
+A2_LIB_010	1	Data Structures	Java;Collections
+A2_LIB_011	3	Software Engineering	Java;Collections
+A2_LIB_013	2	Software Engineering	Java;OOP
+A2_LIB_014	1	Software Engineering	Java;OOP
+A2_LIB_015	3	Software Engineering	Java;OOP
+A2_LIB_016	2	Software Engineering	Java
+A2_LIB_017	3	Software Engineering	Java;Java I/O
+A2_LIB_018	1	Software Engineering	Java;Concurrency
+A2_LIB_019	2	Software Engineering	Java;Backend
+A2_LIB_021	1	Algorithms	DSA;Sorting & Search
+A2_LIB_022	1	Algorithms	DSA
+A2_LIB_023	3	Algorithms	DSA
+A2_LIB_024	1	Data Structures	DSA;Queue
+A2_LIB_025	2	Data Structures	DSA;Stack
+A2_LIB_026	1	Algorithms	DSA
+A2_LIB_028	1	Data Structures	DSA;Linked List
+A2_LIB_029	3	Algorithms	DSA
+A2_LIB_030	3	Algorithms	DSA;Sorting & Search
+A2_LIB_031	2	Algorithms	DSA;Graph
+A2_LIB_032	2	Algorithms	DSA;Graph
+A2_LIB_033	2	Software Engineering	JavaScript;Async JavaScript
+A2_LIB_034	1	Software Engineering	JavaScript;DOM
+A2_LIB_036	2	Software Engineering	JavaScript;DOM
+A2_LIB_037	3	Software Engineering	JavaScript
+A2_LIB_038	3	Software Engineering	JavaScript;Async JavaScript
+A2_LIB_039	2	Software Engineering	JavaScript;Async JavaScript
+A2_LIB_040	2	Software Engineering	JavaScript;ES6+
+A2_LIB_041	1	Software Engineering	JavaScript;ES6+
+A2_LIB_043	3	Software Engineering	JavaScript;REST API
+A2_LIB_044	2	Software Engineering	JavaScript;REST API
+A2_LIB_045	2	Software Engineering	JavaScript
+A2_LIB_046	2	Software Engineering	React;React Hooks
+A2_LIB_047	1	Software Engineering	React;React Hooks
+A2_LIB_048	2	Software Engineering	React;React Hooks
+A2_LIB_049	1	Software Engineering	React;React Hooks
+A2_LIB_051	1	Software Engineering	React;React Hooks
+A2_LIB_052	2	Software Engineering	React;React Hooks
+A2_LIB_053	2	Software Engineering	React;React Hooks
+A2_LIB_054	3	Software Engineering	React;React Hooks
+A2_LIB_055	1	Software Engineering	React;React Hooks
+A2_LIB_056	2	Software Engineering	Node.js;SQL
+A2_LIB_058	3	Software Engineering	Node.js;MVC
+A2_LIB_059	3	Database	SQL;Sequelize
+A2_LIB_060	1	Software Engineering	REST API;Backend
+A2_LIB_061	2	Software Engineering	React
+A2_LIB_062	1	Software Engineering	React
+A2_LIB_063	2	Software Engineering	REST API;Node.js
+A2_LIB_065	3	Software Engineering	React;REST API
+A2_LIB_066	1	Database	Sequelize;Database
+A2_LIB_067	3	Software Engineering	Node.js
+A2_LIB_068	3	Cloud & DevOps	Docker;Deployment
+A2_LIB_069	2	Cloud & DevOps	Docker;Backend
+A2_LIB_070	1	Cloud & DevOps	Docker;Deployment
+A2_LIB_072	3	Cloud & DevOps	Deployment;Node.js
+A2_LIB_073	3	Cloud & DevOps	Deployment;React
+A2_LIB_074	3	Software Engineering	HTTP
+A2_LIB_075	3	Software Engineering	Node.js;Express.js
+A2_LIB_076	1	Software Engineering	HTTP;Node.js
+A2_LIB_077	2	Software Engineering	MVC;Node.js
+A2_LIB_078	1	Software Engineering	MVC;Node.js
+A2_LIB_079	3	Database	Database;Node.js
+A2_LIB_080	2	Database	Database;Node.js

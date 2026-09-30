@@ -1,5 +1,6 @@
 package com.lifelab.common.text;
 
+import java.text.Normalizer;
 import java.util.Locale;
 
 public final class SearchKeywordNormalizer {
@@ -13,8 +14,15 @@ public final class SearchKeywordNormalizer {
         }
 
         String stripped = query.strip();
-        return stripped.isEmpty()
-                ? null
-                : stripped.toLowerCase(Locale.ROOT);
+        if (stripped.isEmpty()) {
+            return null;
+        }
+
+        String decomposed = Normalizer.normalize(stripped.toLowerCase(Locale.ROOT), Normalizer.Form.NFD);
+        return decomposed.replaceAll("\\p{M}+", "").replace('đ', 'd');
+    }
+
+    public static boolean eligibleForTypoFallback(String keyword) {
+        return keyword != null && keyword.matches("[a-z0-9]{4,32}");
     }
 }

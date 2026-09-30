@@ -24,6 +24,7 @@ if ([string]::IsNullOrWhiteSpace($AudioFixturePath)) {
 }
 
 . (Join-Path $PSScriptRoot 'A2-Database.ps1')
+. (Join-Path $PSScriptRoot 'A2-VideoOrganization.ps1')
 & (Join-Path $PSScriptRoot 'Test-A2Artifacts.ps1') -ArtifactDirectory $ArtifactDirectory -Quiet | Out-Null
 if (-not (Test-Path -LiteralPath $NoteFixturePath)) {
     throw 'a2-note-fixtures.tsv is missing. Run Build-A2NoteFixtures.ps1 once before reset.'
@@ -194,9 +195,9 @@ if (
     $audioTimestampZeroCount -ne 3 -or
     $audioTimestampPositiveCount -ne 5 -or
     $audioCategories.Count -ne 4 -or
-    $audioTags.Count -ne 8
+    $audioTags.Count -ne 9
 ) {
-    throw 'A2 Audio fixture inventory must be 8 audio / 5 tasks / 3 note-only / 3 timestamp-zero / 5 timestamp-positive / 4 categories / 8 tags.'
+    throw 'A2 Audio fixture inventory must be 8 audio / 5 tasks / 3 note-only / 3 timestamp-zero / 5 timestamp-positive / 4 categories / 9 tags.'
 }
 
 if (
@@ -284,6 +285,8 @@ if ($notes.Count -ne 240 -or @($notes | Where-Object timestamp_seconds -ne '').C
 }
 
 $builder = [System.Text.StringBuilder]::new()
+[void]$builder.AppendLine((Get-A2VideoOrganizationSql `
+    -Sources $snapshot.sources -Notes $notes))
 [void]$builder.AppendLine(@'
 CREATE TEMP TABLE a2_snapshot_sources (
  fixture_key text primary key, role text not null, library_order integer,
@@ -460,8 +463,9 @@ foreach ($fixture in $audioFixtures) {
 Write-Verbose "A2 audio fixtures: $($audioFixtures.Count)"
 
 $seedSql = Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $PSScriptRoot 'seed-a2.sql')
+$curatedSql = Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $PSScriptRoot 'a2-curated-video.sql')
 $temporarySql = Join-Path ([System.IO.Path]::GetTempPath()) "life-lab-a2-seed-$([guid]::NewGuid().ToString('N')).sql"
-[System.IO.File]::WriteAllText($temporarySql, $builder.ToString() + "`n" + $seedSql, [System.Text.UTF8Encoding]::new($false))
+[System.IO.File]::WriteAllText($temporarySql, $builder.ToString() + "`n" + $curatedSql + "`n" + $seedSql, [System.Text.UTF8Encoding]::new($false))
 $database = Get-A2DatabaseConfig -EnvFile $EnvFile
 $passwordHash = '$2a$10$CtETwdyERV3JxQhKLBJPW.KvfT6IpZCSVsTvloYPUXN6QGHF4UsK2'
 try {

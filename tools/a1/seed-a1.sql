@@ -264,12 +264,18 @@ INSERT INTO library_images (
     account_id,
     image_source_id,
     title,
+    personal_description,
     added_at
 )
 SELECT
     account.id,
     source.id,
-    fixture.title,
+    CASE WHEN fixture.image_no = 1 THEN NULL ELSE fixture.title END,
+    CASE fixture.image_no
+        WHEN 2 THEN 'Sơ đồ Triết học: đối chiếu các chủ đề trước buổi ôn tập.'
+        WHEN 3 THEN 'Pomodoro hỗ trợ chia buổi học thành các phiên tập trung ngắn.'
+        ELSE NULL
+    END,
     config.reference_instant
         - interval '42 days'
         + fixture.image_no * interval '2 days'
@@ -316,8 +322,9 @@ BEGIN
           ON fixture.image_no = map.image_no
         JOIN library_images library
           ON library.id = map.library_image_id
-        WHERE library.title IS DISTINCT FROM fixture.title
-           OR btrim(library.title) = ''
+        WHERE library.title IS DISTINCT FROM
+                (CASE WHEN fixture.image_no = 1 THEN NULL ELSE fixture.title END)
+           OR (library.title IS NOT NULL AND btrim(library.title) = '')
     ) THEN
         RAISE EXCEPTION
             'A1 Image Library title validation failed';
@@ -403,12 +410,18 @@ INSERT INTO library_audio (
     account_id,
     audio_source_id,
     title,
+    personal_description,
     added_at
 )
 SELECT
     account.id,
     source.id,
-    fixture.title,
+    CASE WHEN fixture.audio_no = 1 THEN NULL ELSE fixture.title END,
+    CASE fixture.audio_no
+        WHEN 2 THEN 'Đối chiếu cơ hội giáo dục và thói quen học suốt đời.'
+        WHEN 3 THEN 'Luyện nói tiếng Anh và chấp nhận sai khi thực hành.'
+        ELSE NULL
+    END,
     config.reference_instant
         - interval '25 days'
         + fixture.audio_no * interval '1 day'
@@ -458,8 +471,9 @@ BEGIN
           ON fixture.audio_no = map.audio_no
         JOIN library_audio library
           ON library.id = map.library_audio_id
-        WHERE library.title IS DISTINCT FROM fixture.title
-           OR btrim(library.title) = ''
+        WHERE library.title IS DISTINCT FROM
+                (CASE WHEN fixture.audio_no = 1 THEN NULL ELSE fixture.title END)
+           OR (library.title IS NOT NULL AND btrim(library.title) = '')
     ) THEN
         RAISE EXCEPTION
             'A1 Audio Library title validation failed';
@@ -596,7 +610,8 @@ INSERT INTO a1_tag_names (ordinal, name) VALUES
     (21, 'Career'),
     (22, 'Đồ án'),
     (23, 'Quan trọng'),
-    (24, 'Xem lại');
+    (24, 'Xem lại'),
+    (25, 'Công nghệ');
 
 INSERT INTO tags (
     account_id,
@@ -1050,18 +1065,21 @@ BEGIN
         JOIN notes note
           ON note.id = map.note_id
         WHERE note.timestamp_seconds > 0
-    ) <> 10 THEN
+    ) <> 9 THEN
         RAISE EXCEPTION
-            'A1 Audio positive timestamp count mismatch: expected 10';
+            'A1 Audio positive timestamp count mismatch: expected 9';
     END IF;
 
-    IF EXISTS (
-        SELECT 1
+    IF (
+        SELECT count(*)
         FROM a1_audio_note_map map
         JOIN notes note
           ON note.id = map.note_id
         WHERE note.timestamp_seconds IS NULL
-           OR note.timestamp_seconds < 0
+    ) <> 1 OR EXISTS (
+        SELECT 1 FROM a1_audio_note_map map
+        JOIN notes note ON note.id = map.note_id
+        WHERE note.timestamp_seconds < 0
     ) THEN
         RAISE EXCEPTION
             'A1 Audio Note timestamp validation failed';
@@ -1083,7 +1101,7 @@ BEGIN
      SELECT reference_instant - ((r.sequence_no % 140) + 30) * interval '1 day'
        INTO created FROM a1_config;
      INSERT INTO notes(account_id,youtube_source_id,content,timestamp_seconds,created_at,updated_at)
-       VALUES(account_id_value,source_id,'Temporary source fixture for lifecycle validation',NULL,created,created)
+       VALUES(account_id_value,source_id,'Study intention after revisiting the Spring Boot course: ' || r.title,NULL,created,created)
        RETURNING id INTO temp_note;
      n := temp_note;
    ELSE
@@ -1782,9 +1800,9 @@ BEGIN
                 SELECT count(*)
                 FROM tags
                 WHERE account_id = account_id_value
-        ) <> 38 THEN
+        ) <> 39 THEN
                 RAISE EXCEPTION
-                        'A1 Tag count changed unexpectedly: expected 38';
+                        'A1 Tag count changed unexpectedly: expected 39';
         END IF;
 END
 $$;
@@ -2013,11 +2031,104 @@ BEGIN
  IF (SELECT count(*) FROM notes WHERE account_id=account_id_value)<>123 OR (SELECT count(*) FROM tasks WHERE account_id=account_id_value)<>144 THEN RAISE EXCEPTION 'A1 semantic fixture counts failed'; END IF;
 END $$;
 
+-- Reuse the personal Tag catalog for media membership as well as Notes/Tasks.
+INSERT INTO library_image_tags (library_image_id, tag_id)
+SELECT image_map.library_image_id, tag.id
+FROM a1_image_map image_map
+JOIN a1_image_fixtures fixture ON fixture.image_no = image_map.image_no
+CROSS JOIN LATERAL jsonb_array_elements_text(fixture.tags_json::jsonb) fixture_tag(name)
+JOIN accounts account ON lower(account.email) = 'demo@lifelab.local'
+JOIN tags tag ON tag.account_id = account.id
+    AND tag.normalized_name = lower(btrim(fixture_tag.name))
+WHERE image_map.image_no <> 1;
+
+INSERT INTO library_audio_tags (library_audio_id, tag_id)
+SELECT audio_map.library_audio_id, tag.id
+FROM a1_audio_map audio_map
+JOIN a1_audio_fixtures fixture ON fixture.audio_no = audio_map.audio_no
+CROSS JOIN LATERAL jsonb_array_elements_text(fixture.tags_json::jsonb) fixture_tag(name)
+JOIN accounts account ON lower(account.email) = 'demo@lifelab.local'
+JOIN tags tag ON tag.account_id = account.id
+    AND tag.normalized_name = lower(btrim(fixture_tag.name))
+WHERE audio_map.audio_no <> 5;
+
+-- The explicit 123-row manifest is the authoring source for Note organization.
+-- Image/Audio organization was already seeded from its media fixture and is
+-- checked below against the same manifest. Video organization is applied here.
+INSERT INTO tags (account_id,name,normalized_name,created_at,updated_at)
+SELECT DISTINCT account.id, expected.name, lower(expected.name),
+    config.reference_instant - interval '25 days',
+    config.reference_instant - interval '25 days'
+FROM a1_expected_organization fixture
+CROSS JOIN LATERAL jsonb_array_elements_text(fixture.tag_names) expected(name)
+JOIN accounts account ON lower(account.email)='demo@lifelab.local'
+CROSS JOIN a1_config config
+ON CONFLICT (account_id,normalized_name) DO NOTHING;
+
+UPDATE notes note SET category_id=category.id
+FROM a1_expected_organization fixture
+JOIN a1_note_map map ON map.note_key=fixture.note_key
+JOIN accounts account ON lower(account.email)='demo@lifelab.local'
+JOIN categories category ON category.account_id=account.id
+    AND category.name=fixture.category_name
+WHERE note.id=map.note_id AND note.account_id=account.id;
+
+INSERT INTO note_tags (note_id,tag_id)
+SELECT map.note_id,tag.id
+FROM a1_expected_organization fixture
+JOIN a1_note_map map ON map.note_key=fixture.note_key
+CROSS JOIN LATERAL jsonb_array_elements_text(fixture.tag_names) expected(name)
+JOIN accounts account ON lower(account.email)='demo@lifelab.local'
+JOIN tags tag ON tag.account_id=account.id AND tag.name=expected.name;
+
+-- A linked Task follows its exact Video Note. Image/Audio linked Tasks retain
+-- their already-reviewed organization from the corresponding media fixtures.
+UPDATE tasks task SET category_id=category.id
+FROM a1_task_fixtures task_fixture
+JOIN a1_expected_organization fixture ON fixture.note_key=task_fixture.note_key
+JOIN a1_task_map task_map ON task_map.task_key=task_fixture.task_key
+JOIN accounts account ON lower(account.email)='demo@lifelab.local'
+JOIN categories category ON category.account_id=account.id
+    AND category.name=fixture.category_name
+WHERE task.id=task_map.task_id AND task.account_id=account.id
+    AND task_fixture.source_status='HAS_SOURCE';
+
+INSERT INTO task_tags (task_id,tag_id)
+SELECT task_map.task_id,tag.id
+FROM a1_task_fixtures task_fixture
+JOIN a1_expected_organization fixture ON fixture.note_key=task_fixture.note_key
+JOIN a1_task_map task_map ON task_map.task_key=task_fixture.task_key
+CROSS JOIN LATERAL jsonb_array_elements_text(fixture.tag_names) expected(name)
+JOIN accounts account ON lower(account.email)='demo@lifelab.local'
+JOIN tags tag ON tag.account_id=account.id AND tag.name=expected.name
+WHERE task_fixture.source_status='HAS_SOURCE';
+
+DO $$
+BEGIN
+ IF (SELECT count(*) FROM a1_expected_organization)<>123
+    OR EXISTS (
+      SELECT 1 FROM a1_expected_organization fixture
+      LEFT JOIN a1_note_map map ON map.note_key=fixture.note_key
+      LEFT JOIN a1_image_note_map image_map ON fixture.note_key=
+          'a1-image-'||lpad(image_map.image_no::text,2,'0')
+      LEFT JOIN a1_audio_note_map audio_map ON fixture.note_key=
+          'a1-audio-'||lpad(audio_map.audio_no::text,2,'0')
+      LEFT JOIN notes note ON note.id=coalesce(map.note_id,image_map.note_id,audio_map.note_id)
+      LEFT JOIN categories category ON category.id=note.category_id
+      WHERE note.id IS NULL OR category.name IS DISTINCT FROM fixture.category_name
+        OR coalesce((SELECT jsonb_agg(tag.name ORDER BY tag.name)
+                     FROM note_tags link JOIN tags tag ON tag.id=link.tag_id
+                     WHERE link.note_id=note.id),'[]'::jsonb)
+           IS DISTINCT FROM (SELECT jsonb_agg(name ORDER BY name)
+                             FROM jsonb_array_elements_text(fixture.tag_names) names(name))
+    ) THEN RAISE EXCEPTION 'A1 exact 123-Note organization manifest mismatch'; END IF;
+END $$;
+
 DO $$
 DECLARE account_id_value BIGINT;
 BEGIN
  SELECT id INTO account_id_value FROM accounts WHERE email='demo@lifelab.local';
- IF (SELECT count(*) FROM library_videos WHERE account_id=account_id_value)<>36 OR (SELECT count(*) FROM tags WHERE account_id=account_id_value)<>38 OR (SELECT count(*) FROM watch_sessions s JOIN library_videos l ON l.id=s.library_video_id WHERE l.account_id=account_id_value)<>160 THEN RAISE EXCEPTION 'A1 preserved fixture counts failed'; END IF;
+ IF (SELECT count(*) FROM library_videos WHERE account_id=account_id_value)<>36 OR (SELECT count(*) FROM tags WHERE account_id=account_id_value)<>43 OR (SELECT count(*) FROM watch_sessions s JOIN library_videos l ON l.id=s.library_video_id WHERE l.account_id=account_id_value)<>160 THEN RAISE EXCEPTION 'A1 preserved fixture counts failed'; END IF;
 END $$;
 
 COMMIT;

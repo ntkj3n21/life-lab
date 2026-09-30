@@ -35,12 +35,14 @@ export type CategoryManagerChange =
     };
 
 interface CategoryManagerProps {
+  variant?: "default" | "compact";
   onChange?: (
     change: CategoryManagerChange,
   ) => void;
 }
 
 export function CategoryManager({
+  variant = "default",
   onChange,
 }: CategoryManagerProps = {}) {
   const categories =
@@ -242,9 +244,9 @@ export function CategoryManager({
         aria-busy={
           isLoading || controlsBusy
         }
-        className="rounded-xl border border-(--border) bg-(--app-bg) p-3"
+        className={variant === "compact" ? "min-w-0" : "rounded-xl border border-(--border) bg-(--app-bg) p-3"}
       >
-        <div className="flex items-center justify-between gap-3">
+        {variant !== "compact" && <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <Folder
               size={15}
@@ -265,9 +267,9 @@ export function CategoryManager({
           <span className="rounded-full bg-(--surface) px-2 py-1 text-xs text-(--text-muted)">
             {categories.length}
           </span>
-        </div>
+        </div>}
 
-        <div className="mt-3 flex min-w-0 gap-2">
+        <div className={`${variant === "compact" ? "" : "mt-3"} flex min-w-0 gap-2`}>
           <label
             htmlFor="manager-new-category"
             className="sr-only"
@@ -334,7 +336,7 @@ export function CategoryManager({
             No categories yet.
           </p>
         ) : (
-          <div className="mt-3 space-y-2">
+          <div className={variant === "compact" ? "mt-3 max-h-[40vh] divide-y divide-(--border) overflow-y-auto" : "mt-3 space-y-2"}>
             {categories.map(
               (category) => {
                 const isEditing =
@@ -344,7 +346,7 @@ export function CategoryManager({
                 return (
                   <div
                     key={category.id}
-                    className="flex items-center gap-2 rounded-lg border border-(--border) bg-(--surface) p-2"
+                    className={variant === "compact" ? "flex min-w-0 items-center gap-2 py-1.5 pr-1" : "flex items-center gap-2 rounded-lg border border-(--border) bg-(--surface) p-2"}
                   >
                     {isEditing ? (
                       <>

@@ -169,9 +169,6 @@ public class NoteService {
         String keyword = SearchKeywordNormalizer.normalize(query);
         Specification<Note> specification = NoteSpecifications.ownedBy(accountId);
 
-        if (keyword != null) {
-            specification = specification.and(NoteSpecifications.keywordContains(keyword));
-        }
         if (categoryId != null) {
             specification = specification.and(NoteSpecifications.hasCategory(categoryId));
         }
@@ -182,7 +179,14 @@ public class NoteService {
             specification = specification.and(NoteSpecifications.hasTimestamp(hasTimestamp));
         }
 
-        Page<Note> notes = noteRepository.findAll(specification, pageRequest);
+        Page<Note> notes = noteRepository.findAll(
+                keyword == null ? specification
+                        : specification.and(NoteSpecifications.keywordContains(keyword)),
+                pageRequest);
+        if (notes.getTotalElements() == 0 && SearchKeywordNormalizer.eligibleForTypoFallback(keyword)) {
+            notes = noteRepository.findAll(
+                    specification.and(NoteSpecifications.keywordTypoNear(keyword)), pageRequest);
+        }
         return PagedResponse.from(organizationService.toNoteResponses(notes));
     }
 

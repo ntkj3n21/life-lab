@@ -4,10 +4,10 @@ import {
   Plus,
   X,
 } from "lucide-react";
-import { useId } from "react";
+import { useId, type Ref } from "react";
 
 import { formatTime } from "../../../utils/formatTime";
-import type { Note } from "../../notes/services/noteApi";
+import { getNoteSourceTitle, type Note } from "../../notes/services/noteApi";
 
 interface TaskComposerProps {
   title: string;
@@ -32,6 +32,7 @@ interface TaskComposerProps {
   onSelectNote?: (note: Note) => void;
   onUnlinkNote?: () => void;
   onCreate: () => Promise<void>;
+  titleInputRef?: Ref<HTMLInputElement>;
 }
 
 export function TaskComposer({
@@ -57,6 +58,7 @@ export function TaskComposer({
   onSelectNote,
   onUnlinkNote,
   onCreate,
+  titleInputRef,
 }: TaskComposerProps) {
   const notePickerId = useId();
 
@@ -67,28 +69,30 @@ export function TaskComposer({
     >
       <div className="flex items-center gap-2">
         <Plus size={14} className="shrink-0 text-(--text-muted)" aria-hidden="true" />
-        <h4 className="text-xs font-medium text-(--text-secondary)">Create task</h4>
+        <h4 className="text-sm font-medium text-(--text-primary)">
+          {linkedNote ? "Create task from Note" : "Create task"}
+        </h4>
       </div>
 
       {showSourceControls && (
-        <div className="mt-3 rounded-lg border border-(--border) bg-(--surface) p-3">
+        <div className="mt-3 rounded-lg border border-(--border) bg-(--surface) px-3 py-2.5">
           {linkedNote ? (
             <>
               <div className="min-w-0">
-                <p className="text-[11px] font-medium text-(--text-muted)">
-                  Created from note
+                <p className="line-clamp-1 wrap-anywhere text-[11px] font-medium text-(--text-muted)">
+                  Selected Note · {getNoteSourceTitle(linkedNote)}
                 </p>
                 <p className="mt-1 line-clamp-3 whitespace-pre-wrap wrap-break-word text-xs leading-5 text-(--text-primary)">
                   {linkedNote.content}
                 </p>
-                <p className="mt-1.5 text-[11px] tabular-nums text-(--text-muted)">
-                  {linkedNote.timestampSeconds !== null
-                    ? formatTime(linkedNote.timestampSeconds)
-                    : "No timestamp"}
-                </p>
+                {linkedNote.timestampSeconds !== null && (
+                  <p className="mt-1 text-[11px] tabular-nums text-(--text-muted)">
+                    {formatTime(linkedNote.timestampSeconds)}
+                  </p>
+                )}
               </div>
 
-              <div className="mt-2 flex flex-wrap items-center gap-2">
+              <div className="mt-1 flex flex-wrap items-center gap-1">
                 {canChooseNote && onChooseNote && (
                   <button
                     type="button"
@@ -96,7 +100,7 @@ export function TaskComposer({
                     disabled={isMutating}
                     aria-expanded={notePickerOpen}
                     aria-controls={notePickerId}
-                    className="min-h-9 rounded-lg border border-(--border) px-2.5 text-xs font-medium text-(--text-secondary) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
+                    className="min-h-9 rounded-lg px-2 text-xs text-(--text-muted) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
                   >
                     Change
                   </button>
@@ -107,7 +111,7 @@ export function TaskComposer({
                     type="button"
                     onClick={onUnlinkNote}
                     disabled={isMutating}
-                    className="min-h-9 rounded-lg px-2.5 text-xs text-(--text-muted) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
+                    className="min-h-9 rounded-lg px-2 text-xs text-(--text-muted) transition hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-40"
                   >
                     Unlink
                   </button>
@@ -228,9 +232,10 @@ export function TaskComposer({
         </div>
       )}
 
-      <div className="mt-2 flex items-center gap-2">
-        <label htmlFor="task-title" className="sr-only">Task title</label>
+      <div className="mt-3 space-y-2">
+        <label htmlFor="task-title" className="block text-xs font-medium text-(--text-secondary)">Task title</label>
         <input
+          ref={titleInputRef}
           id="task-title"
           value={title}
           maxLength={255}
@@ -246,15 +251,15 @@ export function TaskComposer({
             }
           }}
           placeholder="Task title..."
-          className="min-w-0 flex-1 rounded-lg border border-(--border) bg-(--surface) px-3 py-2 text-sm outline-none placeholder:text-(--text-faint) transition focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
+          className="w-full min-w-0 rounded-lg border border-(--border) bg-(--surface) px-3 py-2 text-sm outline-none placeholder:text-(--text-faint) transition focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
         />
         <button
           type="button"
           disabled={isMutating || !title.trim()}
           onClick={() => void onCreate()}
-          className="h-10 shrink-0 rounded-lg bg-(--primary-bg) px-3 text-xs font-medium text-(--primary-text) transition hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50 xl:h-8"
+          className="min-h-10 w-full rounded-lg bg-(--primary-bg) px-3 text-sm font-medium text-(--primary-text) transition hover:bg-(--primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {isMutating ? "Saving..." : linkedNote ? "Create Task" : "Add"}
+          {isMutating ? (linkedNote ? "Creating..." : "Saving...") : linkedNote ? "Create Task" : "Add"}
         </button>
       </div>
 

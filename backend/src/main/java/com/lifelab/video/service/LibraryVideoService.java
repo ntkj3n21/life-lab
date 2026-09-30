@@ -29,6 +29,7 @@ import com.lifelab.video.dto.AddLibraryVideoRequest;
 import com.lifelab.video.dto.LibraryVideoDeleteImpactResponse;
 import com.lifelab.video.dto.LibraryVideoNeighborsResponse;
 import com.lifelab.video.dto.LibraryVideoResponse;
+import com.lifelab.video.dto.TagResponse;
 import com.lifelab.video.dto.UpdateLibraryVideoRequest;
 import com.lifelab.video.exception.LibraryVideoAlreadyExistsException;
 import com.lifelab.video.exception.LibraryVideoNotFoundException;
@@ -176,9 +177,14 @@ public class LibraryVideoService {
 
         Map<Long, LibraryVideoWatchStatsProjection> watchStats =
                 loadWatchStats(accountId, videos.getContent());
+        Map<Long, List<TagResponse>> tags =
+                loadTags(accountId, videos.getContent());
 
         Page<LibraryVideoResponse> result =
-                videos.map(video -> toResponse(video, watchStats.get(video.getId())));
+                videos.map(video -> toResponse(
+                        video,
+                        watchStats.get(video.getId()),
+                        tags.getOrDefault(video.getId(), List.of())));
 
         return PagedResponse.from(result);
     }
@@ -258,10 +264,18 @@ public class LibraryVideoService {
         }
         Map<Long, LibraryVideoWatchStatsProjection> watchStats =
                 loadWatchStats(accountId, neighbors);
+        Map<Long, List<TagResponse>> tags =
+                loadTags(accountId, neighbors);
 
         return new LibraryVideoNeighborsResponse(
-                previous == null ? null : toResponse(previous, watchStats.get(previous.getId())),
-                next == null ? null : toResponse(next, watchStats.get(next.getId())));
+                previous == null ? null : toResponse(
+                        previous,
+                        watchStats.get(previous.getId()),
+                        tags.getOrDefault(previous.getId(), List.of())),
+                next == null ? null : toResponse(
+                        next,
+                        watchStats.get(next.getId()),
+                        tags.getOrDefault(next.getId(), List.of())));
     }
 
     @Transactional(readOnly = true)
@@ -271,7 +285,8 @@ public class LibraryVideoService {
 
         return toResponse(
                 video,
-                loadWatchStats(accountId, List.of(video)).get(video.getId()));
+                loadWatchStats(accountId, List.of(video)).get(video.getId()),
+                loadTags(accountId, List.of(video)).getOrDefault(video.getId(), List.of()));
     }
 
     @Transactional
@@ -289,7 +304,9 @@ public class LibraryVideoService {
 
         return toResponse(
                 libraryVideo,
-                loadWatchStats(accountId, List.of(libraryVideo)).get(libraryVideo.getId()));
+                loadWatchStats(accountId, List.of(libraryVideo)).get(libraryVideo.getId()),
+                loadTags(accountId, List.of(libraryVideo)).getOrDefault(
+                        libraryVideo.getId(), List.of()));
     }
 
     @Transactional(readOnly = true)
@@ -347,6 +364,24 @@ public class LibraryVideoService {
                 .collect(Collectors.toMap(
                         stats -> stats.getLibraryVideoId(),
                         stats -> stats));
+    }
+
+    private Map<Long, List<TagResponse>> loadTags(
+            Long accountId,
+            List<LibraryVideo> videos) {
+        if (videos.isEmpty()) {
+            return Map.of();
+        }
+
+        return libraryVideoTagRepository.findWithTagsByLibraryVideoIds(
+                        accountId,
+                        videos.stream().map(LibraryVideo::getId).toList())
+                .stream()
+                .collect(Collectors.groupingBy(
+                        relation -> relation.getLibraryVideo().getId(),
+                        Collectors.mapping(
+                                relation -> TagResponse.from(relation.getTag()),
+                                Collectors.toList())));
     }
 
     private Specification<LibraryVideo> buildLibraryMembershipSpecification(
@@ -424,9 +459,10 @@ public class LibraryVideoService {
 
     private LibraryVideoResponse toResponse(
             LibraryVideo video,
-            LibraryVideoWatchStatsProjection stats) {
+            LibraryVideoWatchStatsProjection stats,
+            List<TagResponse> tags) {
         if (stats == null) {
-            return LibraryVideoResponse.from(video);
+            return LibraryVideoResponse.from(video, tags, 0L, null);
         }
 
         long viewCount =
@@ -436,6 +472,7 @@ public class LibraryVideoService {
 
         return LibraryVideoResponse.from(
                 video,
+                tags,
                 viewCount,
                 stats.getLastWatchedAt());
     }

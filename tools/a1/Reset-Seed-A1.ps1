@@ -17,6 +17,7 @@ if ([string]::IsNullOrWhiteSpace($SnapshotPath)) {
 }
 
 . (Join-Path $PSScriptRoot 'A1-Database.ps1')
+. (Join-Path $PSScriptRoot 'A1-NoteOrganization.ps1')
 
 $DeterministicSeed = 20260827
 $DemoPasswordHash = '$2a$10$CtETwdyERV3JxQhKLBJPW.KvfT6IpZCSVsTvloYPUXN6QGHF4UsK2'
@@ -175,6 +176,9 @@ $noteFixtures = @((ConvertFrom-Json -InputObject $noteFixtureJson) | ForEach-Obj
 $taskFixtures = @((ConvertFrom-Json -InputObject $taskFixtureJson) | ForEach-Object { $_ })
 Write-Verbose "Semantic fixture counts: notes=$($noteFixtures.Count), tasks=$($taskFixtures.Count)"
 if ($noteFixtures.Count -ne 96 -or $taskFixtures.Count -ne 125) { throw 'A1 semantic fixture counts must be 96 notes and 125 tasks.' }
+[void]$prelude.AppendLine((Get-A1NoteOrganizationSql `
+    -VideoNotes $noteFixtures -VideoSources $sources `
+    -Images $imageFixtures -Audio $audioFixtures))
 [void]$prelude.AppendLine(@'
 CREATE TEMP TABLE a1_note_fixtures (
     note_key TEXT PRIMARY KEY,
@@ -332,7 +336,7 @@ CREATE TEMP TABLE a1_audio_fixtures (
     title VARCHAR(255) NOT NULL,
     source_url TEXT NOT NULL,
     note_content TEXT NOT NULL,
-    timestamp_seconds INTEGER NOT NULL,
+    timestamp_seconds INTEGER,
     category_name VARCHAR(100) NOT NULL,
     tags_json TEXT NOT NULL,
     task_title VARCHAR(255),
@@ -361,7 +365,11 @@ foreach ($fixture in $audioFixtures) {
             -Compress
 
     $timestampSeconds =
-        [int]$fixture.timestampSeconds
+        if ($null -eq $fixture.timestampSeconds) {
+            'NULL'
+        } else {
+            [int]$fixture.timestampSeconds
+        }
 
     $values = @(
         $audioNo

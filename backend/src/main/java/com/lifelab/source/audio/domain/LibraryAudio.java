@@ -43,6 +43,9 @@ public class LibraryAudio {
     @Column(length = 255)
     private String title;
 
+    @Column(name = "personal_description", columnDefinition = "text")
+    private String personalDescription;
+
     @NotNull
     @Column(name = "added_at", nullable = false)
     private OffsetDateTime addedAt;
@@ -77,6 +80,15 @@ public class LibraryAudio {
 
     public String getTitle() {
         return title;
+    }
+
+    public String getPersonalDescription() {
+        return personalDescription;
+    }
+
+    public void updatePersonalInfo(String title, String personalDescription) {
+        this.title = title;
+        this.personalDescription = personalDescription;
     }
 
     public OffsetDateTime getAddedAt() {

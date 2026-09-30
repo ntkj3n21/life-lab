@@ -31,6 +31,10 @@ $manifest = Get-Content -Raw -Encoding UTF8 -LiteralPath `
 $snapshot = Get-Content -Raw -Encoding UTF8 -LiteralPath `
     (Join-Path $ArtifactDirectory 'a2-source-snapshot.json') | ConvertFrom-Json
 $a1Snapshot = Get-Content -Raw -Encoding UTF8 -LiteralPath $A1SnapshotPath | ConvertFrom-Json
+$videoNoteFixtures = @(Import-Csv -Delimiter "`t" -Encoding UTF8 -LiteralPath (
+    Join-Path $PSScriptRoot 'a2-note-fixtures.tsv'))
+$videoOrganization = @(Import-Csv -Delimiter "`t" -Encoding UTF8 -LiteralPath (
+    Join-Path $PSScriptRoot 'a2-video-organization.tsv'))
 
 $errors = [System.Collections.Generic.List[string]]::new()
 function Assert-A2([bool]$Condition, [string]$Message) {
@@ -76,6 +80,28 @@ Assert-A2 (Sum-A2 $notes 'timestamped_note_count' -eq 120) 'notes: expected 120 
 Assert-A2 (Sum-A2 $notes 'null_timestamp_note_count' -eq 120) 'notes: expected 120 NULL timestamp'
 Assert-A2 (@($notes | Where-Object { [int]$_.note_count -ne [int]$_.timestamped_note_count + [int]$_.null_timestamp_note_count }).Count -eq 0) 'note per-source totals do not reconcile'
 Assert-A2 (@($notes | Where-Object { $_.has_vtt -eq 'False' -and [int]$_.timestamped_note_count -ne 0 }).Count -eq 0) 'no-VTT source has timestamped Notes'
+
+$noteLessKeys = @('A2_LIB_005','A2_LIB_012','A2_LIB_020','A2_LIB_027','A2_LIB_035',
+    'A2_LIB_042','A2_LIB_050','A2_LIB_057','A2_LIB_064','A2_LIB_071')
+$currentSources = @($snapshot.sources | Where-Object role -eq 'CURRENT_LIBRARY')
+$noteBearingKeys = @($currentSources | Where-Object { $_.fixtureKey -in $videoNoteFixtures.fixture_key } |
+    ForEach-Object { $_.fixtureKey })
+$actualNoteLess = @($currentSources | Where-Object { $_.fixtureKey -notin $videoNoteFixtures.fixture_key } |
+    ForEach-Object { $_.fixtureKey })
+Assert-A2 ($videoNoteFixtures.Count -eq 240) 'durable Video Note fixture count differs from 240'
+Assert-A2 ($noteBearingKeys.Count -eq 70) 'current Video Sources with Note fixtures differ from 70'
+Assert-A2 (@(Compare-Object ($noteLessKeys | Sort-Object) ($actualNoteLess | Sort-Object)).Count -eq 0) 'the ten no-Note Source identities changed'
+Assert-A2 ($videoOrganization.Count -eq 70 -and
+    @($videoOrganization.fixture_key | Sort-Object -Unique).Count -eq 70) 'representative manifest must have 70 unique current Sources'
+Assert-A2 (@(Compare-Object ($noteBearingKeys | Sort-Object) ($videoOrganization.fixture_key | Sort-Object)).Count -eq 0) 'representative manifest does not cover exactly the 70 note-bearing Sources'
+foreach ($entry in $videoOrganization) {
+    $candidate = @($videoNoteFixtures | Where-Object {
+        $_.fixture_key -eq $entry.fixture_key -and [int]$_.note_no -eq [int]$entry.note_no
+    })
+    Assert-A2 ($candidate.Count -eq 1 -and
+        -not [string]::IsNullOrWhiteSpace($entry.category_name) -and
+        -not [string]::IsNullOrWhiteSpace($entry.tag_names)) "invalid representative Note: $($entry.fixture_key)/$($entry.note_no)"
+}
 
 Assert-A2 (Sum-A2 $tasks 'total' -eq 400) 'tasks: expected 400'
 Assert-A2 (Sum-A2 $tasks 'completed' -eq 250) 'tasks: expected 250 COMPLETED'

@@ -126,7 +126,7 @@ export function VideoStage({
                   size={16}
                   aria-hidden="true"
                 />
-                Open first video
+                Open a video
               </button>
             )}
         </div>

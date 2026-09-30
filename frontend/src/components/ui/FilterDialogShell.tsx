@@ -1,5 +1,6 @@
 import { X } from "lucide-react";
 import { type ReactNode, useEffect, useId, useRef } from "react";
+import { createPortal } from "react-dom";
 
 const FOCUSABLE_SELECTOR = [
   "a[href]",
@@ -23,6 +24,7 @@ interface FilterDialogShellProps {
   footer: ReactNode;
   closeAriaLabel?: string;
   maxWidthClassName?: string;
+  withinMainPane?: boolean;
 }
 
 export function FilterDialogShell({
@@ -36,6 +38,7 @@ export function FilterDialogShell({
   footer,
   closeAriaLabel = `Close ${title}`,
   maxWidthClassName = "max-w-4xl",
+  withinMainPane = false,
 }: FilterDialogShellProps) {
   const dialogRef = useRef<HTMLDivElement | null>(null);
   const closeButtonRef = useRef<HTMLButtonElement | null>(null);
@@ -65,6 +68,12 @@ export function FilterDialogShell({
     });
 
     function handleKeyDown(event: KeyboardEvent) {
+      // A confirmation opened from this dialog owns Escape and focus trapping
+      // until it closes (for example, deleting a Tag from the Library panel).
+      if (dialogRef.current?.querySelector('[role="dialog"][aria-modal="true"]')) {
+        return;
+      }
+
       if (event.key === "Escape" && !isBusyRef.current) {
         event.preventDefault();
         dismissRef.current();
@@ -127,10 +136,10 @@ export function FilterDialogShell({
     return null;
   }
 
-  return (
+  const dialog = (
     <div
       role="presentation"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-(--overlay-backdrop) p-3 sm:p-4"
+      className={`${withinMainPane ? "absolute inset-0 z-30" : "fixed inset-0 z-50"} flex items-center justify-center bg-(--overlay-backdrop) p-3 sm:p-4`}
       onMouseDown={(event) => {
         if (event.target === event.currentTarget && !isBusy) {
           onDismiss();
@@ -146,7 +155,7 @@ export function FilterDialogShell({
         aria-describedby={descriptionId}
         aria-busy={isBusy}
         tabIndex={-1}
-        className={`flex max-h-[calc(100dvh-1.5rem)] w-full ${maxWidthClassName} flex-col overflow-hidden rounded-2xl border border-(--border) bg-(--panel-bg) shadow-(--elevated-shadow) sm:max-h-[calc(100dvh-2rem)]`}
+        className={`flex w-full ${maxWidthClassName} flex-col overflow-hidden rounded-2xl border border-(--border) bg-(--panel-bg) shadow-(--elevated-shadow) ${withinMainPane ? "max-h-[calc(100%-1.5rem)] sm:max-h-[calc(100%-2rem)]" : "max-h-[calc(100dvh-1.5rem)] sm:max-h-[calc(100dvh-2rem)]"}`}
       >
         <div className="flex shrink-0 items-start justify-between gap-4 border-b border-(--border) px-4 py-3 sm:px-5 sm:py-4">
           <div className="min-w-0">
@@ -177,7 +186,7 @@ export function FilterDialogShell({
           </button>
         </div>
 
-        <div className="min-h-0 flex-1 space-y-3 overflow-y-auto overscroll-contain px-4 py-4 sm:px-5">
+        <div className="@container min-h-0 flex-1 space-y-3 overflow-y-auto overscroll-contain px-4 py-4 sm:px-5">
           {children}
         </div>
 
@@ -187,4 +196,9 @@ export function FilterDialogShell({
       </div>
     </div>
   );
+
+  if (!withinMainPane) return dialog;
+
+  const mainPane = document.getElementById("library-main-pane");
+  return mainPane ? createPortal(dialog, mainPane) : null;
 }

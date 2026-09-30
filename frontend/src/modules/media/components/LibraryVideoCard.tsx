@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Ellipsis, Film, LoaderCircle, Pencil, Trash2 } from "lucide-react";
+import { Ellipsis, Film, LoaderCircle, Pencil, Tag as TagIcon, Trash2, X } from "lucide-react";
 
 import {
   getLibraryVideoDisplayTitle,
@@ -27,6 +27,7 @@ interface LibraryVideoCardProps {
 
   onToggleActions: () => void;
   onCloseActions: () => void;
+  onTagsChanged: () => void;
 }
 
 function formatDuration(durationSeconds: number | null) {
@@ -67,12 +68,13 @@ export function LibraryVideoCard({
   onDelete,
   onToggleActions,
   onCloseActions,
+  onTagsChanged,
 }: LibraryVideoCardProps) {
   const actionsRef = useRef<HTMLDivElement | null>(null);
 
   const actionsTriggerRef = useRef<HTMLButtonElement | null>(null);
 
-  const [isEditing, setIsEditing] = useState(false);
+  const [disclosure, setDisclosure] = useState<"edit" | "tags" | null>(null);
 
   const [customTitle, setCustomTitle] = useState(video.customTitle ?? "");
 
@@ -85,12 +87,13 @@ export function LibraryVideoCard({
   const displayTitle = getLibraryVideoDisplayTitle(video);
 
   useEffect(() => {
-    if (!isActionsOpen) {
+    if (!isActionsOpen && disclosure === null) {
       return;
     }
 
     function handlePointerDown(event: PointerEvent) {
       if (
+        isActionsOpen &&
         event.target instanceof Node &&
         !actionsRef.current?.contains(event.target)
       ) {
@@ -103,8 +106,10 @@ export function LibraryVideoCard({
         return;
       }
 
-      onCloseActions();
-      actionsTriggerRef.current?.focus();
+      if (isSaving || isMutating) return;
+      if (isActionsOpen) onCloseActions();
+      setDisclosure(null);
+      window.requestAnimationFrame(() => actionsTriggerRef.current?.focus());
     }
 
     document.addEventListener("pointerdown", handlePointerDown);
@@ -114,7 +119,7 @@ export function LibraryVideoCard({
       document.removeEventListener("pointerdown", handlePointerDown);
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isActionsOpen, onCloseActions]);
+  }, [isActionsOpen, disclosure, isSaving, isMutating, onCloseActions]);
 
   function handleStartEdit() {
     onCloseActions();
@@ -123,7 +128,7 @@ export function LibraryVideoCard({
 
     setPersonalDescription(video.personalDescription ?? "");
 
-    setIsEditing(true);
+    setDisclosure("edit");
   }
 
   function handleCancelEdit() {
@@ -131,11 +136,21 @@ export function LibraryVideoCard({
 
     setPersonalDescription(video.personalDescription ?? "");
 
-    setIsEditing(false);
+    setDisclosure(null);
 
     window.requestAnimationFrame(() => {
       actionsTriggerRef.current?.focus();
     });
+  }
+
+  function handleStartTags() {
+    onCloseActions();
+    setDisclosure("tags");
+  }
+
+  function handleCloseTags() {
+    setDisclosure(null);
+    window.requestAnimationFrame(() => actionsTriggerRef.current?.focus());
   }
 
   async function handleSaveEdit() {
@@ -152,7 +167,7 @@ export function LibraryVideoCard({
         personalDescription: personalDescription.trim() || null,
       });
 
-      setIsEditing(false);
+      setDisclosure(null);
 
       window.requestAnimationFrame(() => {
         actionsTriggerRef.current?.focus();
@@ -185,7 +200,7 @@ export function LibraryVideoCard({
       <button
         type="button"
         onClick={() => onOpen(video)}
-        disabled={isEditing}
+        disabled={disclosure === "edit"}
         aria-label={`Open video ${displayTitle}`}
         className="block w-full text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--focus) disabled:cursor-default"
       >
@@ -216,14 +231,14 @@ export function LibraryVideoCard({
       </button>
 
       <div className="min-w-0 p-3.5">
-        {isEditing ? (
+        {disclosure === "edit" ? (
           <div className="space-y-3">
             <div>
               <label
                 htmlFor={`custom-title-${video.id}`}
                 className="mb-1.5 block text-xs font-medium text-(--text-secondary)"
               >
-                Custom title
+                Title
               </label>
 
               <input
@@ -234,7 +249,7 @@ export function LibraryVideoCard({
                 disabled={isSaving || isMutating}
                 maxLength={255}
                 placeholder={
-                  video.youtubeSource.title ?? "Optional custom title"
+                  video.youtubeSource.title ?? "Optional title"
                 }
                 className="w-full rounded-xl border border-(--border) bg-(--surface) px-3 py-2 text-sm outline-none placeholder:text-(--text-faint) focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-60"
               />
@@ -245,7 +260,7 @@ export function LibraryVideoCard({
                 htmlFor={`description-${video.id}`}
                 className="mb-1.5 block text-xs font-medium text-(--text-secondary)"
               >
-                Personal description
+                Description
               </label>
 
               <textarea
@@ -254,7 +269,7 @@ export function LibraryVideoCard({
                 onChange={(event) => setPersonalDescription(event.target.value)}
                 disabled={isSaving || isMutating}
                 rows={3}
-                placeholder="Optional personal description"
+                placeholder="Optional description"
                 className="w-full resize-none rounded-xl border border-(--border) bg-(--surface) px-3 py-2 text-sm outline-none placeholder:text-(--text-faint) focus:border-(--border-strong) focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-60"
               />
             </div>
@@ -321,10 +336,37 @@ export function LibraryVideoCard({
               )}
             </div>
 
-            {video.personalDescription && (
-              <p className="mt-2 line-clamp-2 wrap-break-word text-xs leading-5 text-(--text-secondary)">
-                {video.personalDescription}
-              </p>
+            {disclosure === "tags" ? (
+              <div className="mt-3 border-t border-(--border) pt-3">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-xs font-medium text-(--text-secondary)">Tags</span>
+                  <button
+                    type="button"
+                    autoFocus
+                    onClick={handleCloseTags}
+                    aria-label="Close tag assignment"
+                    className="flex h-9 w-9 items-center justify-center rounded-lg text-(--text-muted) hover:bg-(--surface-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)"
+                  ><X size={14} aria-hidden="true" /></button>
+                </div>
+                <LibraryVideoTags libraryVideoId={video.id} attachedTags={video.tags} onChanged={onTagsChanged} />
+              </div>
+            ) : (
+              <>
+                {video.personalDescription && (
+                  <p className="mt-2 line-clamp-2 wrap-break-word text-xs leading-5 text-(--text-secondary)">
+                    {video.personalDescription}
+                  </p>
+                )}
+                {video.tags.length > 0 && (
+                  <div className="mt-2 flex min-w-0 flex-wrap gap-1.5" aria-label="Video tags">
+                    {video.tags.map((tag) => (
+                      <span key={tag.id} title={tag.name} className="max-w-full truncate rounded-full border border-(--border) bg-(--surface-subtle) px-2 py-1 text-[11px] font-medium text-(--text-primary)">
+                        {tag.name}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </>
             )}
 
             <div
@@ -343,9 +385,10 @@ export function LibraryVideoCard({
                   ref={actionsTriggerRef}
                   type="button"
                   onClick={onToggleActions}
+                  disabled={disclosure !== null || isMutating}
                   aria-expanded={isActionsOpen}
                   aria-controls={`library-video-actions-${video.id}`}
-                  className="flex h-10 w-10 items-center justify-center rounded-lg text-(--text-muted) transition-colors hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) sm:h-7 sm:w-7"
+                  className="flex h-10 w-10 items-center justify-center rounded-lg text-(--text-muted) transition-colors hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:opacity-50 sm:h-7 sm:w-7"
                   aria-label={`More actions for ${displayTitle}`}
                   title="More actions"
                 >
@@ -357,14 +400,13 @@ export function LibraryVideoCard({
                     id={`library-video-actions-${video.id}`}
                     aria-label={`Actions for ${displayTitle}`}
                     role="group"
-                    className="absolute bottom-12 right-0 z-10 w-64 max-w-[calc(100vw-2rem)] rounded-xl border border-(--border-strong) bg-(--surface) p-2 shadow-lg sm:bottom-9"
+                    className="absolute bottom-12 right-0 z-10 w-48 max-w-[calc(100vw-2rem)] rounded-xl border border-(--border-strong) bg-(--surface) p-2 shadow-lg sm:bottom-9"
                   >
-                    <div className="flex gap-1">
                       <button
                         type="button"
                         onClick={handleStartEdit}
                         disabled={isMutating}
-                        className="flex min-h-10 flex-1 items-center justify-center gap-1.5 rounded-lg px-2 text-xs text-(--text-secondary) hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50 sm:min-h-0 sm:py-1.5"
+                        className="flex min-h-10 w-full items-center gap-2 rounded-lg px-2 text-left text-xs text-(--text-secondary) hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:opacity-50"
                       >
                         <Pencil size={13} aria-hidden="true" />
                         Edit
@@ -372,19 +414,27 @@ export function LibraryVideoCard({
 
                       <button
                         type="button"
+                        onClick={handleStartTags}
+                        disabled={isMutating}
+                        className="flex min-h-10 w-full items-center gap-2 rounded-lg px-2 text-left text-xs text-(--text-secondary) hover:bg-(--surface-hover) hover:text-(--text-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:opacity-50"
+                      >
+                        <TagIcon size={13} aria-hidden="true" />
+                        Tags
+                      </button>
+
+                      <button
+                        type="button"
                         onClick={() => {
                           onCloseActions();
+                          actionsTriggerRef.current?.focus();
                           onDelete(video);
                         }}
                         disabled={isMutating}
-                        className="flex min-h-10 flex-1 items-center justify-center gap-1.5 rounded-lg px-2 text-xs text-(--text-secondary) hover:bg-(--danger-surface) hover:text-(--danger-text) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:cursor-not-allowed disabled:opacity-50 sm:min-h-0 sm:py-1.5"
+                        className="flex min-h-10 w-full items-center gap-2 rounded-lg px-2 text-left text-xs text-(--text-secondary) hover:bg-(--danger-surface) hover:text-(--danger-text) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) disabled:opacity-50"
                       >
                         <Trash2 size={13} aria-hidden="true" />
-                        Delete
+                        Remove
                       </button>
-                    </div>
-
-                    <LibraryVideoTags libraryVideoId={video.id} />
                   </div>
                 )}
               </div>

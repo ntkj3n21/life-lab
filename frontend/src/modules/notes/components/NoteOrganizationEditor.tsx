@@ -6,6 +6,8 @@ import {
 import { useState } from "react";
 
 import type { Tag } from "../../media/services/tagApi";
+import { TagFinderInput } from "../../media/components/TagFinder";
+import { useTagFinder } from "../../media/components/tagFinding";
 import type { Category } from "../../organization/services/categoryApi";
 import type { Note } from "../services/noteApi";
 
@@ -39,6 +41,7 @@ export function NoteOrganizationEditor({
     useState<number[]>(
       note.tags.map((tag) => tag.id),
     );
+  const { tagSearch, setTagSearch, visibleTags } = useTagFinder(tags);
 
   function toggleTag(tagId: number) {
     setTagIds((current) =>
@@ -118,8 +121,11 @@ export function NoteOrganizationEditor({
               No tags available.
             </p>
           ) : (
-            <div className="max-h-36 space-y-1 overflow-y-auto rounded-lg border border-(--border) bg-(--surface) p-2">
-              {tags.map((tag) => (
+            <div>
+              <TagFinderInput value={tagSearch} onChange={setTagSearch} disabled={isBusy} />
+              {visibleTags.length === 0 && <p className="text-xs text-(--text-muted)">No matching tags.</p>}
+              <div className="max-h-36 space-y-1 overflow-y-auto rounded-lg border border-(--border) bg-(--surface) p-2">
+              {visibleTags.map((tag) => (
                 <label
                   key={tag.id}
                   className="flex min-h-8 cursor-pointer items-center gap-2 rounded-md px-2 text-xs text-(--text-secondary) hover:bg-(--surface-hover)"
@@ -140,6 +146,7 @@ export function NoteOrganizationEditor({
                   </span>
                 </label>
               ))}
+              </div>
             </div>
           )}
         </fieldset>
